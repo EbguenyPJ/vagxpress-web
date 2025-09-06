@@ -1,0 +1,115 @@
+<div>
+  <!-- Left Sidebar -->
+  <aside id="leftsidebar" class="sidebar" (mouseenter)="mouseHover()" (mouseleave)="mouseOut()">
+    <!-- Menu -->
+    <div class="menu">
+      <ng-scrollbar [style.height]="listMaxHeight + 'px'" visibility="hover">
+        <ul class="list">
+          <li class="sidebar-user-panel">
+            <div class="user-panel">
+              <div class=" image">
+                <img [src]="getPhotoPath()" (error)="userPhoto = 'empleado-default.png'"
+                  class="img-circle user-img-circle" alt="Foto de perfil" />
+              </div>
+            </div>
+            <div class="profile-usertitle">
+              <div class="sidebar-userpic-name">{{ nombreDeUsuario }} </div>
+              <div class="profile-usertitle-job ">{{ userPosition }}</div>
+            </div>
+            <div class="sidebar-userpic-btn">
+              <a mat-icon-button matTooltip="Mi Perfil" [matTooltipPosition]="'above'" (click)="perfilDeUsuario()">
+                <i class="material-icons-outlined profile-icon">account_circle</i>
+              </a>
+              <!-- Iconos de acceso -->
+              @if (hasWebAccess) {
+              <a mat-icon-button matTooltip="Acceso Web" [matTooltipPosition]="'above'">
+                <i class="material-icons-outlined web-icon">public</i>
+              </a>
+              }
+
+              @if (hasMobileAccess) {
+              <a mat-icon-button matTooltip="Acceso Móvil" [matTooltipPosition]="'above'">
+                <i class="material-icons-outlined mobile-icon">smartphone</i>
+              </a>
+              }
+              <!-- <a mat-icon-button disabled routerLink="email/inbox" matTooltip="Email" [matTooltipPosition]="'above'">
+                <i class="material-icons-outlined">mark_email_unread</i>
+              </a>
+              <a mat-icon-button disabled routerLink="calendar" matTooltip="Calendar" [matTooltipPosition]="'above'">
+                <i class="material-icons-outlined">event</i>
+              </a>
+              <a mat-icon-button disabled routerLink="authentication/locked" matTooltip="Lock"
+                [matTooltipPosition]="'above'">
+                <i class="material-icons-outlined">lock</i>
+              </a> -->
+            </div>
+          </li>
+          <!-- Top Most level menu -->
+          <!-- @for (sidebarItem of sidebarItems; track sidebarItem) {
+          <li [routerLinkActive]="sidebarItem.submenu.length !== 0 ? 'active' : 'active-top'">
+            @if (sidebarItem.groupTitle === true) {
+            <div class="header" [innerHTML]="sanitizeHtml(sidebarItem.title)"></div>
+            }
+            @if (!sidebarItem.groupTitle;) {
+            <a [routerLink]="sidebarItem.class === '' ? [sidebarItem.path] : null" [ngClass]="[sidebarItem.class]"
+              (click)="callToggleMenu($event, sidebarItem.submenu.length)" class="menu-top">
+              <i [ngClass]="[sidebarItem.iconType]">{{sidebarItem.icon}}</i>
+              <span class="hide-menu" [innerHTML]="sanitizeHtml(sidebarItem.title)"></span>
+              @if (sidebarItem.badge !== '' ) {
+              <span [ngClass]="[sidebarItem.badgeClass]" [innerHTML]="sanitizeHtml(sidebarItem.badge)"></span>
+              }
+            </a>
+            }
+          </li>
+          } -->
+
+          @for (sidebarItem of sidebarItems; track sidebarItem) {
+          <!-- Título de categoría -->
+          @if (sidebarItem.groupTitle === true) {
+          <li class="sidebar-category">
+            <div class="header" [innerHTML]="sanitizeHtml(sidebarItem.title)"
+              (click)="toggleCategory(sidebarItem.title)" [class.expanded]="isCategoryOpen(sidebarItem.title)">
+              
+            </div>
+          </li>
+
+          <!-- Módulos dentro de la categoría -->
+          @if (isCategoryOpen(sidebarItem.title) || isSidebarCollapsed) {
+          @for (childItem of sidebarItem.submenu; track childItem) {
+          <li [routerLinkActive]="childItem.submenu.length !== 0 ? 'active' : 'active-top'">
+            <a [routerLink]="childItem.class === '' ? [childItem.path] : null" [ngClass]="[childItem.class]"
+              (click)="callToggleMenu($event, childItem.submenu.length)" class="menu-top">
+              <i [ngClass]="[childItem.iconType]">{{ childItem.icon }}</i>
+              <span class="hide-menu" [innerHTML]="sanitizeHtml(childItem.title)"></span>
+              @if (childItem.badge !== '') {
+              <span [ngClass]="[childItem.badgeClass]" [innerHTML]="sanitizeHtml(childItem.badge)"></span>
+              }
+              
+            </a>
+          </li>
+          }
+          }
+          }
+          }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        </ul>
+      </ng-scrollbar>
+    </div>
+    <!-- #Menu -->
+  </aside>
+  <!-- #END# Left Sidebar -->
+</div>

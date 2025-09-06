@@ -1,0 +1,28 @@
+<div class="signature-container">
+  <!-- Título o instrucción para el usuario -->
+  <h5 class="mb-3">Firme aquí</h5>
+
+  <!-- Canvas donde el usuario firma -->
+  <div class="signature-pad-container bg-light border rounded" style="height: 200px;">
+    <canvas #canvas class="signature-pad"></canvas>
+  </div>
+
+  <!-- Botones: Limpiar y Guardar -->
+  <div class="buttons mt-3">
+    <button class="btn btn-outline-danger me-2" (click)="clear()">Limpiar</button>
+    <button class="btn btn-outline-primary" (click)="save()">Guardar</button>
+  </div>
+
+  <!-- Instrucción para el usuario -->
+  <p class="text-muted mt-2 mb-0" style="font-size: 0.85rem;">
+    Firme dentro del recuadro usando su dedo o el mouse.
+  </p>
+</div>
+
+<!-- <div class="signature-container">
+  <canvas #canvas></canvas>
+  <div class="buttons">
+    <button (click)="clear()">Limpiar</button>
+    <button (click)="save()">Guardar</button>
+  </div>
+</div> -->

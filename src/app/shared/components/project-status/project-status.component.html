@@ -1,0 +1,15 @@
+<div *ngFor="let project of projects" class="m-2">
+    <div class="row">
+        <div class="col-lg-5 m-b-20">
+            <div>{{ project.name }}</div>
+        </div>
+        <div class="col-lg-7">
+            <div class="mt-1">
+                {{ project.progress}}%
+                <mat-progress-bar mode="determinate" [value]="project.progress" class="progress-round"
+                    [ngClass]="project.progressColor">
+                </mat-progress-bar>
+            </div>
+        </div>
+    </div>
+</div>

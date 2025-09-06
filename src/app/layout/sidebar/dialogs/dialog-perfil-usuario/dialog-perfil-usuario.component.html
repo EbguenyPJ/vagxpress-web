@@ -1,0 +1,477 @@
+<div class="dialogContainer">
+
+  <div class="modalHeader">
+    <div class="avatarDetails">
+      <label class="hoverable" for="tableFileInput">
+        <div class="background"></div>
+      </label>
+
+      <div class="modalTitle">{{dialogTitle}}</div>
+    </div>
+
+    <button mat-icon-button mat-dialog-close class="modal-close-button" aria-label="Close dialog" type="button">
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+
+  <div mat-dialog-content>
+
+
+    <div class="row clearfix p-3" *ngFor="let info of dataUsuario">
+      <div class="col-lg-4 col-md-12">
+        <div class="card">
+          <div class="m-b-20">
+            <div class="contact-grid">
+              <div class="profile-header bg-dark">
+                <div class="user-name">{{ info.s_nombre_completo }}</div>
+                <div class="name-center">{{ info.s_tipo_empleado }}</div>
+              </div>
+              <img [src]="getEmpleadoImage(info?.s_foto_empleado || '')" class="user-img" alt="Foto de perfil">
+
+              <div class="row">
+                <div class="col-4">
+                  <h6>Si</h6>
+                  <small>Uniformes asignados</small>
+                </div>
+                <div class="col-4">
+                  <h6>No</h6>
+                  <small>Bono de puntualidad</small>
+                </div>
+                <div class="col-4">
+                  <h6>No</h6>
+                  <small>Bono de productividad</small>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-12">
+                  <div class="access-icons-container">
+                    @if (dataUsuario[0]?.b_usuario_web == 1) {
+                    <span class="access-icon web-access" matTooltip="Acceso Web">
+                      <i class="material-icons-outlined">public</i>
+                    </span>
+                    }
+                    @if (dataUsuario[0]?.b_usuario_movil == 1) {
+                    <span class="access-icon mobile-access" matTooltip="Acceso Móvil">
+                      <i class="material-icons-outlined">smartphone</i>
+                    </span>
+                    }
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+        <div class="card">
+          <mat-tab-group mat-align-tabs="start">
+            <mat-tab label="Acerca de mí">
+              <div class="p-4">
+                <div class="name-center" style="text-align: justify;">{{ info.s_descripcion_tipo_empleado }}</div><br>
+                <small class="text-muted">Email address: </small>
+                <p>{{ info.email }}</p>
+                <hr>
+                <small class="text-muted">Phone: </small>
+                <p>+52 {{ info.n_telefono }}</p>
+                <hr>
+              </div>
+            </mat-tab>
+            <mat-tab label="Habilidades">
+              <ul class="list-unstyled p-4">
+                <li *ngFor="let habilidad of habilidadesEmpleado">
+                  <div>{{ habilidad.s_habilidad_empleado }}</div>
+                  <div class="progress skill-progress m-b-20">
+                    <div class="progress-bar l-bg-green"
+                      [style.width.%]="getNivelHabilidadPorcentaje(habilidad.n_nivel_dominio)" role="progressbar"
+                      [attr.aria-valuenow]="habilidad.n_nivel_dominio" aria-valuemin="0" aria-valuemax="10">
+                    </div>
+                  </div>
+                </li>
+              </ul>
+            </mat-tab>
+          </mat-tab-group>
+        </div>
+      </div>
+
+
+
+
+      <div class="col-lg-8 col-md-12">
+        <div class="card">
+          <mat-tab-group>
+            <mat-tab>
+
+              <ng-template mat-tab-label>
+                <mat-icon class="example-tab-icon msr-2">face</mat-icon>Información
+              </ng-template>
+
+              <div class="col-lg-12 col-md-12 col-sm-12">
+                <div class="project_widget">
+                  <div class="header">
+                    <h2><strong>Acerca de mi</strong></h2>
+                  </div>
+
+
+                  <div class="body">
+                    <div class="row">
+                      <div class="col-md-12 col-6 b-r">
+                        <strong>Dirección</strong>
+                        <br>
+                        <p class="text-muted">{{ info.s_direccion }} <br />Puebla, Puebla</p>
+                      </div>
+
+
+                      <div class="col-md-4 col-6 b-r">
+                        <strong>CURP</strong>
+                        <br>
+                        <p class="text-muted">{{ info.s_curp || 'No especificado' }}</p>
+                      </div>
+
+                      <div class="col-md-4 col-6 b-r">
+                        <strong>RFC</strong>
+                        <br>
+                        <p class="text-muted">{{ info.s_rfc || 'No especificado' }}</p>
+                      </div>
+
+                      <div class="col-md-4 col-6 b-r">
+                        <strong>Seguro</strong>
+                        <br>
+                        <p class="text-muted">{{ info.s_seguro || 'No especificado' }}</p>
+                      </div>
+
+                      <div class="col-md-4 col-6 b-r">
+                        <strong>Sexo</strong>
+                        <br>
+                        <p class="text-muted">{{ getSexoText(info.id_sexo) || 'No especificado' }}</p>
+                      </div>
+
+                      <div class="col-md-4 col-6 b-r">
+                        <strong>Sucursal</strong>
+                        <br>
+                        <p class="text-muted">{{ info.s_sucursal || 'No especificado' }}</p>
+                      </div>
+
+                      <div class="col-md-4 col-6 b-r">
+                        <strong>Profesión</strong>
+                        <br>
+                        <p class="text-muted">{{ info.s_profesion || 'No especificado' }}</p>
+                      </div>
+
+                      <div class="col-md-4 col-6 b-r">
+                        <strong>Grado de estudios</strong>
+                        <br>
+                        <p class="text-muted">{{ info.s_grado_estudios || 'No especificado' }}</p>
+                      </div>
+
+                      <div class="col-md-4 col-6 b-r">
+                        <strong>Correo</strong>
+                        <br>
+                        <p class="text-muted">{{ info.s_correo || 'No especificado' }}</p>
+                      </div>
+
+                      <div class="col-md-4 col-6 b-r">
+                        <strong>Teléfono</strong>
+                        <br>
+                        <p class="text-muted">{{ info.n_telefono || 'No especificado' }}</p>
+                      </div>
+
+                      <div class="col-md-4 col-6 b-r">
+                        <strong>Contacto de emergencia</strong>
+                        <br>
+                        <p class="text-muted">{{ info.n_telefono_contacto_emergencia || 'No especificado' }}</p>
+                      </div>
+
+                      <div class="col-md-4 col-6 b-r">
+                        <strong>Fecha de nacimiento</strong>
+                        <br>
+                        <p class="text-muted">{{ info.d_fecha_nacimiento || 'No especificado' }}</p>
+                      </div>
+
+                      <div class="col-md-4 col-6 b-r">
+                        <strong>Fecha de ingreso</strong>
+                        <br>
+                        <p class="text-muted">{{ info.d_fecha_ingreso || 'No especificado' }}</p>
+                      </div>
+
+
+
+                      <!-- <div class="col-md-3 col-6">
+                                      <strong>Location</strong>
+                                      <br><p class="text-muted">India</p>
+                                    </div> -->
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!-- <div class="col-lg-12 col-md-12 col-sm-12">
+                                  <div class="project_widget">
+                                    <div class="header">
+                                      <h2><strong>Education</strong></h2>
+                                    </div>
+                                    <div class="body">
+                                      <ul>
+                                        <li>B.A.,Gujarat University, Ahmedabad,India.</li>
+                                        <li>M.A.,Gujarat University, Ahmedabad, India.</li>
+                                        <li>P.H.D., Shaurashtra University, Rajkot</li>
+                                      </ul>
+                                    </div>
+                                  </div>
+                                </div> -->
+              <!-- <div class="col-lg-12 col-md-12 col-sm-12">
+                                  <div class="project_widget">
+                                    <div class="header">
+                                      <h2><strong>Experience</strong></h2>
+                                    </div>
+                                    <div class="body">
+                                      <ul>
+                                        <li>One year experience as Jr. Professor from April-2009 to march-2010
+                                          at B.
+                                        J. Arts College, Ahmedabad.</li>
+                                        <li>Three year experience as Jr. Professor at V.S. Arts &amp; Commerse
+                                          Collage
+                                        from April - 2008 to April - 2011.</li>
+                                        <li>Lorem Ipsum is simply dummy text of the printing and typesetting
+                                          industry.
+                                        </li>
+                                        <li>Lorem Ipsum is simply dummy text of the printing and typesetting
+                                          industry.
+                                        </li>
+                                        <li>Lorem Ipsum is simply dummy text of the printing and typesetting
+                                          industry.
+                                        </li>
+                                        <li>Lorem Ipsum is simply dummy text of the printing and typesetting
+                                          industry.
+                                        </li>
+                                      </ul>
+                                    </div>
+                                  </div>
+                                </div> -->
+
+              <!-- <div class="col-lg-12 col-md-12 col-sm-12">
+                                  <div class="project_widget">
+                                    <div class="header">
+                                      <h2><strong>Conferences, Cources &amp; Workshop Attended</strong></h2>
+                                    </div>
+                                    <div class="body">
+                                      <ul>
+                                        <li>Lorem Ipsum is simply dummy text of the printing and typesetting
+                                          industry.
+                                        </li>
+                                        <li>Lorem Ipsum is simply dummy text of the printing and typesetting
+                                          industry.
+                                        </li>
+                                        <li>Lorem Ipsum is simply dummy text of the printing and typesetting
+                                          industry.
+                                        </li>
+                                        <li>Lorem Ipsum is simply dummy text of the printing and typesetting
+                                          industry.
+                                        </li>
+                                        <li>Lorem Ipsum is simply dummy text of the printing and typesetting
+                                          industry.
+                                        </li>
+                                        <li>Lorem Ipsum is simply dummy text of the printing and typesetting
+                                          industry.
+                                        </li>
+                                        <li>Lorem Ipsum is simply dummy text of the printing and typesetting
+                                          industry.
+                                        </li>
+                                      </ul>
+                                    </div>
+                                  </div>
+                                </div> -->
+            </mat-tab>
+
+            <mat-tab>
+              <ng-template mat-tab-label>
+                <mat-icon class="example-tab-icon msr-2">settings</mat-icon>Ajustes
+              </ng-template>
+
+              <div class="settings-container">
+                <div class="settings-section">
+                  <div class="section-header">
+                    <h2><strong>Actualizar</strong> Información Personal</h2>
+                    <div class="section-info">
+                      <mat-icon>info_outline</mat-icon>
+                      <span>Solo puede actualizar información de contacto.</span>
+                    </div>
+                  </div>
+                  <div class="body">
+                    <form [formGroup]="perfilForm" (ngSubmit)="submit()" enctype="multipart/form-data">
+                      <!-- Campos de solo lectura -->
+                      <div class="row m-b-25">
+                        <div class="col-sm-4 mt-3">
+                          <mat-form-field class="example-full-width" appearance="outline" subscriptSizing="dynamic">
+                            <mat-label>Nombre</mat-label>
+                            <input matInput formControlName="s_nombre" readonly>
+                            <mat-icon class="material-icons-outlined color-icon p-3" matSuffix>face</mat-icon>
+                          </mat-form-field>
+                        </div>
+                        <div class="col-sm-4 mt-3">
+                          <mat-form-field class="example-full-width" appearance="outline" subscriptSizing="dynamic">
+                            <mat-label>Apellido Paterno</mat-label>
+                            <input matInput formControlName="s_apellido_paterno" readonly>
+                            <mat-icon class="material-icons-outlined color-icon p-3" matSuffix>face</mat-icon>
+                          </mat-form-field>
+                        </div>
+                        <div class="col-sm-4 mt-3">
+                          <mat-form-field class="example-full-width" appearance="outline" subscriptSizing="dynamic">
+                            <mat-label>Apellido Materno</mat-label>
+                            <input matInput formControlName="s_apellido_materno" readonly>
+                            <mat-icon class="material-icons-outlined color-icon p-3" matSuffix>face</mat-icon>
+                          </mat-form-field>
+                        </div>
+                      </div>
+
+                      <div class="row m-b-25">
+                        <div class="col-sm-4 mt-3">
+                          <mat-form-field class="example-full-width" appearance="outline" subscriptSizing="dynamic">
+                            <mat-label>Tipo de empleado</mat-label>
+                            <input matInput formControlName="s_tipo_empleado" readonly>
+                            <mat-icon class="material-icons-outlined color-icon p-3" matSuffix>work</mat-icon>
+                          </mat-form-field>
+                        </div>
+
+                        <div class="col-sm-4 mt-3">
+                          <mat-form-field class="example-full-width" appearance="outline" subscriptSizing="dynamic">
+                            <mat-label>Sucursal</mat-label>
+                            <input matInput formControlName="s_sucursal" readonly>
+                            <mat-icon class="material-icons-outlined color-icon p-3" matSuffix>business</mat-icon>
+                          </mat-form-field>
+                        </div>
+
+                        <div class="col-sm-4 mt-3">
+                          <mat-form-field class="example-full-width" appearance="outline" subscriptSizing="dynamic">
+                            <mat-label>Fecha de ingreso</mat-label>
+                            <input matInput formControlName="d_fecha_ingreso" readonly>
+                            <mat-icon class="material-icons-outlined color-icon p-3" matSuffix>event</mat-icon>
+                          </mat-form-field>
+                        </div>
+                      </div>
+
+                      <!-- Campos editables -->
+                      <div class="row m-b-25">
+                        <div class="col-sm-4 mt-3">
+                          <mat-form-field class="example-full-width" appearance="outline" subscriptSizing="dynamic">
+                            <mat-label>Teléfono</mat-label>
+                            <input matInput formControlName="n_telefono" type="tel" maxlength="10">
+                            <mat-icon class="material-icons-outlined color-icon p-3" matSuffix>phone</mat-icon>
+                            <mat-error *ngIf="perfilForm.get('n_telefono')?.hasError('required')">
+                              Teléfono requerido
+                            </mat-error>
+                          </mat-form-field>
+                        </div>
+                        <div class="col-sm-4 mt-3">
+                          <mat-form-field class="example-full-width" appearance="outline" subscriptSizing="dynamic">
+                            <mat-label>Correo</mat-label>
+                            <input matInput formControlName="s_correo">
+                            <mat-icon class="material-icons-outlined color-icon p-3" matSuffix>email</mat-icon>
+                            <mat-error *ngIf="perfilForm.get('s_correo')?.hasError('email')">
+                              Correo inválido
+                            </mat-error>
+                          </mat-form-field>
+                        </div>
+                        <div class="col-sm-4 mt-3">
+                          <mat-form-field class="example-full-width" appearance="outline" subscriptSizing="dynamic">
+                            <mat-label>Teléfono Emergencia</mat-label>
+                            <input matInput formControlName="n_telefono_contacto_emergencia" type="tel" maxlength="10">
+                          </mat-form-field>
+                        </div>
+                      </div>
+
+                      <div class="row m-b-25">
+                        <div class="col-sm-12">
+                          <mat-form-field class="example-full-width" appearance="outline" subscriptSizing="dynamic">
+                            <mat-label>Dirección</mat-label>
+                            <textarea matInput formControlName="s_direccion"></textarea>
+                          </mat-form-field>
+                        </div>
+                      </div>
+
+                      <!-- Nueva sección de habilidades -->
+                      <div class="row m-b-25">
+                        <div class="col-sm-12">
+                          <h4 class="section-title">Habilidades</h4>
+                          <p class="info-text">
+                            <mat-icon>info</mat-icon> Selecciona tu nivel de dominio en cada habilidad (1-10)
+                          </p>
+
+                          <div class="skills-container" *ngIf="habilidadesEmpleado.length > 0">
+                            <div class="skill-item" *ngFor="let habilidad of habilidadesEmpleado">
+                              <div class="skill-level-selector">
+                                <div class="skill-name">{{ habilidad.s_habilidad_empleado }}</div>
+                                <div class="level-buttons">
+                                  <button *ngFor="let level of [1,2,3,4,5,6,7,8,9,10]" type="button"
+                                    [class.active]="habilidad.n_nivel_dominio === level"
+                                    (click)="habilidad.n_nivel_dominio = level; onSkillLevelChange(habilidad)">
+                                    {{ level }}
+                                  </button>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+
+                          <div *ngIf="habilidadesEmpleado.length === 0" class="info-text">
+                            No hay habilidades asignadas a tu tipo de empleado.
+                          </div>
+                        </div>
+                      </div>
+
+                      <!-- Sección de imagen -->
+                      <div class="row m-b-25">
+                        <div class="col-sm-12">
+                          <h4 class="section-title">Imagen actual</h4>
+                          <img [src]="getEmpleadoImage(dataUsuario[0]?.s_foto_empleado || '')"
+                            class="current-image-preview">
+                          <div class="file-info">{{dataUsuario[0]?.s_foto_empleado || 'empleado-default.png'}}</div><br>
+
+                          <mat-checkbox [(ngModel)]="actualizarImagen" [ngModelOptions]="{standalone: true}"
+                            (change)="fotoSeleccionada = null; fotoPreview = null">
+                            ¿Desea actualizar la imagen?
+                          </mat-checkbox>
+                        </div>
+                      </div>
+
+                      @if (actualizarImagen) {
+                      <div class="row m-b-25">
+                        <div class="col-sm-12">
+                          <div class="form-group mb-2">
+                            <label class="label-style">Nueva Imagen:</label>
+                            <input type="file" (change)="onFotoSelected($event)" accept="image/*" class="form-control">
+                            @if (fotoSeleccionada) {
+                            <div class="file-info">{{fotoSeleccionada.name}}</div>
+                            <img [src]="fotoPreview" class="new-image-preview">
+                            } @else {
+                            <div class="info-text">Si no selecciona una imagen, se restablecerá la imagen por defecto
+                            </div>
+                            }
+                          </div>
+                        </div>
+                      </div>
+                      }
+
+                      <!-- Botones -->
+                      <div class="row m-b-25">
+                        <div class="col-sm-12">
+                          <div
+                            class="example-button-row mat-elevation-z1 mat-mt-3 d-flex flex-column flex-sm-row gap-2 gap-sm-0">
+                            <button mat-flat-button color="primary" type="submit"
+                              [disabled]="perfilForm.invalid || actualizando">
+                              {{actualizando ? 'Actualizando...' : 'Guardar cambios'}}
+                            </button>
+                            <button mat-flat-button mat-dialog-close class="formCancelBtn">Cancelar</button>
+                          </div>
+                        </div>
+                      </div>
+                    </form>
+                  </div>
+                </div>
+              </div>
+            </mat-tab>
+          </mat-tab-group>
+        </div>
+      </div>
+    </div>
+
+
+  </div><!-- End mat-dialog-content -->
+</div><!-- End dialogContainer -->

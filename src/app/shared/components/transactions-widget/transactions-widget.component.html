@@ -1,0 +1,17 @@
+<ul class="p-0 m-0">
+    <li *ngFor="let transaction of transactions" class="d-flex mb-4 pb-1">
+        <div [ngClass]="'icon-box icon-box-' + transaction.iconColor">
+            <i class="material-icons" [ngClass]="'col-'+transaction.iconColor">{{ transaction.icon }}</i>
+        </div>
+        <div class="d-flex w-100 align-items-center justify-content-between">
+            <div class="me-2 ms-2">
+                <small class="text-muted mb-1">{{ transaction.category }}</small>
+                <h6 class="mb-0">{{ transaction.description }}</h6>
+            </div>
+            <div class="d-flex align-items-center amount-section">
+                <h6 class="mb-0" [ngClass]="'col-'+transaction.textColor">{{ transaction.amount }}</h6>
+                <i class="material-icons" [ngClass]="'col-'+transaction.textColor">attach_money</i>
+            </div>
+        </div>
+    </li>
+</ul>

@@ -1,0 +1,118 @@
+<div class="auth-container">
+  <div class="background-image">
+    <div class="carousel-img img1"></div>
+    <div class="carousel-img img2"></div>
+    <div class="carousel-img img3"></div>
+    <div class="carousel-img img4"></div>
+  </div>
+  <div class="overlay"></div>
+
+  <div class="auth-content">
+    <!-- Sección izquierda: Login -->
+    <div class="login-section">
+      <div class="brand">
+        <h1>Bienvenido a <span class="brand-name">TallerUp</span></h1>
+        <p>Si ya tienes una cuenta por favor inicia sesión aquí</p>
+      </div>
+
+      <div class="login-card">
+        <h2>Iniciar Sesión</h2>
+        <form [formGroup]="authForm" (ngSubmit)="onSubmit()">
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Usuario</mat-label>
+            <input matInput formControlName="username"/>
+            <mat-icon matSuffix>person</mat-icon>
+            <mat-error *ngIf="authForm.get('username')?.hasError('required')">
+              El usuario es requerido
+            </mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Contraseña</mat-label>
+            <input matInput [type]="hide ? 'password' : 'text'" formControlName="password" />
+            <button type="button" mat-icon-button matSuffix (click)="hide = !hide">
+              <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+            </button>
+            <mat-error *ngIf="authForm.get('password')?.hasError('required')">
+              La contraseña es requerida
+            </mat-error>
+          </mat-form-field>
+
+          <button mat-flat-button class="btn-login" [disabled]="!authForm.valid">
+            Entrar
+          </button>
+        </form>
+
+        <!-- Redes sociales -->
+        <div class="social-section">
+          <h6 class="social-login-title">Nuestras Redes Sociales</h6>
+          <ul class="list-unstyled social-icon">
+            <li class="list-inline-item">
+              <a href="javascript:void(0)" class="rounded flex-c-m">
+                <i class="fab fa-instagram"></i>
+              </a>
+            </li>
+            <li class="list-inline-item">
+              <a href="javascript:void(0)" class="rounded flex-c-m">
+                <i class="fab fa-facebook-f"></i>
+              </a>
+            </li>
+            <li class="list-inline-item">
+              <a href="javascript:void(0)" class="rounded flex-c-m">
+                <i class="fa-brands fa-tiktok"></i>
+              </a>
+            </li>
+            <li class="list-inline-item">
+              <a href="javascript:void(0)" class="rounded flex-c-m">
+                <i class="fab fa-linkedin-in"></i>
+              </a>
+            </li>
+          </ul>
+          
+          <!-- Texto agregado debajo de los iconos -->
+          <div class="brand-footer">
+            <p>TallerUp by Save Car Mx.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <h6 class="social-login-title p-3">{{ultimaVersionGeneral?.s_nombre_version}}</h6>
+    
+
+    <!-- Separador visual -->
+    <div class="divider">
+      <span>o</span>
+    </div>
+
+    <!-- Sección derecha: Registro -->
+    <div class="register-section">
+      <!-- Imagen añadida arriba del título -->
+      <div class="register-image">
+        <img src="assets/images/pages/taller.png" alt="Ilustración de registro">
+      </div>
+      
+      <h2>Crear una cuenta</h2>
+      
+      <div class="steps">
+        <div class="step">
+          <div class="step-number">1</div>
+          <div class="step-text">Dar Clic en Solicitar Cuenta</div>
+        </div>
+        <div class="step">
+          <div class="step-number">2</div>
+          <div class="step-text">Espera una Respuesta del Administrador</div>
+        </div>
+        <div class="step">
+          <div class="step-number">3</div>
+          <div class="step-text">¡Comienza a usar la plataforma!</div>
+        </div>
+      </div>
+
+      <!-- Botón con evento onSignupClick -->
+      <button mat-flat-button class="btn-register" (click)="onSignupClick($event)">
+        Solicitar Cuenta
+      </button>
+    </div>
+  </div>
+</div>

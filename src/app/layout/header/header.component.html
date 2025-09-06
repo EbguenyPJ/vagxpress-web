@@ -1,0 +1,139 @@
+<nav #navbar class="navbar active">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <a href="#" onClick="return false;" class="navbar-toggle collapsed"
+        (click)="isNavbarCollapsed = !isNavbarCollapsed" aria-expanded="false"></a>
+      <a href="#" onClick="return false;" class="bars" (click)="mobileMenuSidebarOpen($event,'overlay-open')"></a>
+      <a class="navbar-brand" routerLink="dashboard/main">
+          <img src="assets/images/pages/taller.png" alt="" />
+          <span class="logo-name">Taller Up</span>
+      </a>
+    </div>
+    <div class="collapse navbar-collapse" [ngClass]="isNavbarCollapsed ? '' : 'show'">
+      <ul class="pull-left collapse-menu-icon">
+        <li>
+          <button mat-icon-button (click)="callSidemenuCollapse()" class="sidemenu-collapse nav-notification-icons"> <i
+              class="material-icons-outlined icon-color">
+              menu
+            </i></button>
+        </li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <!-- Full Screen Button -->
+        <li class="fullscreen">
+          <button mat-icon-button class="nav-notification-icons" (click)="callFullscreen()"> <i
+              class="material-icons-outlined icon-color">
+              fullscreen
+            </i></button>
+        </li>
+        <!-- #END# Full Screen Button -->
+        <!-- #START# Notifications-->
+        <li>
+          <button mat-icon-button [matMenuTriggerFor]="notificationMenu" class="nav-notification-icons" 
+          [matBadge]="contadorNuevasAlertas"
+        matBadgeColor="warn"
+        [matBadgeHidden]="contadorNuevasAlertas === 0"
+          (click)="onClickCampana()">
+            <i class="material-icons icon-color" [ngClass]="{'nueva-alerta': tieneNuevaAlerta}">
+              notifications_active
+            </i>
+          </button>
+          <mat-menu #notificationMenu="matMenu" class="nfc-menu" (closed)="marcarAlertasComoVistas()">
+            <div class="nfc-header bck-amarillo">
+              <h5 class="mb-0 text-black">Notificaciones</h5>
+              <!-- <a class="nfc-mark-as-read">Mark all as read</a> -->
+            </div>
+            <div class="nfc-dropdown">
+              <ng-scrollbar style="height: 350px" visibility="hover">
+                <div class="noti-list header-menu">
+                  <div class="menu men">
+                    <div>
+                      @for (alerta of alertasGeneral; track alerta) {
+                      <button class="men mt-5" mat-menu-item onClick="return false;" [matTooltip]="quitarHtml(alerta.s_descripcion)">
+                        <span class="table-img msg-user ">
+                          <i class="material-icons-outlined nfc-type-icon" [ngClass]="[alerta.s_color]">{{alerta.s_icono}}</i>
+                        </span>
+                        <span class="menu-info">
+                          <div>
+                            <span class="menu-title">{{alerta.s_tipo_alerta}}:</span>
+                          </div>
+                          <br>
+                          <div class="d-flex justify-content-between align-items-center">
+                            <span class="menu-title">{{ quitarCierrede(alerta.s_alerta) }}:</span>
+                            <span class="badge badge-solid-green ms-4" *ngIf="alerta.esNueva">Nueva</span>
+                          </div>
+
+                          <span class="menu-desc mt-2">
+                            <i  class="material-icons">access_time</i> Hace {{alerta.minutos_transcurridos}} minutos
+                          </span>
+                        </span>
+                        
+                        <!-- <span class="nfc-close">
+                          <app-feather-icons [icon]="'x'" [class]="'user-menu-icons'"></app-feather-icons>
+                        </span> -->
+                      </button>
+                      }
+                    </div>
+                  </div>
+                </div>
+              </ng-scrollbar>
+            </div>
+            <div class="nfc-footer">
+              <a class="nfc-read-all">SaveCar</a>
+            </div>
+          </mat-menu>
+        </li>
+        <!-- #END# Notifications-->
+        <li class="nav-item user_profile">
+          <button mat-button [matMenuTriggerFor]="profilemenu">
+            <div class="chip dropdown-toggle" ngbDropdownToggle class="">
+              <span>{{ usuario }}</span>
+              <img src="assets/images/user.jpg" class="user_img" width="32" height="32" alt="User">
+            </div>
+          </button>
+          <span class="logo-version">{{ultimaVersionGeneral?.s_nombre_version}}</span>
+          <mat-menu #profilemenu="matMenu" class="profile-menu">
+            <div class="noti-list">
+              <div class="menu ">
+                <div class="user_dw_menu">
+                 
+                    <a mat-menu-item href="https://savecar.com.mx/tutoriales/" target="_blank" rel="noopener">
+                    <mat-icon class="material-icons-outlined">play_circle_outline</mat-icon>
+                    <span>Tutoriales</span>
+                    </a>
+
+
+                  <button mat-menu-item>
+                    <mat-icon class="material-icons-outlined" >settings_outline</mat-icon>
+                    <span>Ajustes</span>
+                  </button>
+
+                  <button mat-menu-item (click)="abrirVersiones()" *ngIf="mostrarBoton(id_tipo_usuario)">
+                    <mat-icon class="material-icons-outlined" >cloud_queue</mat-icon>
+                    <span>Versiones</span>
+                  </button>
+
+                  <button mat-menu-item (click)="abrirAcercaDe(ultimaVersionGeneral)">
+                    <mat-icon class="material-icons-outlined" >info</mat-icon>
+                    <span>Acerca de</span>
+                  </button>
+
+                  <button mat-menu-item (click)="logout()"> 
+                    <mat-icon class="material-icons-outlined">exit_to_app</mat-icon>
+                    <span>Cerrar Sesión</span>
+                  </button>
+
+                  <!-- <button mat-menu-item (click)="logout()" class="user-item-list">
+                    <app-feather-icons [icon]="'log-out'" [class]="'user-menu-icons'"></app-feather-icons>Cerrar Sesión
+                  </button> -->
+
+                </div>
+              </div>
+            </div>
+          </mat-menu>
+        </li>
+        <!-- #END# Tasks -->
+      </ul>
+    </div>
+  </div>
+</nav>

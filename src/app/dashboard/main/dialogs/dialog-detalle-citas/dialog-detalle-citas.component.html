@@ -1,0 +1,87 @@
+<div class="materialTableHeader flex-wrap">
+  <div class="left">
+    <ul class="header-buttons-left ms-0">
+      <li class="tbl-title d-flex align-items-center asesor-header">
+        <img
+          *ngIf="asesor?.s_foto_empleado"
+          [src]="url_img_empleados + asesor.s_foto_empleado"
+          alt="Asesor"
+          class="avatar-sm rounded-circle me-2 flex-shrink-0"
+        />
+        <h2 class="asesor-nombre mb-0 text-truncate">{{ asesor?.s_nombre_completo }}</h2>
+      </li>
+
+      <li class="tbl-search-box">
+        <label for="search-input"><i class="material-icons search-icon">search</i></label>
+        <input
+          placeholder="Buscar"
+          type="text"
+          #filter
+          (keyup)="applyFilter($event)"
+          class="browser-default search-field"
+          aria-label="Buscar"
+        />
+      </li>
+    </ul>
+  </div>
+
+  <div class="right">
+    <ul class="tbl-export-btn">
+      <li class="tbl-header-btn">
+        <button mat-icon-button (click)="exportExcel()" class="col-blue" matTooltip="Descargar Excel">
+          <mat-icon class="material-icons-outlined">file_download</mat-icon>
+        </button>
+      </li>
+      <li class="tbl-header-btn">
+        <button mat-icon-button (click)="close()" class="col-red" matTooltip="Cerrar">
+          <mat-icon class="material-icons-outlined">close</mat-icon>
+        </button>
+      </li>
+    </ul>
+  </div>
+</div>
+
+<div class="tabla-scroll-wrapper">
+  <table mat-table [dataSource]="dataSource" matSort class="mat-cell advance-table">
+    <ng-container *ngFor="let column of columnDefinitions" [matColumnDef]="column.def">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>
+        {{ column.label }}
+      </mat-header-cell>
+      <mat-cell *matCellDef="let row">
+        <ng-container [ngSwitch]="column.def">
+          <span *ngSwitchCase="'fecha'">{{ row.fecha | date: 'shortDate' }}</span>
+
+          <span *ngSwitchCase="'estatus'">
+            @if (row.estatus == 1) {
+              <span class="badge badge-solid-orange">Agendada</span>
+            } @else if (row.estatus == 2) {
+              <span class="badge badge-solid-purple">Reagendada</span>
+            } @else if (row.estatus == 3) {
+              <span class="badge badge-solid-green">Concretada</span>
+            } @else if (row.estatus == 4) {
+              <span class="badge badge-solid-red">Cancelada</span>
+            } @else {
+              <span class="badge badge-solid-grey">Desconocido</span>
+            }
+          </span>
+
+          <span *ngSwitchDefault>{{ row[column.def] }}</span>
+        </ng-container>
+      </mat-cell>
+    </ng-container>
+
+    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+    <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+  </table>
+
+  <div *ngIf="isLoading" class="tbl-spinner">
+    <mat-progress-spinner color="primary" [diameter]="40" mode="indeterminate"></mat-progress-spinner>
+  </div>
+
+  <mat-paginator
+    [length]="dataSource.filteredData.length"
+    [pageIndex]="0"
+    [pageSize]="10"
+    [pageSizeOptions]="[5, 10, 25, 100]">
+  </mat-paginator>
+</div>

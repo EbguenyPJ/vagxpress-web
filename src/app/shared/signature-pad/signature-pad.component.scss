@@ -1,0 +1,70 @@
+// .signature-container {
+//   border: 1px solid #ccc;
+//   padding: 10px;
+//   width: 100%;
+//   max-width: 500px;
+// }
+// canvas {
+//   width: 100%;
+//   height: 200px;
+//   border: 1px solid #000;
+// }
+// .buttons {
+//   margin-top: 10px;
+// }
+
+.signature-container {
+  border: 1px solid #ccc;
+  padding: 15px;
+  width: 100%;
+  max-width: 500px;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.signature-pad-container {
+  position: relative;
+  width: 100%;
+  height: 200px;
+  background-color: #f7f7f7;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+canvas {
+  width: 100%;
+  height: 100%;
+  border: 1px solid #000;
+  border-radius: 4px;
+  background-color: #fff;
+  display: block;
+}
+
+.buttons {
+  display: flex;
+  justify-content: flex-start;
+  gap: 10px;
+  margin-top: 15px;
+}
+
+@media (max-width: 768px) {
+  .signature-container {
+    max-width: 100%;
+    padding: 8px; /* 🔽 Reducido el padding */
+  }
+
+  .signature-pad-container {
+    height: 150px;
+  }
+
+  canvas {
+    height: 80%;
+  }
+}

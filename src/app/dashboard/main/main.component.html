@@ -1,0 +1,370 @@
+<section class="content">
+  <div class="content-block">
+    <div class="block-header mt-n3">
+      <div class="row">
+        <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12">
+          <ul class="breadcrumb breadcrumb-style ">
+            <li class="breadcrumb-item">
+              <h4 class="fw-bold">Hi, Welcome back!</h4>
+              <h5 class="font-weight-normal mb-0">Axen Dashboard,</h5>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-xl-5">
+        <div class="w-100">
+          <div class="row">
+            <div class="col-sm-6">
+              <div class="card">
+                <div class="card-body">
+                  <div class="row">
+                    <div class="col mt-0">
+                      <h6 class="card-title font-b-500">New Customers</h6>
+                    </div>
+                    <div class="col-auto">
+                      <div class="col-green">
+                        <i class="fas fa-user-friends pull-left card-icon col-orange font-30"></i>
+                      </div>
+                    </div>
+                  </div>
+                  <h4 class="mt-1 mb-3">456</h4>
+                  <div class="mb-0">
+                    <span class="text-success m-r-5"><i class="material-icons col-green align-middle">trending_up</i>
+                      10.32%
+                    </span>
+                    <span class="text-muted">Since last week</span>
+                  </div>
+                </div>
+              </div>
+              <div class="card">
+                <div class="card-body">
+                  <div class="row">
+                    <div class="col mt-0">
+                      <h6 class="card-title font-b-500">Orders Received</h6>
+                    </div>
+                    <div class="col-auto">
+                      <div class="col-purple">
+                        <i class="fas fa-cart-plus pull-left card-icon font-30"></i>
+                      </div>
+                    </div>
+                  </div>
+                  <h4 class="mt-1 mb-3">103</h4>
+                  <div class="mb-0">
+                    <span class="text-danger m-r-5"><i class="material-icons col-red align-middle">trending_down</i>
+                      -10.64%
+                    </span>
+                    <span class="text-muted">Since last week</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-sm-6">
+              <div class="card">
+                <div class="card-body">
+                  <div class="row">
+                    <div class="col mt-0">
+                      <h6 class="card-title font-b-500">Inquiry</h6>
+                    </div>
+                    <div class="col-auto">
+                      <div class="col-blue">
+                        <i class="fas fa-headset pull-left card-icon font-30"></i>
+                      </div>
+                    </div>
+                  </div>
+                  <h4 class="mt-1 mb-3">3,423</h4>
+                  <div class="mb-0">
+                    <span class="text-success m-r-5"><i class="material-icons col-green align-middle">trending_up</i>
+                      21..19%
+                    </span>
+                    <span class="text-muted">Since last week</span>
+                  </div>
+                </div>
+              </div>
+              <div class="card">
+                <div class="card-body">
+                  <div class="row">
+                    <div class="col mt-0">
+                      <h6 class="card-title font-b-500">Revenue</h6>
+                    </div>
+                    <div class="col-auto">
+                      <div class="col-green">
+                        <i class="fas fa-dollar-sign pull-left card-icon font-30"></i>
+                      </div>
+                    </div>
+                  </div>
+                  <h4 class="mt-1 mb-3">$2,352</h4>
+                  <div class="mb-0">
+                    <span class="text-danger m-r-5"><i class="material-icons col-red align-middle">trending_down</i>
+                      -4.27%
+                    </span>
+                    <span class="text-muted">Since last week</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-xl-7">
+        <mat-card>
+          <mat-card-header class="header-style">
+            <mat-card-title>Daily Booking Chart</mat-card-title>
+            <a mat-button color="primary" href="#" (click)="$event.preventDefault();">View All</a>
+          </mat-card-header>
+          <mat-card-content>
+            <apx-chart [series]="areaChartOptions.series!" [chart]="areaChartOptions.chart!"
+              [xaxis]="areaChartOptions.xaxis!" [yaxis]="areaChartOptions.yaxis!" [colors]="areaChartOptions.colors!"
+              [stroke]="areaChartOptions.stroke!" [legend]="areaChartOptions.legend!"
+              [tooltip]="areaChartOptions.tooltip!" [dataLabels]="areaChartOptions.dataLabels!"></apx-chart>
+          </mat-card-content>
+        </mat-card>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-xl-8 col-lg-8 col-md-12 col-sm-12">
+        <mat-card>
+          <mat-card-header class="header-style">
+            <mat-card-title>Income Survay</mat-card-title>
+            <a mat-button color="primary" href="#" (click)="$event.preventDefault();">View All</a>
+          </mat-card-header>
+          <mat-card-content>
+            <div class="row">
+              <div class="col-xl-8 col-lg-8 col-md-12 col-sm-12">
+                <apx-chart [series]="barChartOptions.series!" [chart]="barChartOptions.chart!"
+                  [dataLabels]="barChartOptions.dataLabels!" [plotOptions]="barChartOptions.plotOptions!"
+                  [yaxis]="barChartOptions.yaxis!" [legend]="barChartOptions.legend!" [colors]="barChartOptions.colors!"
+                  [stroke]="barChartOptions.stroke!" [tooltip]="barChartOptions.tooltip!"
+                  [xaxis]="barChartOptions.xaxis!">
+                </apx-chart>
+              </div>
+              <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12">
+                <h6>Top Selling Products</h6>
+                <hr>
+                <ul class="list-unstyled list-unstyled-noborder">
+                  <li class="sales-group-list top-sell">
+                    <i class="fas fa-mobile-alt bg-purple sell-icon"></i>
+                    <div class="set-flex">
+                      <div class="sell-price">
+                        <div class="font-weight-600 text-muted text-small">112 Sales</div>
+                      </div>
+                      <div class="product-title">Mobile</div>
+                      <div class="product-price">
+                        <div class="budget-price-label col-green">$24,897</div>
+                      </div>
+                    </div>
+                  </li>
+                  <li class="sales-group-list top-sell">
+                    <i class="fas fa-laptop bg-blue sell-icon"></i>
+                    <div class="set-flex">
+                      <div class="sell-price">
+                        <div class="font-weight-600 text-muted text-small">79 Sales</div>
+                      </div>
+                      <div class="product-title">Laptop</div>
+                      <div class="product-price">
+                        <div class="budget-price-label col-green">$12,629</div>
+                      </div>
+                    </div>
+                  </li>
+                  <li class="sales-group-list top-sell">
+                    <i class="fas fa-headset bg-teal sell-icon"></i>
+                    <div class="set-flex">
+                      <div class="sell-price">
+                        <div class="font-weight-600 text-muted text-small">325 Sales</div>
+                      </div>
+                      <div class="product-title">Headphone</div>
+                      <div class="product-price">
+                        <div class="budget-price-label col-green">$34,782</div>
+                      </div>
+                    </div>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </mat-card-content>
+        </mat-card>
+      </div>
+      <div class="col-12 col-sm-12 col-md-12 col-lg-4 col-xl-4">
+        <mat-card>
+          <mat-card-header>
+            <mat-card-title>New Order List</mat-card-title>
+          </mat-card-header>
+          <mat-card-content>
+            <ng-scrollbar style="height: 380px" visibility="hover">
+              <app-new-order-list></app-new-order-list>
+            </ng-scrollbar>
+          </mat-card-content>
+        </mat-card>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+        <div class="card">
+          <div class="card-body">
+            <mat-tab-group>
+              <mat-tab>
+                <ng-template mat-tab-label>
+                  <mat-icon class="example-tab-icon m-2">computer</mat-icon>
+                  Computer
+                </ng-template>
+                <div class="mt-5">
+                  <ngx-gauge [value]="gaugeValue" [size]="gaugeSize" [type]="gaugeType" [thick]="guageThick"
+                    [thresholds]="thresholdConfig" class="guage-chart-center">
+                    <ngx-gauge-value>
+                      <span class="font-27"> {{gaugeValue}}</span>
+                    </ngx-gauge-value>
+                    <ngx-gauge-label>
+                      <span class="font-15 text-muted">'Qty'</span>
+                    </ngx-gauge-label>
+                  </ngx-gauge>
+                </div>
+                <div class="d-flex w-100 text-center mt-5 ml-0 mr-0 pb-3">
+                  <div class="col-6">
+                    <div class="col-6 border-right">
+                      <div class="h4 fw-bold mb-0">28%</div><span class="small text-gray">Last week</span>
+                    </div>
+                  </div>
+                  <div class="col-6">
+                    <div class="h4 fw-bold mb-0">70%</div><span class="small text-gray">Last month</span>
+                  </div>
+                </div>
+              </mat-tab>
+
+              <mat-tab>
+                <ng-template mat-tab-label>
+                  <mat-icon class="example-tab-icon m-2">photo_camera</mat-icon>
+                  Camera
+                </ng-template>
+                <div class="mt-5">
+                  <ngx-gauge [value]="gaugeValue2" [size]="gaugeSize2" [type]="gaugeType2" [thick]="guageThick2"
+                    [thresholds]="thresholdConfig2" class="guage-chart-center">
+                    <ngx-gauge-value>
+                      <span class="font-27"> {{gaugeValue2}}</span>
+                    </ngx-gauge-value>
+                    <ngx-gauge-label>
+                      <span class="font-15 text-muted">'Qty'</span>
+                    </ngx-gauge-label>
+                  </ngx-gauge>
+                </div>
+                <div class="d-flex w-100 text-center mt-5 ml-0 mr-0 pb-3">
+                  <div class="col-6">
+                    <div class="col-6 border-right">
+                      <div class="h4 fw-bold mb-0">33%</div><span class="small text-gray">Last week</span>
+                    </div>
+                  </div>
+                  <div class="col-6">
+                    <div class="h4 fw-bold mb-0">68%</div><span class="small text-gray">Last month</span>
+                  </div>
+                </div>
+              </mat-tab>
+            </mat-tab-group>
+          </div>
+        </div>
+      </div>
+      <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+        <div class="card">
+          <div class="header">
+            <h2>Chart Sample</h2>
+          </div>
+          <div class="body">
+            <div id="chart">
+              <apx-chart [series]="circleChartOptions.series2!" [chart]="circleChartOptions.chart!"
+                [plotOptions]="circleChartOptions.plotOptions!" [labels]="circleChartOptions.labels!"
+                [legend]="circleChartOptions.legend!" [colors]="circleChartOptions.colors!"
+                [responsive]="circleChartOptions.responsive!"></apx-chart>
+            </div>
+            <div class="row">
+              <div class="col-4">
+                <p class="text-muted font-15 text-truncate">Target</p>
+                <h6>
+                  <i class="fas fa-arrow-circle-up col-green m-r-5"></i>$15.3k
+                </h6>
+              </div>
+              <div class="col-4">
+                <p class="text-muted font-15 text-truncate">Last
+                  week</p>
+                <h6>
+                  <i class="fas fa-arrow-circle-down col-red m-r-5"></i>$2.8k
+                </h6>
+              </div>
+              <div class="col-4">
+                <p class="text-muted text-truncate">Last
+                  Month</p>
+                <h6>
+                  <i class="fas fa-arrow-circle-up col-green m-r-5"></i>$12.5k
+                </h6>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12">
+        <div class="card">
+          <div class="header">
+            <h2>Chart Sample</h2>
+          </div>
+          <div class="body">
+            <div id="chart">
+              <apx-chart [series]="pieChartOptions.series2!" [chart]="pieChartOptions.chart!"
+                [labels]="pieChartOptions.labels!" [responsive]="pieChartOptions.responsive!"
+                [dataLabels]="pieChartOptions.dataLabels!" [legend]="pieChartOptions.legend!" class="apex-pie-center">
+              </apx-chart>
+            </div>
+            <div class="table-responsive m-t-15">
+              <table class="table align-items-center">
+                <tbody>
+                  <tr>
+                    <td><i class="fa fa-circle col-blue msr-2"></i>Science</td>
+                    <td>32</td>
+                    <td class="col-green">+12%</td>
+                  </tr>
+                  <tr>
+                    <td><i class="fa fa-circle col-orange msr-2"></i>Economics</td>
+                    <td>12</td>
+                    <td class="col-orange">-12%</td>
+                  </tr>
+                  <tr>
+                    <td><i class="fa fa-circle col-green msr-2"></i>Mathes</td>
+                    <td>32</td>
+                    <td class="col-green">+3%</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row clearfix">
+      <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+        <mat-card>
+          <mat-card-header class="header-style">
+            <mat-card-title>Documents</mat-card-title>
+            <a mat-button color="primary" href="#" (click)="$event.preventDefault();">View All</a>
+          </mat-card-header>
+          <mat-card-content>
+            <ng-scrollbar style="height: 400px" visibility="hover">
+              <div class="doc-file-type">
+                <app-document-list [documents]="documentList"></app-document-list>
+              </div>
+            </ng-scrollbar>
+          </mat-card-content>
+        </mat-card>
+      </div>
+      <div class="col-12 col-sm-12 col-md-12 col-lg-8 col-xl-8">
+        <mat-card>
+          <mat-card-header class="header-style">
+            <mat-card-title>Recent Orders</mat-card-title>
+            <a mat-button color="primary" href="#" (click)="$event.preventDefault();">View All</a>
+          </mat-card-header>
+          <mat-card-content>
+            <ng-scrollbar style="height: 400px" visibility="hover">
+              <app-table-card [dataSource]="orderData " [columnDefinitions]="orderColumnDefinitions"></app-table-card>
+            </ng-scrollbar>
+          </mat-card-content>
+        </mat-card>
+      </div>
+    </div>
+  </div>
+</section>

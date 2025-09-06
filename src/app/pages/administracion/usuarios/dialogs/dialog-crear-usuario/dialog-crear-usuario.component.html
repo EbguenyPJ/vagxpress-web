@@ -1,0 +1,103 @@
+<div class="dialogContainer">
+  <div class="modalHeader">
+    <div class="avatarDetails">
+      <label class="hoverable" for="tableFileInput">
+        <!-- <img [src]="url ? url : advanceTable.img" alt="image"> -->
+        <div class="hover-text">Upload</div>
+        <div class="background"></div>
+      </label>
+      <input id="tableFileInput" type='file' (change)="onSelectFile($event)">
+      <div class="modalTitle">
+        {{dialogTitle}}
+      </div>
+    </div>
+    <button mat-icon-button mat-dialog-close class="modal-close-button" aria-label="Close dialog" type="button">
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+
+  <div mat-dialog-content>
+    <form class="form-field-full" [formGroup]="usuariosTableForm" (ngSubmit)="submit()">
+
+      <div class="row m-b-25">
+        <div class="col-sm-6">
+          <mat-form-field class="example-full-width" appearance="outline" subscriptSizing="dynamic">
+            <mat-label>Nombre de usuario</mat-label>
+            <input matInput formControlName="name">
+            <mat-icon class="material-icons-outlined color-icon p-3" matSuffix>face</mat-icon>
+            @if (usuariosTableForm.get('name')?.hasError('required'))
+            {
+              <mat-error>El nombre de usuario es requerido</mat-error>
+            }
+          </mat-form-field>
+        </div>
+
+        <div class="col-sm-6">
+          <mat-form-field class="example-full-width" appearance="outline">
+            <mat-label>Password</mat-label>
+            <input matInput formControlName="password" [type]="hide ? 'password' : 'text'" required>
+            <mat-icon matSuffix (click)="hide = !hide">{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+            @if (usuariosTableForm.get('password')?.hasError('required'))
+            {
+              <mat-error>La contraseña es requerida</mat-error>
+            }
+          </mat-form-field>
+        </div>
+      </div>
+
+
+
+      <div class="row m-b-25">
+        <div class="col-sm-6">
+          <mat-form-field class="example-full-width " appearance="outline" subscriptSizing="dynamic">
+            <mat-label>Tipos de usuarios</mat-label>
+            <mat-select formControlName="id_tipo_usuario" required>
+              <mat-option *ngFor="let info of tipos_usuarios" [value]="info.id_tipo_usuario">
+                {{ info.s_tipo_usuario }}
+              </mat-option>
+
+            </mat-select>
+            @if (usuariosTableForm.get('id_tipo_usuario')?.hasError('required'))
+            {
+              <mat-error>
+                El tipo de usuario es requerido
+              </mat-error>
+            }
+          </mat-form-field>
+        </div>
+
+
+        <div class="col-sm-6">
+          <mat-form-field class="example-full-width " appearance="outline" subscriptSizing="dynamic">
+            <mat-label>Empleados</mat-label>
+            <mat-select formControlName="id_empleado" required>
+              <mat-option *ngFor="let empleado of empleados" [value]="empleado.id_empleado">
+                {{empleado.s_nombre + " " + empleado.s_apellido_paterno + " " + empleado.s_apellido_materno }}
+              </mat-option>
+
+            </mat-select>
+            @if (usuariosTableForm.get('id_empleado')?.hasError('required'))
+            {
+              <mat-error>
+                El empleado es requerido
+              </mat-error>
+            }
+          </mat-form-field>
+        </div>
+      </div>
+
+
+
+      <div class="row m-b-25">
+        <div class="col-sm-12">
+          <div class="example-button-row">
+            <button mat-flat-button class="formSubmitBtn" [disabled]="!usuariosTableForm.valid" type="submit">Guardar</button>
+            <button mat-flat-button mat-dialog-close class="formCancelBtn" tabindex="-1">Cancelar</button>
+          </div>
+        </div>
+      </div>
+
+    </form>
+
+  </div>
+</div>

@@ -1,0 +1,214 @@
+<div class="dialogContainer">
+  <div class="modalHeader">
+    <div class="avatarDetails">
+      <div class="modalTitle">
+        {{dialogTitle}}
+      </div>
+    </div>
+    <button mat-icon-button mat-dialog-close class="modal-close-button" aria-label="Close dialog" type="button">
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+
+  <div mat-dialog-content>
+    <form class="form-field-full" [formGroup]="empleadosForm" (ngSubmit)="submit()">
+
+      <div class="row m-b-25">
+        <div class="col-sm-4 mt-3">
+          <mat-form-field class="example-full-width" appearance="outline" subscriptSizing="dynamic">
+            <mat-label>Nombre</mat-label>
+            <input matInput formControlName="s_nombre">
+            <mat-icon class="material-icons-outlined color-icon p-3" matSuffix>face</mat-icon>
+            <mat-error *ngIf="empleadosForm.get('s_nombre')?.hasError('required')">
+              El nombre del empleado es requerido
+            </mat-error>
+          </mat-form-field>
+        </div>
+
+        <div class="col-sm-4 mt-3">
+          <mat-form-field class="example-full-width" appearance="outline" subscriptSizing="dynamic">
+            <mat-label>Apellido Paterno</mat-label>
+            <input matInput formControlName="s_apellido_paterno">
+            <mat-icon class="material-icons-outlined color-icon p-3" matSuffix>face</mat-icon>
+            <mat-error *ngIf="empleadosForm.get('s_apellido_paterno')?.hasError('required')">
+              El apellido paterno es requerido
+            </mat-error>
+          </mat-form-field>
+        </div>
+
+        <div class="col-sm-4 mt-3">
+          <mat-form-field class="example-full-width" appearance="outline" subscriptSizing="dynamic">
+            <mat-label>Apellido Materno</mat-label>
+            <input matInput formControlName="s_apellido_materno">
+            <mat-icon class="material-icons-outlined color-icon p-3" matSuffix>face</mat-icon>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div class="row m-b-25">
+        <div class="col-sm-4 mt-3">
+          <mat-form-field class="example-full-width" appearance="outline" subscriptSizing="dynamic">
+            <mat-label>Teléfono</mat-label>
+            <input matInput formControlName="n_telefono" type="tel" maxlength="10" (keypress)="soloNumeros($event)"
+              oninput="if(this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);">
+            <mat-icon class="material-icons-outlined color-icon p-3" matSuffix>phone</mat-icon>
+            <mat-error *ngIf="empleadosForm.get('n_telefono')?.hasError('required')">
+              El teléfono es requerido
+            </mat-error>
+          </mat-form-field>
+        </div>
+
+        <div class="col-sm-4 mt-3">
+          <mat-form-field class="example-full-width" appearance="outline" subscriptSizing="dynamic">
+            <mat-label>Correo</mat-label>
+            <input matInput formControlName="s_correo">
+            <mat-icon class="material-icons-outlined color-icon p-3" matSuffix>email</mat-icon>
+            <mat-error *ngIf="empleadosForm.get('s_correo')?.hasError('email')">
+              Ingrese un correo válido
+            </mat-error>
+          </mat-form-field>
+        </div>
+
+        <div class="col-sm-4 mt-3">
+          <mat-form-field class="example-full-width" appearance="outline" subscriptSizing="dynamic">
+            <mat-label>Género</mat-label>
+            <mat-select formControlName="id_sexo" required>
+              <mat-option [value]="1">Hombre</mat-option>
+              <mat-option [value]="2">Mujer</mat-option>
+            </mat-select>
+            <mat-error *ngIf="empleadosForm.get('id_sexo')?.hasError('required')">
+              El género es requerido
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div class="row m-b-25">
+        <div class="col-sm-3 mt-3">
+          <mat-form-field class="example-full-width" appearance="outline" subscriptSizing="dynamic">
+            <mat-label>Tipo de empleado</mat-label>
+            <mat-select formControlName="id_tipo_empleado" required>
+              <mat-option *ngFor="let info of tiposEmpleados" [value]="info.id_tipo_empleado">
+                {{info.s_tipo_empleado}}
+              </mat-option>
+            </mat-select>
+            <mat-error *ngIf="empleadosForm.get('id_tipo_empleado')?.hasError('required')">
+              El tipo de empleado es requerido
+            </mat-error>
+          </mat-form-field>
+        </div>
+
+        <div class="col-sm-3 mt-3">
+          <mat-form-field class="example-full-width" appearance="outline" subscriptSizing="dynamic">
+            <mat-label>Sucursal</mat-label>
+            <mat-select formControlName="id_sucursal" required>
+              <mat-option *ngFor="let info of sucursales" [value]="info.id_sucursal">
+                {{info.s_sucursal}}
+              </mat-option>
+            </mat-select>
+            <mat-error *ngIf="empleadosForm.get('id_sucursal')?.hasError('required')">
+              La sucursal es requerida
+            </mat-error>
+          </mat-form-field>
+        </div>
+
+        <div class="col-sm-3 mt-3">
+          <mat-form-field class="example-full-width" appearance="outline" subscriptSizing="dynamic">
+            <mat-label>Profesión</mat-label>
+            <mat-select formControlName="id_profesion">
+              <mat-option *ngFor="let info of profesiones" [value]="info.id_profesion">
+                {{info.s_profesion}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+
+        <div class="col-sm-3 mt-3">
+          <mat-form-field class="example-full-width" appearance="outline" subscriptSizing="dynamic">
+            <mat-label>Grado estudios</mat-label>
+            <mat-select formControlName="id_grado_estudios">
+              <mat-option *ngFor="let info of gradosEstudios" [value]="info.id_grado_estudios">
+                {{info.s_grado_estudios}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div class="row m-b-25">
+        <div class="col-sm-6 mt-3">
+          <mat-form-field class="example-full-width" appearance="outline" subscriptSizing="dynamic">
+            <mat-label>Fecha de nacimiento</mat-label>
+            <input matInput [matDatepicker]="pickerNacimiento" formControlName="d_fecha_nacimiento">
+            <mat-datepicker-toggle matSuffix [for]="pickerNacimiento"></mat-datepicker-toggle>
+            <mat-datepicker #pickerNacimiento></mat-datepicker>
+          </mat-form-field>
+        </div>
+
+        <div class="col-sm-6 mt-3">
+          <mat-form-field class="example-full-width" appearance="outline" subscriptSizing="dynamic">
+            <mat-label>Fecha de ingreso</mat-label>
+            <input matInput [matDatepicker]="pickerIngreso" formControlName="d_fecha_ingreso">
+            <mat-datepicker-toggle matSuffix [for]="pickerIngreso"></mat-datepicker-toggle>
+            <mat-datepicker #pickerIngreso></mat-datepicker>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div class="row m-b-25">
+        <div class="col-sm-12">
+          <mat-form-field class="example-full-width" appearance="outline" subscriptSizing="dynamic">
+            <mat-label>Dirección</mat-label>
+            <textarea matInput formControlName="s_direccion"></textarea>
+          </mat-form-field>
+        </div>
+      </div>
+
+      @if (action === 'edit') {
+      <div class="row m-b-15">
+        <div class="col-sm-12">
+          <h4 class="section-title">Imagen actual</h4>
+          <img
+            [src]="empleadosModel.s_foto_empleado ? (ruta_img + empleadosModel.s_foto_empleado) : (ruta_img + 'empleado-default.png')"
+            class="current-image-preview">
+          <div class="file-info">{{empleadosModel.s_foto_empleado || 'empleado-default.png'}}</div>
+
+          <!-- Checkbox para actualizar imagen -->
+          <mat-checkbox [(ngModel)]="actualizarImagen" [ngModelOptions]="{standalone: true}">
+            ¿Desea actualizar la imagen?
+          </mat-checkbox>
+        </div>
+      </div>
+      }
+
+      @if (action !== 'edit' || actualizarImagen) {
+      <div class="row m-b-25">
+        <div class="col-sm-12">
+          <div class="form-group mb-2">
+            <label class="label-style">Subir Imagen:</label>
+            <input type="file" (change)="onFileSelected($event)" accept="image/*" class="form-control">
+            @if (selectedFileName) {
+            <div class="file-info">{{selectedFileName}}</div>
+            @if (url) {
+            <img [src]="url" class="new-image-preview">
+            }
+            }
+          </div>
+        </div>
+      </div>
+      }
+
+      <div class="row m-b-25">
+        <div class="col-sm-12">
+          <div class="example-button-row">
+            <button mat-flat-button class="formSubmitBtn" [disabled]="empleadosForm.invalid || empleadosForm.pending"
+              type="submit">
+              Guardar
+            </button>
+            <button mat-flat-button mat-dialog-close class="formCancelBtn" tabindex="-1">Cancelar</button>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

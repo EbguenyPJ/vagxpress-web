@@ -1,0 +1,164 @@
+/* ---------------- Fondo amarillo para alertas ---------------- */
+.bck-amarillo {
+  background-color: #FFCB00;
+}
+
+/* Animación para nueva alerta */
+.nueva-alerta {
+  color: red;
+  animation: parpadeo 1s infinite;
+}
+
+@keyframes parpadeo {
+  0%, 100% { color: red; }
+  50% { color: orange; }
+}
+
+/* ---------------- Angular Material Menus ---------------- */
+::ng-deep .mat-menu-panel {
+  max-height: 600px !important;
+  width: 400px !important;
+}
+
+::ng-deep .mat-menu-content {
+  max-height: none !important;
+  overflow: visible !important;
+}
+
+::ng-deep .mat-menu-content .men-item {
+  min-height: 120px !important;
+  height: auto !important;
+  padding: 16px !important;
+  align-items: center !important;
+}
+
+.menu, .men, .noti-list, .nfc-dropdown {
+  max-height: none !important;
+  overflow: visible !important;
+}
+
+.nfc-dropdown ng-scrollbar {
+  max-height: 500px !important;
+  overflow: auto !important;
+}
+
+/* ---------------- Encabezado ---------------- */
+.navbar-header {
+  background-color: rgba(0, 0, 0, 0.8); /* Encabezado negro transparente */
+  border-bottom: 1px solid #444;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  padding: 10px 20px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+
+  i.material-icons-outlined,
+  .navbar-brand span,
+  .navbar-toggle,
+  .bars {
+    color: #fff !important;
+  }
+
+  .navbar-brand img {
+    max-height: 50px;
+    height: auto;
+    width: auto;
+    display: inline-block;
+  }
+}
+
+.navbar-brand .logo-name {
+  font-weight: bold;
+  font-size: 25px;
+  color: #fff;
+}
+
+/* ---------------- Perfil de usuario ---------------- */
+.nav-item.user_profile {
+  display: flex;
+  align-items: center;
+
+  .chip {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+
+    .user_img {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      object-fit: cover;
+    }
+
+    .logo-version {
+      font-size: 12px;
+      color: #ccc;
+      margin-left: 6px;
+      white-space: nowrap;
+      display: inline-block; /* Siempre visible */
+    }
+  }
+
+  button {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  span {
+    white-space: nowrap;
+  }
+}
+
+/* ---------------- Iconos de notificación ---------------- */
+.navbar .nav-notification-icons i.material-icons {
+  color: #FFCB00;
+  font-size: 26px;
+}
+
+/* ---------------- Responsive ---------------- */
+
+/* Tablets (768px - 1024px) */
+@media (max-width: 1024px) {
+  .navbar-header {
+    flex-direction: row;
+    flex-wrap: wrap;
+    padding: 10px;
+  }
+
+  .navbar .navbar-right li {
+    display: flex; /* Mostrar todos los elementos importantes */
+    align-items: center;
+    margin-left: 10px;
+  }
+
+  .nav-item.user_profile .chip .logo-version {
+    display: inline-block; /* versión visible */
+  }
+}
+
+/* Móviles (menos de 768px) */
+@media (max-width: 767px) {
+  .navbar-header {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 5px 10px;
+  }
+
+  /* Ocultar todos los elementos de navbar-right por defecto */
+  .navbar .navbar-right li {
+    display: none;
+  }
+
+  /* Mostrar solo el usuario */
+  .navbar .navbar-right li.nav-item.user_profile {
+    display: flex !important;
+    align-items: center;
+  }
+
+  /* Ocultar la versión en móvil */
+  .nav-item.user_profile .chip .logo-version {
+    display: none;
+  }
+}

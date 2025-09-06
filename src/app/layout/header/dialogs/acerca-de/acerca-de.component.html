@@ -1,0 +1,89 @@
+<div class="dialogContainer">
+  <div class="modalHeader">
+    <div class="avatarDetails">
+      <div>
+        <img src="assets/images/tallerup/Logo-Taller-Up.png" alt="Angular" />
+      </div>
+      <div class="modalTitle">
+        {{ dialogTitle }} <b style="color: #ffcb00;">TallerUp</b>
+      </div>
+    </div>
+    <button mat-icon-button mat-dialog-close class="modal-close-button" aria-label="Close dialog">
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+
+  <div mat-dialog-content class="scrollableContent">
+    <mat-card class="aboutCard">
+      <mat-card-content>
+        <p>
+          <strong>TallerUp</strong> es un sistema de gestión integral para talleres mecánicos,
+          desarrollado con una arquitectura modular y escalable. Está diseñado para ofrecer alto rendimiento,
+          seguridad y una experiencia de usuario fluida tanto en el frontend como en el backend.
+        </p>
+
+        <p>
+          La plataforma permite administrar operaciones clave como órdenes de servicio, gestión de clientes,
+          operaciones técnicas, generación de reportes y medición de métricas mediante KPIs en un dashboard dinámico.
+        </p>
+
+        <mat-divider class="divider"></mat-divider>
+
+        <div class="stack-cards">
+            <div class="stack-card">
+                <img src="https://th.bing.com/th/id/OIP.Not8lbjLNJwX6uAobwk4mgHaEK?rs=1&pid=ImgDetMain" alt="Laravel" />
+                <div class="stack-info">
+                <h4>Backend</h4>
+                <ul>
+                    <li>Laravel: <strong>v10.48.29</strong></li>
+                    <li>PHP Local: <strong>v8.1.12</strong></li>
+                    <li>PHP Server: <strong>v8.2.28</strong></li>
+                </ul>
+                </div>
+            </div>
+
+            <div class="stack-card">
+                <img src="https://miro.medium.com/v2/resize:fit:1200/1*CdcJMpd9jQpmER1LTOwwZw.jpeg" alt="Angular" />
+                <div class="stack-info">
+                <h4>Frontend</h4>
+                <ul>
+                    <li>Angular: <strong>v19.0.7</strong></li>
+                    <li>Node JS: <strong>v20.11.1</strong></li>
+                </ul>
+                </div>
+            </div>
+
+            <div class="stack-card">
+                <img src="https://pngimg.com/uploads/mysql/mysql_PNG23.png" alt="MariaDB" />
+                <div class="stack-info">
+                <h4>Base de Datos</h4>
+                <ul>
+                    <li>MariaDB: <strong>10.6.21</strong></li>
+                </ul>
+                </div>
+            </div>
+            </div>
+
+
+        <mat-divider class="divider"></mat-divider>
+
+        <p class="version">
+          <!-- Versión actual -->
+          <mat-icon class="tbl-icon material-icons-outlined col-blue">cloud</mat-icon>
+          <strong>Versión Actual del Sistema:</strong> TallerUp {{this.ultimaVersion}}
+          <br>
+
+          <!-- Fecha de última actualización -->
+          <mat-icon class="tbl-icon material-icons-outlined col-green">update</mat-icon>
+          <strong>Fecha de última actualización:</strong> {{ this.fechaUltimaVersion }}
+          <br>
+
+          <!-- Fecha de lanzamiento -->
+          <mat-icon class="tbl-icon material-icons-outlined col-orange">event</mat-icon>
+          <strong>Fecha de lanzamiento:</strong> 10 de junio 2025
+        </p>
+
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>
