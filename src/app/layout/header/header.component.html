@@ -29,7 +29,7 @@
         <!-- #END# Full Screen Button -->
         <!-- #START# Notifications-->
         <li>
-          <button mat-icon-button [matMenuTriggerFor]="notificationMenu" class="nav-notification-icons" 
+          <!-- <button mat-icon-button [matMenuTriggerFor]="notificationMenu" class="nav-notification-icons"
           [matBadge]="contadorNuevasAlertas"
         matBadgeColor="warn"
         [matBadgeHidden]="contadorNuevasAlertas === 0"
@@ -37,8 +37,9 @@
             <i class="material-icons icon-color" [ngClass]="{'nueva-alerta': tieneNuevaAlerta}">
               notifications_active
             </i>
-          </button>
-          <mat-menu #notificationMenu="matMenu" class="nfc-menu" (closed)="marcarAlertasComoVistas()">
+          </button> -->
+          <!-- <mat-menu #notificationMenu="matMenu" class="nfc-menu" (closed)="marcarAlertasComoVistas()"> -->
+          <mat-menu #notificationMenu="matMenu" class="nfc-menu">
             <div class="nfc-header bck-amarillo">
               <h5 class="mb-0 text-black">Notificaciones</h5>
               <!-- <a class="nfc-mark-as-read">Mark all as read</a> -->
@@ -48,7 +49,7 @@
                 <div class="noti-list header-menu">
                   <div class="menu men">
                     <div>
-                      @for (alerta of alertasGeneral; track alerta) {
+                      <!-- @for (alerta of alertasGeneral; track alerta) {
                       <button class="men mt-5" mat-menu-item onClick="return false;" [matTooltip]="quitarHtml(alerta.s_descripcion)">
                         <span class="table-img msg-user ">
                           <i class="material-icons-outlined nfc-type-icon" [ngClass]="[alerta.s_color]">{{alerta.s_icono}}</i>
@@ -67,12 +68,8 @@
                             <i  class="material-icons">access_time</i> Hace {{alerta.minutos_transcurridos}} minutos
                           </span>
                         </span>
-                        
-                        <!-- <span class="nfc-close">
-                          <app-feather-icons [icon]="'x'" [class]="'user-menu-icons'"></app-feather-icons>
-                        </span> -->
                       </button>
-                      }
+                      } -->
                     </div>
                   </div>
                 </div>
@@ -96,7 +93,7 @@
             <div class="noti-list">
               <div class="menu ">
                 <div class="user_dw_menu">
-                 
+
                     <a mat-menu-item href="https://savecar.com.mx/tutoriales/" target="_blank" rel="noopener">
                     <mat-icon class="material-icons-outlined">play_circle_outline</mat-icon>
                     <span>Tutoriales</span>
@@ -118,7 +115,7 @@
                     <span>Acerca de</span>
                   </button>
 
-                  <button mat-menu-item (click)="logout()"> 
+                  <button mat-menu-item (click)="logout()">
                     <mat-icon class="material-icons-outlined">exit_to_app</mat-icon>
                     <span>Cerrar Sesión</span>
                   </button>

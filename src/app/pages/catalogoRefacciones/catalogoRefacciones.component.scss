@@ -1,0 +1,158 @@
+:host ::ng-deep .column-filter .mat-mdc-select-arrow {
+  display: none;
+}
+
+:host ::ng-deep .advance-table .mat-mdc-header-cell {
+  font-weight: 500;
+}
+
+
+.mat-column-id_refaccion {
+  width: auto !important;
+  min-width: 80px !important;
+  flex: none !important;
+  white-space: nowrap !important;
+  overflow: visible !important;
+  padding: 0 12px !important;
+}
+
+
+.badge {
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 500;
+}
+.badge-solid-green {
+  background-color: #e8f5e9;
+  color: #1e8e3e;
+}
+.badge-solid-red {
+  background-color: #fce8e6;
+  color: #d93025;
+}
+
+
+.tbl-action-btn.view-icon-btn .mat-icon {
+  color: #4285F4;
+}
+
+.tbl-action-btn.edit-icon-btn .mat-icon {
+  color: #34A853;
+}
+
+.tbl-action-btn:hover .mat-icon {
+  opacity: 0.8;
+}
+
+.tbl-action-btn .mat-icon {
+  transition: color 0.2s;
+}
+
+.tbl-action-btn:hover .mat-icon {
+  color: #FBBC05;
+}
+
+
+.refacciones-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 24px;
+}
+
+
+.refaccion-card {
+  background-color: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+
+  &:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  }
+}
+
+.card-image-container {
+  position: relative;
+  height: 200px;
+  background-color: #f0f2f5;
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+}
+
+.card-status-badge {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 600;
+  color: white;
+
+  &.status-disponible {
+    background-color: #34A853;
+  }
+
+  &.status-agotado {
+    background-color: #EA4335;
+  }
+}
+
+
+.card-content {
+  padding: 16px;
+  flex-grow: 1;
+}
+
+.card-title {
+  font-size: 16px;
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-bottom: 4px;
+}
+
+.card-subtitle {
+  font-size: 13px;
+  color: #5f6368;
+  margin-bottom: 12px;
+}
+
+.card-price {
+  font-size: 20px;
+  font-weight: 700;
+  color: #333;
+}
+
+.card-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 16px 16px 16px;
+  border-top: 1px solid #e8eaed;
+  margin-top: auto;
+}
+
+.card-stock {
+  font-size: 14px;
+  color: #3c4043;
+}
+
+
+.table-img {
+  width: 40px;
+  height: 40px;
+  border-radius: 4px;
+  margin-right: 12px;
+  object-fit: cover;
+}

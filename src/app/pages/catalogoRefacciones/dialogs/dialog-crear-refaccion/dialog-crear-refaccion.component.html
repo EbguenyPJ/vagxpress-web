@@ -1,0 +1,69 @@
+<h1 mat-dialog-title>Crear Nueva Refacción</h1>
+
+<div mat-dialog-content>
+  <form [formGroup]="refaccionForm">
+    <div class="row">
+      <div class="col-md-12">
+        <mat-form-field appearance="outline" class="w-100">
+          <mat-label>Nombre de la Refacción</mat-label>
+          <input matInput formControlName="s_nombre_refaccion" required>
+          <mat-icon matSuffix class="icon-nombre">label</mat-icon>
+          <mat-error>El nombre es requerido.</mat-error>
+        </mat-form-field>
+      </div>
+
+      <div class="col-md-12">
+        <mat-form-field appearance="outline" class="w-100">
+          <mat-label>Número de Parte</mat-label>
+          <input matInput formControlName="s_numero_parte" required>
+          <mat-icon matSuffix class="icon-parte">pin</mat-icon>
+          <mat-error>El número de parte es requerido.</mat-error>
+        </mat-form-field>
+      </div>
+
+      <div class="col-md-12">
+        <mat-form-field appearance="outline" class="w-100">
+          <mat-label>Marca</mat-label>
+          <mat-select formControlName="id_marca_refaccion" required>
+            @for(marca of marcas; track marca.id_marca_refaccion){
+              <mat-option [value]="marca.id_marca_refaccion">{{ marca.s_marca_refaccion }}</mat-option>
+            }
+          </mat-select>
+          <mat-icon matSuffix class="icon-marca">sell</mat-icon>
+          <mat-error>La marca es requerida.</mat-error>
+        </mat-form-field>
+      </div>
+
+      <div class="col-md-12">
+        <mat-form-field appearance="outline" class="w-100">
+          <mat-label>Categoría</mat-label>
+          <mat-select formControlName="id_categoria_refaccion" required>
+              @for(cat of categorias; track cat.id_categoria_refaccion){
+              <mat-option [value]="cat.id_categoria_refaccion">{{ cat.s_categoria_refaccion }}</mat-option>
+            }
+          </mat-select>
+          <mat-icon matSuffix class="icon-categoria">category</mat-icon>
+          <mat-error>La categoría es requerida.</mat-error>
+        </mat-form-field>
+      </div>
+
+      <div class="col-md-12">
+        <mat-form-field appearance="outline" class="w-100">
+          <mat-label>Subcategoría</mat-label>
+          <mat-select formControlName="id_subcategoria_refaccion" required>
+              @for(subcat of subcategoriasFiltradas; track subcat.id_subcategoria_refaccion){
+              <mat-option [value]="subcat.id_subcategoria_refaccion">{{ subcat.s_subcategoria_refaccion }}</mat-option>
+            }
+          </mat-select>
+          <mat-icon matSuffix class="icon-subcategoria">dynamic_feed</mat-icon>
+          <mat-error>La subcategoría es requerida.</mat-error>
+        </mat-form-field>
+      </div>
+    </div>
+  </form>
+</div>
+
+<div mat-dialog-actions align="end">
+  <button mat-button (click)="onNoClick()">Cancelar</button>
+  <button mat-raised-button color="primary" (click)="submit()" [disabled]="!refaccionForm.valid">Guardar</button>
+</div>
