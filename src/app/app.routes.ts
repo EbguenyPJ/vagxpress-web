@@ -3,10 +3,10 @@ import { MainLayoutComponent } from './layout/app-layout/main-layout/main-layout
 import { AuthGuard } from '@core/guard/auth.guard';
 import { AuthLayoutComponent } from './layout/app-layout/auth-layout/auth-layout.component';
 import { Page404Component } from './authentication/page404/page404.component';
+import { CatalogoRefaccionesComponent } from './pages/catalogoRefacciones/catalogoRefaccionesComponent.component';
 // import { UsuariosComponent } from './pages/administracion/usuarios/usuarios.component';
 // import { EmpleadosComponent } from './pages/administracion/empleados/empleados.component';
-
-
+CatalogoRefaccionesComponent
 
 export const APP_ROUTE: Route[] = [
   {
@@ -24,8 +24,7 @@ export const APP_ROUTE: Route[] = [
       // ----------------------- Rutas Definidas por desarrolladores -----------------------
       // { path: 'usuarios', component: UsuariosComponent },
       // { path: 'empleados', component: EmpleadosComponent },
-
-
+      { path: 'refacciones', component: CatalogoRefaccionesComponent },
     ],
   },
 

@@ -1,0 +1,54 @@
+:host ::ng-deep .column-filter .mat-mdc-select-arrow {
+  display: none;
+}
+
+:host ::ng-deep .advance-table .mat-mdc-header-cell {
+  font-weight: 500;
+}
+
+
+.mat-column-id_refaccion {
+  width: auto !important;
+  min-width: 80px !important;
+  flex: none !important;
+  white-space: nowrap !important;
+  overflow: visible !important;
+  padding: 0 12px !important;
+}
+
+
+.badge {
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 500;
+}
+.badge-solid-green {
+  background-color: #e8f5e9;
+  color: #1e8e3e;
+}
+.badge-solid-red {
+  background-color: #fce8e6;
+  color: #d93025;
+}
+
+
+.tbl-action-btn.view-icon-btn .mat-icon {
+  color: #4285F4;
+}
+
+.tbl-action-btn.edit-icon-btn .mat-icon {
+  color: #34A853;
+}
+
+.tbl-action-btn:hover .mat-icon {
+  opacity: 0.8;
+}
+
+.tbl-action-btn .mat-icon {
+  transition: color 0.2s;
+}
+
+.tbl-action-btn:hover .mat-icon {
+  color: #FBBC05;
+}
