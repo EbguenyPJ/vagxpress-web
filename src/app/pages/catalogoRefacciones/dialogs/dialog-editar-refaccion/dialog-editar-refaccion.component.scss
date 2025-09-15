@@ -1,0 +1,54 @@
+.form-section {
+  margin-bottom: 1.5rem;
+}
+
+.form-section-title {
+  display: flex;
+  align-items: center;
+  font-size: 1rem;
+  font-weight: 500;
+  margin-bottom: 1rem;
+
+  mat-icon {
+    margin-right: 8px;
+    font-size: 20px;
+  }
+}
+
+
+.form-section.principal {
+  .form-section-title, .form-section-title mat-icon {
+    color: #1565C0;
+  }
+
+  mat-form-field .icon-principal {
+    color: #1565C0;
+  }
+}
+
+.form-section.comercial {
+  .form-section-title, .form-section-title mat-icon {
+    color: #2E7D32;
+  }
+  mat-form-field .icon-comercial {
+    color: #2E7D32;
+  }
+}
+
+.form-section.clasificacion {
+  .form-section-title, .form-section-title mat-icon {
+    color: #EF6C00;
+  }
+  mat-form-field .icon-clasificacion {
+    color: #EF6C00;
+  }
+}
+
+.form-section.inventario {
+  .form-section-title, .form-section-title mat-icon {
+    color: #6A1B9A;
+  }
+  mat-form-field .icon-inventario {
+    color: #6A1B9A;
+  }
+}

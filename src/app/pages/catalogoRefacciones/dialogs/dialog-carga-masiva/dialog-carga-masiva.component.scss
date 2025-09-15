@@ -1,0 +1,79 @@
+$color-nombre: #1e88e5;
+$color-no-parte: #43a047;
+$color-marca: #8e24aa;
+$color-categoria: #fb8c00;
+$color-subcategoria: #e53935;
+
+
+.form-container {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  width: 100%;
+  margin-bottom: 1.5rem;
+}
+
+.add-button-container {
+  margin-top: -1.3em;
+}
+
+.campo-nombre {
+  flex: 0 1 28%;
+}
+.campo-no-parte {
+  flex: 0 1 20%;
+}
+.campo-lista {
+  flex: 0 1 20%;
+}
+.campo-marca {
+  flex: 0 1 12%;
+}
+
+.icon-nombre {
+  color: $color-nombre;
+}
+.icon-no-parte {
+  color: $color-no-parte;
+}
+.icon-marca {
+  color: $color-marca;
+}
+.icon-categoria {
+  color: $color-categoria;
+}
+.icon-subcategoria {
+  color: $color-subcategoria;
+}
+
+
+::ng-deep {
+  .header-nombre {
+    color: $color-nombre !important;
+  }
+  .header-no-parte {
+    color: $color-no-parte !important;
+  }
+  .header-marca {
+    color: $color-marca !important;
+  }
+  .header-categoria {
+    color: $color-categoria !important;
+  }
+  .header-subcategoria {
+    color: $color-subcategoria !important;
+  }
+
+  .edit-button {
+    color: #5ce270;
+    :hover {
+      background-color: #f1ee94;
+    }
+  }
+  .delete-button {
+    color: #d32f2f;
+    :hover {
+      background-color: #f1ee94;
+    }
+  }
+}

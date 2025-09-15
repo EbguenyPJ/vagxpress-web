@@ -1,0 +1,194 @@
+<h1 mat-dialog-title>Editar Refacción</h1>
+
+<div mat-dialog-content>
+  <form [formGroup]="refaccionForm">
+    <div class="row pt-2 align-items-start">
+      <div class="col-md-6">
+        <div class="form-section principal mb-4">
+          <h4 class="form-section-title">
+            <mat-icon>label</mat-icon> <span>Información Principal</span>
+          </h4>
+          <div class="row">
+            <div class="col-md-6">
+              <mat-form-field appearance="outline" class="w-100">
+                <mat-label>Nombre</mat-label>
+                <input matInput formControlName="s_nombre_refaccion" />
+                <mat-icon matSuffix class="icon-principal">label</mat-icon>
+              </mat-form-field>
+            </div>
+            <div class="col-md-6">
+              <mat-form-field appearance="outline" class="w-100">
+                <mat-label>No. de Parte</mat-label>
+                <input matInput formControlName="s_numero_parte" />
+                <mat-icon matSuffix class="icon-principal">pin</mat-icon>
+              </mat-form-field>
+            </div>
+            <div class="col-md-12">
+              <mat-form-field appearance="outline" class="w-100">
+                <mat-label>Código Interno</mat-label>
+                <input matInput formControlName="s_codigo_interno" />
+                <mat-icon matSuffix class="icon-principal">qr_code_2</mat-icon>
+              </mat-form-field>
+            </div>
+            <div class="col-md-12">
+              <mat-form-field appearance="outline" class="w-100">
+                <mat-label>Descripción</mat-label>
+                <textarea matInput formControlName="s_descripcion"></textarea>
+                <mat-icon matSuffix class="icon-principal">description</mat-icon>
+              </mat-form-field>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-section comercial">
+          <h4 class="form-section-title">
+            <mat-icon>monetization_on</mat-icon>
+            <span>Información Comercial</span>
+          </h4>
+          <div class="row">
+            <div class="col-md-6">
+              <mat-form-field appearance="outline" class="w-100">
+                <mat-label>Precio Compra</mat-label>
+                <input matInput type="number" formControlName="n_precio_compra" />
+                <mat-icon matSuffix class="icon-comercial">shopping_cart</mat-icon>
+              </mat-form-field>
+            </div>
+            <div class="col-md-6">
+              <mat-form-field appearance="outline" class="w-100">
+                <mat-label>Precio Venta</mat-label>
+                <input matInput type="number" formControlName="n_precio_venta" />
+                <mat-icon matSuffix class="icon-comercial">price_check</mat-icon>
+              </mat-form-field>
+            </div>
+            <div class="col-md-6">
+              <mat-form-field appearance="outline" class="w-100">
+                <mat-label>Precio Mayoreo</mat-label>
+                <input matInput type="number" formControlName="n_precio_mayoreo" />
+                <mat-icon matSuffix class="icon-comercial">storefront</mat-icon>
+              </mat-form-field>
+            </div>
+            <div class="col-md-6 d-flex align-items-center">
+              <mat-checkbox formControlName="b_importado">Es importado</mat-checkbox>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-6">
+        <div class="form-section clasificacion mb-4">
+          <h4 class="form-section-title">
+            <mat-icon>category</mat-icon> <span>Clasificación</span>
+          </h4>
+          <div class="row">
+            <div class="col-md-6">
+              <mat-form-field appearance="outline" class="w-100">
+                <mat-label>Marca</mat-label>
+                <mat-select formControlName="id_marca_refaccion">
+                  @for(m of marcas; track m.id_marca_refaccion){<mat-option [value]="m.id_marca_refaccion">{{ m.s_marca_refaccion }}</mat-option>}
+                </mat-select>
+                <mat-icon matSuffix class="icon-clasificacion">sell</mat-icon>
+              </mat-form-field>
+            </div>
+            <div class="col-md-6">
+              <mat-form-field appearance="outline" class="w-100">
+                <mat-label>Categoría</mat-label>
+                <mat-select formControlName="id_categoria_refaccion">
+                  @for(c of categorias; track c.id_categoria_refaccion){<mat-option [value]="c.id_categoria_refaccion">{{ c.s_categoria_refaccion }}</mat-option>}
+                </mat-select>
+                <mat-icon matSuffix class="icon-clasificacion">category</mat-icon>
+              </mat-form-field>
+            </div>
+            <div class="col-md-6">
+              <mat-form-field appearance="outline" class="w-100">
+                <mat-label>Subcategoría</mat-label>
+                <mat-select formControlName="id_subcategoria_refaccion">
+                  @for(s of subcategoriasFiltradas; track s.id_subcategoria_refaccion){<mat-option [value]="s.id_subcategoria_refaccion">{{ s.s_subcategoria_refaccion }}</mat-option>}
+                </mat-select>
+                <mat-icon matSuffix class="icon-clasificacion">dynamic_feed</mat-icon>
+              </mat-form-field>
+            </div>
+            <div class="col-md-6">
+              <mat-form-field appearance="outline" class="w-100">
+                <mat-label>Clase</mat-label>
+                <mat-select formControlName="id_clase_refaccion">
+                  @for(c of clases; track c.id_clase_refaccion){<mat-option [value]="c.id_clase_refaccion">{{ c.s_clase_refaccion }}</mat-option>}
+                </mat-select>
+                <mat-icon matSuffix class="icon-clasificacion">star</mat-icon>
+              </mat-form-field>
+            </div>
+            <div class="col-md-12">
+              <mat-form-field appearance="outline" class="w-100">
+                <mat-label>Proveedor</mat-label>
+                <mat-select formControlName="id_proveedor">
+                  @for(p of proveedores; track p.id_proveedor){<mat-option [value]="p.id_proveedor">{{ p.s_proveedor }}</mat-option>}
+                </mat-select>
+                <mat-icon matSuffix class="icon-clasificacion">local_shipping</mat-icon>
+              </mat-form-field>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-section inventario">
+          <h4 class="form-section-title">
+            <mat-icon>inventory_2</mat-icon> <span>Inventario y Logística</span>
+          </h4>
+          <div class="row">
+            <div class="col-md-6">
+              <mat-form-field appearance="outline" class="w-100">
+                <mat-label>Stock Actual</mat-label>
+                <input matInput type="number" formControlName="n_stock_actual" />
+                <mat-icon matSuffix class="icon-inventario">inventory</mat-icon>
+              </mat-form-field>
+            </div>
+            <div class="col-md-6">
+              <mat-form-field appearance="outline" class="w-100">
+                <mat-label>Stock Mínimo</mat-label>
+                <input matInput type="number" formControlName="n_stock_minimo" />
+                <mat-icon matSuffix class="icon-inventario">warning</mat-icon>
+              </mat-form-field>
+            </div>
+            <div class="col-md-6">
+              <mat-form-field appearance="outline" class="w-100">
+                <mat-label>Tiempo Reposición</mat-label>
+                <input matInput type="number" formControlName="n_tiempo_reposicion"/>
+                <mat-icon matSuffix class="icon-inventario">schedule</mat-icon>
+              </mat-form-field>
+            </div>
+            <div class="col-md-6">
+              <mat-form-field appearance="outline" class="w-100">
+                <mat-label>Unidad de Medida</mat-label>
+                <mat-select formControlName="id_unidad_medida">
+                  @for(u of unidadesMedida; track u.id_unidad_medida){<mat-option [value]="u.id_unidad_medida">{{ u.s_unidad_medida }}</mat-option>}
+                </mat-select>
+                <mat-icon matSuffix class="icon-inventario">scale</mat-icon>
+              </mat-form-field>
+            </div>
+            <div class="col-md-6">
+              <mat-form-field appearance="outline" class="w-100">
+                <mat-label>Posición en Vehículo</mat-label>
+                <mat-select formControlName="id_posicion_vehiculo">
+                  @for(p of posiciones; track p.id_posicion_vehiculo){<mat-option [value]="p.id_posicion_vehiculo">{{ p.s_posicion_vehiculo }}</mat-option>}
+                </mat-select>
+                <mat-icon matSuffix class="icon-inventario">directions_car</mat-icon>
+              </mat-form-field>
+            </div>
+            <div class="col-md-6">
+              <mat-form-field appearance="outline" class="w-100">
+                <mat-label>Ubicación en Almacén</mat-label>
+                <mat-select formControlName="id_ubicacion_almacen">
+                  @for(u of ubicaciones; track u.id_ubicacion_almacen){<mat-option [value]="u.id_ubicacion_almacen">{{ u.s_ubicacion_almacen }}</mat-option>}
+                </mat-select>
+                <mat-icon matSuffix class="icon-inventario">warehouse</mat-icon>
+              </mat-form-field>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>
+
+<div mat-dialog-actions align="end">
+  <button mat-button (click)="onNoClick()">Cancelar</button>
+  <button mat-raised-button color="primary" (click)="submit()" [disabled]="!refaccionForm.valid">Guardar Cambios</button>
+</div>
