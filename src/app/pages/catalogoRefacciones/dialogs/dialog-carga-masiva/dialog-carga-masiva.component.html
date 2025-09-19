@@ -1,7 +1,8 @@
 <h1 mat-dialog-title>Carga Masiva de Refacciones</h1>
 
 <div mat-dialog-content>
-  <form [formGroup]="itemForm" class="form-container">
+  <form [formGroup]="itemForm" class="form-container align-items-end">
+
     <mat-form-field appearance="fill" class="campo-nombre">
       <mat-label>Nombre</mat-label>
       <input matInput formControlName="s_nombre_refaccion" />
@@ -48,10 +49,31 @@
       <mat-icon matSuffix class="icon-subcategoria">dynamic_feed</mat-icon>
     </mat-form-field>
 
-    <div class="add-button-container">
-      <button mat-raised-button color="primary" (click)="agregarItem()">
-        Agregar
-      </button>
+    <div class="actions-container">
+      <div class="campo-clase">
+        <mat-radio-group
+          class="clase-radio-group"
+          formControlName="id_clase_refaccion"
+        >
+          @for(clase of clases; track clase.id_clase_refaccion){
+          <mat-radio-button
+            [value]="clase.id_clase_refaccion"
+
+            class="clase-radio-{{clase.id_clase_refaccion}}"
+          >
+            <span class="clase-radio-text" [style.color]="clase.s_color_clase_refaccion">
+                {{ clase.s_clase_refaccion }}
+            </span>
+          </mat-radio-button>
+          }
+        </mat-radio-group>
+      </div>
+
+      <div class="add-button-container">
+        <button mat-raised-button color="primary" (click)="agregarItem()">
+          Agregar
+        </button>
+      </div>
     </div>
   </form>
 
@@ -80,6 +102,17 @@
           {{ getMarcaNombre(element.id_marca_refaccion) }}
         </td></ng-container
       >
+      <ng-container matColumnDef="clase">
+        <th mat-header-cell *matHeaderCellDef class="header-clase">Clase</th>
+        <td mat-cell *matCellDef="let element">
+          <span
+            class="clase-pill"
+            [style.background-color]="getClaseColor(element.id_clase_refaccion)"
+          >
+            {{ getClaseNombre(element.id_clase_refaccion) }}
+          </span>
+        </td>
+      </ng-container>
       <ng-container matColumnDef="categoria"
         ><th mat-header-cell *matHeaderCellDef class="header-categoria">
           Categoría
@@ -96,7 +129,6 @@
           {{ getSubcategoriaNombre(element.id_subcategoria_refaccion) }}
         </td></ng-container
       >
-
       <ng-container matColumnDef="actions">
         <th mat-header-cell *matHeaderCellDef>Acciones</th>
         <td mat-cell *matCellDef="let element; let i = index">
@@ -120,7 +152,6 @@
           </button>
         </td>
       </ng-container>
-
       <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
       <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
     </table>

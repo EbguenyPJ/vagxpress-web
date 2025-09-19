@@ -18,6 +18,10 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
+
+import { MatRadioModule } from '@angular/material/radio';
+import { MatTooltipModule } from '@angular/material/tooltip';
+
 import { RefaccionesService } from 'app/services/refacciones/refacciones.service';
 import { forkJoin, of } from 'rxjs';
 import { catchError } from 'rxjs/operators';
@@ -38,6 +42,8 @@ import Swal from 'sweetalert2';
     MatSelectModule,
     MatButtonModule,
     MatIconModule,
+    MatRadioModule,
+    MatTooltipModule,
   ],
   templateUrl: './dialog-carga-masiva.component.html',
   styleUrl: './dialog-carga-masiva.component.scss',
@@ -49,6 +55,7 @@ export class DialogCargaMasivaComponent implements OnInit {
   categorias: any[] = [];
   subcategorias: any[] = [];
   subcategoriasFiltradas: any[] = [];
+  clases: any[] = [];
 
   refaccionesParaCargar: any[] = [];
   dataSource = new MatTableDataSource<any>();
@@ -56,6 +63,7 @@ export class DialogCargaMasivaComponent implements OnInit {
     'nombre',
     'noParte',
     'marca',
+    'clase',
     'categoria',
     'subcategoria',
     'actions',
@@ -72,6 +80,7 @@ export class DialogCargaMasivaComponent implements OnInit {
       id_marca_refaccion: [null, Validators.required],
       id_categoria_refaccion: [null, Validators.required],
       id_subcategoria_refaccion: [null, Validators.required],
+      id_clase_refaccion: [1, Validators.required],
     });
   }
 
@@ -91,10 +100,14 @@ export class DialogCargaMasivaComponent implements OnInit {
       subcategorias: this.refaccionesService
         .getSubcategorias('')
         .pipe(catchError(() => of({ data: [] }))),
+      clases: this.refaccionesService
+        .getClases('')
+        .pipe(catchError(() => of({ data: [] }))),
     }).subscribe((res: any) => {
       this.marcas = res.marcas.data;
       this.categorias = res.categorias.data;
       this.subcategorias = res.subcategorias.data;
+      this.clases = res.clases.data;
     });
   }
 
@@ -145,7 +158,9 @@ export class DialogCargaMasivaComponent implements OnInit {
 
     this.refaccionesParaCargar.unshift(nuevoItem);
     this.dataSource.data = [...this.refaccionesParaCargar];
-    this.itemForm.reset();
+    this.itemForm.reset({
+      id_clase_refaccion: 1,
+    });
   }
 
   eliminarItem(index: number) {
@@ -178,6 +193,19 @@ export class DialogCargaMasivaComponent implements OnInit {
     );
   }
 
+  getClaseNombre(id: number): string {
+    return (
+      this.clases.find((c) => c.id_clase_refaccion === id)?.s_clase_refaccion ||
+      ''
+    );
+  }
+  getClaseColor(id: number): string {
+    return (
+      this.clases.find((c) => c.id_clase_refaccion === id)
+        ?.s_color_clase_refaccion || '#000'
+    );
+  }
+
   guardarTodo() {
     if (this.refaccionesParaCargar.length === 0) {
       Swal.fire(
@@ -187,7 +215,6 @@ export class DialogCargaMasivaComponent implements OnInit {
       );
       return;
     }
-
     Swal.fire({
       title: 'Guardando Refacciones...',
       text: 'Por favor espere.',
@@ -196,13 +223,7 @@ export class DialogCargaMasivaComponent implements OnInit {
         Swal.showLoading();
       },
     });
-
-    const payload = {
-      refacciones: this.refaccionesParaCargar,
-    };
-
-    console.log('Payload: ', payload);
-
+    const payload = { refacciones: this.refaccionesParaCargar };
     this.refaccionesService.crearRefaccionesMasivo('', payload).subscribe({
       next: () => {
         Swal.fire('¡Éxito!', 'Las refacciones han sido guardadas.', 'success');
