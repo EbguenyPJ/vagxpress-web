@@ -1,26 +1,54 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
+import {
+  FormBuilder,
+  FormGroup,
+  Validators,
+  ReactiveFormsModule,
+} from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { MatDialogRef, MatDialogTitle, MatDialogContent, MatDialogActions } from '@angular/material/dialog';
+
+import { forkJoin, of } from 'rxjs';
+import { catchError } from 'rxjs/operators';
+
+import {
+  MatDialog,
+  MatDialogRef,
+  MatDialogTitle,
+  MatDialogContent,
+  MatDialogActions,
+} from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
+import { MatRadioModule } from '@angular/material/radio';
 
 import { RefaccionesService } from 'app/services/refacciones/refacciones.service';
 import Swal from 'sweetalert2';
+
+import { MatChipsModule } from '@angular/material/chips';
+import { DialogSeleccionarEquivalenciasComponent } from '../dialog-seleccionar-equivalencias/dialog-seleccionar-equivalencias.component';
 
 @Component({
   selector: 'app-dialog-crear-refaccion',
   standalone: true,
   imports: [
-    CommonModule, ReactiveFormsModule, MatDialogTitle, MatDialogContent,
-    MatDialogActions, MatButtonModule, MatIconModule, MatFormFieldModule,
-    MatInputModule, MatSelectModule
+    CommonModule,
+    ReactiveFormsModule,
+    MatDialogTitle,
+    MatDialogContent,
+    MatDialogActions,
+    MatButtonModule,
+    MatIconModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatSelectModule,
+    MatRadioModule,
+    MatChipsModule,
   ],
   templateUrl: './dialog-crear-refaccion.component.html',
-  styleUrl: './dialog-crear-refaccion.component.scss'
+  styleUrl: './dialog-crear-refaccion.component.scss',
 })
 export class DialogCrearRefaccionComponent implements OnInit {
   refaccionForm: FormGroup;
@@ -29,18 +57,23 @@ export class DialogCrearRefaccionComponent implements OnInit {
   categorias: any[] = [];
   subcategorias: any[] = [];
   subcategoriasFiltradas: any[] = [];
+  clases: any[] = [];
+  equivalenciasSeleccionadas: any[] = [];
 
   constructor(
     private fb: FormBuilder,
     public dialogRef: MatDialogRef<DialogCrearRefaccionComponent>,
-    private refaccionesService: RefaccionesService
+    private refaccionesService: RefaccionesService,
+    private dialog: MatDialog
   ) {
     this.refaccionForm = this.fb.group({
       s_nombre_refaccion: ['', Validators.required],
       s_numero_parte: ['', Validators.required],
       id_marca_refaccion: [null, Validators.required],
       id_categoria_refaccion: [null, Validators.required],
-      id_subcategoria_refaccion: [null, Validators.required]
+      id_subcategoria_refaccion: [null, Validators.required],
+      id_clase_refaccion: [1, Validators.required],
+      refacciones_equivalentes: [[]],
     });
   }
 
@@ -49,21 +82,91 @@ export class DialogCrearRefaccionComponent implements OnInit {
     this.escucharCambiosDeCategoria();
   }
 
-    cargarCatalogos() {
-    this.refaccionesService.getMarcas('').subscribe((res: any) => this.marcas = res.data);
+  cargarCatalogos() {
+    Swal.fire({
+      title: 'Cargando Datos...',
+      text: 'Por favor, espere un momento.',
+      allowOutsideClick: false,
+      didOpen: () => {
+        Swal.showLoading();
+      },
+    });
 
-    this.refaccionesService.getCategorias('').subscribe((res: any) => this.categorias = res.data);
+    forkJoin({
+      marcas: this.refaccionesService
+        .getMarcas('')
+        .pipe(catchError(() => of({ data: [] }))),
+      categorias: this.refaccionesService
+        .getCategorias('')
+        .pipe(catchError(() => of({ data: [] }))),
+      subcategorias: this.refaccionesService
+        .getSubcategorias('')
+        .pipe(catchError(() => of({ data: [] }))),
+      clases: this.refaccionesService
+        .getClases('')
+        .pipe(catchError(() => of({ data: [] }))),
+    }).subscribe({
+      next: (respuestas: any) => {
+        this.marcas = respuestas.marcas.data;
+        this.categorias = respuestas.categorias.data;
+        this.subcategorias = respuestas.subcategorias.data;
+        this.clases = respuestas.clases.data;
 
-    this.refaccionesService.getSubcategorias('').subscribe((res: any) => this.subcategorias = res.data);
+        Swal.close();
+      },
+      error: (err) => {
+        console.error('Error al cargar catálogos:', err);
+        Swal.fire({
+          icon: 'error',
+          title: 'Error Inesperado',
+          text: 'No se pudieron cargar los datos necesarios. Por favor, intente de nuevo.',
+        });
+        this.dialogRef.close();
+      },
+    });
   }
 
-    escucharCambiosDeCategoria() {
-    this.refaccionForm.get('id_categoria_refaccion')?.valueChanges.subscribe(idCategoriaSeleccionada => {
-      this.subcategoriasFiltradas = this.subcategorias.filter(
-        sub => sub.id_categoria_refaccion === idCategoriaSeleccionada
-      );
-      this.refaccionForm.get('id_subcategoria_refaccion')?.reset();
+  abrirDialogoEquivalencias(): void {
+    const dialogRef = this.dialog.open(
+      DialogSeleccionarEquivalenciasComponent,
+      {
+        width: '600px',
+      }
+    );
+
+    dialogRef.afterClosed().subscribe((resultado) => {
+      if (resultado) {
+        this.equivalenciasSeleccionadas = resultado;
+        const idsEquivalentes = resultado.map((ref: any) => ref.id_refaccion);
+        this.refaccionForm
+          .get('refacciones_equivalentes')
+          ?.setValue(idsEquivalentes);
+      }
     });
+  }
+
+  removerEquivalencia(refaccion: any): void {
+    const index = this.equivalenciasSeleccionadas.indexOf(refaccion);
+    if (index >= 0) {
+      this.equivalenciasSeleccionadas.splice(index, 1);
+      const idsEquivalentes = this.equivalenciasSeleccionadas.map(
+        (r) => r.id_refaccion
+      );
+      this.refaccionForm
+        .get('refacciones_equivalentes')
+        ?.setValue(idsEquivalentes);
+    }
+  }
+
+  escucharCambiosDeCategoria() {
+    this.refaccionForm
+      .get('id_categoria_refaccion')
+      ?.valueChanges.subscribe((idCategoriaSeleccionada) => {
+        this.subcategoriasFiltradas = this.subcategorias.filter(
+          (sub) => sub.id_categoria_refaccion === idCategoriaSeleccionada
+        );
+        this.refaccionForm.get('id_subcategoria_refaccion')?.reset();
+      });
   }
 
   onNoClick(): void {
@@ -72,16 +175,22 @@ export class DialogCrearRefaccionComponent implements OnInit {
 
   submit() {
     if (this.refaccionForm.valid) {
-      this.refaccionesService.crearRefaccion('', this.refaccionForm.value).subscribe({
-        next: (response) => {
-          Swal.fire('¡Éxito!', 'La refacción ha sido creada correctamente.', 'success');
-          this.dialogRef.close(true);
-        },
-        error: (err) => {
-          Swal.fire('Error', 'No se pudo crear la refacción.', 'error');
-          console.error(err);
-        }
-      });
+      this.refaccionesService
+        .crearRefaccion('', this.refaccionForm.value)
+        .subscribe({
+          next: (response) => {
+            Swal.fire(
+              '¡Éxito!',
+              'La refacción ha sido creada correctamente.',
+              'success'
+            );
+            this.dialogRef.close(true);
+          },
+          error: (err) => {
+            Swal.fire('Error', 'No se pudo crear la refacción.', 'error');
+            console.error(err);
+          },
+        });
     } else {
       this.refaccionForm.markAllAsTouched();
     }

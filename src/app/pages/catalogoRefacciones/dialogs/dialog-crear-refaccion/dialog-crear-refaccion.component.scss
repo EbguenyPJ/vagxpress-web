@@ -2,8 +2,67 @@ form {
   padding-top: 1rem;
 }
 
-.icon-nombre { color: #4285F4; }     
+.icon-nombre { color: #4285F4; }
 .icon-parte { color: #34A853; }
 .icon-marca { color: #FBBC05; }
 .icon-categoria { color: #EA4335; }
 .icon-subcategoria { color: #673AB7; }
+
+
+.clase-label {
+  font-size: 1rem;
+  font-weight: 500;
+  color: rgba(0, 0, 0, 0.6);
+  margin-bottom: 0.5rem;
+  display: block;
+}
+
+.clase-radio-group {
+  display: flex;
+  justify-content: space-around;
+  padding: 0.75rem 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+}
+
+.clase-radio-text {
+  font-weight: bold;
+  font-size: 1rem;
+}
+
+
+:host ::ng-deep {
+  .clase-radio-group {
+    mat-radio-button[ng-reflect-value="1"].mat-mdc-radio-checked .mdc-radio__inner-circle {
+      background-color: #000000;
+    }
+    mat-radio-button[ng-reflect-value="1"].mat-mdc-radio-checked .mdc-radio__outer-circle {
+      border-color: #000000;
+    }
+
+
+    mat-radio-button[ng-reflect-value="2"].mat-mdc-radio-checked .mdc-radio__inner-circle {
+      background-color: #FF0000;
+    }
+    mat-radio-button[ng-reflect-value="2"].mat-mdc-radio-checked .mdc-radio__outer-circle {
+      border-color: #FF0000;
+    }
+
+    mat-radio-button[ng-reflect-value="3"].mat-mdc-radio-checked .mdc-radio__inner-circle {
+      background-color: #0000FF;
+    }
+     mat-radio-button[ng-reflect-value="3"].mat-mdc-radio-checked .mdc-radio__outer-circle {
+      border-color: #0000FF;
+    }
+  }
+}
+
+
+
+.mt-3 {
+  margin-top: 1.5rem;
+}
+.mt-2 {
+  margin-top: 1rem;
+}
