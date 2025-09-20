@@ -127,10 +127,15 @@ export class DialogCrearRefaccionComponent implements OnInit {
   }
 
   abrirDialogoEquivalencias(): void {
+    const subcategoriaId = this.refaccionForm.get(
+      'id_subcategoria_refaccion'
+    )?.value;
+
     const dialogRef = this.dialog.open(
       DialogSeleccionarEquivalenciasComponent,
       {
         width: '600px',
+        data: { id_subcategoria_refaccion: subcategoriaId },
       }
     );
 
