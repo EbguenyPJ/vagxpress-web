@@ -2,12 +2,21 @@ form {
   padding-top: 1rem;
 }
 
-.icon-nombre { color: #4285F4; }
-.icon-parte { color: #34A853; }
-.icon-marca { color: #FBBC05; }
-.icon-categoria { color: #EA4335; }
-.icon-subcategoria { color: #673AB7; }
-
+.icon-nombre {
+  color: #4285f4;
+}
+.icon-parte {
+  color: #34a853;
+}
+.icon-marca {
+  color: #fbbc05;
+}
+.icon-categoria {
+  color: #ea4335;
+}
+.icon-subcategoria {
+  color: #673ab7;
+}
 
 .clase-label {
   font-size: 1rem;
@@ -31,38 +40,48 @@ form {
   font-size: 1rem;
 }
 
-
 :host ::ng-deep {
   .clase-radio-group {
-    mat-radio-button[ng-reflect-value="1"].mat-mdc-radio-checked .mdc-radio__inner-circle {
+    mat-radio-button[ng-reflect-value="1"].mat-mdc-radio-checked
+      .mdc-radio__inner-circle {
       background-color: #000000;
     }
-    mat-radio-button[ng-reflect-value="1"].mat-mdc-radio-checked .mdc-radio__outer-circle {
+    mat-radio-button[ng-reflect-value="1"].mat-mdc-radio-checked
+      .mdc-radio__outer-circle {
       border-color: #000000;
     }
 
+    mat-radio-button[ng-reflect-value="2"].mat-mdc-radio-checked
+      .mdc-radio__inner-circle {
+      background-color: #ff0000;
+    }
+    mat-radio-button[ng-reflect-value="2"].mat-mdc-radio-checked
+      .mdc-radio__outer-circle {
+      border-color: #ff0000;
+    }
 
-    mat-radio-button[ng-reflect-value="2"].mat-mdc-radio-checked .mdc-radio__inner-circle {
-      background-color: #FF0000;
+    mat-radio-button[ng-reflect-value="3"].mat-mdc-radio-checked
+      .mdc-radio__inner-circle {
+      background-color: #0000ff;
     }
-    mat-radio-button[ng-reflect-value="2"].mat-mdc-radio-checked .mdc-radio__outer-circle {
-      border-color: #FF0000;
-    }
-
-    mat-radio-button[ng-reflect-value="3"].mat-mdc-radio-checked .mdc-radio__inner-circle {
-      background-color: #0000FF;
-    }
-     mat-radio-button[ng-reflect-value="3"].mat-mdc-radio-checked .mdc-radio__outer-circle {
-      border-color: #0000FF;
+    mat-radio-button[ng-reflect-value="3"].mat-mdc-radio-checked
+      .mdc-radio__outer-circle {
+      border-color: #0000ff;
     }
   }
 }
-
-
 
 .mt-3 {
   margin-top: 1.5rem;
 }
 .mt-2 {
   margin-top: 1rem;
+}
+mat-chip-list {
+  display: block;
+  margin-top: 1rem;
+}
+
+mat-chip-list mat-chip {
+  margin: 4px;
 }

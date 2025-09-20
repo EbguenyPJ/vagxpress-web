@@ -1,5 +1,9 @@
 .form-section {
   margin-bottom: 1.5rem;
+
+  border: 2px solid #e0e0e0;
+  border-radius: 8px;
+  padding: 16px;
 }
 
 .form-section-title {
@@ -52,3 +56,21 @@
     color: #6A1B9A;
   }
 }
+
+.form-section.equivalencias {
+  .form-section-title, .form-section-title mat-icon {
+    color: #AD1457;
+  }
+}
+
+.empty-equivalencias-msg {
+  color: rgba(0, 0, 0, 0.54);
+  font-size: 14px;
+  margin-top: 1rem;
+}
+
+.mt-2 {
+  margin-top: 1rem;
+}
+
+

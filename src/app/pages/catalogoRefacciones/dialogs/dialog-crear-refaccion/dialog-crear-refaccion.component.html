@@ -97,21 +97,23 @@
           mat-stroked-button
           color="primary"
           (click)="abrirDialogoEquivalencias()"
+          [disabled]="!refaccionForm.get('id_subcategoria_refaccion')?.value"
         >
           <mat-icon>add_circle_outline</mat-icon>
           Agregar Equivalencias
         </button>
 
-        <mat-chip-list class="mt-2" aria-label="Equivalencias seleccionadas">
+        <mat-chip-set class="mt-2" aria-label="Equivalencias seleccionadas">
           @for (ref of equivalenciasSeleccionadas; track ref.id_refaccion) {
           <mat-chip (removed)="removerEquivalencia(ref)">
-            {{ ref.s_nombre_refaccion }} ({{ ref.s_marca_refaccion }})
+            {{ ref.s_nombre_refaccion }} ({{ ref.s_marca_refaccion }} |
+            {{ ref.s_numero_parte }})
             <button matChipRemove>
               <mat-icon>cancel</mat-icon>
             </button>
           </mat-chip>
           }
-        </mat-chip-list>
+        </mat-chip-set>
       </div>
     </div>
   </form>

@@ -131,23 +131,22 @@ export class CatalogoRefaccionesComponent
     });
   }
 
-abrirCargaMasiva() {
-  const dialogRef = this.dialog.open(DialogCargaMasivaComponent, {
-    width: '95vw',
-    maxWidth: '1400px',
-  });
+  abrirCargaMasiva() {
+    const dialogRef = this.dialog.open(DialogCargaMasivaComponent, {
+      width: '95vw',
+      maxWidth: '1400px',
+    });
 
-  dialogRef.afterClosed().subscribe(result => {
-    if (result) {
-      this.refresh();
-    }
-  });
-}
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        this.refresh();
+      }
+    });
+  }
 
   verDetalles(row: refaccionModel) {
     this.dialog.open(DialogDetalleRefaccionComponent, {
       width: '80vw',
-      height: '85vh',
       maxWidth: '100vw',
       data: {
         id_refaccion: row.id_refaccion,
@@ -159,7 +158,8 @@ abrirCargaMasiva() {
     const dialogRef = this.dialog.open(DialogEditarRefaccionComponent, {
       width: '92vw',
       maxWidth: '1200px',
-      data: { refaccion }
+      //height: '90vh',
+      data: { refaccion },
     });
 
     dialogRef.afterClosed().subscribe((result) => {

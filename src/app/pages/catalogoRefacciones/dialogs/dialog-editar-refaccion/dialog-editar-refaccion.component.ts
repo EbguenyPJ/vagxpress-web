@@ -1,10 +1,23 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
+import {
+  FormBuilder,
+  FormGroup,
+  Validators,
+  ReactiveFormsModule,
+} from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { forkJoin, of } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 
-import { MAT_DIALOG_DATA, MatDialogRef, MatDialogTitle, MatDialogContent, MatDialogActions } from '@angular/material/dialog';
+import {
+  MatDialog,
+  MAT_DIALOG_DATA,
+  MatDialogRef,
+  MatDialogTitle,
+  MatDialogContent,
+  MatDialogActions,
+} from '@angular/material/dialog';
+import { MatChipsModule } from '@angular/material/chips';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -14,16 +27,27 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 
 import { RefaccionesService } from 'app/services/refacciones/refacciones.service';
 import Swal from 'sweetalert2';
+import { DialogSeleccionarEquivalenciasComponent } from '../dialog-seleccionar-equivalencias/dialog-seleccionar-equivalencias.component';
 
 @Component({
   selector: 'app-dialog-editar-refaccion',
   standalone: true,
   imports: [
-    CommonModule, ReactiveFormsModule, MatDialogTitle, MatDialogContent, MatDialogActions,
-    MatButtonModule, MatIconModule, MatFormFieldModule, MatInputModule, MatSelectModule, MatCheckboxModule
+    CommonModule,
+    ReactiveFormsModule,
+    MatDialogTitle,
+    MatDialogContent,
+    MatDialogActions,
+    MatButtonModule,
+    MatIconModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatSelectModule,
+    MatCheckboxModule,
+    MatChipsModule,
   ],
   templateUrl: './dialog-editar-refaccion.component.html',
-  styleUrl: './dialog-editar-refaccion.component.scss'
+  styleUrl: './dialog-editar-refaccion.component.scss',
 })
 export class DialogEditarRefaccionComponent implements OnInit {
   refaccionForm: FormGroup;
@@ -37,12 +61,14 @@ export class DialogEditarRefaccionComponent implements OnInit {
   posiciones: any[] = [];
   ubicaciones: any[] = [];
   proveedores: any[] = [];
+  equivalenciasSeleccionadas: any[] = [];
 
   constructor(
     private fb: FormBuilder,
     public dialogRef: MatDialogRef<DialogEditarRefaccionComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
-    private refaccionesService: RefaccionesService
+    private refaccionesService: RefaccionesService,
+    private dialog: MatDialog
   ) {
     this.refaccionForm = this.fb.group({
       s_nombre_refaccion: ['', Validators.required],
@@ -64,6 +90,7 @@ export class DialogEditarRefaccionComponent implements OnInit {
       id_ubicacion_almacen: [null],
       id_proveedor: [null],
       b_importado: [false],
+      refacciones_equivalentes: [[]],
     });
   }
 
@@ -77,19 +104,39 @@ export class DialogEditarRefaccionComponent implements OnInit {
       title: 'Cargando Datos...',
       text: 'Por favor espere.',
       allowOutsideClick: false,
-      didOpen: () => { Swal.showLoading(); }
+      didOpen: () => {
+        Swal.showLoading();
+      },
     });
 
     const observables = {
-      refaccion: this.refaccionesService.getRefaccionById('', this.data.refaccion.id_refaccion).pipe(catchError(() => of({ data: [] }))),
-      marcas: this.refaccionesService.getMarcas('').pipe(catchError(() => of({ data: [] }))),
-      categorias: this.refaccionesService.getCategorias('').pipe(catchError(() => of({ data: [] }))),
-      subcategorias: this.refaccionesService.getSubcategorias('').pipe(catchError(() => of({ data: [] }))),
-      clases: this.refaccionesService.getClases('').pipe(catchError(() => of({ data: [] }))),
-      unidadesMedida: this.refaccionesService.getUnidadesMedida('').pipe(catchError(() => of({ data: [] }))),
-      posiciones: this.refaccionesService.getPosicionesVehiculo('').pipe(catchError(() => of({ data: [] }))),
-      ubicaciones: this.refaccionesService.getUbicacionesAlmacen('').pipe(catchError(() => of({ data: [] }))),
-      proveedores: this.refaccionesService.getProveedores('').pipe(catchError(() => of({ data: [] }))),
+      refaccion: this.refaccionesService
+        .getRefaccionById('', this.data.refaccion.id_refaccion)
+        .pipe(catchError(() => of({ data: [] }))),
+      marcas: this.refaccionesService
+        .getMarcas('')
+        .pipe(catchError(() => of({ data: [] }))),
+      categorias: this.refaccionesService
+        .getCategorias('')
+        .pipe(catchError(() => of({ data: [] }))),
+      subcategorias: this.refaccionesService
+        .getSubcategorias('')
+        .pipe(catchError(() => of({ data: [] }))),
+      clases: this.refaccionesService
+        .getClases('')
+        .pipe(catchError(() => of({ data: [] }))),
+      unidadesMedida: this.refaccionesService
+        .getUnidadesMedida('')
+        .pipe(catchError(() => of({ data: [] }))),
+      posiciones: this.refaccionesService
+        .getPosicionesVehiculo('')
+        .pipe(catchError(() => of({ data: [] }))),
+      ubicaciones: this.refaccionesService
+        .getUbicacionesAlmacen('')
+        .pipe(catchError(() => of({ data: [] }))),
+      proveedores: this.refaccionesService
+        .getProveedores('')
+        .pipe(catchError(() => of({ data: [] }))),
     };
 
     forkJoin(observables).subscribe({
@@ -105,36 +152,102 @@ export class DialogEditarRefaccionComponent implements OnInit {
 
         const refaccionData = responses.refaccion.data[0];
         if (!refaccionData) {
-          Swal.fire('Error', 'No se pudo cargar la información detallada de la refacción.', 'error');
+          Swal.fire(
+            'Error',
+            'No se pudo cargar la información detallada de la refacción.',
+            'error'
+          );
           this.dialogRef.close();
           return;
         }
 
-        const refaccionParaFormulario = { ...refaccionData, b_importado: refaccionData.b_importado == 1 };
-        this.refaccionForm.patchValue(refaccionParaFormulario, { emitEvent: false });
+        if (refaccionData.refacciones_equivalentes) {
+          this.equivalenciasSeleccionadas =
+            refaccionData.refacciones_equivalentes;
+          const idsEquivalentes = refaccionData.refacciones_equivalentes.map(
+            (r: any) => r.id_refaccion
+          );
+          this.refaccionForm
+            .get('refacciones_equivalentes')
+            ?.setValue(idsEquivalentes);
+        }
+
+        const refaccionParaFormulario = {
+          ...refaccionData,
+          b_importado: refaccionData.b_importado == 1,
+        };
+        this.refaccionForm.patchValue(refaccionParaFormulario, {
+          emitEvent: false,
+        });
 
         if (refaccionParaFormulario.id_categoria_refaccion) {
-          this.filtrarSubcategorias(refaccionParaFormulario.id_categoria_refaccion);
+          this.filtrarSubcategorias(
+            refaccionParaFormulario.id_categoria_refaccion
+          );
         }
         Swal.close();
       },
       error: (err) => {
         Swal.close();
-        Swal.fire('Error Inesperado', 'Ocurrió un error al cargar los datos iniciales.', 'error');
+        Swal.fire(
+          'Error Inesperado',
+          'Ocurrió un error al cargar los datos iniciales.',
+          'error'
+        );
         console.error(err);
+      },
+    });
+  }
+
+  abrirDialogoEquivalencias(): void {
+    const subcategoriaId = this.refaccionForm.get(
+      'id_subcategoria_refaccion'
+    )?.value;
+    const dialogRef = this.dialog.open(
+      DialogSeleccionarEquivalenciasComponent,
+      {
+        width: '600px',
+        data: { id_subcategoria_refaccion: subcategoriaId },
+      }
+    );
+
+    dialogRef.afterClosed().subscribe((resultado) => {
+      if (resultado) {
+        this.equivalenciasSeleccionadas = resultado;
+        const idsEquivalentes = resultado.map((ref: any) => ref.id_refaccion);
+        this.refaccionForm
+          .get('refacciones_equivalentes')
+          ?.setValue(idsEquivalentes);
       }
     });
   }
 
+  removerEquivalencia(refaccion: any): void {
+    const index = this.equivalenciasSeleccionadas.indexOf(refaccion);
+    if (index >= 0) {
+      this.equivalenciasSeleccionadas.splice(index, 1);
+      const idsEquivalentes = this.equivalenciasSeleccionadas.map(
+        (r) => r.id_refaccion
+      );
+      this.refaccionForm
+        .get('refacciones_equivalentes')
+        ?.setValue(idsEquivalentes);
+    }
+  }
+
   escucharCambiosDeCategoria() {
-    this.refaccionForm.get('id_categoria_refaccion')?.valueChanges.subscribe(idCategoria => {
-      this.filtrarSubcategorias(idCategoria);
-      this.refaccionForm.get('id_subcategoria_refaccion')?.reset();
-    });
+    this.refaccionForm
+      .get('id_categoria_refaccion')
+      ?.valueChanges.subscribe((idCategoria) => {
+        this.filtrarSubcategorias(idCategoria);
+        this.refaccionForm.get('id_subcategoria_refaccion')?.reset();
+      });
   }
 
   filtrarSubcategorias(idCategoria: number) {
-    this.subcategoriasFiltradas = this.subcategorias.filter(sub => sub.id_categoria_refaccion === idCategoria);
+    this.subcategoriasFiltradas = this.subcategorias.filter(
+      (sub) => sub.id_categoria_refaccion === idCategoria
+    );
   }
 
   submit() {
@@ -143,24 +256,31 @@ export class DialogEditarRefaccionComponent implements OnInit {
         title: 'Guardando Cambios...',
         text: 'Por favor espere.',
         allowOutsideClick: false,
-        didOpen: () => { Swal.showLoading(); }
+        didOpen: () => {
+          Swal.showLoading();
+        },
       });
 
       const datosParaBackend = {
         ...this.refaccionForm.value,
-        b_importado: this.refaccionForm.value.b_importado ? 1 : 0
+        b_importado: this.refaccionForm.value.b_importado ? 1 : 0,
       };
 
-      this.refaccionesService.editarRefaccion('', this.data.refaccion.id_refaccion, datosParaBackend)
+      this.refaccionesService
+        .editarRefaccion('', this.data.refaccion.id_refaccion, datosParaBackend)
         .subscribe({
           next: () => {
-            Swal.fire('¡Éxito!', 'La refacción ha sido actualizada.', 'success');
+            Swal.fire(
+              '¡Éxito!',
+              'La refacción ha sido actualizada.',
+              'success'
+            );
             this.dialogRef.close(true);
           },
           error: (err) => {
             console.error(err);
             Swal.fire('Error', 'No se pudo actualizar la refacción.', 'error');
-          }
+          },
         });
     }
   }
