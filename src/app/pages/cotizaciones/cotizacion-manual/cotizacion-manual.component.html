@@ -1,0 +1,112 @@
+<section class="content">
+  <div class="content-block">
+    @for (breadscrum of breadscrums; track breadscrum) {
+      <div class="block-header">
+        <app-breadcrumb
+          [title]="breadscrum.title"
+          [items]="breadscrum.items"
+          [active_item]="breadscrum.active">
+        </app-breadcrumb>
+      </div>
+    }
+
+    <div class="cotizacion-manual-container">
+
+      <div class="catalogo-column">
+        <mat-card>
+          <mat-card-content>
+            <mat-form-field appearance="outline" class="w-100 search-bar">
+              <mat-label>Buscar por nombre, marca o no. de parte...</mat-label>
+              <input matInput>
+              <mat-icon matSuffix>search</mat-icon>
+            </mat-form-field>
+
+            <div class="refacciones-grid">
+              @for (i of [1, 2, 3, 4]; track i) {
+                <div class="refaccion-card">
+                  <div class="card-image-container">
+                    <img src="assets/images/image-placeholder.jpg" alt="Filtro de Cabina" />
+                  </div>
+                  <div class="card-content">
+                    <h3 class="card-title" matTooltip="Filtro de Cabina de Aire Acondicionado para Mazda 3">Filtro de Cabina de Aire...</h3>
+                    <p class="card-subtitle">Interfil | CFI-4861</p>
+                    <p class="card-price">$ 676.20</p>
+                  </div>
+                  <div class="card-footer">
+                    <span class="card-stock">Stock: <strong>10</strong></span>
+                    <button mat-flat-button color="primary">
+                      <mat-icon>add_shopping_cart</mat-icon>
+                      Agregar
+                    </button>
+                  </div>
+                </div>
+              }
+            </div>
+
+          </mat-card-content>
+        </mat-card>
+      </div>
+
+      <div class="resumen-column">
+        <mat-card class="sticky-card">
+          <mat-card-header>
+            <mat-card-title>Resumen de Cotización</mat-card-title>
+          </mat-card-header>
+          <mat-card-content class="resumen-content">
+            <ul class="resumen-list">
+              <li class="resumen-item">
+                <div class="item-info">
+                  <span class="item-name">Filtro de Cabina Interfil</span>
+                  <span class="item-price">$676.20</span>
+                </div>
+                <div class="item-actions">
+                  <div class="quantity-controls">
+                    <button mat-icon-button><mat-icon>remove</mat-icon></button>
+                    <span>1</span>
+                    <button mat-icon-button><mat-icon>add</mat-icon></button>
+                  </div>
+                  <button mat-icon-button color="warn"><mat-icon>delete</mat-icon></button>
+                </div>
+              </li>
+              <li class="resumen-item">
+                <div class="item-info">
+                  <span class="item-name">Bujía de Iridio NGK</span>
+                  <span class="item-price">$350.00</span>
+                </div>
+                <div class="item-actions">
+                  <div class="quantity-controls">
+                    <button mat-icon-button><mat-icon>remove</mat-icon></button>
+                    <span>4</span>
+                    <button mat-icon-button><mat-icon>add</mat-icon></button>
+                  </div>
+                  <button mat-icon-button color="warn"><mat-icon>delete</mat-icon></button>
+                </div>
+              </li>
+            </ul>
+
+            <mat-divider></mat-divider>
+
+            <div class="totals-section">
+              <div class="total-row">
+                <span>Subtotal:</span>
+                <span>$2,076.20</span>
+              </div>
+              <div class="total-row">
+                <span>IVA (16%):</span>
+                <span>$332.19</span>
+              </div>
+              <div class="total-row total-final">
+                <strong>Total:</strong>
+                <strong>$2,408.39</strong>
+              </div>
+            </div>
+          </mat-card-content>
+          <mat-card-actions>
+            <button mat-raised-button color="primary" class="w-100">Guardar Cotización</button>
+          </mat-card-actions>
+        </mat-card>
+      </div>
+
+    </div>
+  </div>
+</section>

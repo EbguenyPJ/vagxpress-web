@@ -3,9 +3,11 @@ import { MainLayoutComponent } from './layout/app-layout/main-layout/main-layout
 import { AuthGuard } from '@core/guard/auth.guard';
 import { AuthLayoutComponent } from './layout/app-layout/auth-layout/auth-layout.component';
 import { Page404Component } from './authentication/page404/page404.component';
-import { CatalogoRefaccionesComponent } from './pages/catalogoRefacciones/catalogoRefacciones.component';
 // import { UsuariosComponent } from './pages/administracion/usuarios/usuarios.component';
 // import { EmpleadosComponent } from './pages/administracion/empleados/empleados.component';
+import { CatalogoRefaccionesComponent } from './pages/catalogoRefacciones/catalogoRefacciones.component';
+import { CotizacionesComponent } from './pages/cotizaciones/cotizaciones.component';
+import { CotizacionManualComponent } from './pages/cotizaciones/cotizacion-manual/cotizacion-manual.component';
 
 export const APP_ROUTE: Route[] = [
   {
@@ -24,6 +26,13 @@ export const APP_ROUTE: Route[] = [
       // { path: 'usuarios', component: UsuariosComponent },
       // { path: 'empleados', component: EmpleadosComponent },
       { path: 'refacciones', component: CatalogoRefaccionesComponent },
+      {
+        path: 'cotizaciones',
+        children: [
+          { path: '', component: CotizacionesComponent },
+          { path: 'manual', component: CotizacionManualComponent }, 
+        ],
+      },
     ],
   },
 

@@ -1,0 +1,59 @@
+<section class="content">
+  <div class="content-block">
+    @for (breadscrum of breadscrums; track breadscrum) {
+    <div class="block-header">
+      <app-breadcrumb
+        [title]="breadscrum.title"
+        [items]="breadscrum.items"
+        [active_item]="breadscrum.active"
+      >
+      </app-breadcrumb>
+    </div>
+    }
+
+    <div class="row">
+      <div class="col-12">
+        <mat-card class="main-card">
+          <mat-card-header>
+            <mat-card-title>Panel de Cotizaciones</mat-card-title>
+          </mat-card-header>
+
+          <mat-card-content>
+            <div class="row config-grid">
+              @for (option of cotizacionesOptions; track option.title) {
+              <div class="col-xl-3 col-lg-4 col-md-6 col-sm-6 mb-4">
+                <mat-card class="config-card hover-enabled">
+                  <mat-card-content>
+                    <div class="card-circle-placeholder">
+                      <mat-icon
+                        class="card-icon"
+                        [ngClass]="option.iconColorClass"
+                        >{{ option.icon }}</mat-icon
+                      >
+                    </div>
+
+                    <h3 class="card-title">{{ option.title }}</h3>
+
+                    <p class="card-description">{{ option.description }}</p>
+                  </mat-card-content>
+
+                  <mat-card-actions>
+                    <a
+                      mat-raised-button
+                      color="primary"
+                      [routerLink]="option.route"
+                      class="w-100"
+                    >
+                      Acceder
+                    </a>
+                  </mat-card-actions>
+                </mat-card>
+              </div>
+              }
+            </div>
+          </mat-card-content>
+        </mat-card>
+      </div>
+    </div>
+  </div>
+</section>
