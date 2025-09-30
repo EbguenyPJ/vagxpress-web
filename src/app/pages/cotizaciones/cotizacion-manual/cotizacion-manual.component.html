@@ -1,48 +1,34 @@
 <section class="content">
   <div class="content-block">
     @for (breadscrum of breadscrums; track breadscrum) {
-      <div class="block-header">
-        <app-breadcrumb
-          [title]="breadscrum.title"
-          [items]="breadscrum.items"
-          [active_item]="breadscrum.active">
-        </app-breadcrumb>
-      </div>
+    <div class="block-header">
+      <app-breadcrumb
+        [title]="breadscrum.title"
+        [items]="breadscrum.items"
+        [active_item]="breadscrum.active"
+      >
+      </app-breadcrumb>
+    </div>
     }
 
     <div class="cotizacion-manual-container">
-
       <div class="catalogo-column">
         <mat-card>
+          <mat-card-header>
+            <mat-card-title>Seleccionar Refacciones</mat-card-title>
+          </mat-card-header>
           <mat-card-content>
-            <mat-form-field appearance="outline" class="w-100 search-bar">
-              <mat-label>Buscar por nombre, marca o no. de parte...</mat-label>
-              <input matInput>
-              <mat-icon matSuffix>search</mat-icon>
-            </mat-form-field>
-
-            <div class="refacciones-grid">
-              @for (i of [1, 2, 3, 4]; track i) {
-                <div class="refaccion-card">
-                  <div class="card-image-container">
-                    <img src="assets/images/image-placeholder.jpg" alt="Filtro de Cabina" />
-                  </div>
-                  <div class="card-content">
-                    <h3 class="card-title" matTooltip="Filtro de Cabina de Aire Acondicionado para Mazda 3">Filtro de Cabina de Aire...</h3>
-                    <p class="card-subtitle">Interfil | CFI-4861</p>
-                    <p class="card-price">$ 676.20</p>
-                  </div>
-                  <div class="card-footer">
-                    <span class="card-stock">Stock: <strong>10</strong></span>
-                    <button mat-flat-button color="primary">
-                      <mat-icon>add_shopping_cart</mat-icon>
-                      Agregar
-                    </button>
-                  </div>
-                </div>
-              }
+            <div class="search-container">
+              <mat-form-field appearance="outline" class="search-bar">
+                <mat-label>Buscar Refacción...</mat-label>
+                <input matInput [formControl]="searchControl" />
+                <mat-icon matSuffix>search</mat-icon>
+              </mat-form-field>
             </div>
 
+            <app-catalogo-seleccion
+              [filtroExterno$]="filtroParaCatalogo$"
+            ></app-catalogo-seleccion>
           </mat-card-content>
         </mat-card>
       </div>
@@ -52,36 +38,56 @@
           <mat-card-header>
             <mat-card-title>Resumen de Cotización</mat-card-title>
           </mat-card-header>
+
+          @if (itemsEnCotizacion$ | async; as items) {
           <mat-card-content class="resumen-content">
+            @if (items.length === 0) {
+            <div class="empty-cart">
+              <mat-icon>shopping_cart_off</mat-icon>
+              <p>Tu cotización está vacía</p>
+              <small>Agrega refacciones desde el catálogo</small>
+            </div>
+            } @else {
             <ul class="resumen-list">
+              @for (item of items; track item.id_refaccion) {
               <li class="resumen-item">
                 <div class="item-info">
-                  <span class="item-name">Filtro de Cabina Interfil</span>
-                  <span class="item-price">$676.20</span>
+                  <span class="item-name">{{ item.s_nombre_refaccion }}</span>
+                  <span class="item-price">{{
+                    item.n_precio_venta | currency : "MXN"
+                  }}</span>
                 </div>
                 <div class="item-actions">
                   <div class="quantity-controls">
-                    <button mat-icon-button><mat-icon>remove</mat-icon></button>
-                    <span>1</span>
-                    <button mat-icon-button><mat-icon>add</mat-icon></button>
+                    <button
+                      mat-icon-button
+                      color="warn"
+                      (click)="decrementar(item.id_refaccion)"
+                    >
+                      <mat-icon>remove_circle</mat-icon>
+                    </button>
+
+                    <span>{{ item.cantidad }}</span>
+
+                    <button
+                      mat-icon-button
+                      color="primary"
+                      (click)="incrementar(item.id_refaccion)"
+                    >
+                      <mat-icon>add_circle</mat-icon>
+                    </button>
                   </div>
-                  <button mat-icon-button color="warn"><mat-icon>delete</mat-icon></button>
+                  <button
+                    mat-icon-button
+                    color="warn"
+                    matTooltip="Quitar"
+                    (click)="removerItem(item.id_refaccion)"
+                  >
+                    <mat-icon>delete</mat-icon>
+                  </button>
                 </div>
               </li>
-              <li class="resumen-item">
-                <div class="item-info">
-                  <span class="item-name">Bujía de Iridio NGK</span>
-                  <span class="item-price">$350.00</span>
-                </div>
-                <div class="item-actions">
-                  <div class="quantity-controls">
-                    <button mat-icon-button><mat-icon>remove</mat-icon></button>
-                    <span>4</span>
-                    <button mat-icon-button><mat-icon>add</mat-icon></button>
-                  </div>
-                  <button mat-icon-button color="warn"><mat-icon>delete</mat-icon></button>
-                </div>
-              </li>
+              }
             </ul>
 
             <mat-divider></mat-divider>
@@ -89,24 +95,32 @@
             <div class="totals-section">
               <div class="total-row">
                 <span>Subtotal:</span>
-                <span>$2,076.20</span>
+                <span>{{ subtotal$ | async | currency : "MXN" }}</span>
               </div>
               <div class="total-row">
                 <span>IVA (16%):</span>
-                <span>$332.19</span>
+                <span>{{ iva$ | async | currency : "MXN" }}</span>
               </div>
               <div class="total-row total-final">
                 <strong>Total:</strong>
-                <strong>$2,408.39</strong>
+                <strong>{{ total$ | async | currency : "MXN" }}</strong>
               </div>
             </div>
+            }
           </mat-card-content>
           <mat-card-actions>
-            <button mat-raised-button color="primary" class="w-100">Guardar Cotización</button>
+            <button
+              mat-raised-button
+              color="primary"
+              class="w-100"
+              [disabled]="items.length === 0"
+            >
+              Guardar Cotización
+            </button>
           </mat-card-actions>
+          }
         </mat-card>
       </div>
-
     </div>
   </div>
 </section>

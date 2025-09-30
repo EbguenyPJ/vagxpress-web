@@ -30,7 +30,7 @@ export const APP_ROUTE: Route[] = [
         path: 'cotizaciones',
         children: [
           { path: '', component: CotizacionesComponent },
-          { path: 'manual', component: CotizacionManualComponent }, 
+          { path: 'manual', component: CotizacionManualComponent },
         ],
       },
     ],
