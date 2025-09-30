@@ -1,0 +1,123 @@
+.refacciones-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 16px;
+}
+
+.refaccion-card {
+  background-color: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+
+  &:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  }
+}
+
+.card-image-container {
+  position: relative;
+  height: 150px;
+  background-color: #f0f2f5;
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+}
+
+.card-status-badge {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 600;
+  color: white;
+
+  &.status-disponible {
+    background-color: #34a853;
+  }
+
+  &.status-agotado {
+    background-color: #ea4335;
+  }
+}
+
+.card-content {
+  padding: 16px;
+  flex-grow: 1;
+}
+
+.card-title {
+  font-size: 16px;
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-bottom: 4px;
+}
+
+.card-subtitle {
+  font-size: 13px;
+  color: #5f6368;
+  margin-bottom: 12px;
+}
+
+.card-price {
+  font-size: 20px;
+  font-weight: 700;
+  color: #333;
+}
+
+.card-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 16px 16px 16px;
+  border-top: 1px solid #e8eaed;
+  margin-top: auto;
+}
+
+.card-stock {
+  font-size: 14px;
+  color: #3c4043;
+}
+
+.empty-results {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  color: #9e9e9e; // Un gris más suave
+  padding: 4rem 1rem;
+  min-height: 300px;
+  border: 2px dashed #e0e0e0;
+  border-radius: 8px;
+
+  mat-icon {
+    font-size: 64px;
+    width: 64px;
+    height: 64px;
+    margin-bottom: 1rem;
+  }
+
+  p {
+    font-size: 1.2rem;
+    font-weight: 500;
+    margin: 0;
+    color: #757575;
+  }
+
+  small {
+    font-size: 0.9rem;
+    margin-top: 0.5rem;
+  }
+}

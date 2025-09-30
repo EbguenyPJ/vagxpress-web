@@ -1,0 +1,73 @@
+<div class="p-4">
+  @if (dataSource.filteredData.length > 0) {
+  <div class="refacciones-grid">
+    @for (refaccion of dataSource.connect() | async; track
+    refaccion.id_refaccion) {
+    <div class="refaccion-card">
+      <div class="card-image-container">
+        <img
+          [src]="
+            refaccion.s_imagen_refaccion ||
+            'assets/images/image-placeholder.jpg'
+          "
+          alt="{{ refaccion.s_nombre_refaccion }}"
+        />
+        <span
+          class="card-status-badge"
+          [ngClass]="{
+            'status-disponible': refaccion.s_estatus_refaccion === 'Disponible',
+            'status-agotado': refaccion.s_estatus_refaccion !== 'Disponible'
+          }"
+        >
+          {{ refaccion.s_estatus_refaccion }}
+        </span>
+      </div>
+      <div class="card-content">
+        <h3 class="card-title" matTooltip="{{ refaccion.s_nombre_refaccion }}">
+          {{ refaccion.s_nombre_refaccion }}
+        </h3>
+        <p class="card-subtitle">
+          {{ refaccion.s_marca_refaccion }} | {{ refaccion.s_numero_parte }}
+        </p>
+        <p class="card-price">
+          {{ refaccion.n_precio_venta | currency : "MXN" : "symbol-narrow" }}
+        </p>
+      </div>
+      <div class="card-footer">
+        <span class="card-stock">
+          Stock: <strong>{{ refaccion.n_stock_actual }}</strong>
+        </span>
+        <div class="card-actions">
+          <button
+            mat-flat-button
+            color="primary"
+            (click)="agregarACotizacion(refaccion)"
+          >
+            <mat-icon>add_shopping_cart</mat-icon>
+            Agregar
+          </button>
+        </div>
+      </div>
+    </div>
+    }
+  </div>
+  } @else { @if(dataSource.filter) {
+  <div class="empty-results">
+    <mat-icon>search_off</mat-icon>
+    <p>No se encontraron resultados</p>
+    <small
+      >No hay refacciones que coincidan con "{{ dataSource.filter }}"</small
+    >
+  </div>
+  } }
+
+  <mat-paginator
+    #paginator
+    [length]="dataSource.filteredData.length"
+    [pageIndex]="0"
+    [pageSize]="10"
+    [pageSizeOptions]="[5, 10, 25, 100]"
+    aria-label="Seleccionar página de refacciones"
+  >
+  </mat-paginator>
+</div>
