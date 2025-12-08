@@ -72,6 +72,7 @@ export class DialogCrearRefaccionComponent implements OnInit {
       id_marca_refaccion: [null, Validators.required],
       id_categoria_refaccion: [null, Validators.required],
       id_subcategoria_refaccion: [null, Validators.required],
+      n_precio_compra: [null, Validators.required],
       id_clase_refaccion: [1, Validators.required],
       refacciones_equivalentes: [[]],
     });
