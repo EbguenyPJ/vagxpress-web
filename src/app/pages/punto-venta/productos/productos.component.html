@@ -1,0 +1,82 @@
+<div class="productos-wrapper">
+  <!-- Header con navegación -->
+  <div class="header-navegacion">
+    <button class="btn btn-outline-primary btn-sm" (click)="onVolverClick()">
+      <i class="material-icons">arrow_back</i>
+      Volver
+    </button>
+    <div class="breadcrumb-text ms-3">
+      <span>{{ categoriaSeleccionada?.nombre }}</span>
+      <i class="material-icons mx-2">chevron_right</i>
+      <strong>{{ subcategoriaSeleccionada?.s_subcategoria_refaccion }}</strong>
+    </div>
+  </div>
+
+  <!-- Grid de Productos -->
+  <div class="productos-grid" *ngIf="productosMostrar.length > 0">
+    <div
+      class="producto-card"
+      *ngFor="let producto of productosMostrar"
+      (click)="onProductoClick(producto)"
+      [class.sin-stock]="producto.n_stock_actual === 0"
+    >
+      <!-- Imagen -->
+      <div class="producto-imagen">
+        <img
+          [src]="obtenerUrlImagen(producto.s_imagen_refaccion)"
+          [alt]="producto.s_nombre_refaccion"
+          (error)="$any($event.target).src='assets/images/default-product.png'"
+        />
+
+        <!-- Badges -->
+        <div class="badges-container">
+          <span
+            class="badge badge-status"
+            [style.background-color]="obtenerColorEstatus(producto.s_estatus_refaccion)"
+          >
+            {{ producto.s_estatus_refaccion }}
+          </span>
+          <span
+            class="badge badge-tipo"
+            [style.background-color]="obtenerColorClase(producto.s_clase_refaccion)"
+          >
+            {{ producto.s_clase_refaccion }}
+          </span>
+        </div>
+
+        <!-- Overlay -->
+        <div class="add-overlay">
+          <i class="material-icons">add_shopping_cart</i>
+          <span>Agregar</span>
+        </div>
+      </div>
+
+      <!-- Info -->
+      <div class="producto-info">
+        <h5 class="producto-nombre">{{ producto.s_nombre_refaccion }}</h5>
+        <p class="producto-marca mb-1">{{ producto.s_marca_refaccion }}</p>
+        <p class="producto-numero-parte mb-2">
+          <i class="material-icons">tag</i>
+          {{ producto.s_numero_parte }}
+        </p>
+
+        <div class="producto-footer">
+          <div class="producto-precio">
+            <small class="text-muted">Precio:</small>
+            <strong class="text-success">${{ producto.n_precio_venta | number: '1.2-2' }}</strong>
+          </div>
+          <div class="producto-stock">
+            <i class="material-icons">inventory</i>
+            <span>{{ producto.n_stock_actual }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Sin datos -->
+  <div class="text-center py-5" *ngIf="productosMostrar.length === 0">
+    <i class="material-icons" style="font-size: 4rem; color: #ccc;">inventory_2</i>
+    <p class="text-muted">No hay productos disponibles en esta categoría</p>
+  </div>
+</div>

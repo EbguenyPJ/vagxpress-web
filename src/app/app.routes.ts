@@ -8,6 +8,7 @@ import { Page404Component } from './authentication/page404/page404.component';
 import { CatalogoRefaccionesComponent } from './pages/catalogoRefacciones/catalogoRefacciones.component';
 import { CotizacionesComponent } from './pages/cotizaciones/cotizaciones.component';
 import { CotizacionManualComponent } from './pages/cotizaciones/cotizacion-manual/cotizacion-manual.component';
+import { PuntoVentaComponent } from './pages/punto-venta/punto-venta.component';
 
 export const APP_ROUTE: Route[] = [
   {
@@ -33,6 +34,7 @@ export const APP_ROUTE: Route[] = [
           { path: 'manual', component: CotizacionManualComponent },
         ],
       },
+      { path: 'punto-venta', component: PuntoVentaComponent },
     ],
   },
 

@@ -1,0 +1,84 @@
+<section class="content">
+  <div class="content-block">
+
+    <!-- Loader inicial -->
+    <div class="loader-inicial" *ngIf="isLoading">
+      <div class="loader-content">
+        <div class="spinner"></div>
+        <h3>Cargando datos...</h3>
+        <p>Por favor espera mientras se cargan las categorías y productos</p>
+      </div>
+    </div>
+
+    <!-- Error de carga -->
+    <div class="error-carga" *ngIf="errorCarga && !isLoading">
+      <div class="error-content">
+        <i class="material-icons error-icon">error_outline</i>
+        <h3>Error al cargar datos</h3>
+        <p>No se pudieron cargar los datos del punto de venta. Por favor, verifica tu conexión e intenta nuevamente.</p>
+        <button class="btn-reintentar" (click)="reintentar()">
+          <i class="material-icons">refresh</i>
+          Reintentar
+        </button>
+      </div>
+    </div>
+
+    <!-- Contenido principal -->
+    <div class="punto-venta-container" *ngIf="!isLoading && !errorCarga">
+      <!-- Panel Izquierdo: Catálogo -->
+      <div class="panel-catalogo">
+        <!-- Barra de búsqueda -->
+        <div class="busqueda-wrapper">
+          <app-busqueda-pos
+            [buscarProductos]="onBusquedaProductos.bind(this)"
+            [buscarPorCodigoQR]="onBuscarPorCodigoQR.bind(this)"
+            (productoSeleccionado)="onProductoSeleccionado($event)">
+          </app-busqueda-pos>
+        </div>
+
+        <!-- Contenido dinámico según la vista -->
+        <div class="catalogo-contenido">
+          <!-- Vista de Categorías y Subcategorías -->
+          <app-categorias-pos
+            *ngIf="vistaActual === 'categorias' || vistaActual === 'subcategorias'"
+            [vistaActual]="vistaActual"
+            [categoriaSeleccionada]="categoriaSeleccionada"
+            [categoriasMostrar]="categoriasMostrar"
+            [subcategoriasMostrar]="subcategoriasMostrar"
+            (categoriaSelected)="onCategoriaSeleccionada($event)"
+            (subcategoriaSelected)="onSubcategoriaSeleccionada($event)"
+            (volverCategorias)="volverACategorias()">
+          </app-categorias-pos>
+
+          <!-- Vista de Productos -->
+          <app-productos-pos
+            *ngIf="vistaActual === 'productos'"
+            [categoriaSeleccionada]="categoriaSeleccionada"
+            [subcategoriaSeleccionada]="subcategoriaSeleccionada"
+            [productosMostrar]="productosMostrar"
+            (productoSeleccionado)="onProductoSeleccionado($event)"
+            (volver)="volverASubcategorias()">
+          </app-productos-pos>
+        </div>
+      </div>
+
+      <!-- Panel Derecho: Carrito -->
+      <div class="panel-carrito">
+        <app-carrito-pos
+          [carrito]="carrito"
+          [n_subtotal]="n_subtotal"
+          [n_iva]="n_iva"
+          [n_total]="n_total"
+          (incrementar)="incrementarCantidad($event)"
+          (decrementar)="decrementarCantidad($event)"
+          (eliminar)="eliminarDelCarrito($event)"
+          (vaciar)="vaciarCarrito()"
+          (procesar)="procesarVenta()">
+        </app-carrito-pos>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+
