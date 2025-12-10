@@ -1,0 +1,65 @@
+<div class="busqueda-container">
+  <mat-form-field class="w-100" appearance="outline">
+    <mat-label>Buscar producto o escanear código</mat-label>
+    <input
+      #inputBusqueda
+      matInput
+      [(ngModel)]="s_termino"
+      (input)="onBuscar()"
+      (keydown)="onKeyDown($event)"
+      (blur)="cerrarResultados()"
+      placeholder="Nombre, número de parte, marca o código de barras..."
+      autocomplete="off"
+    />
+    <mat-icon matPrefix>search</mat-icon>
+    <button
+      mat-icon-button
+      matSuffix
+      *ngIf="s_termino"
+      (click)="limpiar()"
+      type="button"
+    >
+      <mat-icon>clear</mat-icon>
+    </button>
+  </mat-form-field>
+
+  <!-- Resultados -->
+  <div class="resultados-busqueda" *ngIf="mostrarResultados && resultados.length > 0">
+    <div
+      class="resultado-item"
+      *ngFor="let producto of resultados"
+      (mousedown)="onProductoClick(producto)"
+    >
+      <img
+        [src]="obtenerUrlImagen(producto.s_imagen_refaccion)"
+        [alt]="producto.s_nombre_refaccion"
+        class="producto-img-mini"
+        (error)="$any($event.target).src='assets/images/default-product.png'"
+      />
+      <div class="producto-info">
+        <div class="producto-nombre">{{ producto.s_nombre_refaccion }}</div>
+        <div class="producto-detalles">
+          <span class="marca">{{ producto.s_marca_refaccion }}</span>
+          <span class="separador">•</span>
+          <span class="numero-parte">{{ producto.s_numero_parte }}</span>
+          <span class="separador">•</span>
+          <span class="precio">${{ producto.n_precio_venta | number: '1.2-2' }}</span>
+        </div>
+      </div>
+      <div
+        class="badge"
+        [class.bg-success]="producto.n_stock_actual > 5"
+        [class.bg-warning]="producto.n_stock_actual > 0 && producto.n_stock_actual <= 5"
+        [class.bg-danger]="producto.n_stock_actual === 0"
+      >
+        Stock: {{ producto.n_stock_actual }}
+      </div>
+    </div>
+  </div>
+
+  <!-- Sin resultados -->
+  <div class="sin-resultados" *ngIf="mostrarResultados && s_termino.length >= 2 && resultados.length === 0">
+    <mat-icon>search_off</mat-icon>
+    <p>No se encontraron productos</p>
+  </div>
+</div>

@@ -1,0 +1,49 @@
+<div class="categorias-wrapper">
+  <!-- Botón volver (solo en subcategorías) -->
+  <div class="header-navegacion" *ngIf="vistaActual === 'subcategorias'">
+    <button class="btn btn-outline-primary btn-sm" (click)="onVolverClick()">
+      <i class="material-icons">arrow_back</i>
+      Volver
+    </button>
+    <h5 class="mb-0 ms-3">{{ categoriaSeleccionada?.nombre }}</h5>
+  </div>
+
+  <!-- Grid de Categorías -->
+  <div class="categorias-grid" *ngIf="vistaActual === 'categorias'">
+    <div
+      class="categoria-card"
+      *ngFor="let categoria of categoriasMostrar"
+      (click)="onCategoriaClick(categoria)"
+      [style.background-image]="'url(' + obtenerUrlImagen(categoria.imagen) + ')'"
+    >
+      <div class="categoria-overlay">
+        <h3 class="categoria-nombre">{{ categoria.nombre }}</h3>
+      </div>
+    </div>
+  </div>
+
+  <!-- Grid de Subcategorías -->
+  <div class="categorias-grid" *ngIf="vistaActual === 'subcategorias'">
+    <div
+      class="categoria-card subcategoria-card"
+      *ngFor="let subcategoria of subcategoriasMostrar"
+      (click)="onSubcategoriaClick(subcategoria)"
+      [style.background-image]="'url(' + obtenerUrlImagen(subcategoria.s_img_subcategoria_refaccion) + ')'"
+    >
+      <div class="categoria-overlay">
+        <h3 class="categoria-nombre">{{ subcategoria.s_subcategoria_refaccion }}</h3>
+      </div>
+    </div>
+  </div>
+
+  <!-- Sin datos -->
+  <div class="text-center py-5" *ngIf="categoriasMostrar.length === 0 && vistaActual === 'categorias'">
+    <i class="material-icons" style="font-size: 4rem; color: #ccc;">category</i>
+    <p class="text-muted">No hay categorías disponibles</p>
+  </div>
+
+  <div class="text-center py-5" *ngIf="subcategoriasMostrar.length === 0 && vistaActual === 'subcategorias'">
+    <i class="material-icons" style="font-size: 4rem; color: #ccc;">inventory_2</i>
+    <p class="text-muted">No hay subcategorías disponibles</p>
+  </div>
+</div>
