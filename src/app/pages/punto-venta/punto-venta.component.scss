@@ -1,0 +1,200 @@
+.punto-venta-container {
+  display: flex;
+  height: calc(100vh - 120px); // Ajustar según el header de tu app
+  gap: 1.5rem;
+  padding: 1.5rem;
+  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+  overflow: hidden;
+}
+
+.panel-catalogo {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  background: white;
+  border-radius: 16px;
+  padding: 1.5rem;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+}
+
+.busqueda-wrapper {
+  margin-bottom: 1rem;
+  flex-shrink: 0;
+}
+
+.catalogo-contenido {
+  flex: 1;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.panel-carrito {
+  width: 420px;
+  flex-shrink: 0;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+// Responsive
+@media (max-width: 1400px) {
+  .panel-carrito {
+    width: 380px;
+  }
+}
+
+@media (max-width: 1200px) {
+  .punto-venta-container {
+    flex-direction: column;
+    height: auto;
+    min-height: calc(100vh - 120px);
+  }
+
+  .panel-catalogo {
+    min-height: 600px;
+  }
+
+  .panel-carrito {
+    width: 100%;
+    max-height: 600px;
+  }
+}
+
+@media (max-width: 768px) {
+  .punto-venta-container {
+    padding: 1rem;
+    gap: 1rem;
+  }
+
+  .panel-catalogo {
+    padding: 1rem;
+  }
+}
+
+// Loader inicial
+.loader-inicial {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: calc(100vh - 250px);
+  padding: 3rem;
+}
+
+.loader-content {
+  text-align: center;
+  max-width: 400px;
+
+  h3 {
+    margin: 1.5rem 0 0.75rem 0;
+    color: #333;
+    font-size: 1.5rem;
+  }
+
+  p {
+    margin: 0;
+    color: #666;
+    font-size: 1rem;
+  }
+}
+
+.spinner {
+  border: 4px solid #f3f3f3;
+  border-top: 4px solid #667eea;
+  border-radius: 50%;
+  width: 60px;
+  height: 60px;
+  animation: spin 1s linear infinite;
+  margin: 0 auto;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+// Error de carga
+.error-carga {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: calc(100vh - 250px);
+  padding: 3rem;
+}
+
+.error-content {
+  text-align: center;
+  max-width: 500px;
+
+  .error-icon {
+    font-size: 5rem;
+    width: 5rem;
+    height: 5rem;
+    color: #f44336;
+    margin-bottom: 1rem;
+  }
+
+  h3 {
+    margin: 0 0 0.75rem 0;
+    color: #333;
+    font-size: 1.5rem;
+  }
+
+  p {
+    margin: 0 0 2rem 0;
+    color: #666;
+    font-size: 1rem;
+    line-height: 1.6;
+  }
+}
+
+.btn-reintentar {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(102, 126, 234, 0.5);
+  }
+
+  &:active {
+    transform: translateY(0);
+  }
+
+  i {
+    font-size: 1.2rem;
+  }
+}
+
+// Animaciones
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+app-categorias-pos,
+app-productos-pos {
+  animation: fadeIn 0.3s ease-out;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: hidden;
+}

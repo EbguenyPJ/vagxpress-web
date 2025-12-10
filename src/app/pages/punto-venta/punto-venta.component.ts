@@ -1,0 +1,466 @@
+import { Component, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { Router } from '@angular/router';
+import Swal from 'sweetalert2';
+import { BreadcrumbComponent } from '@shared/components/breadcrumb/breadcrumb.component';
+import { conexion } from 'app/conexion';
+
+// Servicios
+import { PuntoVentaService } from 'app/services/punto-venta/punto-venta.service';
+
+// Componentes hijos
+import { CategoriasComponent } from './categorias/categorias.component';
+import { ProductosComponent } from './productos/productos.component';
+import { CarritoComponent } from './carrito/carrito.component';
+import { BusquedaComponent } from './busqueda/busqueda.component';
+
+@Component({
+  selector: 'app-punto-venta',
+  standalone: true,
+  imports: [
+    CommonModule,
+    BreadcrumbComponent,
+    CategoriasComponent,
+    ProductosComponent,
+    CarritoComponent,
+    BusquedaComponent
+  ],
+  templateUrl: './punto-venta.component.html',
+  styleUrls: ['./punto-venta.component.scss'],
+})
+export class PuntoVentaComponent implements OnInit {
+
+  // Variables de estado
+  isLoading: boolean = true;
+  errorCarga: boolean = false;
+  vistaActual: string = 'categorias'; // 'categorias' | 'subcategorias' | 'productos'
+
+  // Datos completos del backend
+  todasCategorias: any[] = [];
+  todasSubcategorias: any[] = [];
+  todosProductos: any[] = [];
+
+  // Datos filtrados para vista actual
+  categoriasMostrar: any[] = [];
+  subcategoriasMostrar: any[] = [];
+  productosMostrar: any[] = [];
+
+  // Datos de navegación
+  categoriaSeleccionada: any = null;
+  subcategoriaSeleccionada: any = null;
+
+  // Carrito
+  carrito: any[] = [];
+  n_subtotal: number = 0;
+  n_iva: number = 0;
+  n_total: number = 0;
+
+  // Usuario
+  datosUsuario: any;
+  s_token: string = '';
+
+  // URL base para imágenes
+  urlImagenes: string = conexion.url_img;
+
+  // Breadcrumb
+  breadscrums = [
+    {
+      title: 'Punto de Venta',
+      items: ['Dashboard'],
+      active: 'Punto de Venta',
+    },
+  ];
+
+  constructor(
+    private router: Router,
+    private posService: PuntoVentaService
+  ) { }
+
+  ngOnInit(): void {
+    this.obtenerUsuarioActual();
+    this.cargarDatosIniciales();
+  }
+
+  obtenerUsuarioActual(): void {
+    this.datosUsuario = JSON.parse(localStorage.getItem('currentUser') || '{}');
+    this.s_token = this.datosUsuario?.token || '';
+  }
+
+  cargarDatosIniciales(): void {
+    this.isLoading = true;
+    this.errorCarga = false;
+
+    Swal.fire({
+      title: 'Cargando datos...',
+      text: 'Por favor espera',
+      allowOutsideClick: false,
+      didOpen: () => {
+        Swal.showLoading();
+      }
+    });
+
+    let completados = 0;
+    let total = 3;
+    let error = false;
+
+    const verificarCompletado = () => {
+      completados++;
+      if (completados === total) {
+        Swal.close();
+        this.isLoading = false;
+
+        if (!error) {
+          this.categoriasMostrar = this.todasCategorias;
+          console.log('Datos cargados correctamente');
+        } else {
+          this.errorCarga = true;
+          Swal.fire({
+            icon: 'error',
+            title: 'Error al cargar datos',
+            text: 'No se pudieron cargar los datos del punto de venta',
+            confirmButtonText: 'Reintentar'
+          }).then((result) => {
+            if (result.isConfirmed) {
+              this.reintentar();
+            }
+          });
+        }
+      }
+    };
+
+    // Cargar categorías
+    this.posService.getCategorias(this.s_token).subscribe(
+      (response: any) => {
+        if (response.status === 'success') {
+          this.todasCategorias = response.data || [];
+        }
+        verificarCompletado();
+      },
+      (err) => {
+        console.error('Error al cargar categorías:', err);
+        error = true;
+        verificarCompletado();
+      }
+    );
+
+    // Cargar subcategorías
+    this.posService.getSubcategorias(this.s_token).subscribe(
+      (response: any) => {
+        if (response.status === 'success') {
+          this.todasSubcategorias = response.data || [];
+        }
+        verificarCompletado();
+      },
+      (err) => {
+        console.error('Error al cargar subcategorías:', err);
+        error = true;
+        verificarCompletado();
+      }
+    );
+
+    // Cargar productos
+    this.posService.getProductos(this.s_token).subscribe(
+      (response: any) => {
+        if (response.status === 'success') {
+          this.todosProductos = response.data || [];
+        }
+        verificarCompletado();
+      },
+      (err) => {
+        console.error('Error al cargar productos:', err);
+        error = true;
+        verificarCompletado();
+      }
+    );
+  }
+
+  reintentar(): void {
+    this.todasCategorias = [];
+    this.todasSubcategorias = [];
+    this.todosProductos = [];
+    this.cargarDatosIniciales();
+  }
+
+  // ==================== Navegación ====================
+
+  onCategoriaSeleccionada(categoria: any): void {
+    this.categoriaSeleccionada = categoria;
+    this.vistaActual = 'subcategorias';
+
+    // Filtrar subcategorías de esta categoría
+    this.subcategoriasMostrar = this.todasSubcategorias.filter(
+      (sub: any) => sub.id_categoria_refaccion === categoria.id
+    );
+  }
+
+  onSubcategoriaSeleccionada(subcategoria: any): void {
+    this.subcategoriaSeleccionada = subcategoria;
+    this.vistaActual = 'productos';
+
+    // Filtrar productos de esta subcategoría
+    this.productosMostrar = this.todosProductos.filter(
+      (prod: any) =>
+        prod.s_categoria_refaccion === this.categoriaSeleccionada.nombre &&
+        prod.id_subcategoria_refaccion === subcategoria.id_subcategoria_refaccion
+    );
+  }
+
+  volverACategorias(): void {
+    this.vistaActual = 'categorias';
+    this.categoriaSeleccionada = null;
+    this.subcategoriaSeleccionada = null;
+    this.categoriasMostrar = this.todasCategorias;
+  }
+
+  volverASubcategorias(): void {
+    this.vistaActual = 'subcategorias';
+    this.subcategoriaSeleccionada = null;
+    // Re-filtrar subcategorías
+    this.subcategoriasMostrar = this.todasSubcategorias.filter(
+      (sub: any) => sub.id_categoria_refaccion === this.categoriaSeleccionada.id
+    );
+  }
+
+  // ==================== Búsqueda ====================
+
+  onBusquedaProductos(s_termino: string): any[] {
+    if (!s_termino || s_termino.trim().length < 2) {
+      return [];
+    }
+
+    const terminoLower = s_termino.toLowerCase().trim();
+
+    return this.todosProductos.filter(
+      (producto: any) =>
+        producto.s_nombre_refaccion?.toLowerCase().includes(terminoLower) ||
+        producto.s_numero_parte?.toLowerCase().includes(terminoLower) ||
+        producto.s_marca_refaccion?.toLowerCase().includes(terminoLower)
+    );
+  }
+
+  onBuscarPorCodigoQR(s_codigo_qr: string): any {
+    if (!s_codigo_qr || s_codigo_qr.trim().length === 0) {
+      return null;
+    }
+
+    const codigoLower = s_codigo_qr.toLowerCase().trim();
+
+    return this.todosProductos.find(
+      (producto: any) =>
+        producto.s_codigo_qr?.toLowerCase() === codigoLower
+    );
+  }
+
+  // ==================== Carrito ====================
+
+  onProductoSeleccionado(producto: any): void {
+    this.agregarAlCarrito(producto);
+  }
+
+  agregarAlCarrito(producto: any): void {
+    // Buscar si ya existe en el carrito
+    const itemExistente = this.carrito.find(
+      (item: any) => item.producto.id_refaccion === producto.id_refaccion
+    );
+
+    if (itemExistente) {
+      itemExistente.n_cantidad++;
+      itemExistente.n_subtotal = itemExistente.n_cantidad * itemExistente.producto.n_precio_venta;
+    } else {
+      this.carrito.push({
+        producto: producto,
+        n_cantidad: 1,
+        n_subtotal: parseFloat(producto.n_precio_venta)
+      });
+    }
+
+    this.recalcularTotales();
+
+    Swal.fire({
+      toast: true,
+      position: 'top-end',
+      icon: 'success',
+      title: 'Producto agregado',
+      showConfirmButton: false,
+      timer: 1500
+    });
+  }
+
+  eliminarDelCarrito(index: number): void {
+    this.carrito.splice(index, 1);
+    this.recalcularTotales();
+  }
+
+  actualizarCantidad(index: number, n_cantidad: number): void {
+    if (n_cantidad <= 0) {
+      this.eliminarDelCarrito(index);
+      return;
+    }
+
+    this.carrito[index].n_cantidad = n_cantidad;
+    this.carrito[index].n_subtotal =
+      n_cantidad * this.carrito[index].producto.n_precio_venta;
+
+    this.recalcularTotales();
+  }
+
+  incrementarCantidad(index: number): void {
+    this.carrito[index].n_cantidad++;
+    this.carrito[index].n_subtotal =
+      this.carrito[index].n_cantidad * this.carrito[index].producto.n_precio_venta;
+    this.recalcularTotales();
+  }
+
+  decrementarCantidad(index: number): void {
+    if (this.carrito[index].n_cantidad > 1) {
+      this.carrito[index].n_cantidad--;
+      this.carrito[index].n_subtotal =
+        this.carrito[index].n_cantidad * this.carrito[index].producto.n_precio_venta;
+      this.recalcularTotales();
+    } else {
+      this.eliminarDelCarrito(index);
+    }
+  }
+
+  vaciarCarrito(): void {
+    Swal.fire({
+      title: '¿Vaciar carrito?',
+      text: 'Se eliminarán todos los productos',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Sí, vaciar',
+      cancelButtonText: 'Cancelar'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.carrito = [];
+        this.recalcularTotales();
+        Swal.fire('Carrito vaciado', '', 'success');
+      }
+    });
+  }
+
+  recalcularTotales(): void {
+    this.n_subtotal = this.carrito.reduce(
+      (sum: number, item: any) => sum + item.n_subtotal,
+      0
+    );
+    this.n_iva = this.n_subtotal * 0.16;
+    this.n_total = this.n_subtotal + this.n_iva;
+  }
+
+  procesarVenta(): void {
+    if (this.carrito.length === 0) {
+      Swal.fire('Carrito vacío', 'Agrega productos al carrito', 'warning');
+      return;
+    }
+
+    Swal.fire({
+      title: '¿Procesar venta?',
+      text: `Total: $${this.n_total.toFixed(2)}`,
+      icon: 'question',
+      showCancelButton: true,
+      confirmButtonText: 'Sí, procesar',
+      cancelButtonText: 'Cancelar'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.ejecutarVenta();
+      }
+    });
+  }
+
+  ejecutarVenta(): void {
+    // Obtener ID del usuario desde localStorage
+    const currentUserStr = localStorage.getItem('currentUser');
+    let id_usuario_crea = 0;
+
+    if (currentUserStr) {
+      try {
+        const currentUser = JSON.parse(currentUserStr);
+        id_usuario_crea = currentUser.id_usuario;
+      } catch (error) {
+        console.error('Error al leer el usuario del localStorage', error);
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: 'No se pudo obtener la información del usuario'
+        });
+        return;
+      }
+    }
+
+    // Construir payload
+    const refacciones = this.carrito.map((item: any) => ({
+      n_cantidad: item.n_cantidad,
+      id_refaccion: item.producto.id_refaccion
+    }));
+
+    const payload = {
+      id_usuario_crea: id_usuario_crea,
+      refacciones: refacciones
+    };
+
+    console.log('Payload para crear venta:', payload);
+
+    // Mostrar loading
+    Swal.fire({
+      title: 'Procesando venta...',
+      text: 'Por favor espera',
+      allowOutsideClick: false,
+      didOpen: () => {
+        Swal.showLoading();
+      }
+    });
+
+    // Llamar al servicio
+    this.posService.crearVenta(this.s_token, payload).subscribe(
+      (response: any) => {
+        console.log('Respuesta del backend (éxito):', response);
+
+        Swal.close();
+
+        if (response.status === 'success') {
+          Swal.fire({
+            icon: 'success',
+            title: '¡Venta procesada!',
+            text: response.message || 'La venta se ha registrado correctamente',
+            confirmButtonText: 'Aceptar'
+          }).then(() => {
+            // Limpiar carrito
+            this.carrito = [];
+            this.recalcularTotales();
+
+            // Recargar datos para actualizar stock
+            this.reintentar();
+          });
+        } else {
+          Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: response.message || 'Ocurrió un error al procesar la venta'
+          });
+        }
+      },
+      (error) => {
+        console.error('Error al procesar venta:', error);
+        console.log('Respuesta del backend (error):', error.error);
+
+        Swal.close();
+
+        let mensajeError = 'Ocurrió un error al procesar la venta';
+
+        if (error.error && error.error.message) {
+          mensajeError = error.error.message;
+        } else if (error.error && error.error.error) {
+          mensajeError = error.error.error;
+        }
+
+        Swal.fire({
+          icon: 'error',
+          title: 'Error al procesar venta',
+          text: mensajeError,
+          confirmButtonText: 'Aceptar'
+        });
+      }
+    );
+  }
+}
