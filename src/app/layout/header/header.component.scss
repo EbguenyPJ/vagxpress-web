@@ -60,12 +60,12 @@
     color: #fff !important;
   }
 
-  .navbar-brand img {
-    max-height: 50px;
-    height: auto;
-    width: auto;
-    display: inline-block;
-  }
+.navbar-brand img {
+  height: 140px;        /* Ajusta este valor a tu gusto */
+  width: auto !important;  /* Mantiene proporción */
+  object-fit: contain;     /* Evita deformaciones */
+}
+
 }
 
 .navbar-brand .logo-name {
@@ -161,4 +161,262 @@
   .nav-item.user_profile .chip .logo-version {
     display: none;
   }
+}
+
+
+
+/* ==========================================
+   ⚡ COCKPIT DEPORTIVO – HEADER
+   Moderno, deportivo y corporativo
+==========================================*/
+
+nav.navbar {
+  background: linear-gradient(90deg, #0b0c0b 0%, #111 100%) !important;
+  border-bottom: 1px solid rgba(13, 255, 0, 0.18);
+  box-shadow: 0 2px 6px rgba(255, 0, 0, 0.12);
+  height: 64px;
+  display: flex;
+  align-items: center;
+  padding: 0 20px;
+}
+
+.navbar-header .navbar-brand img {
+  filter: drop-shadow(0 0 4px rgba(255, 0, 0, 0.4));
+}
+
+.navbar-brand .logo-name {
+  color: #ff3b3b !important;
+  font-weight: 800;
+}
+
+/* Iconos del header */
+.navbar .nav-notification-icons i,
+.navbar i.material-icons-outlined {
+  color: #ff3b3b !important;
+  transition: 0.2s ease;
+}
+
+.navbar .nav-notification-icons i:hover,
+.navbar i.material-icons-outlined:hover {
+  color: #ffffff !important;
+  transform: scale(1.1);
+}
+
+/* Usuario */
+.nav-item.user_profile .chip span {
+  color: #ffffff;
+}
+
+.nav-item.user_profile .user_img {
+  border: 2px solid #ff3b3b;
+}
+
+.nav-item.user_profile:hover .chip span {
+  color: #ff3b3b;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* Quitar el espacio que genera el borde fantasma entre sidebar y header */
+.navbar-header {
+  padding-left: 0 !important;
+}
+
+/* Reposicionar el botón collapse para que no se pierda */
+.navbar-header .bars,
+.navbar-header .navbar-toggle {
+  margin-left: 12px !important; /* Ajuste fino para compensar el padding eliminado */
+}
+
+/* Asegurar que el header se pegue visualmente al sidebar */
+.navbar,
+.navbar-header,
+.container-fluid {
+  background-color: #000 !important;   /* Igual que el sidebar */
+  border-left: none !important;
+  box-shadow: none !important;
+}
+
+
+
+
+
+
+
+
+/* Unificar visual del header completo */
+.navbar-header {
+  background: transparent !important;   /* Quitamos la plasta */
+  padding-left: 0 !important;
+  position: relative;
+  z-index: 5; /* suficiente para los botones, no para cubrir todo */
+}
+
+/* Hacer que el header principal sea el que manda */
+.navbar {
+  background-color: #000 !important;   /* tono cockpit */
+  border: none !important;
+  box-shadow: none !important;
+}
+
+/* Ajustar el contenedor fluido para que se pegue al sidebar */
+.container-fluid {
+  background-color: #000 !important;
+  padding-left: 60px !important;  /* espacio para el logo */
+}
+
+/* Reposicionar el logo */
+.navbar-header .navbar-brand {
+  margin-left: 0 !important;
+  padding-left: 10px !important;
+  display: flex;
+  align-items: center;
+}
+
+
+
+/* Forzar que TODA la barra superior sea negra */
+.navbar,
+.navbar-header,
+.navbar .container-fluid {
+  background-color: #000 !important;
+  box-shadow: none !important;
+  border: none !important;
+}
+
+
+
+/* Quitar fondos sobrantes detrás del header */
+.page-content,
+.page-wrapper,
+.page-container,
+.navbar {
+  background: transparent !important;
+}
+
+
+
+/* El header debe cubrir 100% horizontal */
+.navbar {
+  width: 100% !important;
+  left: 0 !important;
+}
+
+
+
+
+.navbar-header {
+  position: relative !important;
+  z-index: 10 !important; /* suficiente para botones */
+  width: auto !important;
+  padding: 0 15px !important;
+}
+
+
+
+
+
+
+/* Fuerza al header a ocupar espacio real en el layout */
+.navbar-header {
+  position: relative !important;   /* evita que flote */
+  height: 60px !important;         /* o 70px según tu diseño */
+  display: flex !important;
+  align-items: center;
+  z-index: 10;                      /* sigue encima del contenido */
+}
+
+/* Ajusta la barra completa del header */
+.navbar {
+  height: 60px !important;
+  min-height: 60px !important;
+  display: flex;
+  align-items: center;
+  position: relative;
+  z-index: 9;
+}
+
+
+
+
+.page-wrapper,
+.main-content {
+  margin-left: 0 !important;
+}
+
+
+
+
+
+.navbar {
+  padding-left: 0 !important;
+}
+.navbar-header {
+  padding-left: 0 !important;
+  margin-left: 0 !important;
+}
+
+
+
+
+/* Asegurar que el header inicie en el borde izquierdo */
+.navbar,
+.navbar-header {
+  left: 0 !important;
+}
+
+
+/* Evitar que el header herede el margin-left del layout */
+.navbar {
+  margin-left: 0 !important;
+}
+
+
+header,
+app-header {
+  margin-left: 0 !important;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* ====== Hacer el header FIJO ====== */
+nav.navbar {
+  position: fixed !important;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 2000 !important;
+}
+
+/* Asegurar altura estándar para el cálculo */
+nav.navbar,
+.navbar-header {
+  height: 60px !important;
+  min-height: 60px !important;
+  display: flex;
+  align-items: center;
 }

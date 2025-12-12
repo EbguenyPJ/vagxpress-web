@@ -92,7 +92,7 @@ export class HeaderComponent implements OnInit
 
     // this.obtenerAlertasConDelay();
 
-    this.getUltimaVersion();
+    //this.getUltimaVersion();
 
   }
 

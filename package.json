@@ -30,6 +30,7 @@
     "@fullcalendar/interaction": "^6.1.15",
     "@fullcalendar/list": "^6.1.15",
     "@fullcalendar/timegrid": "^6.1.15",
+    "@grapesjs/studio-sdk-plugins": "^1.0.31",
     "@ngx-loading-bar/core": "^7.0.0",
     "@ngx-loading-bar/router": "^7.0.0",
     "@ngx-translate/core": "^16.0.3",

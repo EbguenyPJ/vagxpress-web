@@ -1,152 +1,165 @@
-import { Message } from './../../shared/components/chat-widget/chat-widget.component';
 import { Component, OnInit } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
-import { UntypedFormBuilder, UntypedFormGroup, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AuthService } from '@core';
+import { CommonModule } from '@angular/common';
+
+// Material
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 
+// Services
 import { VersionesService } from 'app/services/versiones/versiones.service';
+
 // Animations
 import Swal from "sweetalert2";
 
 @Component({
-    selector: 'app-signin',
-    templateUrl: './signin.component.html',
-    styleUrls: ['./signin.component.scss'],
-    imports: [
-        RouterLink,
-        FormsModule,
-        ReactiveFormsModule,
-        MatFormFieldModule,
-        MatInputModule,
-        MatIconModule,
-        MatButtonModule,
-    ]
+  selector: 'app-signin',
+  templateUrl: './signin.component.html',
+  styleUrls: ['./signin.component.scss'],
+  imports: [
+    RouterLink,
+    FormsModule,
+    ReactiveFormsModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatIconModule,
+    MatButtonModule,
+    CommonModule
+  ]
 })
+export class SigninComponent implements OnInit {
 
-export class SigninComponent implements OnInit
-{
-  authForm!: UntypedFormGroup;
-  submitted = false;
-  loading = false;
-  returnUrl!: string;
-  error = '';
-  hide = true;
-  dataResponse : any;
-  ultimaVersionGeneral: any;
+  name: string = "";
+  password: string = "";
+  errorMsg: string = "";
+  loading: boolean = false;
 
   constructor(
-    private formBuilder: UntypedFormBuilder,
+    private auth: AuthService,
     private router: Router,
-    private authService: AuthService,
-    public VersionesService: VersionesService,
-  ) {}
+    private versionesSrv: VersionesService
+  ) { }
 
-  ngOnInit()
-  {
-    this.authForm = this.formBuilder.group({
-      username: ['', Validators.required],
-      password: ['', Validators.required],
-    });
-    this.getUltimaVersion();
+  ngOnInit(): void {
+    localStorage.removeItem("token");
   }
 
-  async getUltimaVersion() {
-    this.VersionesService.getUltimaVersion("").subscribe(
-      (respuesta: any) => {
-        const data = respuesta?.data;
-        if (Array.isArray(data) && data.length > 0) {
-          this.ultimaVersionGeneral = data[0];
-          console.log("ultima version: ", this.ultimaVersionGeneral);
-        } else {
-          Swal.fire('Advertencia', 'No se encontró ninguna versión registrada', 'warning');
+  // ================================================
+  //                 LOGIN PRINCIPAL
+  // ================================================
+  login() {
+
+    this.errorMsg = "";
+    this.loading = true;
+
+    const payload = {
+      name: this.name,
+      password: this.password
+    };
+
+    this.auth.login("", payload).subscribe({
+
+      next: (res: any) => {
+
+        this.loading = false;
+        console.log("Respuesta login:", res);
+
+        // ===============================
+        // ERRORES 401 DE BACKEND
+        // ===============================
+        if (res.code === 401) {
+
+          this.errorMsg = res.message;
+
+          Swal.fire({
+            toast: true,
+            icon: 'error',
+            title: res.message,
+            position: 'top-end',
+            showConfirmButton: false,
+            timer: 2500,
+            background: '#1A1A1A',
+            color: '#fff'
+          });
+
+          return;
         }
+
+        // ===============================
+        // VALIDACIÓN DE RESPUESTA
+        // ===============================
+        if (!res || res.code !== 201) {
+
+          this.errorMsg = "Usuario o contraseña incorrectos";
+
+          Swal.fire({
+            toast: true,
+            icon: 'error',
+            title: 'Usuario o contraseña incorrectos',
+            position: 'top-end',
+            showConfirmButton: false,
+            timer: 2500,
+            background: '#1A1A1A',
+            color: '#fff'
+          });
+
+          return;
+        }
+
+        // ===============================
+        // LOGIN EXITOSO (201)
+        // ===============================
+
+        // Guardar usuario completo (compatibilidad con módulos)
+        localStorage.setItem("currentUser", JSON.stringify(res));
+
+        // Guardar campos individuales
+        localStorage.setItem("token", res.token);
+        localStorage.setItem("id_sucursal", res.id_sucursal);
+        localStorage.setItem("id_usuario", res.id_usuario);
+        localStorage.setItem("username", res.username);
+        localStorage.setItem("id_empleado", res.id_empleado);
+
+        // Toast de bienvenida
+        Swal.fire({
+          toast: true,
+          icon: 'success',
+          title: '¡Bienvenido!',
+          position: 'top-end',
+          showConfirmButton: false,
+          timer: 1500,
+          background: '#1A1A1A',
+          color: '#fff'
+        });
+
+        // Redirección
+        this.router.navigate(['/dashboard/main']);
       },
-      error => {
-        Swal.fire('Error', 'No se pudo cargar la última versión', 'error');
+
+      // ===============================
+      // ERROR DE SERVIDOR
+      // ===============================
+      error: (err) => {
+        this.loading = false;
+        this.errorMsg = "Error de conexión con el servidor.";
+
+        Swal.fire({
+          toast: true,
+          icon: 'warning',
+          title: 'Error de conexión con el servidor',
+          position: 'top-end',
+          showConfirmButton: false,
+          timer: 2500,
+          background: '#1A1A1A',
+          color: '#fff'
+        });
       }
-    );
+
+    });
   }
 
-  get f(){
-    return this.authForm.controls;
-  }
-
-  onSubmit()
-  {
-    this.submitted = true;
-    this.error = '';
-
-    if (this.authForm.invalid)
-    {
-      this.error = 'Username and Password not valid !';
-      return;
-    }
-      else
-          {
-            let dataLogin : any =
-              {
-                  "name": this.f['username'].value,
-                  "password" : this.f['password'].value
-              }
-
-            //this.authService.login(this.f['username'].value, this.f['password'].value).subscribe
-            this.authService.login("", dataLogin).subscribe
-            ({ next: (res) =>
-              {
-                this.dataResponse = res;
-                console.log("Respuesta del servisio: ", this.dataResponse );
-                console.log("Id sucursal: ", this.dataResponse.id_sucursal);
-
-
-                if(this.dataResponse.code == 401){
-                  this.error = this.dataResponse.message;
-                }
-
-                if(this.dataResponse == null || this.dataResponse.code != 200 || this.dataResponse == undefined ){
-                  this.error = "Usuario incorrecto";
-                }
-
-                  if (this.dataResponse.code == 201)
-                  {
-                    const token = this.dataResponse.token;
-                    //console.log("El token del servicio: ", token);
-                    localStorage.setItem('currentUser', JSON.stringify(res));
-                    localStorage.setItem('id_sucursal', this.dataResponse.id_sucursal);
-
-                    if (token)
-                    {
-                      this.router.navigate(['/dashboard/main']);
-                    }
-                  }
-                  else {
-                    this.error = 'Acceso no valido';
-                  }
-
-              },
-
-              error: (error) => {
-                this.error = error;
-                this.submitted = false;
-                this.loading = false;
-              },
-            });
-          }
-  }//End onSubmit
-
-  onSignupClick(event: Event): void {
-  event.preventDefault();
-
-  Swal.fire({
-    title: 'Solicutud Enviada',
-    text: 'Un administrador atenderá tu solicitud lo mas pronto posible.',
-    icon: 'success',
-    confirmButtonText: 'Aceptar',
-    timer: 3000
-  });
-}
-
-}//End class
+} // End class

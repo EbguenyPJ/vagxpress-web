@@ -122,3 +122,152 @@
 .hide-menu {
   color: #a8a5a5 !important; /* Gris para Ocultar Menú */
 }
+
+
+
+/* ================================
+   ⚡ COCKPIT DEPORTIVO – SIDEBAR
+   Sin romper collapse ni menú móvil
+===================================*/
+
+/* Fondo dark deportivo */
+.sidebar.cockpit {
+  background: linear-gradient(180deg, #0b0b0c 0%, #0a0a0b 60%, #000 100%) !important;
+  border-right: 1px solid rgba(255, 0, 0, 0.15);
+  box-shadow: inset -2px 0 6px rgba(255, 0, 0, 0.12);
+}
+
+/* Panel del usuario */
+.sidebar .user-area {
+  padding: 25px 15px;
+  text-align: center;
+}
+
+.sidebar .avatar-wrapper .avatar {
+  width: 78px;
+  height: 78px;
+  border-radius: 50%;
+  border: 2px solid #ff2d2d;
+  padding: 3px;
+  background: rgba(255, 0, 0, 0.1);
+  transition: all 0.3s ease;
+}
+
+.sidebar .avatar-wrapper .avatar:hover {
+  transform: scale(1.03);
+  box-shadow: 0 0 12px rgba(255, 40, 40, 0.5);
+}
+
+.sidebar .user-name {
+  font-weight: 700;
+  font-size: 16px;
+  color: #ffffff;
+  margin-top: 10px;
+}
+
+.sidebar .user-role {
+  font-size: 13px;
+  color: #bbbbbb;
+  margin-bottom: 10px;
+}
+
+.sidebar .user-actions i.cockpit-icon {
+  font-size: 20px;
+  margin: 0 5px;
+  color: #9e9e9e;
+  transition: all 0.2s ease;
+}
+
+.sidebar .user-actions i.cockpit-icon:hover {
+  color: #ff3b3b;
+  transform: translateY(-2px);
+}
+
+/* Separador */
+.sidebar .user-area::after {
+  content: "";
+  display: block;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, #ff3b3b, transparent);
+  margin: 15px 0;
+}
+
+
+/* ================================
+   📌 Categorías
+===================================*/
+.sidebar-category .header {
+  background: rgba(255, 0, 0, 0.08) !important;
+  color: #ff4b4b !important;
+  border-bottom: 1px solid rgba(255, 50, 50, 0.15);
+  letter-spacing: 0.5px;
+  transition: all 0.3s ease;
+}
+
+.sidebar-category .header:hover {
+  background: rgba(255, 50, 50, 0.12) !important;
+}
+
+/* Indicador de abrir/cerrar */
+.sidebar-category .header::after {
+  color: #ff5c5c !important;
+}
+
+
+/* ================================
+   📌 Items del menú
+===================================*/
+
+.menu-item {
+  display: flex;
+  align-items: center;
+  padding: 10px 12px;
+  border-radius: 6px;
+  margin: 4px 0;
+  transition: all 0.25s ease;
+}
+
+.menu-item i {
+  color: #ddd !important;
+  font-size: 19px;
+  margin-right: 10px;
+  transition: all 0.25s ease;
+}
+
+.menu-item:hover {
+  background: rgba(255, 40, 40, 0.15);
+  transform: translateX(3px);
+}
+
+.menu-item:hover i {
+  color: #ff4545 !important;
+}
+
+/* Activo */
+li.active a.menu-item,
+li.active-top a.menu-item {
+  background: rgba(255, 50, 50, 0.22);
+  border-left: 3px solid #ff2b2b;
+  color: #ffffff !important;
+}
+
+li.active a.menu-item i,
+li.active-top a.menu-item i {
+  color: #ff2b2b !important;
+}
+
+
+/* ================================
+   📌 Submenús
+===================================*/
+li ul li a.menu-top {
+  color: #ccc !important;
+}
+
+li ul li a.menu-top:hover {
+  color: #ff4b4b !important;
+}
+
+li ul li.active a.menu-top {
+  color: #ff2b2b !important;
+}
