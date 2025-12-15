@@ -1,0 +1,219 @@
+/* =========================================================
+   CONFIGURACIONES – ROJO & NEGRO (MATCH SIDEBAR)
+========================================================= */
+
+/* ======================
+   TARJETA PRINCIPAL
+====================== */
+.main-card {
+  margin-bottom: 24px;
+  border-radius: 16px;
+  background: rgba(11, 11, 11, 0.86);
+  backdrop-filter: blur(6px);
+  border: 1px solid rgba(255, 60, 60, 0.18);
+  box-shadow: 0 8px 26px rgba(0, 0, 0, 0.55);
+  padding: 16px;
+}
+
+/* ======================
+   TÍTULO DE SECCIÓN
+====================== */
+.titulo-seccion {
+  font-size: 22px;
+  font-weight: 700;
+  color: #ff4b4b;
+  margin-bottom: 16px;
+  text-align: center;
+  letter-spacing: 0.4px;
+}
+
+/* ======================
+   GRID
+====================== */
+.config-grid {
+  margin-top: 10px;
+}
+
+/* =========================================================
+   TARJETAS DE CONFIGURACIÓN
+========================================================= */
+.config-card {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  border-radius: 16px;
+  overflow: hidden;
+  background: rgba(0, 0, 0, 0.55);
+  border: 1px solid rgba(255, 70, 70, 0.18);
+  transition: transform 0.35s ease,
+              box-shadow 0.35s ease,
+              background 0.35s ease;
+  position: relative;
+}
+
+/* ----------------------
+   MARCA DE AGUA
+---------------------- */
+.config-card::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 120px;
+  height: 120px;
+  //background: url('assets/images/pages/taller.png') no-repeat center center;
+  background-size: contain;
+  opacity: 0.04;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+}
+
+/* ----------------------
+   HEADER
+---------------------- */
+.config-card mat-card-header {
+  padding-bottom: 0;
+  z-index: 1;
+  align-items: center;
+}
+
+.config-card .card-icon {
+  margin-right: 12px;
+  font-size: 36px;
+  height: 36px;
+  width: 36px;
+  color: #ff4b4b;
+  background: rgba(255, 60, 60, 0.18);
+  border-radius: 50%;
+}
+
+.config-card mat-card-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: #ffffff;
+  margin-bottom: 8px;
+}
+
+/* ----------------------
+   DESCRIPCIÓN
+---------------------- */
+.card-description {
+  flex-grow: 1;
+  padding: 0 16px 16px;
+  z-index: 1;
+}
+
+.card-description p {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.5;
+  color: #cfcfcf;
+}
+
+/* =========================================================
+   HOVER ACTIVO
+========================================================= */
+.config-card.hover-enabled:hover {
+  transform: translateY(-6px) scale(1.04);
+  box-shadow: 0 14px 36px rgba(255, 40, 40, 0.45);
+  background: rgba(255, 40, 40, 0.12);
+  cursor: pointer;
+}
+
+/* =========================================================
+   DESHABILITADO
+========================================================= */
+.config-card.disabled-card {
+  opacity: 0.45;
+  background: rgba(40, 40, 40, 0.55);
+  border-style: dashed;
+  cursor: not-allowed;
+}
+
+.config-card.disabled-card .card-description p {
+  color: #9a9a9a;
+}
+
+/* Asegura contenido sobre watermark */
+.config-card > * {
+  position: relative;
+  z-index: 1;
+}
+
+
+/* =========================================================
+   LOGO CONFIGURACIONES
+========================================================= */
+
+.header-img {
+  max-width: 150px;
+  height: auto;
+  margin-top: -25px;
+  padding: 6px;
+
+  /* Fondo oscuro translúcido */
+  background: rgba(0, 0, 0, 0.55);
+  backdrop-filter: blur(4px);
+
+  /* Forma y borde */
+  border-radius: 14px;
+  border: 1px solid rgba(255, 60, 60, 0.25);
+
+  /* Profundidad */
+  box-shadow:
+    0 0 12px rgba(255, 40, 40, 0.25),
+    inset 0 0 8px rgba(0, 0, 0, 0.6);
+
+  /* Animación suave */
+  transition: all 0.35s ease;
+}
+
+/* Hover sutil */
+.header-img:hover {
+  transform: scale(1.05);
+  box-shadow:
+    0 0 20px rgba(255, 50, 50, 0.45),
+    inset 0 0 10px rgba(0, 0, 0, 0.7);
+}
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+@media (max-width: 576px) {
+  .header-img {
+    max-width: 60px;
+    margin-top: -15px;
+    padding: 5px;
+  }
+}
+
+
+/* =========================================================
+   COLORES DE ÍCONOS (ROJO-BASED)
+========================================================= */
+.icon-red    { color: #ff4b4b !important; }
+.icon-blue   { color: #42a5f5 !important; }
+.icon-gold   { color: #fbc02d !important; }
+.icon-orange { color: #ff9800 !important; }
+.icon-purple { color: #ab47bc !important; }
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+@media (max-width: 768px) {
+  .config-grid {
+    margin: 0 -8px;
+  }
+
+  .config-grid > div {
+    padding: 0 8px;
+  }
+
+  .config-card {
+    margin-bottom: 16px;
+  }
+
+  .titulo-seccion {
+    font-size: 20px;
+  }
+}

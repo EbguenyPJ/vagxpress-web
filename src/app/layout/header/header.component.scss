@@ -1,422 +1,299 @@
-/* ---------------- Fondo amarillo para alertas ---------------- */
-.bck-amarillo {
-  background-color: #FFCB00;
+/* =========================================================
+   HEADER PRINCIPAL
+========================================================= */
+nav.navbar.app-header {
+  position: fixed !important;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 60px;
+  min-height: 60px;
+  z-index: 2000;
+  background: linear-gradient(90deg, #000 0%, #111 100%);
+  display: flex;
+  align-items: center;
+  border: none;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
+  margin: 0 !important;
+  padding: 0 !important;
 }
 
-/* Animación para nueva alerta */
-.nueva-alerta {
-  color: red;
-  animation: parpadeo 1s infinite;
+/* Contenedor */
+.header-container {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  padding: 0 16px;
+  background: transparent;
 }
 
-@keyframes parpadeo {
-  0%, 100% { color: red; }
-  50% { color: orange; }
-}
-
-/* ---------------- Angular Material Menus ---------------- */
-::ng-deep .mat-menu-panel {
-  max-height: 600px !important;
-  width: 400px !important;
-}
-
-::ng-deep .mat-menu-content {
-  max-height: none !important;
-  overflow: visible !important;
-}
-
-::ng-deep .mat-menu-content .men-item {
-  min-height: 120px !important;
-  height: auto !important;
-  padding: 16px !important;
-  align-items: center !important;
-}
-
-.menu, .men, .noti-list, .nfc-dropdown {
-  max-height: none !important;
-  overflow: visible !important;
-}
-
-.nfc-dropdown ng-scrollbar {
-  max-height: 500px !important;
-  overflow: auto !important;
-}
-
-/* ---------------- Encabezado ---------------- */
+/* =========================================================
+   HEADER IZQUIERDO
+========================================================= */
 .navbar-header {
-  background-color: rgba(0, 0, 0, 0.8); /* Encabezado negro transparente */
-  border-bottom: 1px solid #444;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-  padding: 10px 20px;
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: space-between;
-
-  i.material-icons-outlined,
-  .navbar-brand span,
-  .navbar-toggle,
-  .bars {
-    color: #fff !important;
-  }
-
-.navbar-brand img {
-  height: 140px;        /* Ajusta este valor a tu gusto */
-  width: auto !important;  /* Mantiene proporción */
-  object-fit: contain;     /* Evita deformaciones */
-}
-
-}
-
-.navbar-brand .logo-name {
-  font-weight: bold;
-  font-size: 25px;
-  color: #fff;
-}
-
-/* ---------------- Perfil de usuario ---------------- */
-.nav-item.user_profile {
   display: flex;
   align-items: center;
-
-  .chip {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-
-    .user_img {
-      width: 32px;
-      height: 32px;
-      border-radius: 50%;
-      object-fit: cover;
-    }
-
-    .logo-version {
-      font-size: 12px;
-      color: #ccc;
-      margin-left: 6px;
-      white-space: nowrap;
-      display: inline-block; /* Siempre visible */
-    }
-  }
-
-  button {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-  }
-
-  span {
-    white-space: nowrap;
-  }
+  height: 60px;
+  background: transparent;
+  padding: 0;
+  margin: 0;
+  z-index: 10;
 }
 
-/* ---------------- Iconos de notificación ---------------- */
-.navbar .nav-notification-icons i.material-icons {
-  color: #FFCB00;
-  font-size: 26px;
+.navbar-header i.material-icons-outlined,
+.navbar-header .navbar-toggle,
+.navbar-header .bars {
+  color: #fff !important;
 }
 
-/* ---------------- Responsive ---------------- */
-
-/* Tablets (768px - 1024px) */
-@media (max-width: 1024px) {
-  .navbar-header {
-    flex-direction: row;
-    flex-wrap: wrap;
-    padding: 10px;
-  }
-
-  .navbar .navbar-right li {
-    display: flex; /* Mostrar todos los elementos importantes */
-    align-items: center;
-    margin-left: 10px;
-  }
-
-  .nav-item.user_profile .chip .logo-version {
-    display: inline-block; /* versión visible */
-  }
-}
-
-/* Móviles (menos de 768px) */
-@media (max-width: 767px) {
-  .navbar-header {
-    flex-direction: column;
-    align-items: flex-start;
-    padding: 5px 10px;
-  }
-
-  /* Ocultar todos los elementos de navbar-right por defecto */
-  .navbar .navbar-right li {
-    display: none;
-  }
-
-  /* Mostrar solo el usuario */
-  .navbar .navbar-right li.nav-item.user_profile {
-    display: flex !important;
-    align-items: center;
-  }
-
-  /* Ocultar la versión en móvil */
-  .nav-item.user_profile .chip .logo-version {
-    display: none;
-  }
-}
-
-
-
-/* ==========================================
-   ⚡ COCKPIT DEPORTIVO – HEADER
-   Moderno, deportivo y corporativo
-==========================================*/
-
-nav.navbar {
-  background: linear-gradient(90deg, #0b0c0b 0%, #111 100%) !important;
-  border-bottom: 1px solid rgba(13, 255, 0, 0.18);
-  box-shadow: 0 2px 6px rgba(255, 0, 0, 0.12);
-  height: 64px;
+/* =========================================================
+   LOGO
+========================================================= */
+.navbar-brand {
   display: flex;
   align-items: center;
-  padding: 0 20px;
+  gap: 10px;
+  padding: 0 10px;
+  margin: 0;
 }
 
-.navbar-header .navbar-brand img {
+.navbar-brand img.logo {
+  height: 40px;
+  width: auto;
+  object-fit: contain;
   filter: drop-shadow(0 0 4px rgba(255, 0, 0, 0.4));
 }
 
 .navbar-brand .logo-name {
-  color: #ff3b3b !important;
+  font-size: 22px;
   font-weight: 800;
-}
-
-/* Iconos del header */
-.navbar .nav-notification-icons i,
-.navbar i.material-icons-outlined {
-  color: #ff3b3b !important;
-  transition: 0.2s ease;
-}
-
-.navbar .nav-notification-icons i:hover,
-.navbar i.material-icons-outlined:hover {
-  color: #ffffff !important;
-  transform: scale(1.1);
-}
-
-/* Usuario */
-.nav-item.user_profile .chip span {
-  color: #ffffff;
-}
-
-.nav-item.user_profile .user_img {
-  border: 2px solid #ff3b3b;
-}
-
-.nav-item.user_profile:hover .chip span {
+  letter-spacing: 1px;
   color: #ff3b3b;
+  white-space: nowrap;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-/* Quitar el espacio que genera el borde fantasma entre sidebar y header */
-.navbar-header {
-  padding-left: 0 !important;
+/* =========================================================
+   ICONOS HEADER
+========================================================= */
+.nav-notification-icons i {
+  font-size: 24px;
+  color: #ff3b3b;
+  transition: all 0.2s ease;
 }
 
-/* Reposicionar el botón collapse para que no se pierda */
-.navbar-header .bars,
-.navbar-header .navbar-toggle {
-  margin-left: 12px !important; /* Ajuste fino para compensar el padding eliminado */
+.nav-notification-icons i:hover {
+  color: #fff;
+  transform: scale(1.15);
 }
 
-/* Asegurar que el header se pegue visualmente al sidebar */
-.navbar,
-.navbar-header,
-.container-fluid {
-  background-color: #000 !important;   /* Igual que el sidebar */
-  border-left: none !important;
-  box-shadow: none !important;
+/* =========================================================
+   ALERTAS
+========================================================= */
+.bck-amarillo {
+  background-color: #FFCB00;
 }
 
-
-
-
-
-
-
-
-/* Unificar visual del header completo */
-.navbar-header {
-  background: transparent !important;   /* Quitamos la plasta */
-  padding-left: 0 !important;
-  position: relative;
-  z-index: 5; /* suficiente para los botones, no para cubrir todo */
+.nueva-alerta {
+  animation: pulse 1.2s infinite;
 }
 
-/* Hacer que el header principal sea el que manda */
-.navbar {
-  background-color: #000 !important;   /* tono cockpit */
-  border: none !important;
-  box-shadow: none !important;
+@keyframes pulse {
+  0% {
+    color: red;
+    transform: scale(1);
+  }
+  50% {
+    color: orange;
+    transform: scale(1.15);
+  }
+  100% {
+    color: red;
+    transform: scale(1);
+  }
 }
 
-/* Ajustar el contenedor fluido para que se pegue al sidebar */
-.container-fluid {
+/* =========================================================
+   MENÚS ANGULAR MATERIAL
+========================================================= */
+::ng-deep .mat-menu-panel {
+  width: 380px !important;
+  max-height: 600px !important;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+::ng-deep .mat-menu-content {
+  padding: 0 !important;
+  max-height: none !important;
+  overflow: visible !important;
+}
+
+.nfc-header {
+  padding: 12px 16px;
+  font-weight: 700;
+  color: #000;
+}
+
+.nfc-dropdown ng-scrollbar {
+  max-height: 350px;
+}
+
+.nfc-footer {
+  text-align: center;
+  padding: 10px;
+  background: #000;
+  color: #ff3b3b;
+  font-weight: 600;
+}
+
+/* =========================================================
+   PERFIL – FORZAR FONDO NEGRO (ANGULAR MATERIAL)
+========================================================= */
+
+/* Botón real de Angular Material */
+.nav-item.user_profile button.mat-button,
+.nav-item.user_profile button.mat-mdc-button,
+.nav-item.user_profile button {
   background-color: #000 !important;
-  padding-left: 60px !important;  /* espacio para el logo */
 }
 
-/* Reposicionar el logo */
-.navbar-header .navbar-brand {
-  margin-left: 0 !important;
-  padding-left: 10px !important;
-  display: flex;
-  align-items: center;
-}
-
-
-
-/* Forzar que TODA la barra superior sea negra */
-.navbar,
-.navbar-header,
-.navbar .container-fluid {
+/* Contenedor chip */
+.nav-item.user_profile .chip {
   background-color: #000 !important;
-  box-shadow: none !important;
-  border: none !important;
 }
 
+/* Texto del usuario */
+.nav-item.user_profile .chip span {
+  color: #fff !important;
+}
 
+/* Imagen */
+.nav-item.user_profile .chip .user_img {
+  background-color: #000 !important;
+}
 
-/* Quitar fondos sobrantes detrás del header */
-.page-content,
+/* Evitar que Material cambie el color en hover */
+.nav-item.user_profile button:hover,
+.nav-item.user_profile button:focus,
+.nav-item.user_profile button:active {
+  background-color: #000 !important;
+}
+
+/* Quitar ripple gris de Material */
+.nav-item.user_profile .mat-ripple-element {
+  background-color: transparent !important;
+}
+
+/* Fondo real del menú MDC */
+::ng-deep .profile-menu .mat-mdc-menu-content {
+  background-color: #000 !important;
+}
+
+/* Item normal */
+::ng-deep .profile-menu .mat-mdc-menu-item {
+  background-color: #000 !important;
+  color: #fff !important;
+}
+
+/* Texto e iconos siempre blancos */
+::ng-deep .profile-menu .mat-mdc-menu-item span,
+::ng-deep .profile-menu .mat-mdc-menu-item mat-icon {
+  color: #fff !important;
+}
+
+/* ITEM SELECCIONADO / ACTIVADO (ESTE ES EL CULPABLE) */
+::ng-deep .profile-menu .mat-mdc-menu-item.mdc-list-item--selected,
+::ng-deep .profile-menu .mat-mdc-menu-item.mdc-list-item--activated {
+  background-color: #000 !important;
+}
+
+/* Overlay blanco de MDC */
+::ng-deep .profile-menu .mat-mdc-menu-item::before,
+::ng-deep .profile-menu .mat-mdc-menu-item::after {
+  background-color: transparent !important;
+  opacity: 0 !important;
+}
+
+/* Ripple de MDC */
+::ng-deep .profile-menu .mdc-list-item__ripple {
+  background-color: transparent !important;
+  opacity: 0 !important;
+}
+
+/* Hover controlado (sin tapar texto) */
+::ng-deep .profile-menu .mat-mdc-menu-item:hover {
+  background-color: rgba(255, 255, 255, 0.08) !important;
+}
+
+/* =========================================================
+   MENÚ DESPLEGABLE PERFIL
+========================================================= */
+::ng-deep .profile-menu .mat-menu-content {
+  background-color: #000 !important;
+}
+
+::ng-deep .profile-menu button {
+  background-color: #000 !important;
+  color: #fff !important;
+}
+
+::ng-deep .profile-menu button:hover {
+  background-color: rgba(255, 255, 255, 0.08) !important;
+}
+
+/* =========================================================
+   LISTAS Y SCROLL
+========================================================= */
+.menu,
+.men,
+.noti-list,
+.nfc-dropdown {
+  overflow: visible !important;
+}
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+@media (max-width: 1024px) {
+  .navbar-right li {
+    display: flex;
+    align-items: center;
+    margin-left: 8px;
+  }
+}
+
+@media (max-width: 768px) {
+  .navbar-header {
+    width: 100%;
+  }
+
+  .navbar-right li:not(.user_profile) {
+    display: none;
+  }
+
+  .navbar-brand .logo-name {
+    font-size: 18px;
+  }
+
+  .nav-item.user_profile .logo-version {
+    display: none;
+  }
+}
+
+/* =========================================================
+   FIXES LAYOUT
+========================================================= */
 .page-wrapper,
-.page-container,
-.navbar {
-  background: transparent !important;
-}
-
-
-
-/* El header debe cubrir 100% horizontal */
-.navbar {
-  width: 100% !important;
-  left: 0 !important;
-}
-
-
-
-
-.navbar-header {
-  position: relative !important;
-  z-index: 10 !important; /* suficiente para botones */
-  width: auto !important;
-  padding: 0 15px !important;
-}
-
-
-
-
-
-
-/* Fuerza al header a ocupar espacio real en el layout */
-.navbar-header {
-  position: relative !important;   /* evita que flote */
-  height: 60px !important;         /* o 70px según tu diseño */
-  display: flex !important;
-  align-items: center;
-  z-index: 10;                      /* sigue encima del contenido */
-}
-
-/* Ajusta la barra completa del header */
-.navbar {
-  height: 60px !important;
-  min-height: 60px !important;
-  display: flex;
-  align-items: center;
-  position: relative;
-  z-index: 9;
-}
-
-
-
-
-.page-wrapper,
-.main-content {
-  margin-left: 0 !important;
-}
-
-
-
-
-
-.navbar {
-  padding-left: 0 !important;
-}
-.navbar-header {
-  padding-left: 0 !important;
-  margin-left: 0 !important;
-}
-
-
-
-
-/* Asegurar que el header inicie en el borde izquierdo */
-.navbar,
-.navbar-header {
-  left: 0 !important;
-}
-
-
-/* Evitar que el header herede el margin-left del layout */
-.navbar {
-  margin-left: 0 !important;
-}
-
-
+.main-content,
 header,
 app-header {
   margin-left: 0 !important;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/* ====== Hacer el header FIJO ====== */
-nav.navbar {
-  position: fixed !important;
-  top: 0;
-  left: 0;
-  width: 100%;
-  z-index: 2000 !important;
-}
-
-/* Asegurar altura estándar para el cálculo */
-nav.navbar,
-.navbar-header {
-  height: 60px !important;
-  min-height: 60px !important;
-  display: flex;
-  align-items: center;
+.navbar,
+.navbar-header,
+.container-fluid {
+  background-color: #000 !important;
+  border: none !important;
+  box-shadow: none !important;
 }

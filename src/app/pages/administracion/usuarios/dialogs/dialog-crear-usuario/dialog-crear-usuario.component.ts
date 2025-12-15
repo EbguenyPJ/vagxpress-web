@@ -1,4 +1,4 @@
-import { CatalogosService } from './../../../../../services/catalogos/catalogos.service';
+//import { CatalogosService } from './../../../../../services/catalogos/catalogos.service';
 import { MAT_DIALOG_DATA, MatDialogRef, MatDialogContent, MatDialogClose, } from '@angular/material/dialog';
 import { Component, Inject } from '@angular/core';
 import { UntypedFormControl, Validators, UntypedFormGroup, ReactiveFormsModule, FormsModule, FormGroup, FormBuilder,} from '@angular/forms';
@@ -64,7 +64,7 @@ export class DialogCrearUsuarioComponent
     @Inject(MAT_DIALOG_DATA) public data: DialogData,
     private UsuariosService: UsuariosService,
     private EmpleadosService: EmpleadosService,
-    private CatalogosService: CatalogosService,
+    //private CatalogosService: CatalogosService,
     private fb: FormBuilder
   ) {
     // Set the defaults
@@ -78,7 +78,7 @@ export class DialogCrearUsuarioComponent
     }
 
     this.usuariosTableForm = this.createContactForm();
-    this.getTiposUsuarios();
+    //this.getTiposUsuarios();
     this.getEmpleados();
   }
   formControl = new UntypedFormControl('', [
@@ -203,7 +203,7 @@ export class DialogCrearUsuarioComponent
 
 
 
-  async getTiposUsuarios()
+  /*async getTiposUsuarios()
   {
     this.CatalogosService.GetAll('','tipos-usuarios').subscribe(data => {
       this.tipos_usuarios = data;
@@ -217,6 +217,6 @@ export class DialogCrearUsuarioComponent
       }
     )
   }
-
+*/
 
 }//End class
