@@ -39,6 +39,26 @@ export class PuntoVentaService {
     return this.http.get(url, params);
   }
 
+  getPorcentajesUtilidad(s_token: string) {
+    let headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': s_token
+    });
+    let params = { headers: headers };
+    let url = conexion.url + 'mostrar-porcentajes-utilidad';
+    return this.http.get(url, params);
+  }
+
+  getMetodosPago(s_token: string) {
+    let headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': s_token
+    });
+    let params = { headers: headers };
+    let url = conexion.url + 'mostrar-metodos-pagos';
+    return this.http.get(url, params);
+  }
+
   crearVenta(s_token: string, data: any) {
     let headers = new HttpHeaders({
       'Content-Type': 'application/json',
