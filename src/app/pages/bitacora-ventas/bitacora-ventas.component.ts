@@ -70,6 +70,9 @@ export class BitacoraVentasComponent implements OnInit, OnDestroy {
     { def: 'n_cantidad_refacciones', label: 'Cant. Refacciones', type: 'number', visible: true },
     { def: 'n_subtotal', label: 'Subtotal', type: 'currency', visible: true },
     { def: 'n_total', label: 'Total', type: 'currency', visible: true },
+    { def: 's_estatus_venta', label: 'Estatus', type: 'badge', visible: true },
+    { def: 's_metodo_pago', label: 'Método de Pago', type: 'text', visible: true },
+    { def: 's_nombre_cliente', label: 'Cliente', type: 'text', visible: true },
     { def: 'actions', label: 'Acciones', type: 'actionBtn', visible: true },
   ];
 
@@ -106,7 +109,6 @@ export class BitacoraVentasComponent implements OnInit, OnDestroy {
         const currentUser = JSON.parse(currentUserStr);
         const id_usuario = currentUser.id_usuario;
         this.s_token = currentUser.token;
-        // Regla del líder del proyecto: enviar token como string vacío en esta etapa
         this.s_token = '';
       } catch (error) {
         console.error('Error al leer el usuario del localStorage', error);
@@ -137,9 +139,13 @@ export class BitacoraVentasComponent implements OnInit, OnDestroy {
       html: `
         <div style="text-align: left;">
           <p><strong>ID Venta:</strong> ${row.id_venta}</p>
+          <p><strong>Cliente:</strong> ${row.s_nombre_cliente}</p>
           <p><strong>Cantidad de Refacciones:</strong> ${row.n_cantidad_refacciones}</p>
           <p><strong>Subtotal:</strong> $${row.n_subtotal.toFixed(2)}</p>
+          <p><strong>IVA (${row.n_porcentaje_iva}%):</strong> $${(row.n_total - row.n_subtotal).toFixed(2)}</p>
           <p><strong>Total:</strong> $${row.n_total.toFixed(2)}</p>
+          <p><strong>Método de Pago:</strong> ${row.s_metodo_pago}</p>
+          <p><strong>Estatus:</strong> ${row.s_estatus_venta}</p>
         </div>
       `,
       confirmButtonText: 'Cerrar'
