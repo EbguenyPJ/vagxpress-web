@@ -66,6 +66,7 @@
       <div class="panel-carrito">
         <app-carrito-pos
           [carrito]="carrito"
+          [porcentajesUtilidad]="porcentajesUtilidad"
           [n_subtotal]="n_subtotal"
           [n_iva]="n_iva"
           [n_total]="n_total"
@@ -73,7 +74,8 @@
           (decrementar)="decrementarCantidad($event)"
           (eliminar)="eliminarDelCarrito($event)"
           (vaciar)="vaciarCarrito()"
-          (procesar)="procesarVenta()">
+          (procesar)="procesarVenta()"
+          (cambiarPorcentaje)="cambiarPorcentajeUtilidad($event.index, $event.id_porcentaje)">
         </app-carrito-pos>
       </div>
     </div>

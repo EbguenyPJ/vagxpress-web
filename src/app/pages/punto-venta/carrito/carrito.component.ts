@@ -13,6 +13,7 @@ import { MatButtonModule } from '@angular/material/button';
 export class CarritoComponent {
 
   @Input() carrito: any[] = [];
+  @Input() porcentajesUtilidad: any[] = [];
   @Input() n_subtotal: number = 0;
   @Input() n_iva: number = 0;
   @Input() n_total: number = 0;
@@ -22,6 +23,7 @@ export class CarritoComponent {
   @Output() eliminar = new EventEmitter<number>();
   @Output() vaciar = new EventEmitter<void>();
   @Output() procesar = new EventEmitter<void>();
+  @Output() cambiarPorcentaje = new EventEmitter<{index: number, id_porcentaje: any}>();
 
   get totalItems(): number {
     return this.carrito.reduce((sum: number, item: any) => sum + item.n_cantidad, 0);
@@ -45,5 +47,13 @@ export class CarritoComponent {
 
   onProcesar(): void {
     this.procesar.emit();
+  }
+
+  onCambiarPorcentaje(index: number, id_porcentaje: any): void {
+    this.cambiarPorcentaje.emit({ index, id_porcentaje });
+  }
+
+  esPorcentajeSeleccionado(item: any, id_porcentaje: any): boolean {
+    return item.id_porcentaje_utilidad === id_porcentaje;
   }
 }
