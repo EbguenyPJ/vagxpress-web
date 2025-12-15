@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import Swal from 'sweetalert2';
+import { MatDialog } from '@angular/material/dialog';
 import { BreadcrumbComponent } from '@shared/components/breadcrumb/breadcrumb.component';
 import { conexion } from 'app/conexion';
 
@@ -13,6 +14,9 @@ import { CategoriasComponent } from './categorias/categorias.component';
 import { ProductosComponent } from './productos/productos.component';
 import { CarritoComponent } from './carrito/carrito.component';
 import { BusquedaComponent } from './busqueda/busqueda.component';
+
+// Dialogs
+import { DialogProcesarVentaComponent } from './dialogs/dialog-procesar-venta/dialog-procesar-venta.component';
 
 @Component({
   selector: 'app-punto-venta',
@@ -39,6 +43,7 @@ export class PuntoVentaComponent implements OnInit {
   todasCategorias: any[] = [];
   todasSubcategorias: any[] = [];
   todosProductos: any[] = [];
+  porcentajesUtilidad: any[] = [];
 
   // Datos filtrados para vista actual
   categoriasMostrar: any[] = [];
@@ -49,7 +54,7 @@ export class PuntoVentaComponent implements OnInit {
   categoriaSeleccionada: any = null;
   subcategoriaSeleccionada: any = null;
 
-  // Carrito
+  // Carrito - ahora cada item incluye porcentaje de utilidad seleccionado
   carrito: any[] = [];
   n_subtotal: number = 0;
   n_iva: number = 0;
@@ -73,7 +78,8 @@ export class PuntoVentaComponent implements OnInit {
 
   constructor(
     private router: Router,
-    private posService: PuntoVentaService
+    private posService: PuntoVentaService,
+    private dialog: MatDialog
   ) { }
 
   ngOnInit(): void {
@@ -82,8 +88,18 @@ export class PuntoVentaComponent implements OnInit {
   }
 
   obtenerUsuarioActual(): void {
-    this.datosUsuario = JSON.parse(localStorage.getItem('currentUser') || '{}');
-    this.s_token = this.datosUsuario?.token || '';
+    const currentUserStr = localStorage.getItem('currentUser');
+    if (currentUserStr) {
+      try {
+        this.datosUsuario = JSON.parse(currentUserStr);
+        const id_usuario = this.datosUsuario.id_usuario;
+        this.s_token = this.datosUsuario.token;
+        // Regla del líder del proyecto: enviar token como string vacío en esta etapa
+        this.s_token = '';
+      } catch (error) {
+        console.error('Error al leer el usuario del localStorage', error);
+      }
+    }
   }
 
   cargarDatosIniciales(): void {
@@ -100,7 +116,7 @@ export class PuntoVentaComponent implements OnInit {
     });
 
     let completados = 0;
-    let total = 3;
+    let total = 4; // Ahora cargamos 4 endpoints
     let error = false;
 
     const verificarCompletado = () => {
@@ -172,12 +188,29 @@ export class PuntoVentaComponent implements OnInit {
         verificarCompletado();
       }
     );
+
+    // Cargar porcentajes de utilidad
+    this.posService.getPorcentajesUtilidad(this.s_token).subscribe(
+      (response: any) => {
+        if (response.status === 'success') {
+          this.porcentajesUtilidad = response.data || [];
+          console.log('Porcentajes de utilidad cargados:', this.porcentajesUtilidad);
+        }
+        verificarCompletado();
+      },
+      (err) => {
+        console.error('Error al cargar porcentajes de utilidad:', err);
+        error = true;
+        verificarCompletado();
+      }
+    );
   }
 
   reintentar(): void {
     this.todasCategorias = [];
     this.todasSubcategorias = [];
     this.todosProductos = [];
+    this.porcentajesUtilidad = [];
     this.cargarDatosIniciales();
   }
 
@@ -265,11 +298,13 @@ export class PuntoVentaComponent implements OnInit {
 
     if (itemExistente) {
       itemExistente.n_cantidad++;
-      itemExistente.n_subtotal = itemExistente.n_cantidad * itemExistente.producto.n_precio_venta;
+      this.recalcularItemCarrito(itemExistente);
     } else {
       this.carrito.push({
         producto: producto,
         n_cantidad: 1,
+        id_porcentaje_utilidad: null, // Sin porcentaje por defecto
+        n_precio_unitario: parseFloat(producto.n_precio_venta),
         n_subtotal: parseFloat(producto.n_precio_venta)
       });
     }
@@ -286,6 +321,46 @@ export class PuntoVentaComponent implements OnInit {
     });
   }
 
+  // Recalcular precio y subtotal de un item considerando porcentaje de utilidad
+  recalcularItemCarrito(item: any): void {
+    const n_precio_base = parseFloat(item.producto.n_precio_venta);
+
+    if (item.id_porcentaje_utilidad) {
+      const porcentaje = this.porcentajesUtilidad.find(
+        (p: any) => p.id_porcentaje_utilidad === item.id_porcentaje_utilidad
+      );
+
+      if (porcentaje) {
+        const n_porcentaje = parseFloat(porcentaje.n_porcentaje_utilidad);
+        item.n_precio_unitario = n_precio_base * (1 + n_porcentaje / 100);
+      } else {
+        item.n_precio_unitario = n_precio_base;
+      }
+    } else {
+      item.n_precio_unitario = n_precio_base;
+    }
+
+    item.n_subtotal = item.n_precio_unitario * item.n_cantidad;
+  }
+
+  // Cambiar porcentaje de utilidad de un item del carrito
+  cambiarPorcentajeUtilidad(indexCarrito: number, id_porcentaje: any): void {
+    const item = this.carrito[indexCarrito];
+
+    // Si se hace click en el mismo porcentaje que ya está activo, se desactiva
+    if (item.id_porcentaje_utilidad === id_porcentaje) {
+      item.id_porcentaje_utilidad = null;
+    } else {
+      item.id_porcentaje_utilidad = id_porcentaje;
+    }
+
+    // Recalcular precios del item
+    this.recalcularItemCarrito(item);
+
+    // Recalcular totales generales
+    this.recalcularTotales();
+  }
+
   eliminarDelCarrito(index: number): void {
     this.carrito.splice(index, 1);
     this.recalcularTotales();
@@ -298,24 +373,20 @@ export class PuntoVentaComponent implements OnInit {
     }
 
     this.carrito[index].n_cantidad = n_cantidad;
-    this.carrito[index].n_subtotal =
-      n_cantidad * this.carrito[index].producto.n_precio_venta;
-
+    this.recalcularItemCarrito(this.carrito[index]);
     this.recalcularTotales();
   }
 
   incrementarCantidad(index: number): void {
     this.carrito[index].n_cantidad++;
-    this.carrito[index].n_subtotal =
-      this.carrito[index].n_cantidad * this.carrito[index].producto.n_precio_venta;
+    this.recalcularItemCarrito(this.carrito[index]);
     this.recalcularTotales();
   }
 
   decrementarCantidad(index: number): void {
     if (this.carrito[index].n_cantidad > 1) {
       this.carrito[index].n_cantidad--;
-      this.carrito[index].n_subtotal =
-        this.carrito[index].n_cantidad * this.carrito[index].producto.n_precio_venta;
+      this.recalcularItemCarrito(this.carrito[index]);
       this.recalcularTotales();
     } else {
       this.eliminarDelCarrito(index);
@@ -354,44 +425,17 @@ export class PuntoVentaComponent implements OnInit {
       return;
     }
 
-    Swal.fire({
-      title: '¿Procesar venta?',
-      text: `Total: $${this.n_total.toFixed(2)}`,
-      icon: 'question',
-      showCancelButton: true,
-      confirmButtonText: 'Sí, procesar',
-      cancelButtonText: 'Cancelar'
-    }).then((result) => {
-      if (result.isConfirmed) {
-        this.ejecutarVenta();
-      }
-    });
-  }
-
-  ejecutarVenta(): void {
     // Obtener ID del usuario desde localStorage
-    const currentUserStr = localStorage.getItem('currentUser');
     let id_usuario_crea = 0;
-
-    if (currentUserStr) {
-      try {
-        const currentUser = JSON.parse(currentUserStr);
-        id_usuario_crea = currentUser.id_usuario;
-      } catch (error) {
-        console.error('Error al leer el usuario del localStorage', error);
-        Swal.fire({
-          icon: 'error',
-          title: 'Error',
-          text: 'No se pudo obtener la información del usuario'
-        });
-        return;
-      }
+    if (this.datosUsuario) {
+      id_usuario_crea = this.datosUsuario.id_usuario;
     }
 
-    // Construir payload
+    // Construir payload con porcentajes de utilidad
     const refacciones = this.carrito.map((item: any) => ({
       n_cantidad: item.n_cantidad,
-      id_refaccion: item.producto.id_refaccion
+      id_refaccion: item.producto.id_refaccion,
+      id_porcentaje_utilidad: item.id_porcentaje_utilidad || null
     }));
 
     const payload = {
@@ -399,68 +443,27 @@ export class PuntoVentaComponent implements OnInit {
       refacciones: refacciones
     };
 
-    console.log('Payload para crear venta:', payload);
-
-    // Mostrar loading
-    Swal.fire({
-      title: 'Procesando venta...',
-      text: 'Por favor espera',
-      allowOutsideClick: false,
-      didOpen: () => {
-        Swal.showLoading();
+    // Abrir dialog
+    const dialogRef = this.dialog.open(DialogProcesarVentaComponent, {
+      width: '700px',
+      maxWidth: '90vw',
+      disableClose: true,
+      data: {
+        n_subtotal: this.n_subtotal,
+        n_iva: this.n_iva,
+        n_total: this.n_total,
+        s_token: this.s_token,
+        payload: payload
       }
     });
 
-    // Llamar al servicio
-    this.posService.crearVenta(this.s_token, payload).subscribe(
-      (response: any) => {
-        console.log('Respuesta del backend (éxito):', response);
-
-        Swal.close();
-
-        if (response.status === 'success') {
-          Swal.fire({
-            icon: 'success',
-            title: '¡Venta procesada!',
-            text: response.message || 'La venta se ha registrado correctamente',
-            confirmButtonText: 'Aceptar'
-          }).then(() => {
-            // Limpiar carrito
-            this.carrito = [];
-            this.recalcularTotales();
-
-            // Recargar datos para actualizar stock
-            this.reintentar();
-          });
-        } else {
-          Swal.fire({
-            icon: 'error',
-            title: 'Error',
-            text: response.message || 'Ocurrió un error al procesar la venta'
-          });
-        }
-      },
-      (error) => {
-        console.error('Error al procesar venta:', error);
-        console.log('Respuesta del backend (error):', error.error);
-
-        Swal.close();
-
-        let mensajeError = 'Ocurrió un error al procesar la venta';
-
-        if (error.error && error.error.message) {
-          mensajeError = error.error.message;
-        } else if (error.error && error.error.error) {
-          mensajeError = error.error.error;
-        }
-
-        Swal.fire({
-          icon: 'error',
-          title: 'Error al procesar venta',
-          text: mensajeError,
-          confirmButtonText: 'Aceptar'
-        });
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result === true) {
+        // Venta exitosa - limpiar carrito
+        this.carrito = [];
+        this.recalcularTotales();
       }
-    );
+    });
   }
+
 }

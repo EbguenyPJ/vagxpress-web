@@ -11,62 +11,75 @@
   <!-- Items -->
   <div class="carrito-items" *ngIf="carrito.length > 0">
     <div class="carrito-item" *ngFor="let item of carrito; let i = index">
-      <div class="item-info">
+
+      <!-- Bloque Superior: Imagen, Info y Botón Eliminar -->
+      <div class="item-superior">
         <img
           [src]="item.producto.s_imagen_refaccion"
           [alt]="item.producto.s_nombre_refaccion"
           class="item-imagen"
           (error)="$any($event.target).src='assets/images/default-product.png'"
         />
-        <div class="item-detalles">
+        <div class="item-info-basica">
           <h6 class="mb-1">{{ item.producto.s_nombre_refaccion }}</h6>
-          <small class="text-muted">{{ item.producto.s_marca_refaccion }}</small>
-          <small class="d-block text-muted">{{ item.producto.s_numero_parte }}</small>
+          <small class="text-muted d-block">{{ item.producto.s_marca_refaccion }}</small>
+          <small class="text-muted d-block">No. Parte: {{ item.producto.s_numero_parte }}</small>
+        </div>
+        <button
+          class="btn btn-sm btn-danger btn-eliminar"
+          (click)="onEliminar(i)"
+          title="Eliminar producto"
+        >
+          <mat-icon>delete</mat-icon>
+        </button>
+      </div>
+
+      <!-- Controles de Cantidad -->
+      <div class="item-cantidad">
+        <div class="cantidad-controls">
+          <button
+            class="btn btn-sm btn-outline-secondary"
+            (click)="onDecrementar(i)"
+          >
+            <mat-icon>remove</mat-icon>
+          </button>
+          <span class="cantidad">{{ item.n_cantidad }}</span>
+          <button
+            class="btn btn-sm btn-outline-secondary"
+            (click)="onIncrementar(i)"
+          >
+            <mat-icon>add</mat-icon>
+          </button>
         </div>
       </div>
 
-      <div class="item-acciones">
-        <div class="row gx-2 align-items-center">
-          <div class="col-auto">
-            <small class="text-muted">Precio:</small><br>
-            <strong>${{ item.producto.n_precio_venta | number: '1.2-2' }}</strong>
-          </div>
-
-          <div class="col-auto">
-            <div class="cantidad-controls">
-              <button
-                class="btn btn-sm btn-outline-secondary"
-                (click)="onDecrementar(i)"
-              >
-                <mat-icon>remove</mat-icon>
-              </button>
-              <span class="cantidad">{{ item.n_cantidad }}</span>
-              <button
-                class="btn btn-sm btn-outline-secondary"
-                (click)="onIncrementar(i)"
-                [disabled]="item.n_cantidad >= item.producto.n_stock_actual"
-              >
-                <mat-icon>add</mat-icon>
-              </button>
-            </div>
-          </div>
-
-          <div class="col-auto">
-            <small class="text-muted">Subtotal:</small><br>
-            <strong class="text-success">${{ item.n_subtotal | number: '1.2-2' }}</strong>
-          </div>
-
-          <div class="col-auto">
-            <button
-              class="btn btn-sm btn-outline-danger"
-              (click)="onEliminar(i)"
-              mat-icon-button
-            >
-              <mat-icon>delete</mat-icon>
-            </button>
-          </div>
+      <!-- Porcentajes de Utilidad -->
+      <div class="item-porcentajes">
+        <label class="porcentajes-label">Porcentaje de Utilidad:</label>
+        <div class="porcentajes-botones">
+          <button
+            *ngFor="let porcentaje of porcentajesUtilidad"
+            class="btn btn-sm btn-porcentaje"
+            [class.active]="esPorcentajeSeleccionado(item, porcentaje.id_porcentaje_utilidad)"
+            (click)="onCambiarPorcentaje(i, porcentaje.id_porcentaje_utilidad)"
+          >
+            {{ porcentaje.n_porcentaje_utilidad | number: '1.2-2' }}%
+          </button>
         </div>
       </div>
+
+      <!-- Precio y Subtotal -->
+      <div class="item-totales">
+        <div class="precio-info">
+          <small class="text-muted">Precio Unit.:</small>
+          <strong class="precio-valor">${{ item.n_precio_unitario | number: '1.2-2' }}</strong>
+        </div>
+        <div class="subtotal-info">
+          <small class="text-muted">Subtotal:</small>
+          <strong class="subtotal-valor text-success">${{ item.n_subtotal | number: '1.2-2' }}</strong>
+        </div>
+      </div>
+
     </div>
   </div>
 

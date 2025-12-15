@@ -1,0 +1,82 @@
+<div class="dialog-procesar-venta">
+  <div class="dialog-header">
+    <h2 mat-dialog-title>Procesar Venta</h2>
+    <button mat-icon-button (click)="cerrar()" class="btn-cerrar">
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+
+  <mat-dialog-content>
+    <!-- Resumen de totales -->
+    <div class="resumen-totales">
+      <div class="fila-total">
+        <span class="label">Subtotal:</span>
+        <span class="valor">${{ data.n_subtotal | number: '1.2-2' }}</span>
+      </div>
+      <div class="fila-total">
+        <span class="label">IVA (16%):</span>
+        <span class="valor">${{ data.n_iva | number: '1.2-2' }}</span>
+      </div>
+      <div class="separador"></div>
+      <div class="fila-total-final">
+        <span class="label">TOTAL A PAGAR:</span>
+        <div class="contenedor-total">
+          <span class="total-grande">${{ data.n_total | number: '1.2-2' }}</span>
+          <span class="total-texto">({{ n_total_texto }})</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Métodos de pago -->
+    <div class="seccion-metodos-pago">
+      <h3 class="titulo-seccion">Selecciona el método de pago</h3>
+
+      <!-- Loading spinner -->
+      <div class="loading-metodos" *ngIf="isLoadingMetodos">
+        <mat-spinner diameter="40"></mat-spinner>
+        <p>Cargando métodos de pago...</p>
+      </div>
+
+      <!-- Grid de métodos de pago -->
+      <div class="grid-metodos-pago" *ngIf="!isLoadingMetodos">
+        <div
+          *ngFor="let metodo of metodosPago"
+          class="metodo-pago-card"
+          [class.seleccionado]="esMetodoSeleccionado(metodo.id_metodo_pago)"
+          [class.no-seleccionado]="id_metodo_pago_seleccionado && !esMetodoSeleccionado(metodo.id_metodo_pago)"
+          (click)="seleccionarMetodo(metodo.id_metodo_pago)"
+        >
+          <div class="imagen-container">
+            <img [src]="metodo.s_img_metodo_pago" [alt]="metodo.s_metodo_pago" />
+            <div class="check-overlay" *ngIf="esMetodoSeleccionado(metodo.id_metodo_pago)">
+              <mat-icon>check_circle</mat-icon>
+            </div>
+          </div>
+          <p class="nombre-metodo">{{ metodo.s_metodo_pago }}</p>
+        </div>
+      </div>
+    </div>
+  </mat-dialog-content>
+
+  <mat-dialog-actions align="end">
+    <button
+      mat-raised-button
+      (click)="cerrar()"
+      class="btn-cancelar"
+      [disabled]="isProcessing"
+    >
+      Cancelar
+    </button>
+    <button
+      mat-raised-button
+      color="primary"
+      (click)="finalizarVenta()"
+      class="btn-finalizar"
+      [disabled]="!id_metodo_pago_seleccionado || isProcessing"
+    >
+      <mat-spinner diameter="20" *ngIf="isProcessing"></mat-spinner>
+      <span *ngIf="!isProcessing">Finalizar Venta</span>
+      <span *ngIf="isProcessing">Procesando...</span>
+    </button>
+  </mat-dialog-actions>
+</div>
