@@ -9,7 +9,14 @@ import { CatalogoRefaccionesComponent } from './pages/catalogoRefacciones/catalo
 import { CotizacionesComponent } from './pages/cotizaciones/cotizaciones.component';
 import { CotizacionManualComponent } from './pages/cotizaciones/cotizacion-manual/cotizacion-manual.component';
 import { PuntoVentaComponent } from './pages/punto-venta/punto-venta.component';
+
+import { ConfiguracionesComponent } from './pages/configuraciones/configuraciones.component';
+import { EmpleadosComponent } from './pages/administracion/empleados/empleados.component';
+import { UsuariosComponent } from './pages/administracion/usuarios/usuarios.component';
+
+
 import { BitacoraVentasComponent } from './pages/bitacora-ventas/bitacora-ventas.component';
+
 
 export const APP_ROUTE: Route[] = [
   {
@@ -36,6 +43,10 @@ export const APP_ROUTE: Route[] = [
         ],
       },
       { path: 'punto-venta', component: PuntoVentaComponent },
+
+      { path: 'configuraciones', component: ConfiguracionesComponent },
+      { path: 'usuarios', component: UsuariosComponent },
+      { path: 'empleados', component: EmpleadosComponent },
       { path: 'bitacora-ventas', component: BitacoraVentasComponent },
     ],
   },

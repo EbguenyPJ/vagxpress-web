@@ -16,6 +16,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 //Agregados
 import { empleadosModel } from 'app/models/empleadosModel';
 import { EmpleadosService } from 'app/services/empleados/empleados.service';
+//import { CatalogosService } from 'app/services/catalogos/catalogos.service';
 import { CatalogosService } from 'app/services/catalogos/catalogos.service';
 import { CommonModule } from '@angular/common';//Para que funcione ngFor en Angular 19
 import { conexion } from 'app/conexion';
@@ -90,9 +91,9 @@ export class DialogCrearEmpleadoComponent {
 
     this.empleadosForm = this.createContactForm();
     this.getTiposEmpleados();
-    this.getProfesiones();
-    this.getGradosEstudios();
-    this.getSucursales();
+    //this.getProfesiones();
+    //this.getGradosEstudios();
+    //this.getSucursales();
   }
   formControl = new UntypedFormControl('', [
     Validators.required,
@@ -247,19 +248,16 @@ export class DialogCrearEmpleadoComponent {
     return true;
   }
 
-  // --------------------- Obtener Catalogos ---------------------
+  // --------------------- Obtener Catalogos ---------------------//
 
-  async getTiposEmpleados() {
+ getTiposEmpleados() {
     this.CatalogosService.GetAll('', 'tipos-empleados').subscribe(data => {
       this.tiposEmpleados = data;
       this.tiposEmpleados = this.tiposEmpleados.data;
       console.log("Tipos de empleados: ", this.tiposEmpleados);
-    },
+    }
 
-      error => {
-        console.log('oops', error)
-        // Swal.fire('Catálogo Municipios no funciona','Consulte con el administrador', 'warning');
-      }
+      
     )
   }
 
