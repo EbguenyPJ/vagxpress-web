@@ -14,7 +14,7 @@ export class EmpleadosService {
       'Content-Type': 'application/json',
       'Authorization': s_token
     });
-    let url = conexion.url + 'listar-empleados';
+    let url = conexion.url + 'empleado/listar-empleados';
     return this.http.get(url, { headers });
   }
 
@@ -32,7 +32,7 @@ export class EmpleadosService {
       'Content-Type': 'application/json',
       'Authorization': s_token
     });
-    let url = conexion.url + 'listar-empleados-sin-usuario';
+    let url = conexion.url + 'empleado/listar-empleados-sin-usuario';
     return this.http.get(url, { headers });
   }
 
@@ -41,7 +41,7 @@ export class EmpleadosService {
       'Content-Type': 'application/json',
       'Authorization': s_token
     });
-    let url = conexion.url + 'crear-empleado';
+    let url = conexion.url + 'empleado/crear-empleado';
     return this.http.post(url, data, { headers });
   }
 
@@ -50,7 +50,7 @@ export class EmpleadosService {
       'Content-Type': 'application/json',
       'Authorization': s_token
     });
-    let url = conexion.url + 'actualizar-empleado/' + id;
+    let url = conexion.url + 'empleado/actualizar-empleado/' + id;
     return this.http.put(url, data, { headers });
   }
 

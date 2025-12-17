@@ -1,8 +1,8 @@
 //import { CatalogosService } from './../../../../../services/catalogos/catalogos.service';
 import { MAT_DIALOG_DATA, MatDialogRef, MatDialogContent, MatDialogClose, } from '@angular/material/dialog';
 import { Component, Inject } from '@angular/core';
-import { UntypedFormControl, Validators, UntypedFormGroup, ReactiveFormsModule, FormsModule, FormGroup, FormBuilder,} from '@angular/forms';
-import { MAT_DATE_LOCALE, MatNativeDateModule, MatOptionModule,} from '@angular/material/core';
+import { UntypedFormControl, Validators, UntypedFormGroup, ReactiveFormsModule, FormsModule, FormGroup, FormBuilder, } from '@angular/forms';
+import { MAT_DATE_LOCALE, MatNativeDateModule, MatOptionModule, } from '@angular/material/core';
 import { formatDate } from '@angular/common';
 import { MatSelectModule } from '@angular/material/select';
 import { MatDatepickerModule } from '@angular/material/datepicker';
@@ -15,9 +15,11 @@ import { MatMomentDateModule } from '@angular/material-moment-adapter';
 
 //Agregados
 import { usuariosModel } from 'app/models/usuariosModel';
+import { CatalogosService } from 'app/services/catalogos/catalogos.service';
 import { UsuariosService } from 'app/services/usuarios/usuarios.service';
 import { EmpleadosService } from 'app/services/empleados/empleados.service';
 import { CommonModule } from '@angular/common';//Para que funcione ngFor en Angular 19
+import Swal from 'sweetalert2';
 
 export interface DialogData {
   id: number;
@@ -29,33 +31,32 @@ export interface DialogData {
   selector: 'app-dialog-crear-usuario',
   templateUrl: './dialog-crear-usuario.component.html',
   styleUrl: './dialog-crear-usuario.component.scss',
-    providers: [{ provide: MAT_DATE_LOCALE, useValue: 'en-GB' }],
-    imports: [
-        MatButtonModule,
-        MatIconModule,
-        MatDialogContent,
-        FormsModule,
-        ReactiveFormsModule,
-        MatFormFieldModule,
-        MatInputModule,
-        MatRadioModule,
-        MatDatepickerModule,
-        MatSelectModule,
-        MatOptionModule,
-        MatDialogClose,
-        MatNativeDateModule,
-        MatMomentDateModule,
-        CommonModule,
-    ]
+  providers: [{ provide: MAT_DATE_LOCALE, useValue: 'en-GB' }],
+  imports: [
+    MatButtonModule,
+    MatIconModule,
+    MatDialogContent,
+    FormsModule,
+    ReactiveFormsModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatRadioModule,
+    MatDatepickerModule,
+    MatSelectModule,
+    MatOptionModule,
+    MatDialogClose,
+    MatNativeDateModule,
+    MatMomentDateModule,
+    CommonModule,
+  ]
 })
-export class DialogCrearUsuarioComponent
-{
+export class DialogCrearUsuarioComponent {
   action: string;
   dialogTitle: string;
   usuariosTableForm: FormGroup;
   usuariosModel: usuariosModel;
   url: string | null = null;
-  empleados : any;
+  empleados: any;
   hide = true;
   tipos_usuarios: any;
 
@@ -64,7 +65,7 @@ export class DialogCrearUsuarioComponent
     @Inject(MAT_DIALOG_DATA) public data: DialogData,
     private UsuariosService: UsuariosService,
     private EmpleadosService: EmpleadosService,
-    //private CatalogosService: CatalogosService,
+    private CatalogosService: CatalogosService,
     private fb: FormBuilder
   ) {
     // Set the defaults
@@ -78,7 +79,7 @@ export class DialogCrearUsuarioComponent
     }
 
     this.usuariosTableForm = this.createContactForm();
-    //this.getTiposUsuarios();
+    this.getTiposUsuarios();
     this.getEmpleados();
   }
   formControl = new UntypedFormControl('', [
@@ -86,14 +87,12 @@ export class DialogCrearUsuarioComponent
     // Validators.email,
   ]);
 
-  getErrorMessage()
-  {
+  getErrorMessage() {
     //If ternario
     return this.formControl.hasError('required') ? 'Required field' : this.formControl.hasError('email') ? 'Not a valid email' : '';
   }
 
-  createContactForm(): UntypedFormGroup
-  {
+  createContactForm(): UntypedFormGroup {
 
     return this.fb.group({
       name: [this.usuariosModel.name, [Validators.required]],
@@ -116,60 +115,43 @@ export class DialogCrearUsuarioComponent
     this.dialogRef.close();
   }
 
-  submit()
-  {
+  submit() {
 
-    if (this.usuariosTableForm.valid) {
-      const formData = this.usuariosTableForm.getRawValue();
-      console.log("Datos del formulario: ", formData);
-
-      this.UsuariosService.crearUsuario("",formData).subscribe(
-      {
-        next: (response) => {
-          console.log('Add Response:', response);
-          this.dialogRef.close(response); // Close with the response data
-        },
-        error: (error) => {
-          console.error('Add Error:', error);
-        },
-      });
-
+    if (this.usuariosTableForm.invalid) {
+      Swal.fire('Error', 'Por favor complete los campos requeridos', 'error');
+      return;
     }
 
-    // if (this.usuariosTableForm.valid) {
-    //   const formData = this.usuariosTableForm.getRawValue();
+    const formData = this.usuariosTableForm.getRawValue();
+    console.log('DATOS FORMULARIO:', formData);
 
-    //   if (this.action === 'edit') {
-    //     // Update existing leave request
+    this.UsuariosService.crearUsuario("", formData).subscribe({
+      next: (response) => {
+        console.log(' RESPUESTA API:', response);
 
-    //     this.UsuariosService.updateusuariosModel(formData).subscribe({
-    //       next: (response) => {
-    //         // console.log('Update Response:', response);
-    //         this.dialogRef.close(response); // Close with the response data
-    //       },
-    //       error: (error) => {
-    //         console.error('Update Error:', error);
-    //         // Handle error if necessary
-    //       },
-    //     });
-    //   } else {
-    //     // Add new leave request
-    //     this.UsuariosService.addusuariosModel(formData).subscribe({
-    //       next: (response) => {
-    //         // console.log('Add Response:', response);
-    //         this.dialogRef.close(response); // Close with the response data
-    //       },
-    //       error: (error) => {
-    //         console.error('Add Error:', error);
-    //         // Handle error if necessary
-    //       },
-    //     });
-    //   }
-    // }
+        Swal.fire({
+          title: 'Éxito',
+          text: 'Usuario registrado correctamente',
+          icon: 'success',
+          confirmButtonText: 'Aceptar'
+        }).then(() => {
+          this.dialogRef.close(response);
+        });
+      },
+      error: (error) => {
+        console.error(' ERROR API:', error);
+
+        const errorMessage =
+          error.error?.message ||
+          'Ocurrió un error al registrar el usuario';
+
+        Swal.fire('Error', errorMessage, 'error');
+      }
+    });
   }
 
-  onSelectFile(event: Event)
-  {
+
+  onSelectFile(event: Event) {
     const target = event.target as HTMLInputElement;
     if (target.files && target.files[0]) {
       const reader = new FileReader();
@@ -186,8 +168,7 @@ export class DialogCrearUsuarioComponent
 
 
 
-  async getEmpleados()
-  {
+  async getEmpleados() {
     this.EmpleadosService.getEmpleadosSinUsuario('').subscribe(data => {
       this.empleados = data;
       this.empleados = this.empleados.data;
@@ -203,9 +184,8 @@ export class DialogCrearUsuarioComponent
 
 
 
-  /*async getTiposUsuarios()
-  {
-    this.CatalogosService.GetAll('','tipos-usuarios').subscribe(data => {
+  async getTiposUsuarios() {
+    this.CatalogosService.GetAll('', 'tipos-usuarios').subscribe(data => {
       this.tipos_usuarios = data;
       this.tipos_usuarios = this.tipos_usuarios.data;
       console.log("Tipos de usuarios: ", this.tipos_usuarios);
@@ -217,6 +197,6 @@ export class DialogCrearUsuarioComponent
       }
     )
   }
-*/
+
 
 }//End class

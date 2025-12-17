@@ -13,7 +13,7 @@ import { PuntoVentaComponent } from './pages/punto-venta/punto-venta.component';
 import { ConfiguracionesComponent } from './pages/configuraciones/configuraciones.component';
 import { EmpleadosComponent } from './pages/administracion/empleados/empleados.component';
 import { UsuariosComponent } from './pages/administracion/usuarios/usuarios.component';
-
+import { ClientesComponent } from './pages/clientes/clientes.component';
 
 import { BitacoraVentasComponent } from './pages/bitacora-ventas/bitacora-ventas.component';
 
@@ -43,6 +43,7 @@ export const APP_ROUTE: Route[] = [
         ],
       },
       { path: 'punto-venta', component: PuntoVentaComponent },
+      { path: 'clientes', component: ClientesComponent },
 
       { path: 'configuraciones', component: ConfiguracionesComponent },
       { path: 'usuarios', component: UsuariosComponent },
