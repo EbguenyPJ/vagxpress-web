@@ -11,6 +11,7 @@
   </div>
 
   <div mat-dialog-content>
+    <div class="form-card">
     <form class="form-field-full" [formGroup]="empleadosForm" (ngSubmit)="submit()">
 
       <div class="row m-b-25">
@@ -49,10 +50,10 @@
         <div class="col-sm-4 mt-3">
           <mat-form-field class="example-full-width" appearance="outline" subscriptSizing="dynamic">
             <mat-label>Teléfono</mat-label>
-            <input matInput formControlName="n_telefono" type="tel" maxlength="10" (keypress)="soloNumeros($event)"
+            <input matInput formControlName="s_telefono" type="tel" maxlength="10" (keypress)="soloNumeros($event)"
               oninput="if(this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);">
             <mat-icon class="material-icons-outlined color-icon p-3" matSuffix>phone</mat-icon>
-            <mat-error *ngIf="empleadosForm.get('n_telefono')?.hasError('required')">
+            <mat-error *ngIf="empleadosForm.get('s_telefono')?.hasError('required')">
               El teléfono es requerido
             </mat-error>
           </mat-form-field>
@@ -163,7 +164,7 @@
           </mat-form-field>
         </div>
       </div>
-
+ <div class="image-card">
       @if (action === 'edit') {
       <div class="row m-b-15">
         <div class="col-sm-12">
@@ -196,7 +197,10 @@
           </div>
         </div>
       </div>
+      
       }
+
+      </div>
 
       <div class="row m-b-25">
         <div class="col-sm-12">
@@ -211,4 +215,5 @@
       </div>
     </form>
   </div>
+</div>
 </div>

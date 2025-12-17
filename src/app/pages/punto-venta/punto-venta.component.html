@@ -32,6 +32,7 @@
           <app-busqueda-pos
             [buscarProductos]="onBusquedaProductos.bind(this)"
             [buscarPorCodigoQR]="onBuscarPorCodigoQR.bind(this)"
+            [habilitarFocus]="habilitarFocusBusqueda"
             (productoSeleccionado)="onProductoSeleccionado($event)">
           </app-busqueda-pos>
         </div>

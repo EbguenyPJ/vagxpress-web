@@ -11,8 +11,8 @@ export class empleadosModel {
   s_apellido_paterno: string;
   s_apellido_materno: string;
   s_foto_empleado: string;
-  n_telefono: string;
-  n_telefono_contacto_emergencia: string;
+  s_telefono: string;
+  s_telefono_contacto_emergencia: string;
   s_correo: string;
   s_direccion: string;
   d_fecha_nacimiento: string;
@@ -34,8 +34,8 @@ export class empleadosModel {
       this.s_apellido_paterno = empleadosModel.s_apellido_paterno || '';
       this.s_apellido_materno = empleadosModel.s_apellido_materno || '';
       this.s_foto_empleado = empleadosModel.s_foto_empleado || 'empleado-default.png';
-      this.n_telefono = empleadosModel.n_telefono || '';
-      this.n_telefono_contacto_emergencia = empleadosModel.n_telefono_contacto_emergencia || '';
+      this.s_telefono = empleadosModel.s_telefono || '';
+      this.s_telefono_contacto_emergencia = empleadosModel.s_telefono_contacto_emergencia || '';
       this.s_correo = empleadosModel.s_correo || '';
       this.s_direccion = empleadosModel.s_direccion || '';
       this.d_fecha_nacimiento = formatDate(new Date(), 'yyyy-MM-dd', 'en') || '';

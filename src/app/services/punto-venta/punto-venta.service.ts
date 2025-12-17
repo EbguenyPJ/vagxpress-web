@@ -59,6 +59,26 @@ export class PuntoVentaService {
     return this.http.get(url, params);
   }
 
+  getClientes(s_token: string) {
+    let headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': s_token
+    });
+    let params = { headers: headers };
+    let url = conexion.url + 'mostrar-clientes';
+    return this.http.get(url, params);
+  }
+
+  getCuentasBancarias(s_token: string) {
+    let headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': s_token
+    });
+    let params = { headers: headers };
+    let url = conexion.url + 'mostrar-cuentas-bancarias';
+    return this.http.get(url, params);
+  }
+
   crearVenta(s_token: string, data: any) {
     let headers = new HttpHeaders({
       'Content-Type': 'application/json',

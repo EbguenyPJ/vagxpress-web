@@ -1,0 +1,122 @@
+<div class="dialogContainer">
+    <!-- HEADER -->
+    <div class="modalHeader">
+        <div class="avatarDetails">
+            <div class="modalTitle">
+                {{ dialogTitle }}
+            </div>
+        </div>
+        <button mat-icon-button mat-dialog-close class="modal-close-button" aria-label="Close dialog" type="button">
+            <mat-icon>close</mat-icon>
+        </button>
+    </div>
+
+    <!-- CONTENT -->
+    <div mat-dialog-content>
+        <div class="form-card">
+            <form class="form-field-full" [formGroup]="clientesForm" (ngSubmit)="submit()">
+
+                <!-- NOMBRE / RAZÓN SOCIAL -->
+                <div class="row m-b-25">
+                    <div class="col-sm-6 mt-3">
+                        <mat-form-field appearance="outline" class="example-full-width" subscriptSizing="dynamic">
+                            <mat-label>Nombre del cliente</mat-label>
+                            <input matInput formControlName="s_nombre_cliente">
+                            <mat-icon class="material-icons-outlined color-icon p-3" matSuffix>person</mat-icon>
+                            <mat-error *ngIf="clientesForm.get('s_nombre_cliente')?.hasError('required')">
+                                El nombre es obligatorio
+                            </mat-error>
+                        </mat-form-field>
+                    </div>
+
+                    <div class="col-sm-6 mt-3">
+                        <mat-form-field appearance="outline" class="example-full-width" subscriptSizing="dynamic">
+                            <mat-label>Razón social</mat-label>
+                            <input matInput formControlName="s_razon_social">
+                            <mat-icon class="material-icons-outlined color-icon p-3" matSuffix>business</mat-icon>
+                        </mat-form-field>
+                    </div>
+                </div>
+
+                <!-- RFC / INE -->
+                <div class="row m-b-25">
+                    <div class="col-sm-6 mt-3">
+                        <mat-form-field appearance="outline" class="example-full-width" subscriptSizing="dynamic">
+                            <mat-label>RFC</mat-label>
+                            <input matInput formControlName="s_rfc">
+                            <mat-icon class="material-icons-outlined color-icon p-3" matSuffix>badge</mat-icon>
+                        </mat-form-field>
+                    </div>
+
+                    <div class="col-sm-6 mt-3">
+                        <mat-form-field appearance="outline" class="example-full-width" subscriptSizing="dynamic">
+                            <mat-label>INE</mat-label>
+                            <input matInput formControlName="s_ine">
+                            <mat-icon class="material-icons-outlined color-icon p-3" matSuffix>credit_card</mat-icon>
+                        </mat-form-field>
+                    </div>
+                </div>
+
+                <!-- TELÉFONO / CORREO -->
+                <div class="row m-b-25">
+                    <div class="col-sm-6 mt-3">
+                        <mat-form-field appearance="outline" class="example-full-width" subscriptSizing="dynamic">
+                            <mat-label>Teléfono</mat-label>
+                            <input matInput formControlName="s_numero_telefono" maxlength="10"
+                                (keypress)="soloNumeros($event)">
+                            <mat-icon class="material-icons-outlined color-icon p-3" matSuffix>phone</mat-icon>
+                            <mat-error *ngIf="clientesForm.get('s_numero_telefono')?.hasError('required')">
+                                El teléfono es obligatorio
+                            </mat-error>
+                        </mat-form-field>
+                    </div>
+
+                    <div class="col-sm-6 mt-3">
+                        <mat-form-field appearance="outline" class="example-full-width" subscriptSizing="dynamic">
+                            <mat-label>Correo</mat-label>
+                            <input matInput formControlName="s_correo">
+                            <mat-icon class="material-icons-outlined color-icon p-3" matSuffix>email</mat-icon>
+                            <mat-error *ngIf="clientesForm.get('s_correo')?.hasError('email')">
+                                Correo inválido
+                            </mat-error>
+                        </mat-form-field>
+                    </div>
+                </div>
+
+                <!-- TIPO DE CLIENTE -->
+                <div class="row m-b-25">
+                    <div class="col-sm-6 mt-3">
+                        <mat-form-field appearance="outline" class="example-full-width" subscriptSizing="dynamic">
+                            <mat-label>Tipo de cliente</mat-label>
+                            <mat-select formControlName="id_tipo_cliente" required>
+                                <mat-option *ngFor="let tipo of tiposClientes" [value]="tipo.id_tipo_cliente">
+                                    {{ tipo.s_tipo_cliente }}
+                                </mat-option>
+                            </mat-select>
+                            <mat-error *ngIf="clientesForm.get('id_tipo_cliente')?.hasError('required')">
+                                El tipo de cliente es obligatorio
+                            </mat-error>
+                        </mat-form-field>
+                    </div>
+                </div>
+
+                <!-- BOTONES -->
+                <div class="row m-b-25">
+                    <div class="col-sm-12">
+                        <div class="example-button-row">
+                            <button mat-flat-button class="formSubmitBtn" [disabled]="clientesForm.invalid"
+                                type="submit">
+                                Guardar
+                            </button>
+
+                            <button mat-flat-button mat-dialog-close class="formCancelBtn" type="button">
+                                Cancelar
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+            </form>
+        </div>
+    </div>
+</div>

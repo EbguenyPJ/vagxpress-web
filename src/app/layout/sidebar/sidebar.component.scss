@@ -1,6 +1,6 @@
 /* ================================
-   🎨 SIDEBAR COCKPIT GLASS iOS/macOS
-   Efecto glassmorphism premium
+    SIDEBAR COCKPIT GLASS iOS/macOS
+   Efecto glassmorphism premium - MEJORADO
 ===================================*/
 
 .sidebar {
@@ -100,7 +100,7 @@
 }
 
 /* ================================
-   📌 Iconos del perfil con colores específicos
+   Iconos del perfil con colores específicos
 ===================================*/
 .profile-icon {
   color: #FFC107 !important;
@@ -115,13 +115,14 @@
 }
 
 .hide-menu {
-  color: rgba(255, 255, 255, 0.85) !important;
+  color: rgba(255, 255, 255, 0.95) !important;
   font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif;
   font-weight: 500;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
 }
 
 /* ================================
-   📂 Categorías con glass effect
+   Categorías con glass effect
 ===================================*/
 .sidebar-category .header {
   font-weight: 700;
@@ -168,7 +169,7 @@
 }
 
 /* ================================
-   🔗 Items del menú principal
+   Items del menú principal
 ===================================*/
 li a.menu-top {
   display: flex;
@@ -176,13 +177,14 @@ li a.menu-top {
   padding: 12px 18px;
   margin: 3px 8px;
   border-radius: 12px;
-  color: rgba(255, 255, 255, 0.85);
+  color: rgba(255, 255, 255, 0.9);
   font-size: 14.5px;
   font-weight: 500;
   transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
   font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif;
   position: relative;
   border: 1px solid transparent;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
 
   &::before {
     content: '';
@@ -197,56 +199,63 @@ li a.menu-top {
   }
 
   i {
-    color: rgba(255, 255, 255, 0.7) !important;
+    color: rgba(255, 255, 255, 0.75) !important;
     font-size: 20px;
     margin-right: 12px;
     transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
   }
 
   &:hover {
-    background: rgba(255, 43, 43, 0.12);
-    color: #ffffff;
+    background: rgba(255, 43, 43, 0.15);
+    color: #ffffff !important;
     transform: translateX(4px);
-    border-color: rgba(255, 43, 43, 0.2);
-    box-shadow: 0 2px 8px rgba(255, 43, 43, 0.15);
+    border-color: rgba(255, 43, 43, 0.25);
+    box-shadow: 0 2px 8px rgba(255, 43, 43, 0.2);
 
     &::before {
       width: 4px;
     }
 
     i {
-      color: rgba(255, 75, 75, 1) !important;
+      color: rgba(255, 255, 255, 0.95) !important;
       transform: scale(1.1);
     }
   }
 }
 
 /* ================================
-   ✨ Módulo principal activo
+   Módulo principal activo
 ===================================*/
 li.active-top a.menu-top,
 li.active a.menu-top {
-  background: rgba(255, 43, 43, 0.18);
+  background: rgba(255, 43, 43, 0.20);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
   color: #ffffff !important;
   border-left: 3px solid rgba(255, 43, 43, 0.9);
-  box-shadow: 0 4px 12px rgba(255, 43, 43, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  box-shadow: 0 4px 16px rgba(255, 43, 43, 0.35);
   font-weight: 600;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8);
 
   &::before {
     width: 4px;
   }
 
   i {
-    color: rgba(255, 75, 75, 1) !important;
+    color: rgba(255, 100, 100, 1) !important;
     transform: scale(1.05);
+    filter: drop-shadow(0 2px 6px rgba(255, 43, 43, 0.5));
+  }
+
+  .hide-menu {
+    color: #ffffff !important;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8);
   }
 }
 
 /* ================================
-   📋 Submenús
+   Submenús
 ===================================*/
 li ul {
   background: rgba(0, 0, 0, 0.2);
@@ -258,44 +267,31 @@ li ul {
   border: 1px solid rgba(255, 255, 255, 0.03);
 
   li a.menu-top {
-    color: rgba(255, 255, 255, 0.75) !important;
+    color: rgba(255, 255, 255, 0.8) !important;
     font-weight: 500;
     padding-left: 45px;
     font-size: 13.5px;
     margin: 2px 4px;
 
     i {
-      color: rgba(255, 255, 255, 0.6) !important;
+      color: rgba(255, 255, 255, 0.65) !important;
       font-size: 18px;
       margin-right: 10px;
     }
 
     &:hover {
       color: #ffffff !important;
-      background: rgba(255, 43, 43, 0.1);
+      background: rgba(255, 43, 43, 0.12);
 
       i {
-        color: rgba(255, 200, 100, 1) !important;
+        color: rgba(255, 255, 255, 0.9) !important;
       }
-    }
-  }
-
-  /* Submenu activo */
-  li.active-top a.menu-top,
-  li.active a.menu-top {
-    color: rgba(255, 75, 75, 1) !important;
-    background: rgba(255, 43, 43, 0.15);
-    border-left: 2px solid rgba(255, 75, 75, 0.8);
-    font-weight: 600;
-
-    i {
-      color: rgba(255, 75, 75, 1) !important;
     }
   }
 }
 
 /* ================================
-   🎯 Badges (opcional)
+   Badges
 ===================================*/
 .badge {
   background: rgba(255, 43, 43, 0.8);
@@ -312,7 +308,7 @@ li ul {
 }
 
 /* ================================
-   📱 Scrollbar personalizado
+   Scrollbar personalizado
 ===================================*/
 .sidebar ::-webkit-scrollbar {
   width: 6px;
@@ -333,7 +329,7 @@ li ul {
 }
 
 /* ================================
-   ✨ Animaciones suaves
+   Animaciones suaves
 ===================================*/
 @keyframes slideInLeft {
   from {
@@ -357,7 +353,7 @@ li ul {
 .sidebar .list > li:nth-child(5) { animation-delay: 0.25s; }
 
 /* ================================
-   📱 Responsive
+   Responsive
 ===================================*/
 @media (max-width: 768px) {
   .sidebar {
@@ -387,7 +383,7 @@ li ul {
 }
 
 /* ================================
-   🌙 Efecto de brillo sutil
+   Efecto de brillo sutil
 ===================================*/
 .sidebar::before {
   content: '';
@@ -401,8 +397,25 @@ li ul {
 }
 
 /* ================================
-   💫 Hover effect para todo el sidebar
+   Hover effect para todo el sidebar
 ===================================*/
 .sidebar:hover {
   box-shadow: 4px 0 32px rgba(0, 0, 0, 0.4), inset -1px 0 0 rgba(255, 255, 255, 0.08);
+}
+
+/* ================================
+   ❌ Quitar blanco al seleccionar
+===================================*/
+.sidebar, .sidebar * {
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+}
+
+li a.menu-top:focus,
+li a.menu-top:active {
+  outline: none;
+  background: rgba(255, 43, 43, 0.15);
 }
