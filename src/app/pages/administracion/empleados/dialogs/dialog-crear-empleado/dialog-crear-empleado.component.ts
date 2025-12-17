@@ -91,9 +91,9 @@ export class DialogCrearEmpleadoComponent {
 
     this.empleadosForm = this.createContactForm();
     this.getTiposEmpleados();
-    //this.getProfesiones();
-    //this.getGradosEstudios();
-    //this.getSucursales();
+    this.getProfesiones();
+    this.getGradosEstudios();
+    this.getSucursales();
   }
   formControl = new UntypedFormControl('', [
     Validators.required,
@@ -105,7 +105,7 @@ export class DialogCrearEmpleadoComponent {
     return this.formControl.hasError('required') ? 'Required field' : this.formControl.hasError('email') ? 'Not a valid email' : '';
   }
 
-  createContactForm(): UntypedFormGroup {
+ createContactForm(): UntypedFormGroup {
     return this.fb.group({
       id_tipo_empleado: [this.empleadosModel.id_tipo_empleado || null, [Validators.required]],
       id_profesion: [this.empleadosModel.id_profesion || null],
@@ -116,8 +116,8 @@ export class DialogCrearEmpleadoComponent {
       s_apellido_paterno: [this.empleadosModel.s_apellido_paterno || '', [Validators.required]],
       s_apellido_materno: [this.empleadosModel.s_apellido_materno || ''],
       s_foto_empleado: [this.empleadosModel.s_foto_empleado || null],
-      n_telefono: [this.empleadosModel.n_telefono || '', [Validators.required, Validators.pattern('^[0-9]*$')]],
-      n_telefono_contacto_emergencia: [this.empleadosModel.n_telefono_contacto_emergencia || null],
+      s_telefono: [this.empleadosModel.s_telefono || '', [Validators.required, Validators.pattern('^[0-9]*$')]],
+      s_telefono_contacto_emergencia: [this.empleadosModel.s_telefono_contacto_emergencia || null],
       s_correo: [this.empleadosModel.s_correo || '', [Validators.required, Validators.email, Validators.minLength(5)]],
       s_direccion: [this.empleadosModel.s_direccion || ''],
       d_fecha_nacimiento: [
@@ -133,19 +133,23 @@ export class DialogCrearEmpleadoComponent {
     });
   }
 
+
+
   onNoClick(): void {
     this.dialogRef.close();
   }
 
-  submit() {
-    if (this.empleadosForm.invalid) {
-      Swal.fire('Error', 'Por favor complete todos los campos requeridos', 'error');
-      return;
-    }
+ submit() {
+  if (this.empleadosForm.invalid) {
+    Swal.fire('Error', 'Por favor complete todos los campos requeridos', 'error');
+    return;
+  }
 
-    const formData = this.empleadosForm.getRawValue();
+  const formData = this.empleadosForm.getRawValue();
 
-    // Preparar datos para enviar
+  console.log(' FORM DATA ORIGINAL:', JSON.parse(JSON.stringify(formData)));
+
+  // Preparar datos para enviar
     if (this.action === 'edit') {
       // Para edición:
       if (this.actualizarImagen) {
@@ -160,34 +164,49 @@ export class DialogCrearEmpleadoComponent {
       formData.s_foto_empleado = this.imagenBase64 || null;
     }
 
-    // Limpiar número de teléfono
-    if (formData.n_telefono) {
-      formData.n_telefono = formData.n_telefono.toString().replace(/\D/g, '');
+  // Limpiar número de teléfono
+  if (formData.s_telefono) {
+    formData.s_telefono = formData.s_telefono.toString().replace(/\D/g, '');
+  }
+
+  if (formData.s_telefono_contacto_emergencia) {
+    formData.s_telefono_contacto_emergencia =
+      formData.s_telefono_contacto_emergencia.toString().replace(/\D/g, '');
+  }
+
+  // Formatear fechas (IMPORTANTE)
+  formData.d_fecha_nacimiento = new Date(formData.d_fecha_nacimiento).toISOString().split('T')[0];
+  formData.d_fecha_ingreso = new Date(formData.d_fecha_ingreso).toISOString().split('T')[0];
+
+  console.log('🚀 FORM DATA FINAL (ENVÍO A API):', JSON.parse(JSON.stringify(formData)));
+
+  const serviceCall = this.action === 'edit'
+    ? this.EmpleadosService.actualizarEmpleado("", this.empleadosModel.id_empleado, formData)
+    : this.EmpleadosService.crearEmpleado("", formData);
+
+  serviceCall.subscribe({
+    next: (response) => {
+      console.log(' RESPUESTA API:', response);
+      Swal.fire(
+        'Éxito',
+        `Empleado ${this.action === 'edit' ? 'actualizado' : 'creado'} correctamente`,
+        'success'
+      );
+      this.dialogRef.close(response);
+    },
+    error: (error) => {
+      console.error(' ERROR API COMPLETO:', error);
+      console.error('ERROR BODY:', error.error);
+
+      let errorMessage =
+        error.error?.message ||
+        error.message ||
+        `Ocurrió un error al ${this.action === 'edit' ? 'actualizar' : 'crear'} el empleado`;
+
+      Swal.fire('Error', errorMessage, 'error');
     }
-    if (formData.n_telefono_contacto_emergencia) {
-      formData.n_telefono_contacto_emergencia = formData.n_telefono_contacto_emergencia.toString().replace(/\D/g, '');
-    }
+  });
 
-    // Formatear fechas
-    formData.d_fecha_nacimiento = new Date(formData.d_fecha_nacimiento).toISOString();
-    formData.d_fecha_ingreso = new Date(formData.d_fecha_ingreso).toISOString();
-
-    const serviceCall = this.action === 'edit'
-      ? this.EmpleadosService.actualizarEmpleado("", this.empleadosModel.id_empleado, formData)
-      : this.EmpleadosService.crearEmpleado("", formData);
-
-    serviceCall.subscribe({
-      next: (response) => {
-        Swal.fire('Éxito', `Empleado ${this.action === 'edit' ? 'actualizado' : 'creado'} correctamente`, 'success');
-        this.dialogRef.close(response);
-      },
-      error: (error) => {
-        let errorMessage = error.error?.message || error.message ||
-          `Ocurrió un error al ${this.action === 'edit' ? 'actualizar' : 'crear'} el empleado`;
-        Swal.fire('Error', errorMessage, 'error');
-        console.error('Error completo:', error);
-      }
-    });
 
 
     // if (this.empleadosForm.valid) {

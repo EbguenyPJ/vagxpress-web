@@ -64,8 +64,8 @@ import { DialogCrearUsuarioComponent } from './dialogs/dialog-crear-usuario/dial
 
 export class UsuariosComponent implements OnInit, OnDestroy {
   columnDefinitions = [
-    { def: 'select', label: 'Checkbox', type: 'check', visible: true },
-    { def: 'id', label: '#', type: 'number', visible: true },
+    //{ def: 'select', label: 'Checkbox', type: 'check', visible: true },
+    { def: 'id', label: 'ID', type: 'number', visible: true },
     { def: 'name', label: 'Usuario', type: 'text', visible: true },
     { def: 'email', label: 'Email', type: 'email', visible: true },
     { def: 's_nombre_completo', label: 'Nombre', type: 'text', visible: true },
@@ -155,7 +155,7 @@ export class UsuariosComponent implements OnInit, OnDestroy {
 
     dialogRef.afterClosed().subscribe((result) => {
       // Actualizamos siempre al cerrar el diálogo
-      this.refresh(); 
+      this.refresh();
       if (result) {
         if (action === 'add') {
           this.dataSource.data = [result, ...this.dataSource.data];
@@ -232,10 +232,13 @@ export class UsuariosComponent implements OnInit, OnDestroy {
         this.dataSource.sort = this.sort;
         console.log("Lista de usuarios: ", this.dataSource);
 
-        this.dataSource.filterPredicate = (data: usuariosModel, filter: string) =>
-          Object.values(data).some((value) =>
-            value.toString().toLowerCase().includes(filter)
-          );
+        this.dataSource.filterPredicate = (data: usuariosModel, filter: string) => {
+          const dataStr = Object.values(data)
+            .filter(value => value !== null && value !== undefined)
+            .map(value => value.toString().toLowerCase())
+            .join(' ');
+          return dataStr.indexOf(filter) !== -1;
+        }
         this.isLoading = false;
       },
       error: (err) => {
