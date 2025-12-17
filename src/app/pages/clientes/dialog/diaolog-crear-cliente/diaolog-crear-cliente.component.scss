@@ -262,6 +262,18 @@
     }
 }
 
+.form-label {
+  color: #ffffff !important;
+  font-weight: 700;
+  font-size: 0.95rem;
+  margin-bottom: 8px;
+  display: block;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  text-shadow: 0 2px 4px rgba(30, 30, 30, 0.3);
+}
+
+
 /* ==================== Espaciado helpers ==================== */
 .m-b-25 {
     margin-bottom: 25px;
