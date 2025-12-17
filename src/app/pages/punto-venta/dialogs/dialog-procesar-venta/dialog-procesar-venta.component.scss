@@ -33,6 +33,46 @@
   overflow-y: auto;
 }
 
+// Sección de cliente
+.seccion-cliente {
+  margin-bottom: 1.5rem;
+
+  .titulo-seccion {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 1rem;
+  }
+
+  .loading-clientes {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem;
+    color: #999;
+
+    p {
+      margin: 0;
+      font-size: 0.95rem;
+    }
+  }
+
+  .autocomplete-cliente {
+    width: 100%;
+    font-size: 1rem;
+
+    ::ng-deep .mat-mdc-form-field-flex {
+      background-color: #f8f9fa;
+      border-radius: 8px;
+      padding: 0.5rem 1rem;
+    }
+
+    ::ng-deep .mat-mdc-text-field-wrapper {
+      padding: 0;
+    }
+  }
+}
+
 // Resumen de totales
 .resumen-totales {
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -252,6 +292,126 @@
   }
 }
 
+// Sección cuentas bancarias
+.seccion-cuentas-bancarias {
+  margin-top: 2rem;
+
+  .titulo-seccion {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 1.5rem;
+    text-align: center;
+  }
+
+  .loading-cuentas {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+    color: #999;
+
+    p {
+      margin-top: 1rem;
+      font-size: 0.95rem;
+    }
+  }
+
+  .grid-cuentas-bancarias {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 1.5rem;
+    padding: 0.5rem;
+
+    .cuenta-bancaria-card {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      padding: 0.75rem;
+      border-radius: 12px;
+
+      &:hover {
+        transform: translateY(-4px);
+      }
+
+      &.seleccionado {
+        .imagen-container-circular {
+          border-color: #667eea;
+          box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+          transform: scale(1.05);
+        }
+
+        .nombre-cuenta {
+          color: #667eea;
+          font-weight: 600;
+        }
+      }
+
+      &.no-seleccionado {
+        opacity: 0.4;
+        filter: grayscale(100%);
+
+        &:hover {
+          opacity: 0.6;
+          filter: grayscale(70%);
+        }
+      }
+
+      .nombre-cuenta {
+        margin-bottom: 0.75rem;
+        font-size: 0.9rem;
+        font-weight: 500;
+        color: #333;
+        text-align: center;
+        transition: all 0.3s ease;
+        order: -1;
+      }
+
+      .imagen-container-circular {
+        position: relative;
+        width: 90px;
+        height: 90px;
+        border: 3px solid transparent;
+        border-radius: 50%;
+        overflow: hidden;
+        transition: all 0.3s ease;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+
+        img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+        }
+
+        .check-overlay-circular {
+          position: absolute;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          background: rgba(102, 126, 234, 0.2);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+
+          mat-icon {
+            font-size: 2.5rem;
+            width: 2.5rem;
+            height: 2.5rem;
+            color: #667eea;
+            background-color: white;
+            border-radius: 50%;
+            padding: 0.25rem;
+          }
+        }
+      }
+    }
+  }
+}
+
 // Responsive
 @media (max-width: 768px) {
   .dialog-procesar-venta {
@@ -260,6 +420,11 @@
   }
 
   .grid-metodos-pago {
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)) !important;
+    gap: 1rem !important;
+  }
+
+  .grid-cuentas-bancarias {
     grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)) !important;
     gap: 1rem !important;
   }

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import Swal from 'sweetalert2';
@@ -34,6 +34,8 @@ import { DialogProcesarVentaComponent } from './dialogs/dialog-procesar-venta/di
 })
 export class PuntoVentaComponent implements OnInit {
 
+  @ViewChild(BusquedaComponent) busquedaComponent!: BusquedaComponent;
+
   // Variables de estado
   isLoading: boolean = true;
   errorCarga: boolean = false;
@@ -63,6 +65,9 @@ export class PuntoVentaComponent implements OnInit {
   // Usuario
   datosUsuario: any;
   s_token: string = '';
+
+  // Control de focus
+  habilitarFocusBusqueda: boolean = true;
 
   // URL base para imágenes
   urlImagenes: string = conexion.url_img;
@@ -443,6 +448,9 @@ export class PuntoVentaComponent implements OnInit {
       refacciones: refacciones
     };
 
+    // Desactivar focus antes de abrir dialog
+    this.habilitarFocusBusqueda = false;
+
     // Abrir dialog
     const dialogRef = this.dialog.open(DialogProcesarVentaComponent, {
       width: '700px',
@@ -458,6 +466,16 @@ export class PuntoVentaComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe((result) => {
+      // Reactivar focus al cerrar dialog
+      this.habilitarFocusBusqueda = true;
+
+      // Hacer focus explícito al componente de búsqueda
+      setTimeout(() => {
+        if (this.busquedaComponent) {
+          this.busquedaComponent.hacerFocus();
+        }
+      }, 100);
+
       if (result === true) {
         // Venta exitosa - limpiar carrito
         this.carrito = [];
