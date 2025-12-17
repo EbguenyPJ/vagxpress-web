@@ -23,6 +23,7 @@ export class BusquedaComponent implements AfterViewInit, OnDestroy {
 
   @Input() buscarProductos!: (termino: string) => any[];
   @Input() buscarPorCodigoQR!: (codigo: string) => any;
+  @Input() habilitarFocus: boolean = true; // Nueva propiedad para controlar el focus
   @Output() productoSeleccionado = new EventEmitter<any>();
   @ViewChild('inputBusqueda', { static: false }) inputBusqueda!: ElementRef;
 
@@ -58,12 +59,14 @@ export class BusquedaComponent implements AfterViewInit, OnDestroy {
   agregarListenerGlobal(): void {
     // Escuchar clicks en cualquier parte del documento
     document.addEventListener('click', () => {
-      setTimeout(() => this.hacerFocus(), 100);
+      if (this.habilitarFocus) {
+        setTimeout(() => this.hacerFocus(), 100);
+      }
     });
 
     // Escuchar cuando se presiona ESC
     document.addEventListener('keydown', (event: KeyboardEvent) => {
-      if (event.key === 'Escape') {
+      if (event.key === 'Escape' && this.habilitarFocus) {
         this.limpiar();
         this.hacerFocus();
       }
@@ -71,7 +74,7 @@ export class BusquedaComponent implements AfterViewInit, OnDestroy {
   }
 
   hacerFocus(): void {
-    if (this.inputBusqueda && this.inputBusqueda.nativeElement) {
+    if (this.habilitarFocus && this.inputBusqueda && this.inputBusqueda.nativeElement) {
       this.inputBusqueda.nativeElement.focus();
     }
   }
