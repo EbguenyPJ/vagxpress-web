@@ -27,6 +27,38 @@
       </div>
     </div>
 
+    <!-- Selección de Cliente -->
+    <div class="seccion-cliente">
+      <h3 class="titulo-seccion">Selecciona el cliente</h3>
+
+      <!-- Loading spinner -->
+      <div class="loading-clientes" *ngIf="isLoadingClientes">
+        <mat-spinner diameter="30"></mat-spinner>
+        <p>Cargando clientes...</p>
+      </div>
+
+      <!-- Autocomplete de clientes -->
+      <mat-form-field class="autocomplete-cliente" *ngIf="!isLoadingClientes">
+        <mat-label>Cliente</mat-label>
+        <input
+          type="text"
+          matInput
+          [formControl]="clienteControl"
+          [matAutocomplete]="autoCliente"
+          placeholder="Buscar cliente..."
+        />
+        <mat-autocomplete
+          #autoCliente="matAutocomplete"
+          [displayWith]="mostrarNombreCliente.bind(this)"
+          (optionSelected)="onClienteSeleccionado($event.option.value)"
+        >
+          <mat-option *ngFor="let cliente of clientesFiltrados | async" [value]="cliente">
+            {{ mostrarNombreCliente(cliente) }}
+          </mat-option>
+        </mat-autocomplete>
+      </mat-form-field>
+    </div>
+
     <!-- Métodos de pago -->
     <div class="seccion-metodos-pago">
       <h3 class="titulo-seccion">Selecciona el método de pago</h3>
@@ -56,6 +88,36 @@
         </div>
       </div>
     </div>
+
+    <!-- Cuentas Bancarias (solo si hay un método de pago seleccionado y hay cuentas filtradas) -->
+    <div #seccionCuentasBancarias class="seccion-cuentas-bancarias" *ngIf="id_metodo_pago_seleccionado && cuentasBancariasFiltradas.length > 0">
+      <h3 class="titulo-seccion">Selecciona la cuenta bancaria</h3>
+
+      <!-- Loading spinner -->
+      <div class="loading-cuentas" *ngIf="isLoadingCuentas">
+        <mat-spinner diameter="40"></mat-spinner>
+        <p>Cargando cuentas bancarias...</p>
+      </div>
+
+      <!-- Grid de cuentas bancarias -->
+      <div class="grid-cuentas-bancarias" *ngIf="!isLoadingCuentas">
+        <div
+          *ngFor="let cuenta of cuentasBancariasFiltradas"
+          class="cuenta-bancaria-card"
+          [class.seleccionado]="esCuentaSeleccionada(cuenta.id_cuenta_bancaria)"
+          [class.no-seleccionado]="id_cuenta_bancaria_seleccionada && !esCuentaSeleccionada(cuenta.id_cuenta_bancaria)"
+          (click)="seleccionarCuentaBancaria(cuenta.id_cuenta_bancaria)"
+        >
+          <p class="nombre-cuenta">{{ cuenta.s_nombre_cuenta }}</p>
+          <div class="imagen-container-circular">
+            <img [src]="cuenta.s_img_banco" [alt]="cuenta.s_nombre_cuenta" />
+            <div class="check-overlay-circular" *ngIf="esCuentaSeleccionada(cuenta.id_cuenta_bancaria)">
+              <mat-icon>check_circle</mat-icon>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </mat-dialog-content>
 
   <mat-dialog-actions align="end">
@@ -72,7 +134,7 @@
       color="primary"
       (click)="finalizarVenta()"
       class="btn-finalizar"
-      [disabled]="!id_metodo_pago_seleccionado || isProcessing"
+      [disabled]="!id_metodo_pago_seleccionado || isProcessing || (cuentasBancariasFiltradas.length > 0 && !id_cuenta_bancaria_seleccionada)"
     >
       <mat-spinner diameter="20" *ngIf="isProcessing"></mat-spinner>
       <span *ngIf="!isProcessing">Finalizar Venta</span>
