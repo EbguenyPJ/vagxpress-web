@@ -93,23 +93,14 @@ export class DialogCrearUsuarioComponent {
   }
 
   createContactForm(): UntypedFormGroup {
-
     return this.fb.group({
       name: [this.usuariosModel.name, [Validators.required]],
       password: [this.usuariosModel.password, [Validators.required]],
       id_empleado: [this.usuariosModel.id_empleado, [Validators.required]],
-      id_tipo_usuario: [this.usuariosModel.id_empleado, [Validators.required]],
-      //id: [this.usuariosModel.id],
-      // img: [this.usuariosModel.img],
-      // lastName: [this.usuariosModel.lastName, [Validators.required]],
-      // email: [this.usuariosModel.email,[Validators.required, Validators.email, Validators.minLength(5)],],
-      // gender: [this.usuariosModel.gender],
-      // birthDate: [formatDate(this.usuariosModel.birthDate, 'yyyy-MM-dd', 'en'),[Validators.required],],
-      // address: [this.usuariosModel.address],
-      // mobile: [this.usuariosModel.mobile, [Validators.required]],
-      // country: [this.usuariosModel.country],
+      id_tipo_usuario: [this.usuariosModel.id_tipo_usuario, [Validators.required]],
     });
   }
+
 
   onNoClick(): void {
     this.dialogRef.close();

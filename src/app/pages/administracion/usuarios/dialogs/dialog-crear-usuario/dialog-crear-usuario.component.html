@@ -2,79 +2,116 @@
   <div class="modalHeader">
     <div class="avatarDetails">
       <div class="modalTitle">
-        {{dialogTitle}}
+        {{ dialogTitle }}
       </div>
     </div>
-    <button mat-icon-button mat-dialog-close class="modal-close-button" aria-label="Close dialog" type="button">
-      <mat-icon>close</mat-icon>
+
+    <button type="button"
+            class="modal-close-button btn"
+            mat-dialog-close>
+      ✕
     </button>
   </div>
 
-  <div mat-dialog-content>
+  <div>
     <div class="form-card">
-      <form class="form-field-full" [formGroup]="usuariosTableForm" (ngSubmit)="submit()">
+      <form class="form-field-full"
+            [formGroup]="usuariosTableForm"
+            (ngSubmit)="submit()">
 
+        <!-- ================= FILA 1 ================= -->
         <div class="row m-b-25">
           <div class="col-sm-6 mt-3">
-            <mat-form-field class="example-full-width" appearance="outline" subscriptSizing="dynamic">
-              <mat-label>Nombre de usuario</mat-label>
-              <input matInput formControlName="name">
-              <mat-icon class="material-icons-outlined color-icon p-3" matSuffix>face</mat-icon>
-              <mat-error *ngIf="usuariosTableForm.get('name')?.hasError('required')">
+            <div class="form-group">
+              <label class="form-label">Nombre de usuario</label>
+              <input type="text"
+                     class="form-control"
+                     formControlName="name">
+
+              <div class="text-danger"
+                   *ngIf="usuariosTableForm.get('name')?.hasError('required')">
                 El nombre de usuario es requerido
-              </mat-error>
-            </mat-form-field>
+              </div>
+            </div>
           </div>
 
           <div class="col-sm-6 mt-3">
-            <mat-form-field class="example-full-width" appearance="outline" subscriptSizing="dynamic">
-              <mat-label>Password</mat-label>
-              <input matInput formControlName="password" [type]="hide ? 'password' : 'text'">
-              <mat-icon matSuffix (click)="hide = !hide">{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
-              <mat-error *ngIf="usuariosTableForm.get('password')?.hasError('required')">
+            <div class="form-group">
+              <label class="form-label">Password</label>
+              <input class="form-control"
+                     [type]="hide ? 'password' : 'text'"
+                     formControlName="password">
+
+              <div class="text-danger"
+                   *ngIf="usuariosTableForm.get('password')?.hasError('required')">
                 La contraseña es requerida
-              </mat-error>
-            </mat-form-field>
+              </div>
+            </div>
           </div>
         </div>
 
+        <!-- ================= FILA 2 ================= -->
         <div class="row m-b-25">
           <div class="col-sm-6 mt-3">
-            <mat-form-field class="example-full-width" appearance="outline" subscriptSizing="dynamic">
-              <mat-label>Tipos de usuarios</mat-label>
-              <mat-select formControlName="id_tipo_usuario" required>
-                <mat-option *ngFor="let info of tipos_usuarios" [value]="info.id_tipo_usuario">
+            <div class="form-group">
+              <label class="form-label">Tipos de usuarios</label>
+              <select class="form-select"
+                      formControlName="id_tipo_usuario">
+                <option value="">Seleccione</option>
+                <option *ngFor="let info of tipos_usuarios"
+                        [value]="info.id_tipo_usuario">
                   {{ info.s_tipo_usuario }}
-                </mat-option>
-              </mat-select>
-              <mat-error *ngIf="usuariosTableForm.get('id_tipo_usuario')?.hasError('required')">
+                </option>
+              </select>
+
+              <div class="text-danger"
+                   *ngIf="usuariosTableForm.get('id_tipo_usuario')?.hasError('required')">
                 El tipo de usuario es requerido
-              </mat-error>
-            </mat-form-field>
+              </div>
+            </div>
           </div>
 
           <div class="col-sm-6 mt-3">
-            <mat-form-field class="example-full-width" appearance="outline" subscriptSizing="dynamic">
-              <mat-label>Empleados</mat-label>
-              <mat-select formControlName="id_empleado" required>
-                <mat-option *ngFor="let empleado of empleados" [value]="empleado.id_empleado">
-                  {{empleado.s_nombre + " " + empleado.s_apellido_paterno + " " + empleado.s_apellido_materno }}
-                </mat-option>
-              </mat-select>
-              <mat-error *ngIf="usuariosTableForm.get('id_empleado')?.hasError('required')">
+            <div class="form-group">
+              <label class="form-label">Empleados</label>
+              <select class="form-select"
+                      formControlName="id_empleado">
+                <option value="">Seleccione</option>
+
+                <option *ngFor="let empleado of empleados"
+                        [value]="empleado.id_empleado">
+                  {{
+                    empleado.s_nombre
+                      + (empleado.s_apellido_paterno ? ' ' + empleado.s_apellido_paterno : '')
+                      + (empleado.s_apellido_materno ? ' ' + empleado.s_apellido_materno : '')
+                  }}
+                </option>
+
+              </select>
+
+              <div class="text-danger"
+                   *ngIf="usuariosTableForm.get('id_empleado')?.hasError('required')">
                 El empleado es requerido
-              </mat-error>
-            </mat-form-field>
+              </div>
+            </div>
           </div>
         </div>
 
+        <!-- ================= BOTONES ================= -->
         <div class="row m-b-25">
           <div class="col-sm-12">
             <div class="example-button-row">
-              <button mat-flat-button class="formSubmitBtn" [disabled]="!usuariosTableForm.valid" type="submit">
+              <button type="submit"
+                      class="formSubmitBtn"
+                      [disabled]="usuariosTableForm.invalid">
                 Guardar
               </button>
-              <button mat-flat-button mat-dialog-close class="formCancelBtn" tabindex="-1">Cancelar</button>
+
+              <button type="button"
+                      class="formCancelBtn"
+                      mat-dialog-close>
+                Cancelar
+              </button>
             </div>
           </div>
         </div>
