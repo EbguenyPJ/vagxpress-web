@@ -105,7 +105,7 @@ export class DialogCrearEmpleadoComponent {
     return this.formControl.hasError('required') ? 'Required field' : this.formControl.hasError('email') ? 'Not a valid email' : '';
   }
 
- createContactForm(): UntypedFormGroup {
+  createContactForm(): UntypedFormGroup {
     return this.fb.group({
       id_tipo_empleado: [this.empleadosModel.id_tipo_empleado || null, [Validators.required]],
       id_profesion: [this.empleadosModel.id_profesion || null],
@@ -121,17 +121,29 @@ export class DialogCrearEmpleadoComponent {
       s_correo: [this.empleadosModel.s_correo || '', [Validators.required, Validators.email, Validators.minLength(5)]],
       s_direccion: [this.empleadosModel.s_direccion || ''],
       d_fecha_nacimiento: [
-        this.empleadosModel.d_fecha_nacimiento
-          ? new Date(this.empleadosModel.d_fecha_nacimiento)
-          : new Date(new Date().setFullYear(new Date().getFullYear() - 25))
+        this.action === 'edit'
+          ? this.toDateInputValue(this.empleadosModel.d_fecha_nacimiento)
+          : this.toDateInputValue(new Date(new Date().setFullYear(new Date().getFullYear() - 25)))
       ],
       d_fecha_ingreso: [
-        this.empleadosModel.d_fecha_ingreso
-          ? new Date(this.empleadosModel.d_fecha_ingreso)
-          : new Date()
+        this.action === 'edit'
+          ? this.toDateInputValue(this.empleadosModel.d_fecha_ingreso)
+          : this.toDateInputValue(new Date())
       ]
+
     });
   }
+
+  private toDateInputValue(date: any): string | null {
+    if (!date) return null;
+
+    const d = new Date(date);
+    const month = String(d.getMonth() + 1).padStart(2, '0');
+    const day = String(d.getDate()).padStart(2, '0');
+
+    return `${d.getFullYear()}-${month}-${day}`;
+  }
+
 
 
 
@@ -139,17 +151,17 @@ export class DialogCrearEmpleadoComponent {
     this.dialogRef.close();
   }
 
- submit() {
-  if (this.empleadosForm.invalid) {
-    Swal.fire('Error', 'Por favor complete todos los campos requeridos', 'error');
-    return;
-  }
+  submit() {
+    if (this.empleadosForm.invalid) {
+      Swal.fire('Error', 'Por favor complete todos los campos requeridos', 'error');
+      return;
+    }
 
-  const formData = this.empleadosForm.getRawValue();
+    const formData = this.empleadosForm.getRawValue();
 
-  console.log(' FORM DATA ORIGINAL:', JSON.parse(JSON.stringify(formData)));
+    console.log(' FORM DATA ORIGINAL:', JSON.parse(JSON.stringify(formData)));
 
-  // Preparar datos para enviar
+    // Preparar datos para enviar
     if (this.action === 'edit') {
       // Para edición:
       if (this.actualizarImagen) {
@@ -164,48 +176,48 @@ export class DialogCrearEmpleadoComponent {
       formData.s_foto_empleado = this.imagenBase64 || null;
     }
 
-  // Limpiar número de teléfono
-  if (formData.s_telefono) {
-    formData.s_telefono = formData.s_telefono.toString().replace(/\D/g, '');
-  }
-
-  if (formData.s_telefono_contacto_emergencia) {
-    formData.s_telefono_contacto_emergencia =
-      formData.s_telefono_contacto_emergencia.toString().replace(/\D/g, '');
-  }
-
-  // Formatear fechas (IMPORTANTE)
-  formData.d_fecha_nacimiento = new Date(formData.d_fecha_nacimiento).toISOString().split('T')[0];
-  formData.d_fecha_ingreso = new Date(formData.d_fecha_ingreso).toISOString().split('T')[0];
-
-  console.log('🚀 FORM DATA FINAL (ENVÍO A API):', JSON.parse(JSON.stringify(formData)));
-
-  const serviceCall = this.action === 'edit'
-    ? this.EmpleadosService.actualizarEmpleado("", this.empleadosModel.id_empleado, formData)
-    : this.EmpleadosService.crearEmpleado("", formData);
-
-  serviceCall.subscribe({
-    next: (response) => {
-      console.log(' RESPUESTA API:', response);
-      Swal.fire(
-        'Éxito',
-        `Empleado ${this.action === 'edit' ? 'actualizado' : 'creado'} correctamente`,
-        'success'
-      );
-      this.dialogRef.close(response);
-    },
-    error: (error) => {
-      console.error(' ERROR API COMPLETO:', error);
-      console.error('ERROR BODY:', error.error);
-
-      let errorMessage =
-        error.error?.message ||
-        error.message ||
-        `Ocurrió un error al ${this.action === 'edit' ? 'actualizar' : 'crear'} el empleado`;
-
-      Swal.fire('Error', errorMessage, 'error');
+    // Limpiar número de teléfono
+    if (formData.s_telefono) {
+      formData.s_telefono = formData.s_telefono.toString().replace(/\D/g, '');
     }
-  });
+
+    if (formData.s_telefono_contacto_emergencia) {
+      formData.s_telefono_contacto_emergencia =
+        formData.s_telefono_contacto_emergencia.toString().replace(/\D/g, '');
+    }
+
+    // Formatear fechas (IMPORTANTE)
+    formData.d_fecha_nacimiento = new Date(formData.d_fecha_nacimiento).toISOString().split('T')[0];
+    formData.d_fecha_ingreso = new Date(formData.d_fecha_ingreso).toISOString().split('T')[0];
+
+    console.log('🚀 FORM DATA FINAL (ENVÍO A API):', JSON.parse(JSON.stringify(formData)));
+
+    const serviceCall = this.action === 'edit'
+      ? this.EmpleadosService.actualizarEmpleado("", this.empleadosModel.id_empleado, formData)
+      : this.EmpleadosService.crearEmpleado("", formData);
+
+    serviceCall.subscribe({
+      next: (response) => {
+        console.log(' RESPUESTA API:', response);
+        Swal.fire(
+          'Éxito',
+          `Empleado ${this.action === 'edit' ? 'actualizado' : 'creado'} correctamente`,
+          'success'
+        );
+        this.dialogRef.close(response);
+      },
+      error: (error) => {
+        console.error(' ERROR API COMPLETO:', error);
+        console.error('ERROR BODY:', error.error);
+
+        let errorMessage =
+          error.error?.message ||
+          error.message ||
+          `Ocurrió un error al ${this.action === 'edit' ? 'actualizar' : 'crear'} el empleado`;
+
+        Swal.fire('Error', errorMessage, 'error');
+      }
+    });
 
 
 
@@ -269,14 +281,14 @@ export class DialogCrearEmpleadoComponent {
 
   // --------------------- Obtener Catalogos ---------------------//
 
- getTiposEmpleados() {
+  getTiposEmpleados() {
     this.CatalogosService.GetAll('', 'tipos-empleados').subscribe(data => {
       this.tiposEmpleados = data;
       this.tiposEmpleados = this.tiposEmpleados.data;
       console.log("Tipos de empleados: ", this.tiposEmpleados);
     }
 
-      
+
     )
   }
 

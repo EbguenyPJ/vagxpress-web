@@ -215,34 +215,21 @@ export class ClientesComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
 
+loadData() {
+  this.isLoading = true;
 
-  loadData() {
-    this.isLoading = true;
-    this.ClientesService.getClientes("").subscribe({
-      next: (data) => {
-        this.data = data;
-        this.dataSource.data = this.data.data;
-        this.dataSource = new MatTableDataSource<clientesModel>(this.data.data);
-        this.dataSource.paginator = this.paginator;
-        this.dataSource.sort = this.sort;
-        this.isLoading = false;
+  this.ClientesService.getClientes("").subscribe({
+    next: (resp: any) => {
+      this.dataSource.data = resp.data ?? [];
+      this.isLoading = false;
+      console.log('Clientes:', this.dataSource.data);
+    },
+    error: () => {
+      this.isLoading = false;
+    }
+  });
+}
 
-        console.log("ver: ", data);
-
-        this.dataSource.filterPredicate = (data: clientesModel, filter: string) => {
-          const dataStr = Object.values(data)
-            .filter(value => value !== null && value !== undefined)
-            .map(value => value.toString().toLowerCase())
-            .join(' ');
-          return dataStr.indexOf(filter) !== -1;
-        };
-      },
-      error: (err) => {
-        console.error(err);
-        this.isLoading = false;
-      },
-    });
-  }
 
   
 
