@@ -279,7 +279,7 @@ export class CortesComponent implements OnInit, OnDestroy {
       'Apellido Materno': x.s_apellido_materno,
       'Tipo': x.s_tipo_empleado,
       'Sucursal': x.s_sucursal,
-      'Teléfono': this.formatPhoneNumber(x.n_telefono),
+      'Teléfono': this.formatPhoneNumber(x.s_telefono),
       'Correo': x.s_correo,
       'Estatus': x.b_activo ? 'Activo' : 'Inactivo'
     }));

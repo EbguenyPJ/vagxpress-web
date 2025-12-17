@@ -8,7 +8,7 @@
       <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
         <div class="card">
           <div class="materialTableHeader">
-            <!-- Buscador -->
+
             <div class="left">
               <ul class="header-buttons-left ms-0">
                 <li class="tbl-title">
@@ -22,7 +22,7 @@
               </ul>
             </div>
 
-            <!-- Funciones de la barra superior de la tabla - Header -->
+
             <div class="right">
               <ul class="tbl-export-btn">
                 <li class="tbl-header-btn">
@@ -77,13 +77,13 @@
                 </li>
               </ul>
             </div>
-          </div><!-- End table header -->
+          </div>
 
           <div class="overflow-auto">
             <div class="responsive_table">
               <table mat-table [dataSource]="dataSource" matSort class="mat-cell advance-table">
 
-                <!-- Checkbox Column -->
+
                 <ng-container matColumnDef="select">
                   <mat-header-cell *matHeaderCellDef>
                     <mat-checkbox (change)="$event ? masterToggle() : null"
@@ -100,7 +100,7 @@
 
                 @for (column of columnDefinitions; track column) {
                 @if (column.type === 'check' || column.type === 'actionBtn') {
-                <!-- Skip this column -->
+
                 } @else {
                 @if (column.def === 's_nombre') {
                 <ng-container [matColumnDef]="column.def">
@@ -153,7 +153,7 @@
                   </mat-cell>
                 </ng-container>
                 } @else {
-                <!-- Campos normales -->
+
                 <ng-container [matColumnDef]="column.def">
                   <mat-header-cell *matHeaderCellDef mat-sort-header>
                     <span class="truncate-text">{{ column.label }}</span>
@@ -167,7 +167,7 @@
                 }
                 }
 
-                <!-- actions -->
+
                 <ng-container matColumnDef="actions">
                   <mat-header-cell class="pr-0" *matHeaderCellDef>Acciones</mat-header-cell>
                   <mat-cell *matCellDef="let row; let i=index;" class="pr-0">
@@ -181,9 +181,9 @@
                 <mat-row [@rowsAnimation]="" *matRowDef="let row; columns: getDisplayedColumns();"
                   [style.cursor]="'pointer'" matRipple></mat-row>
               </table>
-            </div><!-- End responsive table-->
+            </div>
 
-            <!-- Loading spinner -->
+
             @if (isLoading) {
             <div class="tbl-spinner">
               <mat-progress-spinner color="primary" [diameter]="40" mode="indeterminate">
@@ -194,9 +194,9 @@
             <mat-paginator #paginator [length]="dataSource.filteredData.length" [pageIndex]="0" [pageSize]="10"
               [pageSizeOptions]="[5, 10, 25, 100]" aria-label="Seleccionar página de empleados">
             </mat-paginator>
-          </div><!-- End overflow-auto -->
-        </div><!-- End card -->
-      </div><!-- End col-12 -->
-    </div><!-- End row -->
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </section>
