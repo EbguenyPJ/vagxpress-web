@@ -30,4 +30,23 @@ export class EmbarqueService {
     let url = conexion.url + 'mostrar-embarque' + '/' + id_embarque
     return this.http.get(url, params);
   }
+
+
+  aprobarEmbarque(s_token: string, data: any, id_embarque: any) {
+    let headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': s_token
+    });
+    let url = conexion.url + 'aprobar-embarque' + '/' + id_embarque;
+    return this.http.post(url, data, { headers });
+  }
+
+  rechazarEmbarque(s_token: string, data: any, id_embarque: any) {
+    let headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': s_token
+    });
+    let url = conexion.url + 'rechazar-embarque' + '/' + id_embarque;
+    return this.http.post(url, data, { headers });
+  }
 }

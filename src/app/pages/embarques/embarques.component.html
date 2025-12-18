@@ -48,13 +48,6 @@
                 </li>
                 <li class="tbl-header-btn">
                   <div class="m-l-10">
-                    <button mat-icon-button (click)="addNew()" class="col-green" matTooltip="Agregar Embarque">
-                      <mat-icon class="mt-2">add_circle_outline</mat-icon>
-                    </button>
-                  </div>
-                </li>
-                <li class="tbl-header-btn">
-                  <div class="m-l-10">
                     <button mat-icon-button (click)="refresh()" matTooltip="Refrescar">
                       <mat-icon class="mt-2">refresh</mat-icon>
                     </button>
@@ -159,7 +152,7 @@
                                   @if(row.id_estatus_embarque === 2)
                                   {
                                     <div>
-                                      <span class="badge badge-solid-yellow">Segundo</span>
+                                      <span class="badge badge-solid-green">Aprobado</span>
                                     </div>
                                   }
                                   @else 
@@ -167,7 +160,7 @@
                                     @if(row.id_estatus_embarque === 3)
                                     {
                                       <div>
-                                        <span class="badge badge-solid-green">Tercero</span>
+                                        <span class="badge badge-solid-yellow">Rechazado</span>
                                       </div>
                                     }
                                   }

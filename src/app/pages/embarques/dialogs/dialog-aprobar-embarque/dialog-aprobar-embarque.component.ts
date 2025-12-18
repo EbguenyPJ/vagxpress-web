@@ -22,11 +22,9 @@ import { embarqueModel } from 'app/models/embarqueModel';
 import { CommonModule } from '@angular/common';
 // Animations
 import Swal from "sweetalert2";
-
-
-
 import { EmbarqueService } from 'app/services/embarque/embarque.service';
 import { MatDividerModule } from "@angular/material/divider";
+import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 
 
 
@@ -71,6 +69,12 @@ export class DialogAprobarEmbarqueComponent {
   dialogTitle: string;
   embarque: any;
   id_embarque: any;
+  url_img: any = conexion.url_img + "/evidenciasVXM/imgFacturaEmbarque/";
+  url_pdf: any = conexion.url_img + "/evidenciasVXM/pdfFacturaEmbarque/";
+  pdfSeguro!: SafeResourceUrl;
+
+  
+
 
   constructor(
     public dialogRef: MatDialogRef<DialogAprobarEmbarqueComponent>,
@@ -78,6 +82,7 @@ export class DialogAprobarEmbarqueComponent {
     private fb: FormBuilder,
     private dialog: MatDialog,
     private EmbarqueService: EmbarqueService,
+    private sanitizer: DomSanitizer
   ){
     this.action = data.action;
     this.dialogTitle = 'Aprobar Embarque';
@@ -107,8 +112,76 @@ export class DialogAprobarEmbarqueComponent {
       next: (response) => {
         this.embarque = response;
         this.embarque = this.embarque.data;
+        
+        if(this.embarque?.factura?.id_tipo_evidencia === 3){
+          const dataUrl = `data:application/pdf;base64,${this.embarque.base64}`;
+          this.pdfSeguro = this.sanitizer.bypassSecurityTrustResourceUrl(dataUrl);
+        }
         console.log("Embarque: ", this.embarque);
         Swal.close();
+      },
+      error: (error) => {
+        Swal.close();
+        Swal.fire('Error', 'Hubo un error', 'error');
+        console.log(error);
+      }
+    });
+  }
+
+
+
+  async aprobarEmbarque(){
+    Swal.fire({
+      title: '¡Espere un momento!',
+      html: 'Cargando datos...',
+      allowOutsideClick: false,
+      didOpen: () => {
+        Swal.showLoading()
+      }
+    });
+
+    const currentUserData = JSON.parse(localStorage.getItem('currentUser') || '{}');
+    const id_usuario = currentUserData?.id_usuario;
+    this.embarque.id_usuario = id_usuario;
+    console.log("Embarque: ", this.embarque);
+    this.EmbarqueService.aprobarEmbarque("", this.embarque, this.id_embarque).subscribe({
+      next: (response) => {
+        Swal.close();
+        Swal.fire('Exito', 'El embarque se aprobó', 'success');
+        this.dialogRef.close(response);
+      },
+      error: (error) => {
+        Swal.close();
+        Swal.fire('Error', 'Hubo un error', 'error');
+        console.log(error);
+      }
+    });
+  }
+
+
+
+
+
+
+  async rechazarEmbarque(){
+    Swal.fire({
+      title: '¡Espere un momento!',
+      html: 'Cargando datos...',
+      allowOutsideClick: false,
+      didOpen: () => {
+        Swal.showLoading()
+      }
+    });
+
+    const currentUserData = JSON.parse(localStorage.getItem('currentUser') || '{}');
+    const id_usuario = currentUserData?.id_usuario;
+    this.embarque.id_usuario = id_usuario;
+    console.log("Embarque: ", this.embarque);
+    this.EmbarqueService.rechazarEmbarque("", this.embarque, this.id_embarque).subscribe({
+      next: (response) => {
+        Swal.close();
+        Swal.fire('Exito', 'El embarque se rechazó', 'success');
+        this.dialogRef.close(response);
       },
       error: (error) => {
         Swal.close();

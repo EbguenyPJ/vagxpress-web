@@ -59,199 +59,151 @@
 
         <br>
 
-        <div class="col-6">
-          <!-- <mat-card>
-            <div *ngFor="let entrada of embarque?.entradas">
+        <div class="row">
+          <div class="col-6">
+         
+            <mat-card class="entrada-card" *ngFor="let entrada of embarque?.entradas">
 
-              <div class="container">
-                <div class="row">
-                  <div class="col">
-                    <mat-label>
-                      {{ entrada.s_nombre_refaccion }}
-                    </mat-label>
+              <!-- Título -->
+              <mat-card-header>
+                <mat-card-title>
+                  {{ entrada.s_nombre_refaccion }}
+                </mat-card-title>
+                <mat-card-subtitle>
+                  {{ entrada.s_marca_refaccion }}
+                </mat-card-subtitle>
+              </mat-card-header>
+
+              <mat-divider></mat-divider>
+
+              <!-- Contenido -->
+              <mat-card-content>
+                <div class="info-grid">
+                  <div>
+                    <strong>Categoría:</strong>
+                    <span> {{ entrada.s_categoria_refaccion }}</span>
+                  </div>
+
+                  <div>
+                    <strong>Subcategoría:</strong>
+                    <span> {{ entrada.s_subcategoria_refaccion }}</span>
+                  </div>
+
+                  <div>
+                    <strong>Clase:</strong>
+                    <span> {{ entrada.s_clase_refaccion }}</span>
+                  </div>
+
+                  <div>
+                    <strong>No. Parte:</strong>
+                    <span> {{ entrada.s_numero_parte }}</span>
+                  </div>
+
+                  <div>
+                    <strong>Cantidad:</strong>
+                    <span> {{ entrada.n_cantidad }}</span>
+                  </div>
+
+                  <div>
+                    <strong>Precio compra:</strong>
+                    <span> ${{ entrada.n_precio_compra | number:'1.2-2' }}</span>
+                  </div>
+
+                  <div class="full-width">
+                    <strong>Código de barras:</strong>
+                    <span> {{ entrada.s_codigo_barras }}</span>
                   </div>
                 </div>
-                <div class="row">
-                  <div class="col">
-                    <mat-label>
-                      {{ entrada.s_marca_refaccion }}
-                    </mat-label>
+              </mat-card-content>
+
+            </mat-card>
+
+            <mat-card
+              class="pendiente-card"
+              *ngFor="let pendiente of embarque?.pendientes"
+            >
+
+              <!-- Header -->
+              <mat-card-header>
+                <mat-card-title>
+                  {{ pendiente.s_nombre_refaccion }}
+                </mat-card-title>
+
+                <mat-card-subtitle>
+                  {{ pendiente.s_marca_refaccion }}
+                </mat-card-subtitle>
+                <div>
+                  <span class="badge badge-solid-green">Nueva</span>
+                </div>
+              </mat-card-header>
+
+              <mat-divider></mat-divider>
+
+              <!-- Contenido -->
+              <mat-card-content>
+                <div class="info-grid">
+                  <div>
+                    <strong>Categoría:</strong>
+                    <span> {{ pendiente.s_categoria_refaccion }}</span>
+                  </div>
+
+                  <div>
+                    <strong>Subcategoría:</strong>
+                    <span> {{ pendiente.s_subcategoria_refaccion }}</span>
+                  </div>
+
+                  <div>
+                    <strong>Clase:</strong>
+                    <span> {{ pendiente.s_clase_refaccion }}</span>
+                  </div>
+
+                  <div>
+                    <strong>No. Parte:</strong>
+                    <span> {{ pendiente.s_numero_parte }}</span>
+                  </div>
+
+                  <div>
+                    <strong>Cantidad pendiente:</strong>
+                    <span> {{ pendiente.n_cantidad }}</span>
+                  </div>
+
+                  <div>
+                    <strong>Precio compra:</strong>
+                    <span> ${{ pendiente.n_precio_compra | number:'1.2-2' }}</span>
+                  </div>
+
+                  <div class="full-width">
+                    <strong>Código de barras:</strong>
+                    <span> {{ pendiente.s_codigo_barras }}</span>
                   </div>
                 </div>
-                <div class="row">
-                  <div class="col">
-                    <mat-label>
-                      {{ entrada.s_categoria_refaccion }}
-                    </mat-label>
-                  </div>
-                </div>
-                <div class="row">
-                  <div class="col">
-                    <mat-label>
-                      {{ entrada.s_subcategoria_refaccion }}
-                    </mat-label>
-                  </div>
-                </div>
-                <div class="row">
-                  <div class="col">
-                    <mat-label>
-                      {{ entrada.s_clase_refaccion }}
-                    </mat-label>
-                  </div>
-                </div>
-                <div class="row">
-                  <div class="col">
-                    <mat-label>
-                      {{ entrada.s_numero_parte }}
-                    </mat-label>
-                  </div>
-                </div>
-                <div class="row">
-                  <div class="col">
-                    <mat-label>
-                      {{ entrada.n_cantidad }}
-                    </mat-label>
-                  </div>
-                </div>
-                <div class="row">
-                  <div class="col">
-                    <mat-label>
-                      {{ entrada.n_precio_compra }}
-                    </mat-label>
-                  </div>
-                </div>
-                <div class="row">
-                  <div class="col">
-                    <mat-label>
-                      {{ entrada.s_codigo_barras }}
-                    </mat-label>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </mat-card> -->
+              </mat-card-content>
 
+            </mat-card>
+          </div>
 
+          <div class="col-6">
+          
+            <img *ngIf="embarque?.factura?.id_tipo_evidencia === 2"
+              [src]="url_img + embarque?.factura?.s_evidencia_embarque"
+              alt="Evidencia de embarque"
+              class="img-fluid rounded shadow-sm mt-2"
+            >
 
-          <mat-card class="entrada-card" *ngFor="let entrada of embarque?.entradas">
+            <iframe *ngIf="embarque?.factura?.id_tipo_evidencia === 3"
+              [src]="pdfSeguro"
+            
+              style="border: none; width: 100%; height: 95%;"
+            ></iframe>
 
-            <!-- Título -->
-            <mat-card-header>
-              <mat-card-title>
-                {{ entrada.s_nombre_refaccion }}
-              </mat-card-title>
-              <mat-card-subtitle>
-                {{ entrada.s_marca_refaccion }}
-              </mat-card-subtitle>
-            </mat-card-header>
-
-            <mat-divider></mat-divider>
-
-            <!-- Contenido -->
-            <mat-card-content>
-              <div class="info-grid">
-                <div>
-                  <strong>Categoría:</strong>
-                  <span> {{ entrada.s_categoria_refaccion }}</span>
-                </div>
-
-                <div>
-                  <strong>Subcategoría:</strong>
-                  <span> {{ entrada.s_subcategoria_refaccion }}</span>
-                </div>
-
-                <div>
-                  <strong>Clase:</strong>
-                  <span> {{ entrada.s_clase_refaccion }}</span>
-                </div>
-
-                <div>
-                  <strong>No. Parte:</strong>
-                  <span> {{ entrada.s_numero_parte }}</span>
-                </div>
-
-                <div>
-                  <strong>Cantidad:</strong>
-                  <span> {{ entrada.n_cantidad }}</span>
-                </div>
-
-                <div>
-                  <strong>Precio compra:</strong>
-                  <span> ${{ entrada.n_precio_compra | number:'1.2-2' }}</span>
-                </div>
-
-                <div class="full-width">
-                  <strong>Código de barras:</strong>
-                  <span> {{ entrada.s_codigo_barras }}</span>
-                </div>
-              </div>
-            </mat-card-content>
-
-          </mat-card>
-
-
-          <mat-card
-            class="pendiente-card"
-            *ngFor="let pendiente of embarque?.pendientes"
-          >
-
-            <!-- Header -->
-            <mat-card-header>
-              <mat-card-title>
-                {{ pendiente.s_nombre_refaccion }}
-              </mat-card-title>
-
-              <mat-card-subtitle>
-                {{ pendiente.s_marca_refaccion }}
-                <small>Nueva</small>
-              </mat-card-subtitle>
-            </mat-card-header>
-
-            <mat-divider></mat-divider>
-
-            <!-- Contenido -->
-            <mat-card-content>
-              <div class="info-grid">
-                <div>
-                  <strong>Categoría:</strong>
-                  <span>{{ pendiente.s_categoria_refaccion }}</span>
-                </div>
-
-                <div>
-                  <strong>Subcategoría:</strong>
-                  <span>{{ pendiente.s_subcategoria_refaccion }}</span>
-                </div>
-
-                <div>
-                  <strong>Clase:</strong>
-                  <span>{{ pendiente.s_clase_refaccion }}</span>
-                </div>
-
-                <div>
-                  <strong>No. Parte:</strong>
-                  <span>{{ pendiente.s_numero_parte }}</span>
-                </div>
-
-                <div>
-                  <strong>Cantidad pendiente:</strong>
-                  <span>{{ pendiente.n_cantidad }}</span>
-                </div>
-
-                <div>
-                  <strong>Precio compra:</strong>
-                  <span>${{ pendiente.n_precio_compra | number:'1.2-2' }}</span>
-                </div>
-
-                <div class="full-width">
-                  <strong>Código de barras:</strong>
-                  <span>{{ pendiente.s_codigo_barras }}</span>
-                </div>
-              </div>
-            </mat-card-content>
-
-          </mat-card>
-
+          </div>
         </div>
+    <mat-divider></mat-divider>
+    <div class="row mt-4">
+      <div class="col-12">
+        <button type="button" class="btn btn-primary"(click)="aprobarEmbarque()" [disabled]="embarque?.embarque?.id_estatus_embarque === 2 || embarque?.embarque?.id_estatus_embarque === 3">Aprobar</button>
+        <button type="button" class="btn btn-danger ms-2"(click)="rechazarEmbarque()" [disabled]="embarque?.embarque?.id_estatus_embarque === 2 || embarque?.embarque?.id_estatus_embarque === 3">Rechazar</button>
+      </div>
     </div>
   </div>
 </div>
