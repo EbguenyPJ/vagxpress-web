@@ -1,10 +1,10 @@
-import { Component, ElementRef, OnDestroy, OnInit, ViewChild, AfterViewInit } from '@angular/core';
+import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatSort, MatSortModule } from '@angular/material/sort';
 import { MatSnackBar, MatSnackBarHorizontalPosition, MatSnackBarVerticalPosition } from '@angular/material/snack-bar';
 import { MatMenuModule, MatMenuTrigger } from '@angular/material/menu';
-import { MatTableDataSource, MatTableModule, MatHeaderCell, MatCell } from '@angular/material/table';
+import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { SelectionModel } from '@angular/cdk/collections';
 import { Subject } from 'rxjs';
 import { MAT_DATE_LOCALE, MatOptionModule, MatRippleModule } from '@angular/material/core';
@@ -13,11 +13,11 @@ import { rowsAnimation, TableExportUtil } from '@shared';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
-import { MatCheckboxModule, MatCheckbox } from '@angular/material/checkbox';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
-import { MatProgressSpinnerModule, MatProgressSpinner } from '@angular/material/progress-spinner';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSelectModule } from '@angular/material/select';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { FeatherIconsComponent } from '@shared/components/feather-icons/feather-icons.component';
@@ -27,16 +27,14 @@ import { Direction } from '@angular/cdk/bidi';
 
 
 
-
-
-import { clientesModel } from 'app/models/clientesModel'
+import { ProveedoresService } from 'app/services/proveedores/proveedores.service';
 import { conexion } from 'app/conexion';
-import { ClientesService } from 'app/services/clientes/clientes.service';
-import { DiaologCrearClienteComponent } from './dialog/diaolog-crear-cliente/diaolog-crear-cliente.component';
+import { DialogCrearProveedorComponent } from './dialog/dialog-crear-proveedor/dialog-crear-proveedor.component';
 
 @Component({
-  selector: 'app-clientes',
-  imports: [
+  selector: 'app-proveedores',
+  imports: [BreadcrumbComponent,
+    FeatherIconsComponent,
     CommonModule,
     MatCardModule,
     MatFormFieldModule,
@@ -48,63 +46,47 @@ import { DiaologCrearClienteComponent } from './dialog/diaolog-crear-cliente/dia
     ReactiveFormsModule,
     FormsModule,
     MatOptionModule,
-    MatPaginator,
-    MatProgressSpinner,
-    MatHeaderCell,
-    MatCell,
-    BreadcrumbComponent, MatTableModule,
-    MatPaginatorModule,
+    MatCheckboxModule,
+    MatTableModule,
     MatSortModule,
-    FeatherIconsComponent,
-    MatCheckbox
-  ],
-  templateUrl: './clientes.component.html',
-  styleUrl: './clientes.component.scss'
+    MatRippleModule,
+    MatProgressSpinnerModule,
+    MatMenuModule,
+    MatPaginatorModule,],
+  templateUrl: './proveedores.component.html',
+  styleUrl: './proveedores.component.scss'
 })
-export class ClientesComponent implements OnInit, OnDestroy, AfterViewInit {
+export class ProveedoresComponent implements OnInit, OnDestroy {
 
-  // Definición de columnas
+
   columnDefinitions = [
-    { def: 'id_cliente', label: 'ID', type: 'idTabla', visible: true },
-    { def: 's_nombre_cliente', label: 'Nombre', type: 'text', visible: true },
-    { def: 's_numero_telefono', label: 'Teléfono', type: 'phone', visible: true },
-    { def: 's_tipo_cliente', label: 'Tipo de cliente', type: 'text', visible: true },
-    { def: 's_correo', label: 'Correo', type: 'email', visible: true },
+    { def: 'id_proveedor', label: 'ID', type: 'idTabla', visible: true },
+    { def: 's_proveedor', label: 'Proveedor', type: 'text', visible: true },
+    { def: 's_nombre_contacto', label: 'Contacto', type: 'text', visible: true },
+    { def: 's_telefono', label: 'Teléfono', type: 'phone', visible: true },
+    { def: 's_rfc', label: 'RFC', type: 'text', visible: true },
     { def: 'b_activo', label: 'Estatus', type: 'text', visible: true },
     { def: 'actions', label: 'Acciones', type: 'actionBtn', visible: true }
+
   ];
 
-
-  dataSource = new MatTableDataSource<clientesModel>();
-  selection = new SelectionModel<clientesModel>(true, []);
-  contextMenuPosition = { x: '0px', y: '0px' };
+  dataSource = new MatTableDataSource<any>([]);
+  selection = new SelectionModel<any>(true, []);
   isLoading = true;
   private destroy$ = new Subject<void>();
-
-  clientesModel: clientesModel[] = [];
   data: any;
-  ruta_img: string = conexion.ruta_img_front + "clientes/";
-  tiposClientes: any[] = [];
-
+  ruta_img: any = conexion.url_img + "/proveedores/";
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
   @ViewChild('filter') filter: ElementRef | undefined;
-  @ViewChild(MatMenuTrigger) contextMenu?: MatMenuTrigger;
 
-  breadscrums = [
-    {
-      title: 'Clientes',
-      items: ['Home'],
-      active: 'Clientes',
-    },
-  ];
 
 
   constructor(
     public httpClient: HttpClient,
     public dialog: MatDialog,
-    public ClienteService: ClientesService,
+    public ProveedoresService: ProveedoresService,
     private snackBar: MatSnackBar
   ) { }
 
@@ -112,6 +94,7 @@ export class ClientesComponent implements OnInit, OnDestroy, AfterViewInit {
     this.loadData();
   }
 
+  
 
 
   ngAfterViewInit() {
@@ -128,84 +111,11 @@ export class ClientesComponent implements OnInit, OnDestroy, AfterViewInit {
     this.loadData();
   }
 
-  getDisplayedColumns(): string[] {
-    return this.columnDefinitions
-      .filter((cd) => cd.visible)
-      .map((cd) => cd.def);
-  }
-
-  addNew() {
-    this.openDialog('add');
-  }
-
-  openDialog(action: 'add' | 'edit', data?: clientesModel) {
-    let varDirection: Direction;
-    if (localStorage.getItem('isRtl') === 'true') {
-      varDirection = 'rtl';
-    } else {
-      varDirection = 'ltr';
-    }
-    const dialogRef = this.dialog.open(DiaologCrearClienteComponent, {
-      width: '60vw',
-      maxWidth: '100vw',
-      panelClass: 'custom-dialog-container',
-      data: { clientesModel: data, action },
-      direction: varDirection,
-      autoFocus: false,
-    });
-
-    dialogRef.afterClosed().subscribe((result) => {
-      // Actualizamos la tabla después de cerrar el dialog
-      this.refresh();
-      if (result) {
-        if (action === 'add') {
-          this.dataSource.data = [result, ...this.dataSource.data];
-        } else {
-          this.updateRecord(result);
-        }
-        this.refreshTable();
-        this.showNotification(
-          action === 'add' ? 'snackbar-success' : 'black',
-          `${action === 'add' ? 'Nuevo cliente agregado' : 'Cliente actualizado'} correctamente`,
-          'bottom',
-          'center'
-        );
-      }
-    });
-  }
-
-
-
-  editCall(row: clientesModel) {
-    this.openDialog('edit', row);
-  }
-
-
-
-
-
-  private updateRecord(updatedRecord: clientesModel) {
-    const index = this.dataSource.data.findIndex(
-      (record) => record.id_cliente === updatedRecord.id_cliente
-    );
-    if (index !== -1) {
-      this.dataSource.data[index] = updatedRecord;
-      this.dataSource._updateChangeSubscription();
-    }
-  }
-
-
-
-  private refreshTable() {
-    this.paginator.pageIndex = 0;
-    this.dataSource.paginator = this.paginator;
-    this.dataSource.sort = this.sort;
-  }
-
-  applyFilter(event: Event) {
-    const filterValue = (event.target as HTMLInputElement).value;
-    this.dataSource.filter = filterValue.trim().toLowerCase();
-  }
+getDisplayedColumns(): string[] {
+  return this.columnDefinitions
+    .filter((cd) => cd.visible)
+    .map((cd) => cd.def);
+}
 
   isAllSelected() {
     return this.selection.selected.length === this.dataSource.data.length;
@@ -218,21 +128,106 @@ export class ClientesComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
 
+
+  formatPhoneNumber(phoneNumber: string): string {
+    if (!phoneNumber) return '';
+    return phoneNumber.replace(/[^0-9]/g, ''); // elimina letras o guiones
+  }
+
   loadData() {
     this.isLoading = true;
 
-    this.ClienteService.getClientes("").subscribe({
-      next: (resp: any) => {
-        this.dataSource.data = resp.data ?? [];
+    this.ProveedoresService.getProveedores("").subscribe({
+      next: (res) => {
+        console.log('Respuesta del API:', res);
+        this.data = res;
+        this.dataSource = new MatTableDataSource<any>(this.data.data);
+        this.dataSource.paginator = this.paginator;
+        this.dataSource.sort = this.sort;
         this.isLoading = false;
-        console.log('Clientes:', this.dataSource.data);
+
+        // Filtro global
+        this.dataSource.filterPredicate = (data: any, filter: string) => {
+          const dataStr = Object.values(data)
+            .filter(v => v !== null && v !== undefined)
+            .map(v => v.toString().toLowerCase())
+            .join(' ');
+          return dataStr.indexOf(filter) !== -1;
+        };
       },
-      error: () => {
+      error: (err) => {
+        console.error(err);
         this.isLoading = false;
+        this.showNotification('snackbar-danger', 'Error al cargar los proveedores', 'bottom', 'center');
+      },
+    });
+  }
+
+
+  addNew() {
+    this.openDialog('add');
+  }
+
+  editCall(row: any) {
+    this.openDialog('edit', row);
+  }
+
+  openDialog(action: 'add' | 'edit', data?: any) {
+    let varDirection: Direction = localStorage.getItem('isRtl') === 'true' ? 'rtl' : 'ltr';
+
+    const dialogRef = this.dialog.open(DialogCrearProveedorComponent, {
+      width: '60vw',
+      maxWidth: '100vw',
+      data: { proveedor: data, action },
+      direction: varDirection,
+      autoFocus: false,
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      this.refresh(); // Siempre recarga los datos
+
+      if (result) {
+        if (action === 'add') {
+          this.dataSource.data = [result, ...this.dataSource.data];
+        } else {
+          this.updateRecord(result);
+        }
+        this.refreshTable();
+        this.showNotification(
+          action === 'add' ? 'snackbar-success' : 'black',
+          `${action === 'add' ? 'Agregado' : 'Editado'} correctamente...!!!`,
+          'bottom',
+          'center'
+        );
       }
     });
   }
 
+  private updateRecord(updatedRecord: any) {
+    const index = this.dataSource.data.findIndex(
+      (record) => record.id_proveedor === updatedRecord.id_proveedor
+    );
+    if (index !== -1) {
+      this.dataSource.data[index] = updatedRecord;
+      this.dataSource._updateChangeSubscription();
+    }
+  }
+
+  private refreshTable() {
+    this.paginator.pageIndex = 0;
+    this.dataSource.paginator = this.paginator;
+    this.dataSource.sort = this.sort;
+  }
+
+
+
+  applyFilter(event: Event) {
+    const filterValue = (event.target as HTMLInputElement).value;
+    this.dataSource.filter = filterValue.trim().toLowerCase();
+    if (this.dataSource.paginator) {
+      this.dataSource.paginator.firstPage();
+    }
+  }
 
 
 
@@ -249,9 +244,6 @@ export class ClientesComponent implements OnInit, OnDestroy, AfterViewInit {
       panelClass: colorName,
     });
   }
-
-
-
 
 
 }

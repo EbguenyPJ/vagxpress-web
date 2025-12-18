@@ -17,6 +17,7 @@ import { ClientesComponent } from './pages/clientes/clientes.component';
 
 import { BitacoraVentasComponent } from './pages/bitacora-ventas/bitacora-ventas.component';
 import { CortesComponent } from './pages/operaciones/cortes/cortes.component';
+import { ProveedoresComponent } from './pages/proveedores/proveedores.component';
 
 
 export const APP_ROUTE: Route[] = [
@@ -51,6 +52,8 @@ export const APP_ROUTE: Route[] = [
       { path: 'empleados', component: EmpleadosComponent },
       { path: 'bitacora-ventas', component: BitacoraVentasComponent },
       { path: 'cortes', component: CortesComponent },
+      { path: 'proveedores', component: ProveedoresComponent },
+
     ],
   },
 
