@@ -18,6 +18,7 @@ import { ClientesComponent } from './pages/clientes/clientes.component';
 import { BitacoraVentasComponent } from './pages/bitacora-ventas/bitacora-ventas.component';
 import { CortesComponent } from './pages/operaciones/cortes/cortes.component';
 import { EmbarquesComponent } from './pages/embarques/embarques.component';
+import { TabsComponent } from './pages/embarques/tabs/tabs.component';
 
 import { ProveedoresComponent } from './pages/proveedores/proveedores.component';
 import { PermisosComponent } from './pages/configuraciones/permisos/permisos.component';
@@ -56,7 +57,7 @@ export const APP_ROUTE: Route[] = [
       { path: 'empleados', component: EmpleadosComponent },
       { path: 'bitacora-ventas', component: BitacoraVentasComponent },
       { path: 'cortes', component: CortesComponent },
-      { path: 'embarques', component: EmbarquesComponent },
+      { path: 'embarques', component: TabsComponent },
       { path: 'proveedores', component: ProveedoresComponent },
 
     ],

@@ -1,0 +1,37 @@
+<section class="content">
+  <div class="content-block">
+    <div class="row">
+      <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+        <div class="card">
+          <div class="body">
+            <mat-tab-group (selectedTabChange)="onTabChange($event)">
+
+              <mat-tab>
+                <ng-template mat-tab-label>
+                  <mat-icon class="tbl-icon material-icons-outlined">access_time</mat-icon>
+                  Embarques
+                </ng-template>
+                <div class="mt-4">
+                  <app-embarques *ngIf="showEmbarques"></app-embarques>
+                </div>
+                
+    
+              </mat-tab>
+
+              <mat-tab>
+                <ng-template mat-tab-label>
+                  <mat-icon class="tbl-icon material-icons-outlined">import_contacts</mat-icon>
+                  Refacciones
+                </ng-template>
+                <div class="mt-4">
+                  <app-refacciones-insertadas *ngIf="showRefaccionesInsertadas"></app-refacciones-insertadas>
+                </div>
+              </mat-tab>
+
+            </mat-tab-group>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
