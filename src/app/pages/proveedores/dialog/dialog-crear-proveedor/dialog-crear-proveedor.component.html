@@ -1,0 +1,94 @@
+<div class="dialogContainer">
+    <!-- ==================== Header ==================== -->
+    <div class="modalHeader">
+        <div class="modalTitle">{{ dialogTitle }}</div>
+        <button type="button" class="modal-close-button btn" (click)="onNoClick()" mat-dialog-close>✕</button>
+    </div>
+
+    <!-- ==================== Form Card ==================== -->
+    <div class="form-card">
+        <form [formGroup]="proveedoresForm" (ngSubmit)="submit()">
+
+            <!-- ==================== NOMBRE DEL PROVEEDOR ==================== -->
+            <div class="row m-b-25">
+                <div class="col-sm-6 mt-3">
+                    <label class="form-label">Proveedor</label>
+                    <input type="text" class="form-control" formControlName="s_proveedor">
+                    <div class="text-danger" *ngIf="proveedoresForm.get('s_proveedor')?.hasError('required')">
+                        El nombre del proveedor es requerido
+                    </div>
+                </div>
+
+                <div class="col-sm-6 mt-3">
+                    <label class="form-label">Nombre del contacto</label>
+                    <input type="text" class="form-control" formControlName="s_nombre_contacto">
+                    <div class="text-danger" *ngIf="proveedoresForm.get('s_nombre_contacto')?.hasError('required')">
+                        El nombre del contacto es requerido
+                    </div>
+                </div>
+            </div>
+
+            <!-- ==================== TELÉFONO Y RFC ==================== -->
+            <div class="row m-b-25">
+                <div class="col-sm-6 mt-3">
+                    <label class="form-label">Teléfono</label>
+                    <input type="tel" maxlength="10" class="form-control" formControlName="s_telefono"
+                        (keypress)="soloNumeros($event)">
+                    <div class="text-danger" *ngIf="proveedoresForm.get('s_telefono')?.hasError('required')">
+                        El teléfono es requerido
+                    </div>
+                </div>
+
+                <div class="col-sm-6 mt-3">
+                    <label class="form-label">RFC</label>
+                    <input type="text" class="form-control" formControlName="s_rfc">
+                    <div class="text-danger" *ngIf="proveedoresForm.get('s_rfc')?.hasError('required')">
+                        El RFC es requerido
+                    </div>
+                </div>
+            </div>
+
+            <!-- ==================== IMAGEN DEL PROVEEDOR ==================== -->
+            <div class="image-card">
+                <!-- Imagen actual (solo si edit) -->
+                <div class="row m-b-15" *ngIf="action === 'edit'">
+                    <div class="col-sm-12 text-center">
+                        <h4 class="section-title">Imagen actual</h4>
+                        <img [src]="proveedorData.s_img_proveedor ? (ruta_img + proveedorData.s_img_proveedor) : (ruta_img + 'proveedor-default.png')"
+                            class="current-image-preview">
+                        <div class="file-info">{{proveedorData.s_img_proveedor || 'proveedor-default.png'}}</div>
+
+                        <mat-checkbox [(ngModel)]="actualizarImagen" [ngModelOptions]="{standalone: true}">
+                            ¿Desea actualizar la imagen?
+                        </mat-checkbox>
+                    </div>
+                </div>
+
+                <!-- Subir nueva imagen -->
+                <div class="row m-b-25" *ngIf="action !== 'edit' || actualizarImagen">
+                    <div class="col-sm-12">
+                        <div class="form-group mb-2">
+                            <label class="label-style">Subir Imagen:</label>
+                            <input type="file" (change)="onFileSelected($event)" accept="image/*" class="form-control">
+                            <div class="file-info" *ngIf="selectedFileName">{{ selectedFileName }}</div>
+                            <img *ngIf="url" [src]="url" class="new-image-preview">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ==================== BOTONES ==================== -->
+            <div class="example-button-row">
+                <button type="submit" class="formSubmitBtn"
+                    [disabled]="proveedoresForm.invalid || proveedoresForm.pending">
+                    Guardar
+                </button>
+
+                <button type="button" class="formCancelBtn" mat-dialog-close>
+                    Cancelar
+                </button>
+            </div>
+
+        </form>
+    </div>
+</div>

@@ -1,0 +1,209 @@
+<div class="modal-overlay">
+
+  <div class="modal-container">
+
+    <!-- HEADER FIJO -->
+    <div class="modal-header">
+      <h2>Crear nuevo corte</h2>
+      <button class="btn-close">✕</button>
+    </div>
+
+    <!-- CONTENIDO SCROLL -->
+    <div class="modal-content">
+
+
+
+
+
+
+
+<div class="corte-form-container">
+
+  <!-- ENCABEZADO -->
+  <div class="form-header">
+    <h2>
+      <span class="material-icons">post_add</span>
+      Crear nuevo corte
+    </h2>
+    <p class="subtitle">
+      Registra los montos del corte y adjunta evidencias según el método de pago.
+    </p>
+  </div>
+
+  <!-- FORMULARIO -->
+  <div class="card">
+
+    <!-- DATOS GENERALES -->
+    <h3>Datos generales</h3>
+
+    <div class="form-grid">
+      <div class="form-group">
+        <label>Fecha del corte</label>
+        <input type="date" />
+      </div>
+
+      <div class="form-group">
+        <label>Tipo de corte</label>
+        <select>
+          <option>Diario</option>
+          <option>Parcial</option>
+          <option>Especial</option>
+        </select>
+      </div>
+
+      <div class="form-group full">
+        <label>Descripción</label>
+        <input type="text" placeholder="Ej. Corte turno matutino" />
+      </div>
+
+      <div class="form-group full">
+        <label>Comentarios</label>
+        <textarea rows="3" placeholder="Observaciones generales del corte"></textarea>
+      </div>
+    </div>
+  </div>
+
+  <!-- MÉTODOS DE PAGO -->
+  <div class="card">
+    <h3>Montos por método de pago</h3>
+
+    <div class="metodos-grid">
+
+      <!-- EFECTIVO -->
+      <div class="metodo-card">
+        <div class="metodo-header">
+          <span class="material-icons">payments</span>
+          <h4>Efectivo</h4>
+        </div>
+
+        <label>Monto</label>
+        <input type="number" placeholder="0.00" />
+
+        <p class="hint">Evidencia opcional</p>
+
+        <button class="btn-evidencia">
+          <span class="material-icons">attach_file</span>
+          Subir evidencia
+        </button>
+      </div>
+
+      <!-- TRANSFERENCIA -->
+      <div class="metodo-card requerido">
+        <div class="metodo-header">
+          <span class="material-icons">account_balance</span>
+          <h4>Transferencia</h4>
+        </div>
+
+        <label>Monto</label>
+        <input type="number" placeholder="0.00" />
+
+        <p class="hint requerido-text">Evidencia requerida</p>
+
+        <div class="evidencia-preview">
+          <span class="material-icons">description</span>
+          spei_transferencia.png
+        </div>
+
+        <button class="btn-evidencia">
+          <span class="material-icons">attach_file</span>
+          Subir evidencia
+        </button>
+      </div>
+
+      <!-- TARJETA CRÉDITO -->
+      <div class="metodo-card requerido">
+        <div class="metodo-header">
+          <span class="material-icons">credit_card</span>
+          <h4>Tarjeta crédito</h4>
+        </div>
+
+        <label>Monto</label>
+        <input type="number" placeholder="0.00" />
+
+        <p class="hint requerido-text">Evidencia requerida</p>
+
+        <div class="evidencia-preview">
+          <span class="material-icons">description</span>
+          voucher_banco.pdf
+        </div>
+
+        <button class="btn-evidencia">
+          <span class="material-icons">attach_file</span>
+          Subir evidencia
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- RESUMEN -->
+  <div class="card resumen">
+    <h3>Resumen del corte</h3>
+
+    <div class="resumen-grid">
+      <div>
+        <span>Efectivo</span>
+        <strong>$12,450.00</strong>
+      </div>
+      <div>
+        <span>Transferencias</span>
+        <strong>$8,200.00</strong>
+      </div>
+      <div>
+        <span>Tarjetas</span>
+        <strong>$15,300.00</strong>
+      </div>
+      <div class="total">
+        <span>Total</span>
+        <strong>$35,900.00</strong>
+      </div>
+    </div>
+  </div>
+
+  <!-- ACCIONES -->
+  <div class="acciones">
+    <button class="btn-cancelar">Cancelar</button>
+    <button class="btn-guardar">
+      <span class="material-icons">save</span>
+      Guardar corte
+    </button>
+  </div>
+
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+    </div>
+
+    <!-- FOOTER FIJO -->
+    <div class="modal-footer">
+      <button class="btn-cancelar">Cancelar</button>
+      <button class="btn-guardar">Guardar corte</button>
+    </div>
+
+  </div>
+
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
