@@ -10,6 +10,7 @@ export class Venta {
   s_metodo_pago: string;
   id_cliente: number;
   s_nombre_cliente: string;
+  fecha_venta: string;
 
   constructor(venta: Partial<Venta> = {}) {
     this.id_venta = venta.id_venta || this.getRandomID();
@@ -23,6 +24,7 @@ export class Venta {
     this.s_metodo_pago = venta.s_metodo_pago || '';
     this.id_cliente = venta.id_cliente || 0;
     this.s_nombre_cliente = venta.s_nombre_cliente || '';
+    this.fecha_venta = venta.fecha_venta || '';
   }
 
   public getRandomID(): number {
