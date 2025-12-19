@@ -10,6 +10,7 @@ import { CotizacionesComponent } from './pages/cotizaciones/cotizaciones.compone
 import { CotizacionManualComponent } from './pages/cotizaciones/cotizacion-manual/cotizacion-manual.component';
 import { PuntoVentaComponent } from './pages/punto-venta/punto-venta.component';
 import { BitacoraVentasComponent } from './pages/bitacora-ventas/bitacora-ventas.component';
+import { RequisicionesComponent } from './pages/compras/requisiciones/requisiciones.component';
 
 export const APP_ROUTE: Route[] = [
   {
@@ -37,6 +38,7 @@ export const APP_ROUTE: Route[] = [
       },
       { path: 'punto-venta', component: PuntoVentaComponent },
       { path: 'bitacora-ventas', component: BitacoraVentasComponent },
+      { path: 'requisiciones', component: RequisicionesComponent },
     ],
   },
 
