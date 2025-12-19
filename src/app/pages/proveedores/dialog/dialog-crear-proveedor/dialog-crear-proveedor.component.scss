@@ -1,0 +1,613 @@
+/* ==================== Contenedor principal del diálogo ==================== */
+.dialogContainer {
+  position: relative;
+  background-color: rgba(177, 18, 38, 0.15);
+  padding: 20px;
+  border-radius: 16px;
+  overflow-y: auto;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* ==================== Header del modal ==================== */
+  .modalHeader {
+    background: linear-gradient(135deg, #7f0c19 0%, #b11226 50%, #e53935 100%);
+    border-radius: 12px;
+    padding: 1rem;
+    justify-content: center;
+    text-align: center;
+    position: relative;
+    z-index: 2;
+    box-shadow: 0 6px 20px rgba(30, 30, 30, 0.5);
+
+    .modalTitle {
+      font-size: 2rem;
+      color: #ffffff;
+      margin: 0;
+      font-weight: 700;
+      text-shadow: 0 3px 6px rgba(30, 30, 30, 0.6);
+      letter-spacing: 0.5px;
+    }
+
+    .modal-close-button {
+      background-color: rgba(255, 255, 255, 0.2) !important;
+      width: 35px;
+      height: 35px;
+      top: 8px;
+      right: 8px;
+      position: absolute;
+      padding: 0;
+      border-radius: 50%;
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s ease;
+      border: 2px solid rgba(255, 255, 255, 0.4);
+      backdrop-filter: blur(10px);
+
+      mat-icon {
+        font-size: 22px;
+        color: #ffffff;
+      }
+
+      &:hover {
+        background-color: rgba(255, 255, 255, 0.35) !important;
+        transform: scale(1.1) rotate(90deg);
+        border-color: #ffffff;
+        box-shadow: 0 4px 16px rgba(255, 255, 255, 0.3);
+      }
+    }
+  }
+
+  /* ==================== Card del formulario ==================== */
+  .form-card {
+    background-color: rgba(50, 50, 50, 0.95);
+    border-radius: 12px;
+    padding: 20px;
+    margin-top: 15px;
+    max-height: 70vh;
+    overflow-y: auto;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+    box-shadow: 0 6px 20px rgba(30, 30, 30, 0.4);
+
+    &::-webkit-scrollbar {
+      display: none;
+    }
+
+    /* ==================== Labels personalizados ==================== */
+    .form-label {
+      color: #ffffff !important;
+      font-weight: 700;
+      font-size: 0.95rem;
+      margin-bottom: 8px;
+      display: block;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      text-shadow: 0 2px 4px rgba(30, 30, 30, 0.3);
+    }
+
+    /* ==================== Form fields ==================== */
+    ::ng-deep mat-form-field {
+      width: 100%;
+      background-color: #ffffff;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 2px 6px rgba(30, 30, 30, 0.15);
+      transition: all 0.3s ease;
+
+      &:hover {
+        box-shadow: 0 3px 10px rgba(177, 18, 38, 0.2);
+      }
+
+      .mat-mdc-text-field-wrapper {
+        padding-bottom: 0 !important;
+        background-color: #ffffff;
+      }
+
+      .mat-mdc-form-field-subscript-wrapper {
+        display: none !important;
+      }
+
+      .mdc-text-field {
+        border-radius: 8px;
+      }
+
+      .mat-mdc-input-element,
+      input,
+      textarea {
+        color: #1e1e1e !important;
+        padding: 0.5rem !important;
+        font-weight: 500;
+        font-size: 0.9rem !important;
+      }
+
+      .mdc-floating-label,
+      mat-label {
+        color: rgba(30, 30, 30, 0.7) !important;
+        font-size: 0.85rem !important;
+        font-weight: 600 !important;
+      }
+
+      // Placeholder styling
+      input::placeholder,
+      textarea::placeholder {
+        color: rgba(30, 30, 30, 0.5);
+        font-weight: 500;
+        font-size: 0.85rem;
+      }
+
+      // Outline borders
+      .mdc-notched-outline__leading,
+      .mdc-notched-outline__notch,
+      .mdc-notched-outline__trailing {
+        border-color: transparent !important;
+      }
+
+      // Focus state
+      &.mat-focused {
+        box-shadow: 0 0 0 3px rgba(177, 18, 38, 0.3);
+        transform: translateY(-2px);
+
+        .mdc-notched-outline__leading,
+        .mdc-notched-outline__notch,
+        .mdc-notched-outline__trailing {
+          border-color: #b11226 !important;
+          border-width: 2px !important;
+        }
+      }
+
+      // Icons
+      .color-icon {
+        color: #b11226 !important;
+        transition: all 0.3s ease;
+
+        &:hover {
+          transform: scale(1.1);
+        }
+      }
+
+      // Select arrow
+      .mat-mdc-select-arrow {
+        color: #b11226 !important;
+      }
+
+      // Datepicker toggle
+      .mat-datepicker-toggle {
+        button {
+          color: #b11226 !important;
+        }
+      }
+    }
+
+    /* ==================== Textarea específico ==================== */
+    ::ng-deep textarea.mat-mdc-input-element {
+      min-height: 60px !important;
+      resize: vertical;
+      line-height: 1.4;
+      font-size: 0.9rem !important;
+    }
+  }
+
+  /* ==================== Mensajes de error ==================== */
+  .text-danger {
+    color: #e53935 !important;
+    font-weight: 600;
+    font-size: 0.85rem;
+    margin-top: 6px;
+    text-shadow: 0 1px 3px rgba(30, 30, 30, 0.3);
+    display: block;
+  }
+
+  /* ==================== Botones de acción ==================== */
+  .example-button-row {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    margin-top: 20px;
+
+    button {
+      padding: 12px 32px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      border-radius: 10px;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: 0 4px 12px rgba(30, 30, 30, 0.3);
+      border: none;
+    }
+
+    .formSubmitBtn {
+      background: linear-gradient(135deg, #7f0c19 0%, #b11226 50%, #e53935 100%) !important;
+      color: #ffffff !important;
+      position: relative;
+      overflow: hidden;
+
+      &::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+        transition: left 0.5s;
+      }
+
+      &:hover:not(:disabled) {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 20px rgba(177, 18, 38, 0.6);
+
+        &::before {
+          left: 100%;
+        }
+      }
+
+      &:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+        transform: none;
+      }
+    }
+
+    .formCancelBtn {
+      background: linear-gradient(135deg, #1e1e1e, #444444) !important;
+      color: #ffffff !important;
+
+      &:hover {
+        background: linear-gradient(135deg, #444444, #5a5a5a) !important;
+        transform: translateY(-3px);
+        box-shadow: 0 8px 20px rgba(30, 30, 30, 0.5);
+      }
+    }
+  }
+
+  /* ==================== Responsive botones ==================== */
+  @media (max-width: 576px) {
+    .example-button-row {
+      flex-direction: column;
+      gap: 10px;
+
+      button {
+        width: 100%;
+      }
+    }
+  }
+
+  /* ==================== Responsive general ==================== */
+  @media (max-width: 768px) {
+    padding: 15px;
+
+    .modalHeader .modalTitle {
+      font-size: 1.5rem;
+    }
+
+    .form-card {
+      padding: 15px;
+    }
+  }
+}
+
+/* ==================== Card de imagen ==================== */
+.image-card {
+  background-color: rgba(50, 50, 50, 0.95);
+  border-radius: 12px;
+  text-align: center;
+  padding: 20px;
+  margin-top: 14px;
+  box-shadow: 0 6px 20px rgba(30, 30, 30, 0.5);
+  border: 2px solid rgba(177, 18, 38, 0.3);
+
+  /* ==================== Título de sección ==================== */
+  .section-title {
+    color: #ffffff;
+    font-size: 1.2rem;
+    font-weight: 700;
+    text-align: center;
+    margin-bottom: 15px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    text-shadow: 0 2px 6px rgba(30, 30, 30, 0.5);
+  }
+
+  /* ==================== Preview de imágenes ==================== */
+  .current-image-preview,
+  .new-image-preview {
+    display: block;
+    max-width: 220px;
+    max-height: 220px;
+    width: auto;
+    height: auto;
+    margin: 10px auto;
+    border: 2px solid #b11226;
+    border-radius: 8px;
+    padding: 3px;
+    background-color: #ffffff;
+    box-shadow: 0 3px 10px rgba(177, 18, 38, 0.3);
+    transition: all 0.3s ease;
+
+    &:hover {
+      transform: scale(1.02);
+      box-shadow: 0 5px 15px rgba(177, 18, 38, 0.5);
+    }
+  }
+
+  /* ==================== Info del archivo ==================== */
+  .file-info {
+    color: #ffffff;
+    text-align: center;
+    font-weight: 600;
+    font-size: 0.85rem;
+    padding: 8px 12px;
+    background: linear-gradient(135deg, rgba(127, 12, 25, 0.8), rgba(177, 18, 38, 0.8));
+    border-radius: 6px;
+    margin: 8px auto;
+    max-width: 250px;
+    box-shadow: 0 2px 8px rgba(30, 30, 30, 0.3);
+    border-left: 3px solid #e53935;
+  }
+
+  /* ==================== Checkbox personalizado ==================== */
+  ::ng-deep mat-checkbox {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 15px auto;
+    padding: 12px 20px;
+    background: linear-gradient(135deg, rgba(177, 18, 38, 0.1), rgba(177, 18, 38, 0.05));
+    border-radius: 8px;
+    border: 2px solid rgba(177, 18, 38, 0.3);
+    transition: all 0.3s ease;
+    max-width: 350px;
+
+    &:hover {
+      background: linear-gradient(135deg, rgba(177, 18, 38, 0.15), rgba(177, 18, 38, 0.1));
+      border-color: rgba(177, 18, 38, 0.5);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(177, 18, 38, 0.3);
+    }
+
+    .mdc-checkbox {
+      padding: 0;
+      margin-right: 12px;
+    }
+
+    .mdc-checkbox__background {
+      border-color: #b11226 !important;
+      border-width: 2px !important;
+      border-radius: 4px;
+      width: 20px;
+      height: 20px;
+    }
+
+    &.mat-mdc-checkbox-checked .mdc-checkbox__background {
+      background-color: #b11226 !important;
+      border-color: #b11226 !important;
+      box-shadow: 0 0 0 3px rgba(177, 18, 38, 0.2);
+    }
+
+    .mdc-checkbox__checkmark {
+      color: #ffffff !important;
+    }
+
+    .mdc-label,
+    .mat-mdc-checkbox-label {
+      color: #ffffff !important;
+      font-weight: 600;
+      font-size: 0.95rem;
+      letter-spacing: 0.3px;
+      cursor: pointer;
+    }
+  }
+
+  /* ==================== Input file estilizado ==================== */
+  .form-group {
+    position: relative;
+    margin-top: 15px;
+
+    input[type="file"] {
+      display: block;
+      margin: 12px auto 0 auto;
+      padding: 12px 12px 12px 45px;
+      border: 2px dashed #b11226;
+      border-radius: 8px;
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(177, 18, 38, 0.05));
+      color: #ffffff;
+      cursor: pointer;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      font-weight: 600;
+      font-size: 0.85rem;
+      text-align: center;
+      width: 100%;
+      max-width: 300px;
+      position: relative;
+
+      &::before {
+        content: '☁';
+        position: absolute;
+        left: 15px;
+        top: 50%;
+        transform: translateY(-50%);
+        font-size: 1.5rem;
+        color: #1252b1;
+        transition: all 0.3s ease;
+      }
+
+      &:hover {
+        background: linear-gradient(135deg, rgba(177, 18, 38, 0.15), rgba(177, 18, 38, 0.2));
+        border-style: solid;
+        border-color: #e53935;
+        transform: translateY(-1px);
+        box-shadow: 0 4px 12px rgba(177, 18, 38, 0.3);
+
+        &::before {
+          color: #0d3d7a;
+          transform: translateY(-50%) scale(1.1);
+        }
+      }
+
+      &::file-selector-button {
+        display: none;
+      }
+    }
+  }
+
+  /* Separación de la sección de botones */
+  & + .row.m-b-25 {
+    margin-top: 20px;
+  }
+}
+
+/* ==================== Responsive para image-card ==================== */
+@media (max-width: 768px) {
+  .image-card {
+    padding: 15px;
+
+    .current-image-preview,
+    .new-image-preview {
+      max-width: 180px;
+      max-height: 180px;
+    }
+
+    .form-group input[type="file"] {
+      max-width: 100%;
+      font-size: 0.8rem;
+      padding-left: 40px;
+
+      &::before {
+        font-size: 1.3rem;
+        left: 12px;
+      }
+    }
+
+    ::ng-deep mat-checkbox {
+      max-width: 100%;
+      padding: 10px 15px;
+
+      .mdc-label,
+      .mat-mdc-checkbox-label {
+        font-size: 0.85rem;
+      }
+    }
+  }
+}
+
+@media (max-width: 576px) {
+  .image-card {
+    .current-image-preview,
+    .new-image-preview {
+      max-width: 150px;
+      max-height: 150px;
+    }
+
+    .section-title {
+      font-size: 1.1rem;
+    }
+
+    ::ng-deep mat-checkbox {
+      padding: 8px 12px;
+
+      .mdc-label,
+      .mat-mdc-checkbox-label {
+        font-size: 0.8rem;
+      }
+    }
+  }
+}
+
+/* ==================== Select Panel Dropdown ==================== */
+::ng-deep .mat-mdc-select-panel {
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 8px 32px rgba(30, 30, 30, 0.3);
+  border: 2px solid #b11226;
+  margin-top: 8px;
+
+  .mat-mdc-option {
+    transition: all 0.2s ease;
+    color: #1e1e1e;
+    font-weight: 500;
+
+    &:hover {
+      background: rgba(177, 18, 38, 0.1) !important;
+      color: #b11226;
+    }
+
+    &.mat-mdc-option-active,
+    &.mdc-list-item--selected {
+      background: rgba(177, 18, 38, 0.15) !important;
+      color: #b11226;
+      font-weight: 700;
+    }
+  }
+}
+
+/* ==================== Datepicker Calendar ==================== */
+::ng-deep {
+  .mat-datepicker-content {
+    border-radius: 12px;
+    box-shadow: 0 8px 32px rgba(30, 30, 30, 0.3);
+    border: 2px solid #b11226;
+  }
+
+  .mat-calendar-body-selected {
+    background-color: #b11226 !important;
+    color: #ffffff !important;
+    font-weight: 700;
+    box-shadow: 0 4px 12px rgba(177, 18, 38, 0.5);
+  }
+
+  .mat-calendar-body-today:not(.mat-calendar-body-selected) {
+    border: 2px solid #b11226 !important;
+    font-weight: 600;
+  }
+
+  .mat-calendar-body-cell:hover .mat-calendar-body-cell-content {
+    background: rgba(177, 18, 38, 0.2);
+    color: #b11226;
+  }
+}
+
+/* ==================== Espaciado helpers ==================== */
+.m-b-25 {
+  margin-bottom: 25px;
+}
+
+.m-b-15 {
+  margin-bottom: 15px;
+}
+
+.mt-3 {
+  margin-top: 1rem;
+}
+
+.mb-2 {
+  margin-bottom: 0.5rem;
+}
+
+.label-style {
+  color: #ffffff;
+  font-weight: 600;
+  font-size: 0.95rem;
+  margin-bottom: 8px;
+  display: block;
+}
+
+.form-control {
+  background-color: #ffffff;
+  color: #1e1e1e;
+  border: 2px solid transparent;
+  border-radius: 8px;
+  padding: 10px;
+  transition: all 0.3s ease;
+
+  &:focus {
+    border-color: #b11226;
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(177, 18, 38, 0.2);
+  }
+}
