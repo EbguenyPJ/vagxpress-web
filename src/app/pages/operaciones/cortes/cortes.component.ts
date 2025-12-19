@@ -30,6 +30,7 @@ import { EmpleadosService } from 'app/services/empleados/empleados.service';
 import { empleadosModel } from 'app/models/empleadosModel';
 import { DialogCrearEmpleadoComponent } from 'app/pages/administracion/empleados/dialogs/dialog-crear-empleado/dialog-crear-empleado.component';
 import { conexion } from 'app/conexion';
+import { DialogNuevoCorteComponent } from './dialogs/dialog-nuevo-corte/dialog-nuevo-corte.component';
 
 @Component({
   selector: 'app-cortes',
@@ -144,7 +145,7 @@ export class CortesComponent implements OnInit, OnDestroy {
     } else {
       varDirection = 'ltr';
     }
-    const dialogRef = this.dialog.open(DialogCrearEmpleadoComponent, {
+    const dialogRef = this.dialog.open(DialogNuevoCorteComponent, {
       width: '60vw',
       maxWidth: '100vw',
       data: { empleadosModel: data, action },

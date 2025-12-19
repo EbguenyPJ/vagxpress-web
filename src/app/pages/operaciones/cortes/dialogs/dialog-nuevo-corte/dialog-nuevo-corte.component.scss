@@ -1,0 +1,198 @@
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.modal-container {
+  background: #fff;
+  width: 90%;
+  max-width: 1200px;
+  height: 90vh;               /* 🔥 CLAVE */
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+}
+
+.modal-header,
+.modal-footer {
+  padding: 16px 20px;
+  background: #fafafa;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.modal-footer {
+  border-top: 1px solid #e0e0e0;
+  border-bottom: none;
+}
+
+.modal-content {
+  flex: 1;                    /* 🔥 CLAVE */
+  overflow-y: auto;           /* 🔥 CLAVE */
+  padding: 20px;
+}
+
+
+
+.corte-form-container {
+  padding: 24px;
+  font-family: Roboto, sans-serif;
+  max-width: 1100px;
+  margin: auto;
+}
+
+.form-header {
+  margin-bottom: 24px;
+
+  h2 {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .subtitle {
+    color: #757575;
+    margin-top: 4px;
+  }
+}
+
+/* CARDS */
+.card {
+  background: #ffffff;
+  border-radius: 10px;
+  padding: 20px;
+  margin-bottom: 24px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+/* FORM */
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+
+  &.full {
+    grid-column: span 2;
+  }
+
+  label {
+    font-size: 13px;
+    margin-bottom: 4px;
+  }
+
+  input,
+  select,
+  textarea {
+    padding: 8px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+  }
+}
+
+/* MÉTODOS */
+.metodos-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 16px;
+}
+
+.metodo-card {
+  border: 1px solid #e0e0e0;
+  border-radius: 10px;
+  padding: 16px;
+}
+
+.metodo-card.requerido {
+  border-left: 5px solid #ff9800;
+}
+
+.metodo-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.hint {
+  font-size: 13px;
+  color: #757575;
+  margin: 6px 0;
+}
+
+.requerido-text {
+  color: #e65100;
+  font-weight: 500;
+}
+
+.btn-evidencia {
+  background: #f5f5f5;
+  border: 1px dashed #ccc;
+  padding: 8px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.evidencia-preview {
+  background: #eeeeee;
+  padding: 8px;
+  border-radius: 6px;
+  font-size: 13px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 8px;
+}
+
+/* RESUMEN */
+.resumen-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 16px;
+
+  div {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .total {
+    font-size: 18px;
+    color: #2e7d32;
+  }
+}
+
+/* ACCIONES */
+.acciones {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+
+  button {
+    padding: 10px 16px;
+    border-radius: 6px;
+    cursor: pointer;
+    border: none;
+  }
+
+  .btn-cancelar {
+    background: #eeeeee;
+  }
+
+  .btn-guardar {
+    background: #1976d2;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+}
