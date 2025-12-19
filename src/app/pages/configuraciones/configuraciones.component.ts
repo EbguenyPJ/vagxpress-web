@@ -6,6 +6,7 @@ import { Router, RouterModule } from '@angular/router';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatIconModule, MatIcon } from '@angular/material/icon';
 import { MatCardModule, MatCard, MatCardTitle, MatCardContent, MatCardHeader } from '@angular/material/card';
+import { PermisosComponent } from './permisos/permisos.component';
 
 @Component({
   selector: 'app-configuraciones',
@@ -52,6 +53,14 @@ export class ConfiguracionesComponent implements OnInit {
         iconColorClass: 'icon-blue',
         description: 'Gestionar usuarios del sistema',
         route: 'usuarios',
+        available: false
+      },
+        {
+        title: 'Administrar Permisos',
+        icon: 'admin_panel_settings',
+        iconColorClass: 'icon-red',
+        description: 'Administrar permisos de usuarios y roles',
+        route: 'permisos',
         available: false
       },
 
