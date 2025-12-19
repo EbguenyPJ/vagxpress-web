@@ -1,209 +1,273 @@
 <div class="modal-overlay">
-
   <div class="modal-container">
 
-    <!-- HEADER FIJO -->
+    <!-- ================= HEADER ================= -->
     <div class="modal-header">
       <h2>Crear nuevo corte</h2>
-      <button class="btn-close">✕</button>
+
+      <button mat-icon-button mat-dialog-close class="modal-close-button" aria-label="Cerrar diálogo" type="button">
+        <mat-icon>close</mat-icon>
+      </button>
     </div>
 
-    <!-- CONTENIDO SCROLL -->
+    <!-- ================= CONTENT ================= -->
     <div class="modal-content">
 
+      <form class="corte-form-container">
+
+        <!-- ================= DATOS GENERALES ================= -->
+        <div class="card">
+          <h3 class="card-title">Datos generales</h3>
+
+          <div class="form-grid">
+            <div class="form-group">
+              <label class="form-label">Fecha del corte</label>
+              <input type="date" class="form-input">
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Tipo de corte</label>
+              <select class="form-input">
+                <option value="">Seleccione una opción</option>
+                <option>Diario</option>
+                <option>Parcial</option>
+                <option>Especial</option>
+              </select>
+            </div>
+
+            <div class="form-group full">
+              <label class="form-label">Descripción</label>
+              <input type="text" class="form-input" placeholder="Ej. Corte turno matutino">
+            </div>
+
+            <div class="form-group full">
+              <label class="form-label">Comentarios</label>
+              <textarea rows="4" class="form-input" placeholder="Observaciones generales del corte"></textarea>
+            </div>
+          </div>
+        </div>
+
+        <!-- ================= MÉTODOS DE PAGO ================= -->
+        <div class="card">
+          <h3 class="card-title">Montos por método de pago</h3>
+
+          <div class="metodos-grid">
+
+            <!-- EFECTIVO -->
+            <div class="metodo-card">
+              <div class="metodo-header">
+                <span class="material-icons">payments</span>
+                <h4>Efectivo</h4>
+              </div>
+
+              <div class="metodo-body">
+                <label class="form-label">Monto</label>
+                <div class="input-with-prefix">
+                  <span class="prefix">$</span>
+                  <input type="number" class="form-input" placeholder="0.00" step="0.01">
+                </div>
+
+                <p class="hint">Evidencia opcional</p>
+
+                <button type="button" class="btn-evidencia">
+                  <span class="material-icons">attach_file</span>
+                  Subir evidencia
+                </button>
+              </div>
+            </div>
+
+            <!-- TRANSFERENCIA -->
+            <div class="metodo-card requerido">
+              <div class="metodo-header">
+                <span class="material-icons">account_balance</span>
+                <h4>Transferencia</h4>
+              </div>
+
+              <div class="metodo-body">
+                <label class="form-label">Monto</label>
+                <div class="input-with-prefix">
+                  <span class="prefix">$</span>
+                  <input type="number" class="form-input" placeholder="0.00" step="0.01">
+                </div>
+
+                <p class="hint requerido-text">
+                  <span class="material-icons icon-small">info</span>
+                  Evidencia requerida
+                </p>
+
+                <div class="evidencia-list">
+                  <div class="evidencia-preview">
+                    <span class="material-icons">description</span>
+                    <span>Santander</span>
+                  </div>
+                  <div class="evidencia-preview">
+                    <span class="material-icons">description</span>
+                    <span>BBVA</span>
+                  </div>
+                </div>
+
+                <button type="button" class="btn-evidencia">
+                  <span class="material-icons">attach_file</span>
+                  Subir evidencia
+                </button>
+              </div>
+            </div>
+
+            <!-- TARJETA CRÉDITO -->
+            <div class="metodo-card requerido">
+              <div class="metodo-header">
+                <span class="material-icons">credit_card</span>
+                <h4>Tarjeta crédito</h4>
+              </div>
+
+              <div class="metodo-body">
+                <label class="form-label">Monto</label>
+                <div class="input-with-prefix">
+                  <span class="prefix">$</span>
+                  <input type="number" class="form-input" placeholder="0.00" step="0.01">
+                </div>
+
+                <p class="hint requerido-text">
+                  <span class="material-icons icon-small">info</span>
+                  Evidencia requerida
+                </p>
+
+                <div class="evidencia-list">
+                  <div class="evidencia-preview">
+                    <span class="material-icons">description</span>
+                    <span>Santander</span>
+                  </div>
+                  <div class="evidencia-preview">
+                    <span class="material-icons">description</span>
+                    <span>BBVA</span>
+                  </div>
+                </div>
+
+                <button type="button" class="btn-evidencia">
+                  <span class="material-icons">attach_file</span>
+                  Subir evidencia
+                </button>
+              </div>
+            </div>
+
+            <!-- TARJETA DÉBITO -->
+            <div class="metodo-card requerido">
+              <div class="metodo-header">
+                <span class="material-icons">credit_card</span>
+                <h4>Tarjeta débito</h4>
+              </div>
+
+              <div class="metodo-body">
+                <label class="form-label">Monto</label>
+                <div class="input-with-prefix">
+                  <span class="prefix">$</span>
+                  <input type="number" class="form-input" placeholder="0.00" step="0.01">
+                </div>
+
+                <p class="hint requerido-text">
+                  <span class="material-icons icon-small">info</span>
+                  Evidencia requerida
+                </p>
+
+                <div class="evidencia-list">
+                  <div class="evidencia-preview">
+                    <span class="material-icons">description</span>
+                    <span>Santander</span>
+                  </div>
+                  <div class="evidencia-preview">
+                    <span class="material-icons">description</span>
+                    <span>BBVA</span>
+                  </div>
+                </div>
+
+                <button type="button" class="btn-evidencia">
+                  <span class="material-icons">attach_file</span>
+                  Subir evidencia
+                </button>
+              </div>
+            </div>
+
+            <!-- Credito -->
+            <div class="metodo-card requerido">
+              <div class="metodo-header">
+                <span class="material-icons">credit_card</span>
+                <h4>Credito</h4>
+              </div>
+
+              <div class="metodo-body">
+                <label class="form-label">Monto</label>
+                <div class="input-with-prefix">
+                  <span class="prefix">$</span>
+                  <input type="number" class="form-input" placeholder="0.00" step="0.01">
+                </div>
+
+                <p class="hint requerido-text">
+                  <span class="material-icons icon-small">info</span>
+                  Evidencia requerida
+                </p>
 
 
 
+                <button type="button" class="btn-evidencia">
+                  <span class="material-icons">attach_file</span>
+                  Subir evidencia
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
 
+        <!-- ================= RESUMEN ================= -->
+        <div class="card resumen">
+          <h3 class="card-title">Resumen del corte</h3>
 
+          <div class="resumen-grid">
+            <div class="resumen-item">
+              <span class="resumen-label">Efectivo</span>
+              <strong class="resumen-value">$12,450.00</strong>
+            </div>
+            <div class="resumen-item">
+              <span class="resumen-label">Transferencias</span>
+              <strong class="resumen-value">$8,200.00</strong>
+            </div>
+            <div class="resumen-item">
+              <span class="resumen-label">Crédito Santander</span>
+              <strong class="resumen-value">$9,500.00</strong>
+            </div>
+            <div class="resumen-item">
+              <span class="resumen-label">Crédito BBVA</span>
+              <strong class="resumen-value">$5,800.00</strong>
+            </div>
+            <div class="resumen-item">
+              <span class="resumen-label">Débito Santander</span>
+              <strong class="resumen-value">$7,200.00</strong>
+            </div>
+            <div class="resumen-item">
+              <span class="resumen-label">Débito BBVA</span>
+              <strong class="resumen-value">$3,400.00</strong>
+            </div>
 
-<div class="corte-form-container">
+            <div class="resumen-item total">
+              <span class="resumen-label">Total general</span>
+              <strong class="resumen-value">$35,900.00</strong>
+            </div>
+          </div>
+        </div>
 
-  <!-- ENCABEZADO -->
-  <div class="form-header">
-    <h2>
-      <span class="material-icons">post_add</span>
-      Crear nuevo corte
-    </h2>
-    <p class="subtitle">
-      Registra los montos del corte y adjunta evidencias según el método de pago.
-    </p>
-  </div>
+        <!-- ================= ACCIONES ================= -->
+        <div class="acciones">
+          <button type="button" class="btn-cancelar" mat-dialog-close>
+            <span class="material-icons">close</span>
+            Cancelar
+          </button>
 
-  <!-- FORMULARIO -->
-  <div class="card">
+          <button type="submit" class="btn-guardar">
+            <span class="material-icons">save</span>
+            Guardar corte
+          </button>
+        </div>
 
-    <!-- DATOS GENERALES -->
-    <h3>Datos generales</h3>
-
-    <div class="form-grid">
-      <div class="form-group">
-        <label>Fecha del corte</label>
-        <input type="date" />
-      </div>
-
-      <div class="form-group">
-        <label>Tipo de corte</label>
-        <select>
-          <option>Diario</option>
-          <option>Parcial</option>
-          <option>Especial</option>
-        </select>
-      </div>
-
-      <div class="form-group full">
-        <label>Descripción</label>
-        <input type="text" placeholder="Ej. Corte turno matutino" />
-      </div>
-
-      <div class="form-group full">
-        <label>Comentarios</label>
-        <textarea rows="3" placeholder="Observaciones generales del corte"></textarea>
-      </div>
+      </form>
     </div>
   </div>
-
-  <!-- MÉTODOS DE PAGO -->
-  <div class="card">
-    <h3>Montos por método de pago</h3>
-
-    <div class="metodos-grid">
-
-      <!-- EFECTIVO -->
-      <div class="metodo-card">
-        <div class="metodo-header">
-          <span class="material-icons">payments</span>
-          <h4>Efectivo</h4>
-        </div>
-
-        <label>Monto</label>
-        <input type="number" placeholder="0.00" />
-
-        <p class="hint">Evidencia opcional</p>
-
-        <button class="btn-evidencia">
-          <span class="material-icons">attach_file</span>
-          Subir evidencia
-        </button>
-      </div>
-
-      <!-- TRANSFERENCIA -->
-      <div class="metodo-card requerido">
-        <div class="metodo-header">
-          <span class="material-icons">account_balance</span>
-          <h4>Transferencia</h4>
-        </div>
-
-        <label>Monto</label>
-        <input type="number" placeholder="0.00" />
-
-        <p class="hint requerido-text">Evidencia requerida</p>
-
-        <div class="evidencia-preview">
-          <span class="material-icons">description</span>
-          spei_transferencia.png
-        </div>
-
-        <button class="btn-evidencia">
-          <span class="material-icons">attach_file</span>
-          Subir evidencia
-        </button>
-      </div>
-
-      <!-- TARJETA CRÉDITO -->
-      <div class="metodo-card requerido">
-        <div class="metodo-header">
-          <span class="material-icons">credit_card</span>
-          <h4>Tarjeta crédito</h4>
-        </div>
-
-        <label>Monto</label>
-        <input type="number" placeholder="0.00" />
-
-        <p class="hint requerido-text">Evidencia requerida</p>
-
-        <div class="evidencia-preview">
-          <span class="material-icons">description</span>
-          voucher_banco.pdf
-        </div>
-
-        <button class="btn-evidencia">
-          <span class="material-icons">attach_file</span>
-          Subir evidencia
-        </button>
-      </div>
-
-    </div>
-  </div>
-
-  <!-- RESUMEN -->
-  <div class="card resumen">
-    <h3>Resumen del corte</h3>
-
-    <div class="resumen-grid">
-      <div>
-        <span>Efectivo</span>
-        <strong>$12,450.00</strong>
-      </div>
-      <div>
-        <span>Transferencias</span>
-        <strong>$8,200.00</strong>
-      </div>
-      <div>
-        <span>Tarjetas</span>
-        <strong>$15,300.00</strong>
-      </div>
-      <div class="total">
-        <span>Total</span>
-        <strong>$35,900.00</strong>
-      </div>
-    </div>
-  </div>
-
-  <!-- ACCIONES -->
-  <div class="acciones">
-    <button class="btn-cancelar">Cancelar</button>
-    <button class="btn-guardar">
-      <span class="material-icons">save</span>
-      Guardar corte
-    </button>
-  </div>
-
 </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-    </div>
-
-    <!-- FOOTER FIJO -->
-    <div class="modal-footer">
-      <button class="btn-cancelar">Cancelar</button>
-      <button class="btn-guardar">Guardar corte</button>
-    </div>
-
-  </div>
-
-</div>
-
-
-
-
-
-
-
-
-
-
-
-
-

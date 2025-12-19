@@ -1,103 +1,200 @@
 <div class="dialogContainerOuter">
   <div class="dialogContainer">
-    <!-- Header -->
+    
+    <!-- ========== HEADER MEJORADO ========== -->
     <div class="modalHeader">
-      <div class="avatarDetails">
-        <div class="modalTitle">
-          Asignar permisos a {{ usuario?.s_nombre_completo || usuario?.name || 'Usuario' }}
+      <div class="header-content">
+        <div class="user-avatar-section">
+          <div class="avatar-circle">
+            <mat-icon>person</mat-icon>
+          </div>
+          <div class="user-info">
+            <span class="user-label">Gestión de Permisos</span>
+            <h2 class="modalTitle">
+              {{ usuario?.s_nombre_completo || usuario?.name || 'Usuario' }}
+            </h2>
+          </div>
         </div>
       </div>
-      <button mat-icon-button mat-dialog-close class="modal-close-button" aria-label="Close dialog" type="button">
+      
+      <button mat-icon-button 
+              mat-dialog-close 
+              class="modal-close-button" 
+              aria-label="Cerrar diálogo" 
+              type="button">
         <mat-icon>close</mat-icon>
       </button>
     </div>
 
-    <!-- Contenedor con scroll externo -->
+    <!-- ========== CONTENEDOR DE SCROLL ========== -->
     <div class="scrollOuter">
-      <!-- Contenido con scroll interno -->
       <div class="scrollableContent">
-        <!-- Loader -->
-        <div *ngIf="isLoading; else contenido">
-          <div class="loading-container text-center p-4">
-            <mat-progress-spinner diameter="50" mode="indeterminate" class="m-auto"></mat-progress-spinner>
-            <p class="mt-3 text-black">{{ mensaje }}</p>
+        
+        <!-- ========== LOADER ========== -->
+        <div *ngIf="isLoading; else contenido" class="loading-wrapper">
+          <div class="loading-card">
+            <mat-progress-spinner 
+              diameter="60" 
+              mode="indeterminate" 
+              class="spinner-custom">
+            </mat-progress-spinner>
+            <p class="loading-text">{{ mensaje }}</p>
           </div>
         </div>
 
-        <!-- Contenido -->
+        <!-- ========== CONTENIDO PRINCIPAL ========== -->
         <ng-template #contenido>
-          <div class="user-permisos-wrapper">
-            <!-- Configuración del usuario -->
-            <div class="card mb-3 border-apply">
-              <div class="card-header bg-black text-white">
-                <h3 class="m-0">Configuración del usuario</h3>
-              </div>
-              <div class="card-body d-flex align-items-center">
-                <mat-icon class="me-3 text-muted">person</mat-icon>
-                <span class="flex-grow-1 text-black">{{ usuario?.s_nombre_completo || usuario?.name || 'Usuario' }}</span>
-
-                <mat-slide-toggle [checked]="usuario?.b_activo === 1" [disabled]="usuario.loading"
-                    (change)="actualizarEstatus(usuario, $event)" class="ms-2 toggle-verde">
-                </mat-slide-toggle>
-
-                <mat-spinner *ngIf="usuario.loading" diameter="20" class="ms-2"></mat-spinner>
+          <div class="permisos-content">
+            
+            <!-- ========== SECCIÓN: CONFIGURACIÓN DE USUARIO ========== -->
+            <div class="config-section">
+              <div class="section-header">
+                <div class="header-icon">
+                  <mat-icon>settings</mat-icon>
+                </div>
+                <h3>Configuración del Usuario</h3>
               </div>
 
-      <mat-form-field appearance="outline" class="custom-select w-100 mt-3">
-  <mat-label>Tipo de usuario</mat-label>
-  <mat-select 
-    [value]="usuario?.id_tipo_usuario"
-    (selectionChange)="actualizarTipoUsuario(usuario, $event)">
-    
-    <mat-option *ngFor="let tipo of tiposUsuarios" [value]="tipo.id_tipo_usuario">
-      {{ tipo.s_tipo_usuario }}
-    </mat-option>
-  </mat-select>
-</mat-form-field>
+              <div class="config-body">
+                <!-- Usuario info row -->
+                <div class="info-row">
+                  <div class="info-label">
+                    <mat-icon class="icon-small">account_circle</mat-icon>
+                    <span>Usuario activo</span>
+                  </div>
+                  <div class="info-value">
+                    <span class="user-name">
+                      {{ usuario?.s_nombre_completo || usuario?.name || 'Usuario' }}
+                    </span>
+                    <mat-slide-toggle 
+                      [checked]="usuario?.b_activo === 1" 
+                      [disabled]="usuario.loading"
+                      (change)="actualizarEstatus(usuario, $event)" 
+                      class="toggle-rojo">
+                    </mat-slide-toggle>
+                    <mat-spinner 
+                      *ngIf="usuario.loading" 
+                      diameter="20" 
+                      class="inline-spinner">
+                    </mat-spinner>
+                  </div>
+                </div>
 
+                <!-- Select tipo usuario -->
+                <div class="select-wrapper">
+                  <label class="select-label">
+                    <mat-icon class="icon-small">badge</mat-icon>
+                    Tipo de Usuario
+                  </label>
+                  <mat-form-field appearance="outline" class="select-field">
+                    <mat-select 
+                      [value]="usuario?.id_tipo_usuario"
+                      (selectionChange)="actualizarTipoUsuario(usuario, $event)"
+                      placeholder="Seleccione un tipo">
+                      <mat-option 
+                        *ngFor="let tipo of tiposUsuarios" 
+                        [value]="tipo.id_tipo_usuario">
+                        {{ tipo.s_tipo_usuario }}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+              </div>
             </div>
 
-            <!-- PERMISOS POR CATEGORÍA -->
-            <div *ngFor="let categoria of categorias" class="card mb-3 border-apply">
-              <div class="card-header bg-dark text-white">
-                <h3 class="m-0">{{ categoria.nombre }}</h3>
-              </div>
+            <!-- ========== SECCIÓN: PERMISOS POR CATEGORÍA ========== -->
+            <div class="permisos-grid">
+              <div *ngFor="let categoria of categorias" class="categoria-card">
+                
+                <!-- Header de categoría -->
+                <div class="categoria-header">
+                  <div class="categoria-title-wrapper">
+                    <div class="categoria-icon-bg">
+                      <mat-icon>folder_open</mat-icon>
+                    </div>
+                    <h4 class="categoria-title">{{ categoria.nombre }}</h4>
+                  </div>
+                  <div class="categoria-badge">
+                    {{ getModulosPorCategoria(categoria.id).length }} módulos
+                  </div>
+                </div>
 
-              <div class="card-body p-0">
-                <div class="list-group list-group-flush">
-                  <div *ngFor="let modulo of getModulosPorCategoria(categoria.id)"
-                      class="list-group-item d-flex align-items-center py-3 px-4">
-                    <mat-icon class="me-3 text-muted">{{ modulo.s_icono || 'settings' }}</mat-icon>
-                    <span class="flex-grow-1 text-black">{{ modulo.s_modulo }}</span>
-                    <mat-slide-toggle [checked]="moduloEstaActivo(modulo.id_modulo)"
-                        (change)="toggleModulo(modulo.id_modulo, $event)" class="ms-2 toggle-verde">
+                <!-- Lista de módulos -->
+                <div class="modulos-list">
+                  <div 
+                    *ngFor="let modulo of getModulosPorCategoria(categoria.id); let i = index"
+                    class="modulo-item"
+                    [class.modulo-item-alternate]="i % 2 === 1">
+                    
+                    <div class="modulo-info">
+                      <div class="modulo-icon-wrapper">
+                        <mat-icon class="modulo-icon">
+                          {{ modulo.s_icono || 'extension' }}
+                        </mat-icon>
+                      </div>
+                      <div class="modulo-details">
+                        <span class="modulo-name">{{ modulo.s_modulo }}</span>
+                        <span class="modulo-status" [class.status-active]="moduloEstaActivo(modulo.id_modulo)">
+                          {{ moduloEstaActivo(modulo.id_modulo) ? 'Activo' : 'Inactivo' }}
+                        </span>
+                      </div>
+                    </div>
+
+                    <mat-slide-toggle 
+                      [checked]="moduloEstaActivo(modulo.id_modulo)"
+                      (change)="toggleModulo(modulo.id_modulo, $event)" 
+                      class="toggle-rojo">
                     </mat-slide-toggle>
                   </div>
                 </div>
+
               </div>
             </div>
 
           </div>
         </ng-template>
 
-        <!-- Mensaje -->
-        <div *ngIf="mensaje && !isLoading" class="alert mt-3 mb-0 text-center"
-            [class.alert-danger]="mensajeColor === 'warn'" [class.alert-success]="mensajeColor === 'primary'">
-          {{ mensaje }}
+        <!-- ========== MENSAJES ========== -->
+        <div 
+          *ngIf="mensaje && !isLoading" 
+          class="message-alert"
+          [class.alert-error]="mensajeColor === 'warn'" 
+          [class.alert-success]="mensajeColor === 'primary'">
+          <mat-icon class="alert-icon">
+            {{ mensajeColor === 'warn' ? 'error_outline' : 'check_circle_outline' }}
+          </mat-icon>
+          <span>{{ mensaje }}</span>
         </div>
 
       </div>
     </div>
 
-    <!-- Acciones -->
-    <div class="d-flex flex-column flex-sm-row gap-2 justify-content-end mt-3">
-      <button mat-flat-button mat-dialog-close class="formSubmitBtnCancelar">Cancelar</button>
-      <button mat-flat-button color="primary" class="formSubmitBtn" (click)="guardarPermisos()"
+    <!-- ========== FOOTER CON BOTONES ========== -->
+    <div class="modal-footer">
+      <div class="footer-actions">
+        <button 
+          mat-stroked-button 
+          mat-dialog-close 
+          class="btn-cancel">
+          <mat-icon>close</mat-icon>
+          Cancelar
+        </button>
+        
+        <button 
+          mat-flat-button 
+          class="btn-save" 
+          (click)="guardarPermisos()"
           [disabled]="isLoading || isSaving">
-        <mat-spinner *ngIf="isSaving" diameter="20" class="me-2"></mat-spinner>
-        Guardar cambios
-      </button>
+          <mat-spinner 
+            *ngIf="isSaving" 
+            diameter="18" 
+            class="btn-spinner">
+          </mat-spinner>
+          <mat-icon *ngIf="!isSaving">save</mat-icon>
+          <span>{{ isSaving ? 'Guardando...' : 'Guardar Cambios' }}</span>
+        </button>
+      </div>
     </div>
+
   </div>
 </div>
-
