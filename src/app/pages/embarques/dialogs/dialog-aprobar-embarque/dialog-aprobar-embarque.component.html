@@ -1,0 +1,209 @@
+<div class="dialogContainer">
+  <div class="modalHeader">
+    <div class="avatarDetails">
+      <div class="modalTitle">
+        {{dialogTitle}}
+      </div>
+    </div>
+    <button mat-icon-button mat-dialog-close class="modal-close-button" aria-label="Close dialog" type="button">
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+
+  <div mat-dialog-content>
+    <div class="form-card">
+        <mat-card class="p-0 shadow-sm">
+          <div class="card border-0">
+            
+            <!-- Header -->
+            <div class="card-header bg-danger text-white d-flex align-items-center">
+              <i class="bi bi-truck me-2 fs-5"></i>
+              <span class="fw-semibold">Información del Embarque</span>
+            </div>
+
+            <!-- Body -->
+            <div class="card-body">
+              <div class="row mb-2">
+                <div class="col-5 text-muted">Proveedor:</div>
+                <div class="col-7 fw-semibold">
+                  {{ embarque?.embarque?.s_proveedor }}
+                </div>
+              </div>
+
+              <div class="row mb-2">
+                <div class="col-5 text-muted">Fecha:</div>
+                <div class="col-7">
+                  {{ embarque?.embarque?.d_fecha_creacion }}
+                </div>
+              </div>
+
+              <div class="row mb-2">
+                <div class="col-5 text-muted">Responsable:</div>
+                <div class="col-7">
+                  {{ embarque?.embarque?.s_nombre_completo }}
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-5 text-muted">Estatus:</div>
+                <div class="col-7">
+                  <span class="badge bg-success">
+                    {{ embarque?.embarque?.s_estatus_embarque }}
+                  </span>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </mat-card>
+
+        <br>
+
+        <div class="row">
+          <div class="col-6">
+         
+            <mat-card class="entrada-card" *ngFor="let entrada of embarque?.entradas">
+
+              <!-- Título -->
+              <mat-card-header>
+                <mat-card-title>
+                  {{ entrada.s_nombre_refaccion }}
+                </mat-card-title>
+                <mat-card-subtitle>
+                  {{ entrada.s_marca_refaccion }}
+                </mat-card-subtitle>
+              </mat-card-header>
+
+              <mat-divider></mat-divider>
+
+              <!-- Contenido -->
+              <mat-card-content>
+                <div class="info-grid">
+                  <div>
+                    <strong>Categoría:</strong>
+                    <span> {{ entrada.s_categoria_refaccion }}</span>
+                  </div>
+
+                  <div>
+                    <strong>Subcategoría:</strong>
+                    <span> {{ entrada.s_subcategoria_refaccion }}</span>
+                  </div>
+
+                  <div>
+                    <strong>Clase:</strong>
+                    <span> {{ entrada.s_clase_refaccion }}</span>
+                  </div>
+
+                  <div>
+                    <strong>No. Parte:</strong>
+                    <span> {{ entrada.s_numero_parte }}</span>
+                  </div>
+
+                  <div>
+                    <strong>Cantidad:</strong>
+                    <span> {{ entrada.n_cantidad }}</span>
+                  </div>
+
+                  <div>
+                    <strong>Precio compra:</strong>
+                    <span> ${{ entrada.n_precio_compra | number:'1.2-2' }}</span>
+                  </div>
+
+                  <div class="full-width">
+                    <strong>Código de barras:</strong>
+                    <span> {{ entrada.s_codigo_barras }}</span>
+                  </div>
+                </div>
+              </mat-card-content>
+
+            </mat-card>
+
+            <mat-card
+              class="pendiente-card"
+              *ngFor="let pendiente of embarque?.pendientes"
+            >
+
+              <!-- Header -->
+              <mat-card-header>
+                <mat-card-title>
+                  {{ pendiente.s_nombre_refaccion }}
+                </mat-card-title>
+
+                <mat-card-subtitle>
+                  {{ pendiente.s_marca_refaccion }}
+                </mat-card-subtitle>
+                <div>
+                  <span class="badge badge-solid-green">Nueva</span>
+                </div>
+              </mat-card-header>
+
+              <mat-divider></mat-divider>
+
+              <!-- Contenido -->
+              <mat-card-content>
+                <div class="info-grid">
+                  <div>
+                    <strong>Categoría:</strong>
+                    <span> {{ pendiente.s_categoria_refaccion }}</span>
+                  </div>
+
+                  <div>
+                    <strong>Subcategoría:</strong>
+                    <span> {{ pendiente.s_subcategoria_refaccion }}</span>
+                  </div>
+
+                  <div>
+                    <strong>Clase:</strong>
+                    <span> {{ pendiente.s_clase_refaccion }}</span>
+                  </div>
+
+                  <div>
+                    <strong>No. Parte:</strong>
+                    <span> {{ pendiente.s_numero_parte }}</span>
+                  </div>
+
+                  <div>
+                    <strong>Cantidad pendiente:</strong>
+                    <span> {{ pendiente.n_cantidad }}</span>
+                  </div>
+
+                  <div>
+                    <strong>Precio compra:</strong>
+                    <span> ${{ pendiente.n_precio_compra | number:'1.2-2' }}</span>
+                  </div>
+
+                  <div class="full-width">
+                    <strong>Código de barras:</strong>
+                    <span> {{ pendiente.s_codigo_barras }}</span>
+                  </div>
+                </div>
+              </mat-card-content>
+
+            </mat-card>
+          </div>
+
+          <div class="col-6">
+          
+            <img *ngIf="embarque?.factura?.id_tipo_evidencia === 2"
+              [src]="url_img + embarque?.factura?.s_evidencia_embarque"
+              alt="Evidencia de embarque"
+              class="img-fluid rounded shadow-sm mt-2"
+            >
+
+            <iframe *ngIf="embarque?.factura?.id_tipo_evidencia === 3"
+              [src]="pdfSeguro"
+            
+              style="border: none; width: 100%; height: 95%;"
+            ></iframe>
+
+          </div>
+        </div>
+    <mat-divider></mat-divider>
+    <div class="row mt-4">
+      <div class="col-12">
+        <button type="button" class="btn btn-primary"(click)="aprobarEmbarque()" [disabled]="embarque?.embarque?.id_estatus_embarque === 2 || embarque?.embarque?.id_estatus_embarque === 3">Aprobar</button>
+        <button type="button" class="btn btn-danger ms-2"(click)="rechazarEmbarque()" [disabled]="embarque?.embarque?.id_estatus_embarque === 2 || embarque?.embarque?.id_estatus_embarque === 3">Rechazar</button>
+      </div>
+    </div>
+  </div>
+</div>
