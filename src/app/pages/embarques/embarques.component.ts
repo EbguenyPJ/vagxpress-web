@@ -36,7 +36,6 @@ import { EmbarqueService } from 'app/services/embarque/embarque.service';
   selector: 'app-embarques',
   imports: [
     CommonModule,
-    BreadcrumbComponent,
     MatIconModule,
     MatSelectModule,
     MatCheckboxModule,
@@ -57,7 +56,7 @@ export class EmbarquesComponent {
     { def: 's_proveedor', label: 'Proveedor', type: 'text', visible: true },
     { def: 'd_fecha_creacion', label: 'Registro', type: 'text', visible: true },
     //{ def: 'id_usuario_crea', label: 'Teléfono', type: 'phone', visible: true },
-    { def: 's_nombre_completo', label: 'Usuario', type: 'text', visible: true },
+    { def: 's_nombre_completo', label: 'Responsable', type: 'text', visible: true },
     { def: 'id_estatus_embarque', label: 'Estatus', type: 'text', visible: true },
     //{ def: 's_estatus_embarque', label: 'Estatus', type: 'text', visible: true },
     { def: 'actions', label: 'Acciones', type: 'actionBtn', visible: true },
@@ -259,7 +258,7 @@ export class EmbarquesComponent {
       'ID': x.id_embarque,
       'Proveedor': x.s_proveedor,
       'Registro': x.d_fecha_creacion,
-      'Usuario': x.s_nombre_completo
+      'Responsable': x.s_nombre_completo
     }));
 
     TableExportUtil.exportToExcel(exportData, 'embarques');
