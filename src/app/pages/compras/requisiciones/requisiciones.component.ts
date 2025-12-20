@@ -30,14 +30,16 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { HttpClient } from '@angular/common/http';
 import { BreadcrumbComponent } from '@shared/components/breadcrumb/breadcrumb.component';
-import { Venta } from 'app/models/ventaModel';
-import { BitacoraVentasService } from 'app/services/bitacora-ventas/bitacora-ventas.service';
+import { Requisicion } from 'app/models/requisicionModel';
+import { RequisicionesService } from 'app/services/compras/requisiciones.service';
+import { MatDialog } from '@angular/material/dialog';
+import { DialogDetalleRequisicionComponent } from './dialogs/dialog-detalle-requisicion/dialog-detalle-requisicion.component';
 import Swal from 'sweetalert2';
 
 @Component({
-  selector: 'app-bitacora-ventas',
-  templateUrl: './bitacora-ventas.component.html',
-  styleUrls: ['./bitacora-ventas.component.scss'],
+  selector: 'app-requisiciones',
+  templateUrl: './requisiciones.component.html',
+  styleUrls: ['./requisiciones.component.scss'],
   providers: [{ provide: MAT_DATE_LOCALE, useValue: 'en-GB' }],
   standalone: true,
   imports: [
@@ -63,22 +65,19 @@ import Swal from 'sweetalert2';
     MatPaginatorModule,
   ]
 })
-export class BitacoraVentasComponent implements OnInit, OnDestroy {
+export class RequisicionesComponent implements OnInit, OnDestroy {
   columnDefinitions = [
     { def: 'select', label: 'Checkbox', type: 'check', visible: true },
-    { def: 'id_venta', label: 'ID Venta', type: 'text', visible: true },
-    { def: 'fecha_venta', label: 'Fecha', type: 'date', visible: true },
+    { def: 'id_requisicion', label: 'ID Requisición', type: 'text', visible: true },
     { def: 'n_cantidad_refacciones', label: 'Cant. Refacciones', type: 'number', visible: true },
-    { def: 'n_subtotal', label: 'Subtotal', type: 'currency', visible: true },
-    { def: 'n_total', label: 'Total', type: 'currency', visible: true },
-    { def: 's_estatus_venta', label: 'Estatus', type: 'badge', visible: true },
-    { def: 's_metodo_pago', label: 'Método de Pago', type: 'text', visible: true },
-    { def: 's_nombre_cliente', label: 'Cliente', type: 'text', visible: true },
+    { def: 'n_total_estimado', label: 'Total Estimado', type: 'currency', visible: true },
+    { def: 's_estatus_requisicion', label: 'Estatus', type: 'badge', visible: true },
+    { def: 's_tipo_requisicion', label: 'Tipo', type: 'text', visible: true },
     { def: 'actions', label: 'Acciones', type: 'actionBtn', visible: true },
   ];
 
-  dataSource = new MatTableDataSource<Venta>([]);
-  selection = new SelectionModel<Venta>(true, []);
+  dataSource = new MatTableDataSource<Requisicion>([]);
+  selection = new SelectionModel<Requisicion>(true, []);
   contextMenuPosition = { x: '0px', y: '0px' };
   isLoading = true;
   private destroy$ = new Subject<void>();
@@ -91,16 +90,17 @@ export class BitacoraVentasComponent implements OnInit, OnDestroy {
 
   breadscrums = [
     {
-      title: 'Bitácora de Ventas',
-      items: ['Inicio'],
-      active: 'Bitácora de Ventas',
+      title: 'Requisiciones',
+      items: ['Compras'],
+      active: 'Requisiciones',
     },
   ];
 
   constructor(
     public httpClient: HttpClient,
-    public bitacoraVentasService: BitacoraVentasService,
-    private snackBar: MatSnackBar
+    public requisicionesService: RequisicionesService,
+    private snackBar: MatSnackBar,
+    private dialog: MatDialog
   ) {}
 
   ngOnInit() {
@@ -133,53 +133,44 @@ export class BitacoraVentasComponent implements OnInit, OnDestroy {
       .map((cd) => cd.def);
   }
 
-  verDetalle(row: Venta) {
-    Swal.fire({
-      icon: 'info',
-      title: `Venta #${row.id_venta}`,
-      html: `
-        <div style="text-align: left;">
-          <p><strong>ID Venta:</strong> ${row.id_venta}</p>
-          <p><strong>Cliente:</strong> ${row.s_nombre_cliente}</p>
-          <p><strong>Cantidad de Refacciones:</strong> ${row.n_cantidad_refacciones}</p>
-          <p><strong>Subtotal:</strong> $${row.n_subtotal.toFixed(2)}</p>
-          <p><strong>IVA (${row.n_porcentaje_iva}%):</strong> $${(row.n_total - row.n_subtotal).toFixed(2)}</p>
-          <p><strong>Total:</strong> $${row.n_total.toFixed(2)}</p>
-          <p><strong>Método de Pago:</strong> ${row.s_metodo_pago}</p>
-          <p><strong>Estatus:</strong> ${row.s_estatus_venta}</p>
-        </div>
-      `,
-      confirmButtonText: 'Cerrar'
+  verDetalle(row: Requisicion) {
+    this.dialog.open(DialogDetalleRequisicionComponent, {
+      width: '90vw',
+      maxWidth: '1200px',
+      data: {
+        id_requisicion: row.id_requisicion,
+        s_token: this.s_token
+      }
     });
   }
 
-  editarVenta(row: Venta) {
+  editarRequisicion(row: Requisicion) {
     Swal.fire({
+      toast: true,
+      position: 'top-end',
       icon: 'info',
-      title: 'Editar venta',
-      text: `Funcionalidad de edición para venta #${row.id_venta} en desarrollo`,
-      confirmButtonText: 'Entendido'
+      title: `Editar requisición #${row.id_requisicion}`,
+      showConfirmButton: false,
+      timer: 2000
     });
   }
 
-  deleteItem(row: Venta) {
+  deleteItem(row: Requisicion) {
     Swal.fire({
+      title: '¿Eliminar requisición?',
+      text: `Se eliminará la requisición #${row.id_requisicion}`,
       icon: 'warning',
-      title: '¿Eliminar venta?',
-      text: `Se eliminará la venta #${row.id_venta}`,
       showCancelButton: true,
-      confirmButtonText: 'Eliminar',
-      cancelButtonText: 'Cancelar',
-      confirmButtonColor: '#d33'
+      confirmButtonText: 'Sí, eliminar',
+      cancelButtonText: 'Cancelar'
     }).then((result) => {
       if (result.isConfirmed) {
         this.dataSource.data = this.dataSource.data.filter(
-          (record) => record.id_venta !== row.id_venta
+          (item) => item.id_requisicion !== row.id_requisicion
         );
-        this.refreshTable();
         this.showNotification(
           'snackbar-danger',
-          'Venta eliminada correctamente',
+          'Requisición eliminada correctamente',
           'bottom',
           'center'
         );
@@ -218,7 +209,7 @@ export class BitacoraVentasComponent implements OnInit, OnDestroy {
     this.selection.clear();
     this.showNotification(
       'snackbar-danger',
-      `${totalSelect} venta(s) eliminada(s) correctamente`,
+      `${totalSelect} requisición(es) eliminada(s) correctamente`,
       'bottom',
       'center'
     );
@@ -227,28 +218,33 @@ export class BitacoraVentasComponent implements OnInit, OnDestroy {
   loadData() {
     this.isLoading = true;
 
-    this.bitacoraVentasService.getVentas(this.s_token).subscribe({
-      next: (response: any) => {
+    this.requisicionesService.getRequisiciones(this.s_token).subscribe(
+      (response: any) => {
         if (response.status === 'success') {
-          this.dataSource.data = response.data.map((v: any) => new Venta(v));
-          this.refreshTable();
-          this.dataSource.filterPredicate = (data: Venta, filter: string) =>
-            Object.values(data).some((value) =>
-              value.toString().toLowerCase().includes(filter)
-            );
+          const requisiciones = response.data.map((req: any) => new Requisicion(req));
+          this.dataSource.data = requisiciones;
+          this.dataSource.paginator = this.paginator;
+          this.dataSource.sort = this.sort;
           this.isLoading = false;
+        } else {
+          this.isLoading = false;
+          Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: response.message || 'No se pudieron cargar las requisiciones'
+          });
         }
       },
-      error: (err) => {
-        console.error('Error al cargar ventas:', err);
+      (error) => {
+        console.error('Error al cargar requisiciones:', error);
         this.isLoading = false;
         Swal.fire({
           icon: 'error',
           title: 'Error',
-          text: 'No se pudieron cargar las ventas. Intenta nuevamente.'
+          text: 'Ocurrió un error al cargar las requisiciones'
         });
-      },
-    });
+      }
+    );
   }
 
   showNotification(
@@ -276,7 +272,7 @@ export class BitacoraVentasComponent implements OnInit, OnDestroy {
     });
   }
 
-  onContextMenu(event: MouseEvent, item: Venta) {
+  onContextMenu(event: MouseEvent, item: Requisicion) {
     event.preventDefault();
     this.contextMenuPosition = {
       x: `${event.clientX}px`,
@@ -286,28 +282,6 @@ export class BitacoraVentasComponent implements OnInit, OnDestroy {
       this.contextMenu.menuData = { item };
       this.contextMenu.menu?.focusFirstItem('mouse');
       this.contextMenu.openMenu();
-    }
-  }
-
-  formatearFechaHora(fecha: string): string {
-    if (!fecha) return '';
-
-    try {
-      const date = new Date(fecha);
-
-      // Formatear fecha: DD/MM/YYYY
-      const dia = date.getDate().toString().padStart(2, '0');
-      const mes = (date.getMonth() + 1).toString().padStart(2, '0');
-      const anio = date.getFullYear();
-
-      // Formatear hora: HH:MM
-      const horas = date.getHours().toString().padStart(2, '0');
-      const minutos = date.getMinutes().toString().padStart(2, '0');
-
-      return `${dia}/${mes}/${anio} - ${horas}:${minutos}`;
-    } catch (error) {
-      console.error('Error al formatear fecha:', error);
-      return fecha;
     }
   }
 }

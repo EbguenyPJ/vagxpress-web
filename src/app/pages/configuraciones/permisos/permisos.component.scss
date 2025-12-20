@@ -13,16 +13,10 @@
 
 
 
-:host ::ng-deep .advance-table thead {
-    background-color: #d46529; // color verde para la columnas 
-    //background: #767575;// color gris para la columnas 
-    color: #fff;
-    border-radius: 8px;
-}
-
 
 ::ng-deep .toggle-verde {
-    --mdc-switch-selected-track-color: rgba(232, 116, 27, 0.766);
+    --mdc-switch-selected-track-color: rgba(177, 18, 38, 0.8);
+    
 
 }
 
