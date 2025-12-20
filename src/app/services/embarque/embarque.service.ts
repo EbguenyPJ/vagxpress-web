@@ -49,4 +49,15 @@ export class EmbarqueService {
     let url = conexion.url + 'rechazar-embarque' + '/' + id_embarque;
     return this.http.post(url, data, { headers });
   }
+
+
+  getRefaccionesInsertadas(s_token: string) {
+    let headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': s_token
+    });
+    let params = { headers: headers };
+    let url = conexion.url + 'refacciones-insertadas'
+    return this.http.get(url, params);
+  }
 }
