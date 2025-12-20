@@ -1,0 +1,103 @@
+<div class="dialogContainer">
+  <div class="modalHeader">
+    <div class="avatarDetails">
+      <div class="modalTitle">
+        {{dialogTitle}}
+      </div>
+    </div>
+    <button mat-icon-button mat-dialog-close class="modal-close-button" aria-label="Close dialog" type="button">
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+
+  <div mat-dialog-content>
+    <div class="form-card">
+    
+    <!-- <mat-card *ngFor="let embarque of embarques">
+
+      <mat-card-header>
+        <mat-card-title>
+          Proveedor: {{embarque.s_proveedor}}
+        </mat-card-title>
+      </mat-card-header>
+
+      <mat-divider></mat-divider>
+
+      <mat-card-content>
+        <div class="container">
+          <div class="row" *ngFor="let refaccion of embarque?.refacciones">
+            <b>Refacción:</b> {{refaccion.s_nombre_refaccion}}
+            <br>
+            <b>Cantidad:</b> {{refaccion.n_cantidad}}
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card> -->
+    
+    <mat-card *ngFor="let embarque of embarques" class="mb-4 shadow-sm">
+
+      <!-- HEADER -->
+      <mat-card-header class="bg-light">
+        <mat-card-title class="fw-bold">
+          <i class="bi bi-truck me-2"></i>
+          {{ embarque.s_proveedor }}
+        </mat-card-title>
+
+        <mat-card-subtitle>
+          Estatus: <span class="badge bg-success">{{ embarque.s_estatus_embarque }}</span>
+        </mat-card-subtitle>
+      </mat-card-header>
+
+      <mat-divider></mat-divider>
+
+      <!-- CONTENT -->
+      <mat-card-content class="mt-3">
+
+        <div class="row g-3" *ngIf="embarque.refacciones?.length > 0; else sinRefacciones">
+
+          <div class="col-md-6 col-lg-4"
+              *ngFor="let refaccion of embarque.refacciones">
+
+            <div class="card h-100 border-0 shadow-sm">
+              <div class="card-body">
+
+                <h6 class="card-title fw-bold text-primary">
+                  {{ refaccion.s_nombre_refaccion }}
+                </h6>
+
+                <p class="mb-1">
+                  <b>Cantidad:</b>
+                  <span class="badge bg-secondary ms-1">
+                    {{ refaccion.n_cantidad }}
+                  </span>
+                </p>
+
+                <p class="mb-1">
+                  <b>Marca:</b> {{ refaccion.s_marca_refaccion }}
+                </p>
+
+                <p class="mb-0 text-muted small">
+                  {{ refaccion.s_categoria_refaccion }} /
+                  {{ refaccion.s_subcategoria_refaccion }}
+                </p>
+
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- SIN REFACCIONES -->
+        <ng-template #sinRefacciones>
+          <div class="alert alert-warning text-center">
+            <i class="bi bi-exclamation-triangle me-2"></i>
+            Este embarque no tiene refacciones
+          </div>
+        </ng-template>
+
+      </mat-card-content>
+    </mat-card>
+
+
+  </div>
+</div>
