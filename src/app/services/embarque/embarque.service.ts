@@ -60,4 +60,28 @@ export class EmbarqueService {
     let url = conexion.url + 'refacciones-insertadas'
     return this.http.get(url, params);
   }
+
+  getEmbarquesRefaccionesInsertadas(s_token: string, id_refaccion: number) {
+    let headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': s_token
+    });
+    let params = { headers: headers };
+    let url = conexion.url + 'embarques-refacciones-insertadas' + '/' + id_refaccion
+    return this.http.get(url, params);
+  }
+
+
+
+  getEmbarquesRefaccionesInsertadasNuevas(s_token: string, id_pre_registro_refaccion: number) {
+    let headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': s_token
+    });
+    let params = { headers: headers };
+    let url = conexion.url + 'embarques-refacciones-insertadas-nuevas' + '/' + id_pre_registro_refaccion
+    return this.http.get(url, params);
+  }
+
+  
 }

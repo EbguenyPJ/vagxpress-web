@@ -2,6 +2,7 @@ import { formatDate } from '@angular/common';
 
 export class refaccionInsertadaModel {
   id_refaccion: number;
+  id_pre_registro_refaccion: number;
   s_nombre_refaccion: string;
   s_marca_refaccion: string;
   s_categoria_refaccion: string;
@@ -14,6 +15,7 @@ export class refaccionInsertadaModel {
 
   constructor(data: Partial<refaccionInsertadaModel> = {}) {
     this.id_refaccion = data.id_refaccion   || this.getRandomID();
+    this.id_pre_registro_refaccion = data.id_pre_registro_refaccion   || this.getRandomID();
     this.s_nombre_refaccion = data.s_nombre_refaccion || '';
     this.s_marca_refaccion = data.s_marca_refaccion || '';
     this.s_categoria_refaccion = data.s_categoria_refaccion || '';

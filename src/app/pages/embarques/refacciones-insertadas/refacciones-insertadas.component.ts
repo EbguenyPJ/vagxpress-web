@@ -32,6 +32,7 @@ import { Direction } from '@angular/cdk/bidi';
 import { refaccionInsertadaModel } from 'app/models/refaccionInsertadaModel';
 import { EmbarqueService } from 'app/services/embarque/embarque.service';
 import { MatDatepickerModule } from "@angular/material/datepicker";
+import { DialogRefaccionesInsertadasComponent } from '../dialogs/dialog-refacciones-insertadas/dialog-refacciones-insertadas.component';
 
 @Component({
   selector: 'app-refacciones-insertadas',
@@ -99,9 +100,11 @@ export class RefaccionesInsertadasComponent {
   }
 
   applyDateFilter() {
-    // Forzamos el refresco del filtro
-    this.dataSource.filter = Math.random().toString();
+    this.paginator.firstPage();
+    this.dataSource.filter = Math.random().toString(); // solo refresca
   }
+
+
 
 
 
@@ -136,38 +139,38 @@ export class RefaccionesInsertadasComponent {
   }
     
   openDialog(action: 'add' | 'edit', data?: refaccionInsertadaModel) {
-    // let varDirection: Direction;
-    // if (localStorage.getItem('isRtl') === 'true') {
-    //   varDirection = 'rtl';
-    // } else {
-    //   varDirection = 'ltr';
-    // }
-    // const dialogRef = this.dialog.open(DialogAprobarEmbarqueComponent, {
-    //   width: '60vw',
-    //   maxWidth: '100vw',
-    //   data: { embarqueModel: data, action },
-    //   direction: varDirection,
-    //   autoFocus: false,
-    // });
+    let varDirection: Direction;
+    if (localStorage.getItem('isRtl') === 'true') {
+      varDirection = 'rtl';
+    } else {
+      varDirection = 'ltr';
+    }
+    const dialogRef = this.dialog.open(DialogRefaccionesInsertadasComponent, {
+      width: '60vw',
+      maxWidth: '100vw',
+      data: { refaccionInsertadaModel: data, action },
+      direction: varDirection,
+      autoFocus: false,
+    });
 
-    // dialogRef.afterClosed().subscribe((result) => {
-    //   // Actualizamos siempre al cerrar el diálogo
-    //   this.refresh();
-    //   if (result) {
-    //     if (action === 'add') {
-    //       this.dataSource.data = [result, ...this.dataSource.data];
-    //     } else {
-    //       this.updateRecord(result);
-    //     }
-    //     this.refreshTable();
-    //     this.showNotification(
-    //       action === 'add' ? 'snackbar-success' : 'black',
-    //       `${action === 'add' ? 'Agregado' : 'Editado'} correctamente...!!!`,
-    //       'bottom',
-    //       'center'
-    //     );
-    //   }
-    // });
+    dialogRef.afterClosed().subscribe((result) => {
+      // Actualizamos siempre al cerrar el diálogo
+      this.refresh();
+      if (result) {
+        if (action === 'add') {
+          this.dataSource.data = [result, ...this.dataSource.data];
+        } else {
+          this.updateRecord(result);
+        }
+        this.refreshTable();
+        this.showNotification(
+          action === 'add' ? 'snackbar-success' : 'black',
+          `${action === 'add' ? 'Agregado' : 'Editado'} correctamente...!!!`,
+          'bottom',
+          'center'
+        );
+      }
+    });
   }
     
   private updateRecord(updatedRecord: refaccionInsertadaModel) {
@@ -190,6 +193,7 @@ export class RefaccionesInsertadasComponent {
     const filterValue = (event.target as HTMLInputElement).value
     this.dataSource.filter = filterValue.trim().toLowerCase();
   }
+
     
   isAllSelected() {
     return this.selection.selected.length === this.dataSource.data.length;
@@ -237,31 +241,34 @@ export class RefaccionesInsertadasComponent {
 
 
 
-      this.dataSource.filterPredicate = (data: refaccionInsertadaModel, filter: string) => {
+      this.dataSource.filterPredicate = (data: refaccionInsertadaModel) => {
 
-  /* ===== FILTRO TEXTO ===== */
-  const texto = filter.toLowerCase();
-  const cumpleTexto = Object.values(data)
-    .filter(v => v !== null && v !== undefined)
-    .some(v => v.toString().toLowerCase().includes(texto));
+        /* ===== FILTRO TEXTO INPUT ===== */
+        const textoFiltro = (this.filter?.nativeElement.value || '').toLowerCase();
 
-  if (!cumpleTexto) return false;
+        const cumpleTexto = Object.values(data)
+          .filter(v => v !== null && v !== undefined)
+          .some(v => v.toString().toLowerCase().includes(textoFiltro));
 
-  /* ===== FILTRO FECHAS ===== */
-  if (!data.d_fecha_creacion) return false;
+        if (!cumpleTexto) return false;
 
-  const fechaRegistro = new Date(data.d_fecha_creacion);
+        /* ===== FILTRO FECHAS ===== */
+        if (!data.d_fecha_creacion) return false;
 
-  if (this.fechaDesde && fechaRegistro < this.startOfDay(this.fechaDesde)) {
-    return false;
-  }
+        const fechaRegistro = new Date(data.d_fecha_creacion);
 
-  if (this.fechaHasta && fechaRegistro > this.endOfDay(this.fechaHasta)) {
-    return false;
-  }
+        if (this.fechaDesde) {
+          if (fechaRegistro < this.startOfDay(this.fechaDesde)) return false;
+        }
 
-  return true;
-};
+        if (this.fechaHasta) {
+          if (fechaRegistro > this.endOfDay(this.fechaHasta)) return false;
+        }
+
+        return true;
+      };
+
+
 
 
 
@@ -303,46 +310,46 @@ export class RefaccionesInsertadasComponent {
     return phoneNumber.replace(/^\-+|\-+/g, '');
   }
     
-    showNotification(
-      colorName: string,
-      text: string,
-      placementFrom: MatSnackBarVerticalPosition,
-      placementAlign: MatSnackBarHorizontalPosition
-    ) {
-      this.snackBar.open(text, '', {
-        duration: 2000,
-        verticalPosition: placementFrom,
-        horizontalPosition: placementAlign,
-        panelClass: colorName,
-      });
-    }
+  showNotification(
+    colorName: string,
+    text: string,
+    placementFrom: MatSnackBarVerticalPosition,
+    placementAlign: MatSnackBarHorizontalPosition
+  ) {
+    this.snackBar.open(text, '', {
+      duration: 2000,
+      verticalPosition: placementFrom,
+      horizontalPosition: placementAlign,
+      panelClass: colorName,
+    });
+  }
     
-    exportExcel() {
-      const exportData = this.dataSource.filteredData.map((x) => ({
-        'ID': x.id_refaccion,
-        'Refaccion': x.s_nombre_refaccion,
-        'Marca': x.s_marca_refaccion,
-        'Categoria': x.s_categoria_refaccion,
-        'Subcategoria': x.s_subcategoria_refaccion,
-        'Clase': x.s_clase_refaccion,
-        '#Parte': x.s_numero_parte,
-        'Cantidad': x.n_cantidad
-      }));
-  
-      TableExportUtil.exportToExcel(exportData, 'refaccionesInsertadas');
-    }
+  exportExcel() {
+    const exportData = this.dataSource.filteredData.map((x) => ({
+      'ID': x.id_refaccion,
+      'Refaccion': x.s_nombre_refaccion,
+      'Marca': x.s_marca_refaccion,
+      'Categoria': x.s_categoria_refaccion,
+      'Subcategoria': x.s_subcategoria_refaccion,
+      'Clase': x.s_clase_refaccion,
+      '#Parte': x.s_numero_parte,
+      'Cantidad': x.n_cantidad
+    }));
+
+    TableExportUtil.exportToExcel(exportData, 'refaccionesInsertadas');
+  }
     
-    onContextMenu(event: MouseEvent, item: refaccionInsertadaModel) {
-      event.preventDefault();
-      this.contextMenuPosition = {
-        x: `${event.clientX}px`,
-        y: `${event.clientY}px`,
-      };
-      if (this.contextMenu) {
-        this.contextMenu.menuData = { item };
-        this.contextMenu.menu?.focusFirstItem('mouse');
-        this.contextMenu.openMenu();
-      }
+  onContextMenu(event: MouseEvent, item: refaccionInsertadaModel) {
+    event.preventDefault();
+    this.contextMenuPosition = {
+      x: `${event.clientX}px`,
+      y: `${event.clientY}px`,
+    };
+    if (this.contextMenu) {
+      this.contextMenu.menuData = { item };
+      this.contextMenu.menu?.focusFirstItem('mouse');
+      this.contextMenu.openMenu();
     }
+  }
 
 }
