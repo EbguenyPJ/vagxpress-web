@@ -1,8 +1,7 @@
 <section class="content">
   <div class="content-block">
     <div class="block-header">
-      <!-- breadcrumb -->
-      <app-breadcrumb [title]="'Requisiciones'" [items]="['Compras']" [active_item]="'Requisiciones'"></app-breadcrumb>
+      <app-breadcrumb [title]="'Órdenes de Compra'" [items]="['Compras']" [active_item]="'Órdenes de Compra'"></app-breadcrumb>
     </div>
     <div class="row">
       <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
@@ -11,11 +10,11 @@
             <div class="left">
               <ul class="header-buttons-left ms-0">
                 <li class="tbl-title">
-                  <h2>Requisiciones Registradas</h2>
+                  <h2>Órdenes de Compra Generadas</h2>
                 </li>
                 <li class="tbl-search-box">
                   <label for="search-input"><i class="material-icons search-icon">search</i></label>
-                  <input placeholder="Buscar requisiciones..." type="text" #filter (keyup)="applyFilter($event)"
+                  <input placeholder="Buscar órdenes de compra..." type="text" #filter (keyup)="applyFilter($event)"
                     class="browser-default search-field" aria-label="Search box">
                 </li>
               </ul>
@@ -89,24 +88,24 @@
                   @if (column.type === 'check' || column.type === 'actionBtn') {
                     <!-- Skip checkbox and actions - rendered separately -->
                   } @else {
-                    @if (column.def === 'id_requisicion') {
+                    @if (column.def === 's_folio_interno') {
                       <ng-container [matColumnDef]="column.def">
                         <mat-header-cell *matHeaderCellDef mat-sort-header>
                           <span class="truncate-text">{{ column.label }}</span>
                         </mat-header-cell>
                         <mat-cell *matCellDef="let row" (contextmenu)="onContextMenu($event, row)">
                           <span class="mobile-label">{{ column.label }}:</span>
-                          <strong>#{{ row.id_requisicion }}</strong>
+                          <strong class="text-primary">{{ row.s_folio_interno }}</strong>
                         </mat-cell>
                       </ng-container>
-                    } @else if (column.def === 'n_cantidad_refacciones') {
+                    } @else if (column.def === 'id_requisicion') {
                       <ng-container [matColumnDef]="column.def">
                         <mat-header-cell *matHeaderCellDef mat-sort-header>
                           <span class="truncate-text">{{ column.label }}</span>
                         </mat-header-cell>
                         <mat-cell *matCellDef="let row" (contextmenu)="onContextMenu($event, row)">
                           <span class="mobile-label">{{ column.label }}:</span>
-                          <span class="badge badge-solid-blue">{{ row.n_cantidad_refacciones }}</span>
+                          <span class="badge badge-solid-blue">#{{ row.id_requisicion }}</span>
                         </mat-cell>
                       </ng-container>
                     } @else if (column.type === 'currency') {
@@ -126,7 +125,17 @@
                         </mat-header-cell>
                         <mat-cell *matCellDef="let row" (contextmenu)="onContextMenu($event, row)">
                           <span class="mobile-label">{{ column.label }}:</span>
-                          <span class="badge badge-solid-green">{{ row[column.def] }}</span>
+                          <span [class]="'badge ' + getBadgeClass(row[column.def])">{{ row[column.def] }}</span>
+                        </mat-cell>
+                      </ng-container>
+                    } @else if (column.type === 'date') {
+                      <ng-container [matColumnDef]="column.def">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header>
+                          <span class="truncate-text">{{ column.label }}</span>
+                        </mat-header-cell>
+                        <mat-cell *matCellDef="let row" (contextmenu)="onContextMenu($event, row)">
+                          <span class="mobile-label">{{ column.label }}:</span>
+                          <span>{{ row[column.def] }}</span>
                         </mat-cell>
                       </ng-container>
                     } @else {
@@ -151,13 +160,7 @@
                       class="tbl-action-btn btn-view" matTooltip="Ver detalle">
                       <mat-icon>visibility</mat-icon>
                     </button>
-                    @if (esRequisicionCerrada(row)) {
-                      <button mat-icon-button (click)="$event.stopPropagation()" (click)="generarOrdenes(row)"
-                        class="tbl-action-btn btn-money" matTooltip="Generar Órdenes" style="color: #4caf50;">
-                        <mat-icon>attach_money</mat-icon>
-                      </button>
-                    }
-                    <button mat-icon-button (click)="$event.stopPropagation()" (click)="editarRequisicion(row)"
+                    <button mat-icon-button (click)="$event.stopPropagation()" (click)="editarOrdenCompra(row)"
                       class="tbl-action-btn btn-edit" matTooltip="Editar">
                       <mat-icon>edit</mat-icon>
                     </button>
@@ -191,13 +194,13 @@
                   <mat-icon>visibility</mat-icon>
                   <span>Ver Detalle</span>
                 </button>
-                <button mat-menu-item (click)="editarRequisicion(item)">
+                <button mat-menu-item (click)="editarOrdenCompra(item)">
                   <mat-icon>edit</mat-icon>
-                  <span>Editar Requisición</span>
+                  <span>Editar Orden</span>
                 </button>
                 <button mat-menu-item (click)="deleteItem(item)">
                   <mat-icon>delete</mat-icon>
-                  <span>Eliminar Requisición</span>
+                  <span>Eliminar Orden</span>
                 </button>
                 <button mat-menu-item (click)="refresh()">
                   <mat-icon>refresh</mat-icon>
@@ -208,7 +211,7 @@
             <!-- context menu end -->
             @if (!isLoading) {
             <div class="no-results" [style.display]="dataSource.data.length === 0 ? '' : 'none'">
-              No se encontraron requisiciones
+              No se encontraron órdenes de compra
             </div>
             }
             <mat-paginator #paginator [length]="dataSource.filteredData.length" [pageIndex]="0" [pageSize]="10"

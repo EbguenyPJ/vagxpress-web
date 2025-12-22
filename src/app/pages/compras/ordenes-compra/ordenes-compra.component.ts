@@ -30,17 +30,16 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { HttpClient } from '@angular/common/http';
 import { BreadcrumbComponent } from '@shared/components/breadcrumb/breadcrumb.component';
-import { Requisicion } from 'app/models/requisicionModel';
-import { RequisicionesService } from 'app/services/compras/requisiciones.service';
+import { OrdenCompra } from 'app/models/ordenCompraModel';
+import { OrdenesCompraService } from 'app/services/compras/ordenes-compra.service';
 import { MatDialog } from '@angular/material/dialog';
-import { DialogDetalleRequisicionComponent } from './dialogs/dialog-detalle-requisicion/dialog-detalle-requisicion.component';
-import { DialogGenerarOrdenesComponent } from './dialogs/dialog-generar-ordenes/dialog-generar-ordenes.component';
+import { DialogDetalleOrdenCompraComponent } from './dialogs/dialog-detalle-orden-compra/dialog-detalle-orden-compra.component';
 import Swal from 'sweetalert2';
 
 @Component({
-  selector: 'app-requisiciones',
-  templateUrl: './requisiciones.component.html',
-  styleUrls: ['./requisiciones.component.scss'],
+  selector: 'app-ordenes-compra',
+  templateUrl: './ordenes-compra.component.html',
+  styleUrls: ['./ordenes-compra.component.scss'],
   providers: [{ provide: MAT_DATE_LOCALE, useValue: 'en-GB' }],
   standalone: true,
   imports: [
@@ -66,19 +65,21 @@ import Swal from 'sweetalert2';
     MatPaginatorModule,
   ]
 })
-export class RequisicionesComponent implements OnInit, OnDestroy {
+export class OrdenesCompraComponent implements OnInit, OnDestroy {
   columnDefinitions = [
     { def: 'select', label: 'Checkbox', type: 'check', visible: true },
-    { def: 'id_requisicion', label: 'ID Requisición', type: 'text', visible: true },
-    { def: 'n_cantidad_refacciones', label: 'Cant. Refacciones', type: 'number', visible: true },
+    { def: 's_folio_interno', label: 'Folio', type: 'text', visible: true },
+    { def: 'id_requisicion', label: 'Requisición', type: 'text', visible: true },
+    { def: 's_nombre_proveedor', label: 'Proveedor', type: 'text', visible: true },
+    { def: 'd_fecha_orden', label: 'Fecha Orden', type: 'date', visible: true },
+    { def: 'd_fecha_recepcion_estimada', label: 'Recepción Estimada', type: 'date', visible: true },
     { def: 'n_total_estimado', label: 'Total Estimado', type: 'currency', visible: true },
-    { def: 's_estatus_requisicion', label: 'Estatus', type: 'badge', visible: true },
-    { def: 's_tipo_requisicion', label: 'Tipo', type: 'text', visible: true },
+    { def: 's_estatus_orden_compra', label: 'Estatus', type: 'badge', visible: true },
     { def: 'actions', label: 'Acciones', type: 'actionBtn', visible: true },
   ];
 
-  dataSource = new MatTableDataSource<Requisicion>([]);
-  selection = new SelectionModel<Requisicion>(true, []);
+  dataSource = new MatTableDataSource<OrdenCompra>([]);
+  selection = new SelectionModel<OrdenCompra>(true, []);
   contextMenuPosition = { x: '0px', y: '0px' };
   isLoading = true;
   private destroy$ = new Subject<void>();
@@ -91,15 +92,15 @@ export class RequisicionesComponent implements OnInit, OnDestroy {
 
   breadscrums = [
     {
-      title: 'Requisiciones',
+      title: 'Órdenes de Compra',
       items: ['Compras'],
-      active: 'Requisiciones',
+      active: 'Órdenes de Compra',
     },
   ];
 
   constructor(
     public httpClient: HttpClient,
-    public requisicionesService: RequisicionesService,
+    public ordenesCompraService: OrdenesCompraService,
     private snackBar: MatSnackBar,
     private dialog: MatDialog
   ) {}
@@ -134,65 +135,35 @@ export class RequisicionesComponent implements OnInit, OnDestroy {
       .map((cd) => cd.def);
   }
 
-  verDetalle(row: Requisicion) {
-    const dialogRef = this.dialog.open(DialogDetalleRequisicionComponent, {
-      width: '90vw',
-      maxWidth: '1200px',
-      data: {
-        id_requisicion: row.id_requisicion,
-        id_estatus_requisicion: row.id_estatus_requisicion,
-        s_token: this.s_token
-      }
-    });
-
-    dialogRef.afterClosed().subscribe(result => {
-      if (result === 'cerrada') {
-        this.loadData();
-      }
-    });
-  }
-
-  generarOrdenes(row: Requisicion) {
-    const dialogRef = this.dialog.open(DialogGenerarOrdenesComponent, {
+  verDetalle(row: OrdenCompra) {
+    this.dialog.open(DialogDetalleOrdenCompraComponent, {
       width: '95vw',
-      maxWidth: '1200px',
+      maxWidth: '1400px',
       data: {
+        id_orden_compra: row.id_orden_compra,
+        s_folio_interno: row.s_folio_interno,
+        s_nombre_proveedor: row.s_nombre_proveedor,
         id_requisicion: row.id_requisicion,
         s_token: this.s_token
       }
     });
-
-    dialogRef.afterClosed().subscribe(result => {
-      if (result === 'ordenes_generadas') {
-        Swal.fire({
-          icon: 'success',
-          title: 'Órdenes generadas',
-          text: 'Las órdenes de compra se generaron exitosamente',
-          showConfirmButton: true
-        });
-      }
-    });
   }
 
-  esRequisicionCerrada(row: Requisicion): boolean {
-    return row.id_estatus_requisicion === 2;
-  }
-
-  editarRequisicion(row: Requisicion) {
+  editarOrdenCompra(row: OrdenCompra) {
     Swal.fire({
       toast: true,
       position: 'top-end',
       icon: 'info',
-      title: `Editar requisición #${row.id_requisicion}`,
+      title: `Editar orden de compra ${row.s_folio_interno}`,
       showConfirmButton: false,
       timer: 2000
     });
   }
 
-  deleteItem(row: Requisicion) {
+  deleteItem(row: OrdenCompra) {
     Swal.fire({
-      title: '¿Eliminar requisición?',
-      text: `Se eliminará la requisición #${row.id_requisicion}`,
+      title: '¿Eliminar orden de compra?',
+      text: `Se eliminará la orden ${row.s_folio_interno}`,
       icon: 'warning',
       showCancelButton: true,
       confirmButtonText: 'Sí, eliminar',
@@ -200,11 +171,11 @@ export class RequisicionesComponent implements OnInit, OnDestroy {
     }).then((result) => {
       if (result.isConfirmed) {
         this.dataSource.data = this.dataSource.data.filter(
-          (item) => item.id_requisicion !== row.id_requisicion
+          (item) => item.id_orden_compra !== row.id_orden_compra
         );
         this.showNotification(
           'snackbar-danger',
-          'Requisición eliminada correctamente',
+          'Orden de compra eliminada correctamente',
           'bottom',
           'center'
         );
@@ -243,7 +214,7 @@ export class RequisicionesComponent implements OnInit, OnDestroy {
     this.selection.clear();
     this.showNotification(
       'snackbar-danger',
-      `${totalSelect} requisición(es) eliminada(s) correctamente`,
+      `${totalSelect} orden(es) de compra eliminada(s) correctamente`,
       'bottom',
       'center'
     );
@@ -252,11 +223,11 @@ export class RequisicionesComponent implements OnInit, OnDestroy {
   loadData() {
     this.isLoading = true;
 
-    this.requisicionesService.getRequisiciones(this.s_token).subscribe(
+    this.ordenesCompraService.getOrdenesCompra(this.s_token).subscribe(
       (response: any) => {
         if (response.status === 'success') {
-          const requisiciones = response.data.map((req: any) => new Requisicion(req));
-          this.dataSource.data = requisiciones;
+          const ordenes = response.data.map((orden: any) => new OrdenCompra(orden));
+          this.dataSource.data = ordenes;
           this.dataSource.paginator = this.paginator;
           this.dataSource.sort = this.sort;
           this.isLoading = false;
@@ -265,17 +236,17 @@ export class RequisicionesComponent implements OnInit, OnDestroy {
           Swal.fire({
             icon: 'error',
             title: 'Error',
-            text: response.message || 'No se pudieron cargar las requisiciones'
+            text: response.message || 'No se pudieron cargar las órdenes de compra'
           });
         }
       },
       (error) => {
-        console.error('Error al cargar requisiciones:', error);
+        console.error('Error al cargar órdenes de compra:', error);
         this.isLoading = false;
         Swal.fire({
           icon: 'error',
           title: 'Error',
-          text: 'Ocurrió un error al cargar las requisiciones'
+          text: 'Ocurrió un error al cargar las órdenes de compra'
         });
       }
     );
@@ -306,7 +277,25 @@ export class RequisicionesComponent implements OnInit, OnDestroy {
     });
   }
 
-  onContextMenu(event: MouseEvent, item: Requisicion) {
+  getBadgeClass(estatus: string): string {
+    switch (estatus.toLowerCase()) {
+      case 'pendiente':
+        return 'badge-solid-orange';
+      case 'autorizada':
+        return 'badge-solid-blue';
+      case 'en tránsito':
+      case 'en transito':
+        return 'badge-solid-purple';
+      case 'recibida':
+        return 'badge-solid-green';
+      case 'cancelada':
+        return 'badge-solid-red';
+      default:
+        return 'badge-solid-grey';
+    }
+  }
+
+  onContextMenu(event: MouseEvent, item: OrdenCompra) {
     event.preventDefault();
     this.contextMenuPosition = {
       x: `${event.clientX}px`,
