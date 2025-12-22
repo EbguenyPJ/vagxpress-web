@@ -1,0 +1,129 @@
+<div class="dialog-generar-ordenes">
+  <div class="dialog-header">
+    <div class="dialog-header-content">
+      <h2 mat-dialog-title>Generar Órdenes de Compra</h2>
+      <p class="dialog-subtitle">Requisición #{{ data.id_requisicion }}</p>
+    </div>
+    <button mat-icon-button (click)="cerrar()" class="btn-cerrar">
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+
+  <mat-dialog-content>
+    @if (isLoading) {
+      <div class="loading-container">
+        <mat-progress-spinner color="primary" [diameter]="40" mode="indeterminate">
+        </mat-progress-spinner>
+        <p>Cargando refacciones...</p>
+      </div>
+    } @else {
+      @if (gruposProveedores.length === 0) {
+        <div class="no-data">
+          <mat-icon class="no-data-icon">inventory_2</mat-icon>
+          <p>No hay refacciones para generar órdenes</p>
+        </div>
+      } @else {
+        <mat-accordion class="proveedores-accordion">
+          @for (grupo of gruposProveedores; track grupo.id_proveedor) {
+            <mat-expansion-panel>
+              <mat-expansion-panel-header>
+                <mat-panel-title>
+                  <div class="proveedor-header">
+                    <div class="proveedor-info">
+                      <mat-icon class="proveedor-icon">store</mat-icon>
+                      <span class="proveedor-nombre">{{ grupo.s_nombre_proveedor }}</span>
+                    </div>
+                    <div class="proveedor-stats">
+                      <span class="stat-badge refacciones-badge">
+                        <mat-icon>inventory</mat-icon>
+                        {{ grupo.n_total_refacciones }} refacciones
+                      </span>
+                      <span class="stat-badge total-badge">
+                        <mat-icon>attach_money</mat-icon>
+                        ${{ grupo.n_total_estimado | number: '1.2-2' }}
+                      </span>
+                    </div>
+                  </div>
+                </mat-panel-title>
+              </mat-expansion-panel-header>
+
+              <div class="panel-content">
+                <!-- Lista de refacciones -->
+                <div class="refacciones-list">
+                  @for (refaccion of grupo.refacciones; track refaccion.id_requisicion_refaccion) {
+                    <mat-card class="refaccion-card">
+                      <div class="refaccion-main">
+                        <div class="refaccion-info">
+                          <div class="refaccion-title">
+                            <strong class="numero-parte">{{ refaccion.s_numero_parte }}</strong>
+                            <span class="nombre-refaccion">{{ refaccion.s_nombre_refaccion }}</span>
+                          </div>
+                          <div class="refaccion-badges">
+                            <span [class]="'badge ' + getBadgeClass('s_prioridad', refaccion.s_prioridad)">
+                              {{ refaccion.s_prioridad }}
+                            </span>
+                            <span [class]="'badge ' + getBadgeClass('s_motivo_pedido', refaccion.s_motivo_pedido)">
+                              {{ refaccion.s_motivo_pedido }}
+                            </span>
+                          </div>
+                        </div>
+
+                        <div class="refaccion-details">
+                          <div class="detail-item">
+                            <span class="detail-label">Stock Actual:</span>
+                            <span class="detail-value badge badge-solid-grey">{{ refaccion.n_stock_actual }}</span>
+                          </div>
+                          <div class="detail-item">
+                            <span class="detail-label">Cant. Sugerida:</span>
+                            <span class="detail-value badge badge-solid-blue">{{ refaccion.n_cantidad_sugerida }}</span>
+                          </div>
+                          <div class="detail-item">
+                            <span class="detail-label">Cant. Solicitada:</span>
+                            <span class="detail-value badge badge-solid-orange">{{ refaccion.n_cantidad_solicitada }}</span>
+                          </div>
+                        </div>
+
+                        <div class="refaccion-pricing">
+                          <div class="precio-item">
+                            <span class="precio-label">P. Unitario:</span>
+                            <span class="precio-valor">${{ refaccion.n_costo_unitario | number: '1.2-2' }}</span>
+                          </div>
+                          <mat-divider [vertical]="true"></mat-divider>
+                          <div class="precio-item total">
+                            <span class="precio-label">Total:</span>
+                            <span class="precio-valor total-valor">${{ calcularTotalRefaccion(refaccion) | number: '1.2-2' }}</span>
+                          </div>
+                        </div>
+                      </div>
+                    </mat-card>
+                  }
+                </div>
+
+                <!-- Botón de generar orden individual -->
+                <div class="panel-actions">
+                  <button mat-raised-button color="primary" (click)="generarOrdenProveedor(grupo)" class="btn-generar-individual">
+                    <mat-icon>add_shopping_cart</mat-icon>
+                    Generar Orden para {{ grupo.s_nombre_proveedor }}
+                  </button>
+                </div>
+              </div>
+            </mat-expansion-panel>
+          }
+        </mat-accordion>
+      }
+    }
+  </mat-dialog-content>
+
+  <mat-dialog-actions align="end" class="dialog-actions">
+    <div class="actions-container">
+      <button mat-raised-button (click)="cerrar()" class="btn-cancelar">
+        Cancelar
+      </button>
+      <button mat-raised-button color="accent" (click)="generarTodasLasOrdenes()"
+        [disabled]="gruposProveedores.length === 0" class="btn-generar-todas">
+        <mat-icon>shopping_cart</mat-icon>
+        Generar Todas las Órdenes ({{ gruposProveedores.length }})
+      </button>
+    </div>
+  </mat-dialog-actions>
+</div>
