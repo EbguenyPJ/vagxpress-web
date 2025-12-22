@@ -21,6 +21,7 @@ import { EmbarquesComponent } from './pages/embarques/embarques.component';
 import { ProveedoresComponent } from './pages/proveedores/proveedores.component';
 import { PermisosComponent } from './pages/configuraciones/permisos/permisos.component';
 import { RequisicionesComponent } from './pages/compras/requisiciones/requisiciones.component';
+import { OrdenesCompraComponent } from './pages/compras/ordenes-compra/ordenes-compra.component';
 
 export const APP_ROUTE: Route[] = [
   {
@@ -58,6 +59,7 @@ export const APP_ROUTE: Route[] = [
       { path: 'embarques', component: EmbarquesComponent },
       { path: 'proveedores', component: ProveedoresComponent },
       { path: 'requisiciones', component: RequisicionesComponent },
+      { path: 'ordenes-compra', component: OrdenesCompraComponent },
     ],
   },
 

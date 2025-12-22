@@ -138,6 +138,52 @@ export class DialogDetalleRequisicionComponent implements OnInit {
     });
   }
 
+  cerrarRequisicion(): void {
+    Swal.fire({
+      title: '¿Cerrar requisición?',
+      text: 'Al cerrar la requisición no se podrán hacer más cambios y podrá generar las órdenes de compra.',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Sí, cerrar',
+      cancelButtonText: 'Cancelar'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.requisicionesService.cerrarRequisicion(this.data.s_token, this.data.id_requisicion).subscribe(
+          (response: any) => {
+            if (response.status === 'success') {
+              Swal.fire({
+                icon: 'success',
+                title: 'Éxito',
+                text: 'Requisición cerrada correctamente',
+                timer: 2000,
+                showConfirmButton: false
+              });
+              this.dialogRef.close('cerrada');
+            } else {
+              Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: response.message || 'No se pudo cerrar la requisición'
+              });
+            }
+          },
+          (error) => {
+            console.error('Error al cerrar requisición:', error);
+            Swal.fire({
+              icon: 'error',
+              title: 'Error',
+              text: 'Ocurrió un error al cerrar la requisición'
+            });
+          }
+        );
+      }
+    });
+  }
+
+  esRequisicionAbierta(): boolean {
+    return this.data.id_estatus_requisicion === 1;
+  }
+
   cerrar(): void {
     this.dialogRef.close();
   }
