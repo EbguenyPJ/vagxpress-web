@@ -1,32 +1,40 @@
 <div class="modal-overlay">
   <div class="modal-container">
 
-    <!-- ================= HEADER ================= -->
+    <!-- HEADER -->
     <div class="modal-header">
-      <h2>Crear nuevo corte</h2>
-
-      <button mat-icon-button mat-dialog-close class="modal-close-button" aria-label="Cerrar diálogo" type="button">
+      <div class="header-content">
+        <span class="material-icons header-icon">receipt_long</span>
+        <h2>Corte del Día</h2>
+      </div>
+      <button mat-icon-button mat-dialog-close class="modal-close-button" type="button">
         <mat-icon>close</mat-icon>
       </button>
     </div>
 
-    <!-- ================= CONTENT ================= -->
+    <!-- CONTENT -->
     <div class="modal-content">
-
       <form class="corte-form-container">
 
-        <!-- ================= DATOS GENERALES ================= -->
-        <div class="card">
-          <h3 class="card-title">Datos generales</h3>
-
+        <!-- DATOS GENERALES -->
+        <div class="card card-datos">
+          <div class="card-header">
+            <span class="material-icons">info</span>
+            <h3 class="card-title">Datos Generales</h3>
+          </div>
           <div class="form-grid">
             <div class="form-group">
-              <label class="form-label">Fecha del corte</label>
-              <input type="date" class="form-input">
+              <label class="form-label">
+                <span class="material-icons label-icon">calendar_today</span>
+                Fecha de consulta
+              </label>
+              <input type="date" class="form-input" [value]="fechaConsulta">
             </div>
-
             <div class="form-group">
-              <label class="form-label">Tipo de corte</label>
+              <label class="form-label">
+                <span class="material-icons label-icon">category</span>
+                Tipo de corte
+              </label>
               <select class="form-input">
                 <option value="">Seleccione una opción</option>
                 <option>Diario</option>
@@ -34,24 +42,109 @@
                 <option>Especial</option>
               </select>
             </div>
-
             <div class="form-group full">
-              <label class="form-label">Descripción</label>
-              <input type="text" class="form-input" placeholder="Ej. Corte turno matutino">
+              <label class="form-label">
+                <span class="material-icons label-icon">description</span>
+                Descripción
+              </label>
+              <input type="text" class="form-input" placeholder="Ej. Consulta turno matutino">
             </div>
-
             <div class="form-group full">
-              <label class="form-label">Comentarios</label>
-              <textarea rows="4" class="form-input" placeholder="Observaciones generales del corte"></textarea>
+              <label class="form-label">
+                <span class="material-icons label-icon">comment</span>
+                Comentarios
+              </label>
+              <textarea rows="4" class="form-input" placeholder="Observaciones generales"></textarea>
             </div>
           </div>
         </div>
 
-        <!-- ================= MÉTODOS DE PAGO ================= -->
-        <div class="card">
-          <h3 class="card-title">Montos por método de pago</h3>
+        <!-- VENTAS DEL CORTE -->
+        <div class="card card-ventas">
+          <div class="card-header">
+            <span class="material-icons">shopping_cart</span>
+            <h3 class="card-title">Ventas del Día</h3>
+          </div>
+          
+          <div class="ventas-container">
+            <!-- Lista de ventas -->
+            <div class="ventas-list">
+              <div class="venta-card" *ngFor="let v of ventasCorte">
+                <div class="venta-header">
+                  <div class="venta-id">
+                    <span class="material-icons">receipt</span>
+                    <span class="id-number">#{{ v.id_venta }}</span>
+                  </div>
+                  <div class="venta-amount">${{ v.n_total }}</div>
+                </div>
+                <div class="venta-body">
+                  <div class="venta-info">
+                    <span class="material-icons info-icon">person</span>
+                    <span class="info-text">{{ v.cliente }}</span>
+                  </div>
+                  <div class="venta-info">
+                    <span class="material-icons info-icon">payment</span>
+                    <span class="info-text payment-badge">{{ v.metodo_pago }}</span>
+                  </div>
+                </div>
+                <div class="venta-footer">
+                  <span class="footer-item">
+                    <span class="material-icons">schedule</span>
+                    {{ v.created_at }}
+                  </span>
+                  <span class="footer-item" *ngIf="v.telefono">
+                    <span class="material-icons">phone</span>
+                    {{ v.telefono }}
+                  </span>
+                  <span class="footer-item" *ngIf="v.correo">
+                    <span class="material-icons">email</span>
+                    {{ v.correo }}
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
 
+        <!-- MÉTODOS DE PAGO -->
+        <div class="card card-metodos">
+          <div class="card-header">
+            <span class="material-icons">account_balance_wallet</span>
+            <h3 class="card-title">Métodos de Pago</h3>
+          </div>
           <div class="metodos-grid">
+
+            <!-- CRÉDITO -->
+            <div class="metodo-card">
+              <div class="metodo-header">
+                <span class="material-icons">payments</span>
+                <h4>Crédito</h4>
+              </div>
+              <div class="metodo-body">
+                <label class="form-label">Monto</label>
+                <div class="input-with-prefix">
+                  <span class="prefix">$</span>
+                  <input class="form-input" placeholder="{{ getMontoMetodo(1) }}">
+                </div>
+                <div class="monto-actual">
+                  <span class="material-icons">info</span>
+                  Monto actual: <strong>${{ getMontoMetodo(1) }}</strong>
+                </div>
+                <div class="evidencia-list" *ngIf="bancosCredito.length > 0">
+                  <div class="evidencia-preview" *ngFor="let banco of bancosCredito">
+                    <span class="material-icons">account_balance</span>
+                    <div class="evidencia-info">
+                      <span class="banco-cuenta">{{ banco.cuenta }}</span>
+                      <span class="banco-monto">${{ banco.total_dinero }}</span>
+                    </div>
+                  </div>
+                </div>
+                <button type="button" class="btn-evidencia">
+                  <span class="material-icons">attach_file</span>
+                  <span>Subir evidencia</span>
+                </button>
+              </div>
+            </div>
 
             <!-- EFECTIVO -->
             <div class="metodo-card">
@@ -59,211 +152,168 @@
                 <span class="material-icons">payments</span>
                 <h4>Efectivo</h4>
               </div>
-
               <div class="metodo-body">
                 <label class="form-label">Monto</label>
                 <div class="input-with-prefix">
                   <span class="prefix">$</span>
-                  <input type="number" class="form-input" placeholder="0.00" step="0.01">
+                  <input class="form-input" placeholder="{{ getMontoMetodo(2) }}">
                 </div>
-
-                <p class="hint">Evidencia opcional</p>
-
-                <button type="button" class="btn-evidencia">
-                  <span class="material-icons">attach_file</span>
-                  Subir evidencia
-                </button>
-              </div>
-            </div>
-
-            <!-- TRANSFERENCIA -->
-            <div class="metodo-card requerido">
-              <div class="metodo-header">
-                <span class="material-icons">account_balance</span>
-                <h4>Transferencia</h4>
-              </div>
-
-              <div class="metodo-body">
-                <label class="form-label">Monto</label>
-                <div class="input-with-prefix">
-                  <span class="prefix">$</span>
-                  <input type="number" class="form-input" placeholder="0.00" step="0.01">
+                <div class="monto-actual">
+                  <span class="material-icons">info</span>
+                  Monto actual: <strong>${{ getMontoMetodo(2) }}</strong>
                 </div>
-
-                <p class="hint requerido-text">
-                  <span class="material-icons icon-small">info</span>
-                  Evidencia requerida
-                </p>
-
-                <div class="evidencia-list">
-                  <div class="evidencia-preview">
-                    <span class="material-icons">description</span>
-                    <span>Santander</span>
-                  </div>
-                  <div class="evidencia-preview">
-                    <span class="material-icons">description</span>
-                    <span>BBVA</span>
+                <div class="evidencia-list" *ngIf="bancosEfectivo.length > 0">
+                  <div class="evidencia-preview" *ngFor="let banco of bancosEfectivo">
+                    <span class="material-icons">account_balance</span>
+                    <div class="evidencia-info">
+                      <span class="banco-cuenta">{{ banco.cuenta }}</span>
+                      <span class="banco-monto">${{ banco.total_dinero }}</span>
+                    </div>
                   </div>
                 </div>
-
                 <button type="button" class="btn-evidencia">
                   <span class="material-icons">attach_file</span>
-                  Subir evidencia
+                  <span>Subir evidencia</span>
                 </button>
               </div>
             </div>
 
             <!-- TARJETA CRÉDITO -->
-            <div class="metodo-card requerido">
+            <div class="metodo-card metodo-requerido">
               <div class="metodo-header">
                 <span class="material-icons">credit_card</span>
-                <h4>Tarjeta crédito</h4>
+                <h4>Tarjeta Crédito</h4>
+                <span class="badge-requerido">Requerido</span>
               </div>
-
               <div class="metodo-body">
                 <label class="form-label">Monto</label>
                 <div class="input-with-prefix">
                   <span class="prefix">$</span>
-                  <input type="number" class="form-input" placeholder="0.00" step="0.01">
+                  <input class="form-input" placeholder="{{ getMontoMetodo(3) }}">
                 </div>
-
-                <p class="hint requerido-text">
-                  <span class="material-icons icon-small">info</span>
-                  Evidencia requerida
-                </p>
-
-                <div class="evidencia-list">
-                  <div class="evidencia-preview">
-                    <span class="material-icons">description</span>
-                    <span>Santander</span>
-                  </div>
-                  <div class="evidencia-preview">
-                    <span class="material-icons">description</span>
-                    <span>BBVA</span>
+                <div class="monto-actual">
+                  <span class="material-icons">info</span>
+                  Monto actual: <strong>${{ getMontoMetodo(3) }}</strong>
+                </div>
+                <div class="evidencia-list" *ngIf="bancosTarjetaCredito.length > 0">
+                  <div class="evidencia-preview" *ngFor="let banco of bancosTarjetaCredito">
+                    <span class="material-icons">account_balance</span>
+                    <div class="evidencia-info">
+                      <span class="banco-cuenta">{{ banco.cuenta }}</span>
+                      <span class="banco-monto">${{ banco.total_dinero }}</span>
+                    </div>
                   </div>
                 </div>
-
                 <button type="button" class="btn-evidencia">
                   <span class="material-icons">attach_file</span>
-                  Subir evidencia
+                  <span>Subir evidencia</span>
                 </button>
               </div>
             </div>
 
             <!-- TARJETA DÉBITO -->
-            <div class="metodo-card requerido">
+            <div class="metodo-card metodo-requerido">
               <div class="metodo-header">
                 <span class="material-icons">credit_card</span>
-                <h4>Tarjeta débito</h4>
+                <h4>Tarjeta Débito</h4>
+                <span class="badge-requerido">Requerido</span>
               </div>
-
               <div class="metodo-body">
                 <label class="form-label">Monto</label>
                 <div class="input-with-prefix">
                   <span class="prefix">$</span>
-                  <input type="number" class="form-input" placeholder="0.00" step="0.01">
+                  <input class="form-input" placeholder="{{ getMontoMetodo(4) }}">
                 </div>
-
-                <p class="hint requerido-text">
-                  <span class="material-icons icon-small">info</span>
-                  Evidencia requerida
-                </p>
-
-                <div class="evidencia-list">
-                  <div class="evidencia-preview">
-                    <span class="material-icons">description</span>
-                    <span>Santander</span>
-                  </div>
-                  <div class="evidencia-preview">
-                    <span class="material-icons">description</span>
-                    <span>BBVA</span>
+                <div class="monto-actual">
+                  <span class="material-icons">info</span>
+                  Monto actual: <strong>${{ getMontoMetodo(4) }}</strong>
+                </div>
+                <div class="evidencia-list" *ngIf="bancosDebito.length > 0">
+                  <div class="evidencia-preview" *ngFor="let banco of bancosDebito">
+                    <span class="material-icons">account_balance</span>
+                    <div class="evidencia-info">
+                      <span class="banco-cuenta">{{ banco.cuenta }}</span>
+                      <span class="banco-monto">${{ banco.total_dinero }}</span>
+                    </div>
                   </div>
                 </div>
-
                 <button type="button" class="btn-evidencia">
                   <span class="material-icons">attach_file</span>
-                  Subir evidencia
+                  <span>Subir evidencia</span>
                 </button>
               </div>
             </div>
 
-            <!-- Credito -->
-            <div class="metodo-card requerido">
+            <!-- TRANSFERENCIA -->
+            <div class="metodo-card metodo-requerido">
               <div class="metodo-header">
-                <span class="material-icons">credit_card</span>
-                <h4>Credito</h4>
+                <span class="material-icons">account_balance</span>
+                <h4>Transferencia</h4>
+                <span class="badge-requerido">Requerido</span>
               </div>
-
               <div class="metodo-body">
                 <label class="form-label">Monto</label>
                 <div class="input-with-prefix">
                   <span class="prefix">$</span>
-                  <input type="number" class="form-input" placeholder="0.00" step="0.01">
+                  <input class="form-input" placeholder="{{ getMontoMetodo(5) }}">
                 </div>
-
-                <p class="hint requerido-text">
-                  <span class="material-icons icon-small">info</span>
-                  Evidencia requerida
-                </p>
-
-
-
+                <div class="monto-actual">
+                  <span class="material-icons">info</span>
+                  Monto actual: <strong>${{ getMontoMetodo(5) }}</strong>
+                </div>
+                <div class="evidencia-list" *ngIf="bancosTransferencia.length > 0">
+                  <div class="evidencia-preview" *ngFor="let banco of bancosTransferencia">
+                    <span class="material-icons">account_balance</span>
+                    <div class="evidencia-info">
+                      <span class="banco-cuenta">{{ banco.cuenta }}</span>
+                      <span class="banco-monto">${{ banco.total_dinero }}</span>
+                    </div>
+                  </div>
+                </div>
                 <button type="button" class="btn-evidencia">
                   <span class="material-icons">attach_file</span>
-                  Subir evidencia
+                  <span>Subir evidencia</span>
                 </button>
               </div>
             </div>
+
           </div>
         </div>
 
-        <!-- ================= RESUMEN ================= -->
-        <div class="card resumen">
-          <h3 class="card-title">Resumen del corte</h3>
-
+        <!-- RESUMEN -->
+        <div class="card card-resumen">
+          <div class="card-header">
+            <span class="material-icons">summarize</span>
+            <h3 class="card-title">Resumen de la Consulta</h3>
+          </div>
           <div class="resumen-grid">
-            <div class="resumen-item">
-              <span class="resumen-label">Efectivo</span>
-              <strong class="resumen-value">$12,450.00</strong>
+            <div class="resumen-item" *ngFor="let r of consultaCorte?.resumen">
+              <div class="resumen-info">
+                <span class="resumen-label">{{ r.s_nombre_metodo }}</span>
+                <span class="resumen-value">${{ r.total_dinero }}</span>
+              </div>
             </div>
-            <div class="resumen-item">
-              <span class="resumen-label">Transferencias</span>
-              <strong class="resumen-value">$8,200.00</strong>
-            </div>
-            <div class="resumen-item">
-              <span class="resumen-label">Crédito Santander</span>
-              <strong class="resumen-value">$9,500.00</strong>
-            </div>
-            <div class="resumen-item">
-              <span class="resumen-label">Crédito BBVA</span>
-              <strong class="resumen-value">$5,800.00</strong>
-            </div>
-            <div class="resumen-item">
-              <span class="resumen-label">Débito Santander</span>
-              <strong class="resumen-value">$7,200.00</strong>
-            </div>
-            <div class="resumen-item">
-              <span class="resumen-label">Débito BBVA</span>
-              <strong class="resumen-value">$3,400.00</strong>
-            </div>
-
-            <div class="resumen-item total">
-              <span class="resumen-label">Total general</span>
-              <strong class="resumen-value">$35,900.00</strong>
+            <div class="resumen-total">
+              <div class="total-content">
+                <span class="material-icons">payments</span>
+                <div class="total-info">
+                  <span class="total-label">Total del Día</span>
+                  <span class="total-value">${{ totalDia }}</span>
+                </div>
+              </div>
             </div>
           </div>
         </div>
 
-        <!-- ================= ACCIONES ================= -->
+        <!-- ACCIONES -->
         <div class="acciones">
-          <button type="button" class="btn-cancelar" mat-dialog-close>
+          <button type="button" class="btn btn-cancelar" mat-dialog-close>
             <span class="material-icons">close</span>
-            Cancelar
+            <span>Cancelar</span>
           </button>
-
-          <button type="submit" class="btn-guardar">
+          <button type="submit" class="btn btn-guardar">
             <span class="material-icons">save</span>
-            Guardar corte
+            <span>Guardar Corte</span>
           </button>
         </div>
 
