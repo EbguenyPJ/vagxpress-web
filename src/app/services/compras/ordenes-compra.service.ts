@@ -5,57 +5,47 @@ import { conexion } from '../../conexion';
 @Injectable({
   providedIn: 'root'
 })
-export class RequisicionesService {
+export class OrdenesCompraService {
 
   constructor(private http: HttpClient) { }
 
-  getRequisiciones(s_token: string) {
+  getOrdenesCompra(s_token: string) {
     let headers = new HttpHeaders({
       'Content-Type': 'application/json',
       'Authorization': s_token
     });
     let params = { headers: headers };
-    let url = conexion.url + 'mostrar-requisiciones';
+    let url = conexion.url + 'mostrar-ordenes-compras';
     return this.http.get(url, params);
   }
 
-  getDetalleRequisicion(s_token: string, id_requisicion: number) {
+  getOrdenCompra(s_token: string, id_orden_compra: number) {
     let headers = new HttpHeaders({
       'Content-Type': 'application/json',
       'Authorization': s_token
     });
     let params = { headers: headers };
-    let url = conexion.url + 'mostrar-requisicion/' + id_requisicion;
+    let url = conexion.url + 'mostrar-orden-compra/' + id_orden_compra;
     return this.http.get(url, params);
   }
 
-  actualizarRequisicion(s_token: string, id_requisicion: number, data: any) {
+  aprobarOrdenCompra(s_token: string, id_orden_compra: number, data: any) {
     let headers = new HttpHeaders({
       'Content-Type': 'application/json',
       'Authorization': s_token
     });
-    let url = conexion.url + 'actualizar-requisicion/' + id_requisicion;
+    let url = conexion.url + 'aprobar-orden-compra/' + id_orden_compra;
     let options = { headers: headers };
     return this.http.put(url, data, options);
   }
 
-  getRequisicionPorProveedor(s_token: string, id_requisicion: number) {
+  rechazarOrdenCompra(s_token: string, id_orden_compra: number) {
     let headers = new HttpHeaders({
       'Content-Type': 'application/json',
       'Authorization': s_token
     });
-    let params = { headers: headers };
-    let url = conexion.url + 'mostrar-requisicion-por-proveedor/' + id_requisicion;
-    return this.http.get(url, params);
-  }
-
-  crearOrdenesCompras(s_token: string, data: any) {
-    let headers = new HttpHeaders({
-      'Content-Type': 'application/json',
-      'Authorization': s_token
-    });
-    let url = conexion.url + 'crear-ordenes-compras';
+    let url = conexion.url + 'rechazar-orden-compra/' + id_orden_compra;
     let options = { headers: headers };
-    return this.http.post(url, data, options);
+    return this.http.put(url, {}, options);
   }
 }

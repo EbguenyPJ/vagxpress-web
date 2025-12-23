@@ -1,0 +1,111 @@
+<div class="dialog-ordenes-compra">
+  <div class="dialog-header">
+    <h2 mat-dialog-title>Órdenes de Compra - Requisición #{{ data.id_requisicion }}</h2>
+    <button mat-icon-button (click)="cerrar()" class="btn-cerrar">
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+
+  <mat-dialog-content>
+    <!-- Loading spinner -->
+    <div class="loading-container" *ngIf="isLoading">
+      <mat-progress-spinner color="primary" [diameter]="50" mode="indeterminate"></mat-progress-spinner>
+      <p>Cargando datos...</p>
+    </div>
+
+    <!-- Proveedores -->
+    <div class="proveedores-container" *ngIf="!isLoading">
+      <div class="proveedor-group" *ngFor="let proveedor of proveedores">
+        <mat-card class="proveedor-card">
+          <!-- Header del proveedor -->
+          <mat-card-header class="proveedor-header" (click)="toggleProveedor(proveedor.id_proveedor)">
+            <div class="proveedor-info">
+              <div class="proveedor-title-row">
+                <mat-card-title>{{ proveedor.s_proveedor }}</mat-card-title>
+                <button mat-icon-button class="btn-expand">
+                  <mat-icon>{{ isProveedorExpandido(proveedor.id_proveedor) ? 'expand_less' : 'expand_more' }}</mat-icon>
+                </button>
+              </div>
+              <div class="proveedor-stats">
+                <span class="stat-item">
+                  <mat-icon>shopping_cart</mat-icon>
+                  {{ contarRefaccionesAutorizadas(proveedor) }} refacciones autorizadas
+                </span>
+                <span class="stat-item total-estimado">
+                  <mat-icon>attach_money</mat-icon>
+                  Total: ${{ calcularTotalProveedor(proveedor) | number: '1.2-2' }}
+                </span>
+              </div>
+            </div>
+            <button mat-raised-button color="primary" class="btn-generar-orden"
+              (click)="$event.stopPropagation(); generarOrden(proveedor)">
+              <mat-icon>add_shopping_cart</mat-icon>
+              Generar Orden
+            </button>
+          </mat-card-header>
+
+          <!-- Lista de refacciones (colapsable) -->
+          <div *ngIf="isProveedorExpandido(proveedor.id_proveedor)">
+            <mat-divider></mat-divider>
+
+            <mat-card-content class="refacciones-list">
+              <div class="refaccion-item" *ngFor="let item of proveedor.items" [class.refaccion-desautorizada]="!item.b_autorizada">
+                <div class="refaccion-checkbox">
+                  <mat-checkbox [(ngModel)]="item.b_autorizada" color="primary"></mat-checkbox>
+                </div>
+                <div class="refaccion-main">
+                  <div class="refaccion-header">
+                    <h4 class="refaccion-nombre">{{ item.s_nombre_refaccion }}</h4>
+                    <span class="numero-parte">#{{ item.s_numero_parte }}</span>
+                  </div>
+
+                  <div class="refaccion-details">
+                    <div class="detail-group">
+                      <span class="detail-label">Stock Actual:</span>
+                      <span class="detail-value badge-blue">{{ item.n_stock_actual }}</span>
+                    </div>
+                    <div class="detail-group">
+                      <span class="detail-label">Cantidad Sugerida:</span>
+                      <span class="detail-value badge-green">{{ item.n_cantidad_sugerida }}</span>
+                    </div>
+                    <div class="detail-group">
+                      <span class="detail-label">Costo Unitario:</span>
+                      <span class="detail-value">${{ item.n_costo_unitario | number: '1.2-2' }}</span>
+                    </div>
+                    <div class="detail-group">
+                      <span class="detail-label">Costo Total:</span>
+                      <span class="detail-value costo-total">${{ calcularCostoTotal(item) | number: '1.2-2' }}</span>
+                    </div>
+                  </div>
+
+                  <div class="refaccion-badges">
+                    <span class="badge badge-prioridad">{{ item.s_prioridad }}</span>
+                    <span class="badge badge-motivo">{{ item.s_motivo_pedido }}</span>
+                  </div>
+                </div>
+              </div>
+            </mat-card-content>
+          </div>
+        </mat-card>
+      </div>
+
+      <!-- Mensaje si no hay proveedores -->
+      <div class="no-data" *ngIf="proveedores.length === 0">
+        <mat-icon>info</mat-icon>
+        <p>No se encontraron proveedores para esta requisición</p>
+      </div>
+    </div>
+  </mat-dialog-content>
+
+  <mat-dialog-actions align="end">
+    <button mat-raised-button (click)="cerrar()" class="btn-cancelar">
+      Cerrar
+    </button>
+    <button mat-raised-button color="accent" class="btn-generar-todas"
+      (click)="generarTodasOrdenes()"
+      [disabled]="proveedores.length === 0">
+      <mat-icon>library_add</mat-icon>
+      Generar Todas las Órdenes
+    </button>
+  </mat-dialog-actions>
+</div>
