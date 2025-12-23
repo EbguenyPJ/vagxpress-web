@@ -10,11 +10,26 @@
   padding: 1rem 1.5rem;
   border-bottom: 2px solid #f0f0f0;
 
-  h2 {
-    margin: 0;
-    font-size: 1.5rem;
-    font-weight: 600;
-    color: #333;
+  .header-title {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+
+    h2 {
+      margin: 0;
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: #333;
+    }
+
+    .badge-estatus {
+      padding: 0.25rem 0.75rem;
+      border-radius: 12px;
+      color: white;
+      font-size: 0.875rem;
+      font-weight: 500;
+      text-transform: uppercase;
+    }
   }
 
   .btn-cerrar {
@@ -38,13 +53,30 @@
   border-top: 2px solid #f0f0f0;
   gap: 1rem;
 
-  .btn-cerrar-action {
-    background-color: #f5f5f5;
-    color: #666;
+  .btn-cerrar-requisicion {
+    background-color: #2196F3;
+    color: white;
+    font-weight: 500;
 
     &:hover:not([disabled]) {
-      background-color: #e0e0e0;
+      background-color: #1976D2;
     }
+  }
+
+  .btn-cancelar-requisicion {
+    background-color: #F44336;
+    color: white;
+    font-weight: 500;
+
+    &:hover:not([disabled]) {
+      background-color: #D32F2F;
+    }
+  }
+
+  .btn-disabled {
+    background-color: #E0E0E0 !important;
+    color: #9E9E9E !important;
+    cursor: not-allowed;
   }
 }
 

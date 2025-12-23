@@ -33,7 +33,7 @@ import { BreadcrumbComponent } from '@shared/components/breadcrumb/breadcrumb.co
 import { OrdenCompra } from 'app/models/ordenCompraModel';
 import { OrdenesCompraService } from 'app/services/compras/ordenes-compra.service';
 import { MatDialog } from '@angular/material/dialog';
-import { DialogDetalleOrdenCompraComponent } from './dialogs/dialog-detalle-orden-compra/dialog-detalle-orden-compra.component';
+import { DialogGestionarOrdenComponent } from './dialogs/dialog-gestionar-orden/dialog-gestionar-orden.component';
 import Swal from 'sweetalert2';
 
 @Component({
@@ -69,10 +69,9 @@ export class OrdenesCompraComponent implements OnInit, OnDestroy {
   columnDefinitions = [
     { def: 'select', label: 'Checkbox', type: 'check', visible: true },
     { def: 's_folio_interno', label: 'Folio', type: 'text', visible: true },
-    { def: 'id_requisicion', label: 'Requisición', type: 'text', visible: true },
-    { def: 's_nombre_proveedor', label: 'Proveedor', type: 'text', visible: true },
+    { def: 'id_requisicion', label: 'ID Requisición', type: 'number', visible: true },
+    { def: 's_proveedor', label: 'Proveedor', type: 'text', visible: true },
     { def: 'd_fecha_orden', label: 'Fecha Orden', type: 'date', visible: true },
-    { def: 'd_fecha_recepcion_estimada', label: 'Recepción Estimada', type: 'date', visible: true },
     { def: 'n_total_estimado', label: 'Total Estimado', type: 'currency', visible: true },
     { def: 's_estatus_orden_compra', label: 'Estatus', type: 'badge', visible: true },
     { def: 'actions', label: 'Acciones', type: 'actionBtn', visible: true },
@@ -110,9 +109,7 @@ export class OrdenesCompraComponent implements OnInit, OnDestroy {
     if (currentUserStr) {
       try {
         const currentUser = JSON.parse(currentUserStr);
-        const id_usuario = currentUser.id_usuario;
         this.s_token = currentUser.token;
-        this.s_token = '';
       } catch (error) {
         console.error('Error al leer el usuario del localStorage', error);
       }
@@ -135,50 +132,23 @@ export class OrdenesCompraComponent implements OnInit, OnDestroy {
       .map((cd) => cd.def);
   }
 
-  verDetalle(row: OrdenCompra) {
-    this.dialog.open(DialogDetalleOrdenCompraComponent, {
+  gestionarOrden(row: OrdenCompra) {
+    const dialogRef = this.dialog.open(DialogGestionarOrdenComponent, {
       width: '95vw',
       maxWidth: '1400px',
       data: {
         id_orden_compra: row.id_orden_compra,
         s_folio_interno: row.s_folio_interno,
-        s_nombre_proveedor: row.s_nombre_proveedor,
+        s_proveedor: row.s_proveedor,
         id_requisicion: row.id_requisicion,
+        id_estatus_orden_compra: row.id_estatus_orden_compra,
         s_token: this.s_token
       }
     });
-  }
 
-  editarOrdenCompra(row: OrdenCompra) {
-    Swal.fire({
-      toast: true,
-      position: 'top-end',
-      icon: 'info',
-      title: `Editar orden de compra ${row.s_folio_interno}`,
-      showConfirmButton: false,
-      timer: 2000
-    });
-  }
-
-  deleteItem(row: OrdenCompra) {
-    Swal.fire({
-      title: '¿Eliminar orden de compra?',
-      text: `Se eliminará la orden ${row.s_folio_interno}`,
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonText: 'Sí, eliminar',
-      cancelButtonText: 'Cancelar'
-    }).then((result) => {
-      if (result.isConfirmed) {
-        this.dataSource.data = this.dataSource.data.filter(
-          (item) => item.id_orden_compra !== row.id_orden_compra
-        );
-        this.showNotification(
-          'snackbar-danger',
-          'Orden de compra eliminada correctamente',
-          'bottom',
-          'center'
-        );
+    dialogRef.afterClosed().subscribe(result => {
+      if (result?.success) {
+        this.loadData();
       }
     });
   }
@@ -214,7 +184,7 @@ export class OrdenesCompraComponent implements OnInit, OnDestroy {
     this.selection.clear();
     this.showNotification(
       'snackbar-danger',
-      `${totalSelect} orden(es) de compra eliminada(s) correctamente`,
+      `${totalSelect} orden(es) eliminada(s) correctamente`,
       'bottom',
       'center'
     );
@@ -226,7 +196,7 @@ export class OrdenesCompraComponent implements OnInit, OnDestroy {
     this.ordenesCompraService.getOrdenesCompra(this.s_token).subscribe(
       (response: any) => {
         if (response.status === 'success') {
-          const ordenes = response.data.map((orden: any) => new OrdenCompra(orden));
+          const ordenes = response.data.map((ord: any) => new OrdenCompra(ord));
           this.dataSource.data = ordenes;
           this.dataSource.paginator = this.paginator;
           this.dataSource.sort = this.sort;
@@ -241,7 +211,7 @@ export class OrdenesCompraComponent implements OnInit, OnDestroy {
         }
       },
       (error) => {
-        console.error('Error al cargar órdenes de compra:', error);
+        console.error('Error al cargar órdenes:', error);
         this.isLoading = false;
         Swal.fire({
           icon: 'error',
@@ -275,24 +245,6 @@ export class OrdenesCompraComponent implements OnInit, OnDestroy {
       showConfirmButton: false,
       timer: 2000
     });
-  }
-
-  getBadgeClass(estatus: string): string {
-    switch (estatus.toLowerCase()) {
-      case 'pendiente':
-        return 'badge-solid-orange';
-      case 'autorizada':
-        return 'badge-solid-blue';
-      case 'en tránsito':
-      case 'en transito':
-        return 'badge-solid-purple';
-      case 'recibida':
-        return 'badge-solid-green';
-      case 'cancelada':
-        return 'badge-solid-red';
-      default:
-        return 'badge-solid-grey';
-    }
   }
 
   onContextMenu(event: MouseEvent, item: OrdenCompra) {
