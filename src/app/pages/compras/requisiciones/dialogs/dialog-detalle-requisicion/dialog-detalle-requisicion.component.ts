@@ -133,24 +133,6 @@ export class DialogDetalleRequisicionComponent implements OnInit {
     return coloresMap[this.id_estatus_requisicion] || '#999';
   }
 
-  esRequisicionAbierta(): boolean {
-    return this.id_estatus_requisicion === 1;
-  }
-
-  cerrarRequisicion(): void {
-    Swal.fire({
-      title: '¿Cerrar requisición?',
-      text: 'La requisición cambiará a estatus "Cerrada"',
-      icon: 'question',
-      showCancelButton: true,
-      confirmButtonText: 'Sí, cerrar',
-      cancelButtonText: 'Cancelar'
-    }).then((result) => {
-      if (result.isConfirmed) {
-        this.actualizarEstatus(2);
-      }
-    });
-  }
 
   cancelarRequisicion(): void {
     Swal.fire({
