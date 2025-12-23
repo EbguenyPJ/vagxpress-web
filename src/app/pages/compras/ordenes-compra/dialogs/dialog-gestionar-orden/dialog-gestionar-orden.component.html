@@ -1,10 +1,12 @@
-<div class="dialog-detalle-requisicion">
+<div class="dialog-gestionar-orden">
   <div class="dialog-header">
-    <div class="header-title">
-      <h2 mat-dialog-title>Detalle de Requisición #{{ data.id_requisicion }}</h2>
-      <span class="badge-estatus" [style.background-color]="obtenerColorEstatus()">
-        {{ s_estatus_requisicion }}
-      </span>
+    <div class="header-info">
+      <h2 mat-dialog-title>Gestionar Orden de Compra</h2>
+      <div class="order-info">
+        <span class="info-item"><strong>Folio:</strong> {{ data.s_folio_interno }}</span>
+        <span class="info-item"><strong>Proveedor:</strong> {{ data.s_proveedor }}</span>
+        <span class="info-item"><strong>Requisición:</strong> #{{ data.id_requisicion }}</span>
+      </div>
     </div>
     <button mat-icon-button (click)="cerrar()" class="btn-cerrar">
       <mat-icon>close</mat-icon>
@@ -87,14 +89,27 @@
                     <strong>{{ row.s_numero_parte }}</strong>
                   </mat-cell>
                 </ng-container>
-              } @else if (column.def === 'n_stock_actual' || column.def === 'n_cantidad_sugerida') {
+              } @else if (column.def === 'n_cantidad_sugerida') {
                 <ng-container [matColumnDef]="column.def">
                   <mat-header-cell *matHeaderCellDef mat-sort-header>
                     <span class="truncate-text">{{ column.label }}</span>
                   </mat-header-cell>
                   <mat-cell *matCellDef="let row">
                     <span class="mobile-label">{{ column.label }}:</span>
-                    <span class="badge badge-solid-blue">{{ row[column.def] }}</span>
+                    <span class="badge badge-solid-blue">{{ row.n_cantidad_sugerida }}</span>
+                  </mat-cell>
+                </ng-container>
+              } @else if (column.type === 'editable') {
+                <ng-container [matColumnDef]="column.def">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header>
+                    <span class="truncate-text">{{ column.label }}</span>
+                  </mat-header-cell>
+                  <mat-cell *matCellDef="let row">
+                    <span class="mobile-label">{{ column.label }}:</span>
+                    <mat-form-field class="cantidad-input" appearance="outline">
+                      <input matInput type="number" [(ngModel)]="row.n_cantidad"
+                        (ngModelChange)="onCantidadChange()" min="1" step="1">
+                    </mat-form-field>
                   </mat-cell>
                 </ng-container>
               } @else if (column.type === 'currency') {
@@ -105,6 +120,16 @@
                   <mat-cell *matCellDef="let row">
                     <span class="mobile-label">{{ column.label }}:</span>
                     <span>${{ row[column.def] | number: '1.2-2' }}</span>
+                  </mat-cell>
+                </ng-container>
+              } @else if (column.type === 'calculated') {
+                <ng-container [matColumnDef]="column.def">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header>
+                    <span class="truncate-text">{{ column.label }}</span>
+                  </mat-header-cell>
+                  <mat-cell *matCellDef="let row">
+                    <span class="mobile-label">{{ column.label }}:</span>
+                    <strong class="total-value">${{ calcularTotal(row) | number: '1.2-2' }}</strong>
                   </mat-cell>
                 </ng-container>
               } @else if (column.type === 'badge') {
@@ -152,24 +177,29 @@
         [pageSizeOptions]="[5, 10, 25, 100]">
       </mat-paginator>
     </div>
+
+    <!-- Gran Total -->
+    <div class="gran-total">
+      <h3>Gran Total: <strong>${{ calcularGranTotal() | number: '1.2-2' }}</strong></h3>
+    </div>
   </mat-dialog-content>
 
   <mat-dialog-actions align="end">
     <button
       mat-raised-button
-      (click)="cerrarRequisicion()"
-      [class.btn-cerrar-requisicion]="esRequisicionAbierta()"
-      [class.btn-disabled]="!esRequisicionAbierta()"
-      [disabled]="!esRequisicionAbierta()">
-      Cerrar Requisición
+      (click)="aprobarOrden()"
+      [class.btn-aprobar]="esOrdenCreada()"
+      [class.btn-disabled]="!esOrdenCreada()"
+      [disabled]="!esOrdenCreada()">
+      Aprobar Orden
     </button>
     <button
       mat-raised-button
-      (click)="cancelarRequisicion()"
-      [class.btn-cancelar-requisicion]="esRequisicionAbierta()"
-      [class.btn-disabled]="!esRequisicionAbierta()"
-      [disabled]="!esRequisicionAbierta()">
-      Cancelar Requisición
+      (click)="rechazarOrden()"
+      [class.btn-rechazar]="esOrdenCreada()"
+      [class.btn-disabled]="!esOrdenCreada()"
+      [disabled]="!esOrdenCreada()">
+      Rechazar Orden
     </button>
   </mat-dialog-actions>
 </div>

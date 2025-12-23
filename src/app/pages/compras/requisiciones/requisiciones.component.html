@@ -151,19 +151,10 @@
                       class="tbl-action-btn btn-view" matTooltip="Ver detalle">
                       <mat-icon>visibility</mat-icon>
                     </button>
-                    @if (esRequisicionCerrada(row)) {
-                      <button mat-icon-button (click)="$event.stopPropagation()" (click)="generarOrdenes(row)"
-                        class="tbl-action-btn btn-money" matTooltip="Generar Órdenes" style="color: #4caf50;">
-                        <mat-icon>attach_money</mat-icon>
-                      </button>
-                    }
-                    <button mat-icon-button (click)="$event.stopPropagation()" (click)="editarRequisicion(row)"
-                      class="tbl-action-btn btn-edit" matTooltip="Editar">
-                      <mat-icon>edit</mat-icon>
-                    </button>
-                    <button mat-icon-button (click)="$event.stopPropagation()" (click)="deleteItem(row)"
-                      class="tbl-action-btn btn-delete" matTooltip="Eliminar">
-                      <mat-icon>delete</mat-icon>
+                    <button mat-icon-button (click)="$event.stopPropagation()" (click)="verOrdenesCompra(row)"
+                      class="tbl-action-btn btn-orders" matTooltip="Órdenes de Compra"
+                      *ngIf="row.id_estatus_requisicion !== 1 && row.id_estatus_requisicion !== 4">
+                      <mat-icon>attach_money</mat-icon>
                     </button>
                   </mat-cell>
                 </ng-container>
@@ -191,13 +182,10 @@
                   <mat-icon>visibility</mat-icon>
                   <span>Ver Detalle</span>
                 </button>
-                <button mat-menu-item (click)="editarRequisicion(item)">
-                  <mat-icon>edit</mat-icon>
-                  <span>Editar Requisición</span>
-                </button>
-                <button mat-menu-item (click)="deleteItem(item)">
-                  <mat-icon>delete</mat-icon>
-                  <span>Eliminar Requisición</span>
+                <button mat-menu-item (click)="verOrdenesCompra(item)"
+                  *ngIf="item.id_estatus_requisicion !== 1 && item.id_estatus_requisicion !== 4">
+                  <mat-icon>attach_money</mat-icon>
+                  <span>Órdenes de Compra</span>
                 </button>
                 <button mat-menu-item (click)="refresh()">
                   <mat-icon>refresh</mat-icon>
