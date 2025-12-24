@@ -135,19 +135,12 @@ export class RequisicionesComponent implements OnInit, OnDestroy {
   }
 
   verDetalle(row: Requisicion) {
-    const dialogRef = this.dialog.open(DialogDetalleRequisicionComponent, {
+    this.dialog.open(DialogDetalleRequisicionComponent, {
       width: '90vw',
       maxWidth: '1200px',
       data: {
         id_requisicion: row.id_requisicion,
-        id_estatus_requisicion: row.id_estatus_requisicion,
         s_token: this.s_token
-      }
-    });
-
-    dialogRef.afterClosed().subscribe(result => {
-      if (result === 'cerrada') {
-        this.loadData();
       }
     });
   }
