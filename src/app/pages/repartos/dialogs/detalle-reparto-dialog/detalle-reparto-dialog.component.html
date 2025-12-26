@@ -1,0 +1,105 @@
+
+
+
+<div class="container-fluid mt-4 mb-4 scrollableContent">
+  <div class="row g-3">
+
+    <!-- PANEL IZQUIERDO -->
+    <div class="col-lg-4 col-md-12">
+
+      <!-- ESTADO -->
+      <div class="card bg-dark text-white mb-3 shadow-sm">
+        <div class="card-body">
+          <span class="badge bg-success mb-2">EN TRÁNSITO</span>
+          <h5 class="fw-bold">Orden #{{orden?.id_orden}}</h5>
+          <small>
+            Asignada: {{orden?.d_fecha_asignacion | date:'short'}}
+          </small>
+        </div>
+      </div>
+
+      <!-- DESTINO -->
+      <div class="card mb-3 shadow-sm">
+        <div class="card-body">
+          <h6 class="fw-bold mb-2">Destino</h6>
+          <p class="mb-1 fw-semibold">{{orden?.s_nombre_destino}}</p>
+          <small class="text-muted">{{orden?.s_direccion}}</small>
+        </div>
+      </div>
+
+      <!-- REPARTIDOR -->
+      <div class="card mb-3 shadow-sm">
+        <div class="card-body d-flex align-items-center">
+          <div class="me-3">
+            <div class="avatar-circle">
+              {{orden?.s_nombre_completo}}
+            </div>
+          </div>
+          <div>
+            <h6 class="mb-0">{{orden?.s_nombre_completo}}</h6>
+            <small class="text-muted">Repartidor asignado</small>
+          </div>
+        </div>
+      </div>
+
+      <!-- TIMELINE -->
+      <div class="card mb-3 shadow-sm">
+        <div class="card-body">
+          <h6 class="fw-bold mb-3">Timeline</h6>
+
+          <ul class="timeline">
+            <li class="active">
+              <span>Inicio reparto</span>
+              <small>{{orden?.d_inicio_reparto | date:'short'}}</small>
+              <div *ngIf="reparto.evidencias_salida_reparto">
+                <div *ngFor="let evs of reparto.evidencias_salida_reparto">
+                  <img [src]="url_evidencia_salida_reparto + evs.s_evidencia_orden" [alt]="evs.s_evidencia_orden">                
+                </div>
+              </div>
+            </li>
+
+            <li *ngIf="orden?.d_fin_reparto">
+              <span>Entrega completada</span>
+              <small>{{orden?.d_fin_reparto | date:'short'}}</small>
+            </li>
+
+            <li *ngIf="orden?.d_inicio_regreso">
+              <span>Inicio regreso</span>
+              <small>{{orden?.d_inicio_regreso | date:'short'}}</small>
+            </li>
+
+            <li *ngIf="orden?.d_fin_regreso">
+              <span>Regreso finalizado</span>
+              <small>{{orden?.d_fin_regreso | date:'short'}}</small>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- PRODUCTOS -->
+      <div class="card shadow-sm">
+        <div class="card-body">
+          <h6 class="fw-bold mb-3">Productos</h6>
+          <div *ngFor="let p of orden?.productos" class="mb-2">
+            <div class="d-flex justify-content-between">
+              <span>{{p.s_producto}}</span>
+              <span class="badge bg-secondary">x{{p.n_cantidad}}</span>
+            </div>
+            <small class="text-muted">{{p.s_comentario}}</small>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- MAPA -->
+    <div class="col-lg-8 col-md-12">
+      <div
+        #mapRuta
+        class="timeline-map w-100 shadow-sm"
+        style="height:100%; border-radius:12px; overflow:hidden;"
+      ></div>
+    </div>
+
+  </div>
+</div>
