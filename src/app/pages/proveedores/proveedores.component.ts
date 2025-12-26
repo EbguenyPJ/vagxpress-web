@@ -56,7 +56,7 @@ import { DialogCrearProveedorComponent } from './dialog/dialog-crear-proveedor/d
   templateUrl: './proveedores.component.html',
   styleUrl: './proveedores.component.scss'
 })
-export class ProveedoresComponent implements OnInit, OnDestroy {
+export class ProveedoresComponent implements OnInit, OnDestroy{
 
 
   columnDefinitions = [

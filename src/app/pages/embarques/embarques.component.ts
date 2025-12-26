@@ -44,7 +44,7 @@ import { EmbarqueService } from 'app/services/embarque/embarque.service';
     MatProgressSpinnerModule,
     MatPaginatorModule,
     FormsModule,
-   
+    BreadcrumbComponent
 ],
   templateUrl: './embarques.component.html',
   styleUrl: './embarques.component.scss'
@@ -114,6 +114,7 @@ export class EmbarquesComponent {
   addNew() {
     this.openDialog('add');
   }
+  
   
   editCall(row: embarqueModel) {
     this.openDialog('edit', row);

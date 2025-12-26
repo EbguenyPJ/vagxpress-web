@@ -7,6 +7,34 @@
   font-weight: 500;
 }
 
+.badge {
+    font-size: 0.75rem;
+    font-weight: 600;
+    padding: 4px 8px;
+    border-radius: 12px;
+    text-transform: uppercase;
+    display: inline-block;
+    margin-right: 4px;
+}
+
+:host ::ng-deep .badge.badge-solid-green {
+    background-color: #e6f4ea;
+    color: #1e7e34;
+    border: 1px solid #c3e6cb;
+}
+
+:host ::ng-deep .badge.badge-solid-purple {
+    background-color: #f3e8ff;
+    color: #6f42c1;
+    border: 1px solid #d6bcfa;
+    
+}
+
+.btn-ver-detalle mat-icon {
+  color: #a5ccf0; /* Verde personalizado */
+}
+
+
 /* ==================== Encabezado y barra superior ==================== */
 :host ::ng-deep .materialTableHeader {
   background: linear-gradient(
@@ -145,23 +173,57 @@
 }
 
 /* ==================== Columnas específicas ==================== */
-.mat-column-id {
-  min-width: 100px !important;
-  padding: 0 8px !important;
-  white-space: nowrap !important;
+.mat-column-id_corte {
+    //background: #767575;
+    //background: #65923f  ;
+    width: auto !important;
+    min-width: 100px !important;
+    flex: none !important;
+    white-space: nowrap !important;
+    overflow: visible !important;
+    padding: 0 8px !important;
 }
 
-.mat-column-email {
-  width: 280px !important;
-  min-width: 280px !important;
-  padding: 0 8px !important;
+
+.mat-column-d_fecha_corte {
+    width: 210px !important;
+    min-width: 210px !important;
+    flex: none !important;
+    white-space: nowrap !important;
+    overflow: visible !important;
+    padding: 0 8px !important;
 }
+
+.mat-column-n_monto_total {
+    width: 210px !important;
+    min-width: 210px !important;
+    flex: none !important;
+    white-space: nowrap !important;
+    overflow: visible !important;
+    padding: 0 8px !important;
+}
+
+
 
 .mat-column-s_nombre_completo {
-  width: 260px !important;
-  min-width: 260px !important;
-  padding: 0 8px !important;
+    width: 300px !important;
+    min-width: 300px !important;
+    flex: none !important;
+    white-space: nowrap !important;
+    overflow: visible !important;
+    padding: 0 8px !important;
 }
+
+
+.mat-column-s_descripcion_corte {
+    width: 300px !important;
+    min-width: 300px !important;
+    flex: none !important;
+    white-space: nowrap !important;
+    overflow: visible !important;
+    padding: 0 8px !important;
+}
+
 
 /* ==================== Icono ver ==================== */
 .btn-icon-azul .mat-icon.tbl-fav-eye {
@@ -226,13 +288,18 @@
     width: 140px;
   }
 
-  :host ::ng-deep .mat-column-id {
-    background-color: #b11226 !important;
+  :host ::ng-deep .mat-column-id_corte {
+
+    background-color: #dc6815 !important;
     color: #ffffff;
   }
 
-  .mat-column-email,
-  .mat-column-s_nombre_completo {
+  .mat-column-d_fecha_corte,
+  .mat-column-n_monto_total,
+  .mat-column-s_nombre_completo,
+  .mat-column-s_descripcion_corte,
+  .mat-column-b_activo ,
+  .mat-column-actions {
     min-width: 80px !important;
     white-space: nowrap !important;
     overflow: hidden !important;
@@ -240,4 +307,8 @@
     padding: 0 4px !important;
     text-align: center !important;
   }
+
+
+
+
 }

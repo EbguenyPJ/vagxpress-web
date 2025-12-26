@@ -65,11 +65,19 @@ export class DialogNuevoCorteComponent implements OnInit {
 
   evidencias: any[] = [];
 
+  hoy: string = '';
+
 
 
   ngOnInit(): void {
-    const hoy = new Date();
-    this.fechaConsulta = hoy.toISOString().split('T')[0]; // yyyy-mm-dd
+
+    const hoyDate = new Date();
+    const month = (hoyDate.getMonth() + 1).toString().padStart(2, '0');
+    const day = hoyDate.getDate().toString().padStart(2, '0');
+    const year = hoyDate.getFullYear();
+
+    this.hoy = `${year}-${month}-${day}`;   // yyyy-MM-dd
+    this.fechaConsulta = this.hoy;          // Inicializa con hoy
     this.cargarConsulta(this.fechaConsulta);
     this.cargarVentasCorte(this.fechaConsulta);
   }

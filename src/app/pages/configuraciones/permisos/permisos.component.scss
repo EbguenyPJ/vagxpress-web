@@ -11,12 +11,31 @@
     }
 }
 
+.badge {
+    font-size: 0.75rem;
+    font-weight: 600;
+    padding: 4px 8px;
+    border-radius: 12px;
+    text-transform: uppercase;
+    display: inline-block;
+    margin-right: 4px;
+}
 
+:host ::ng-deep .badge.badge-solid-green {
+    background-color: #e6f4ea;
+    color: #1e7e34;
+    border: 1px solid #c3e6cb;
+}
 
+:host ::ng-deep .badge.badge-solid-purple {
+    background-color: #f3e8ff;
+    color: #6f42c1;
+    border: 1px solid #d6bcfa;
+}
 
 ::ng-deep .toggle-verde {
     --mdc-switch-selected-track-color: rgba(177, 18, 38, 0.8);
-    
+
 
 }
 
@@ -186,27 +205,19 @@
 
 
 .mat-column-name {
-    width: 200px !important;
-    min-width: 200px !important;
+    width: 180px !important;
+    min-width: 180px !important;
     flex: none !important;
     white-space: nowrap !important;
     overflow: visible !important;
     padding: 0 8px !important;
 }
 
-.mat-column-email {
-    width: 280px !important;
-    min-width: 280px !important;
-    flex: none !important;
-    white-space: nowrap !important;
-    overflow: visible !important;
-    padding: 0 8px !important;
-}
 
 
 .mat-column-s_nombre_completo {
-    width: 280px !important;
-    min-width: 280px !important;
+    width: 250px !important;
+    min-width: 250px !important;
     flex: none !important;
     white-space: nowrap !important;
     overflow: visible !important;
@@ -214,9 +225,14 @@
 }
 
 
-
-
-
+.mat-column-email {
+    width: 300px !important;
+    min-width: 300px !important;
+    flex: none !important;
+    white-space: nowrap !important;
+    overflow: visible !important;
+    padding: 0 8px !important;
+}
 
 
 
@@ -297,12 +313,12 @@
     }
 
     .mat-column-name,
-    .mat-column-email,
     .mat-column-s_nombre_completo,
-    .mat-column-b_usuario_web,
-    .mat-column-b_usuario_movi,
-    .mat-column-b_activo,
-    .mat-column-actions {
+    .mat-column-email,
+    .mat-column-b_activo
+    .mat-column-actions,
+    .mat-column-acceso_web,
+    .mat-column-acceso_movil {
         min-width: 80px !important;
         /* ancho mínimo para móvil */
         width: auto !important;
@@ -320,7 +336,5 @@
         text-align: center !important;
         /* centra el contenido */
     }
-
-
 
 }

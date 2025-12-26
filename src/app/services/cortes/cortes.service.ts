@@ -94,6 +94,18 @@ subirEvidenciasCorte(token: string, idCorte: number, evidencias: any[]) {
   }
 
 
+getCorteById(s_token: string, id_corte: number): Observable<any> {
+  const headers = new HttpHeaders({
+    'Content-Type': 'application/json',
+    'Authorization': s_token
+  });
+
+  const url = conexion.url + 'mostrar-corte-id/' + id_corte;
+  return this.http.get(url, { headers });
+}
+
+
+  
 
 
 
