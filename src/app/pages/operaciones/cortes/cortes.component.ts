@@ -28,6 +28,8 @@ import { Direction } from '@angular/cdk/bidi';
 // Services and Models
 import { EmpleadosService } from 'app/services/empleados/empleados.service';
 import { empleadosModel } from 'app/models/empleadosModel';
+import { cortesModel } from 'app/models/cortesModel';
+import { CortesService } from 'app/services/cortes/cortes.service';
 import { DialogCrearEmpleadoComponent } from 'app/pages/administracion/empleados/dialogs/dialog-crear-empleado/dialog-crear-empleado.component';
 import { conexion } from 'app/conexion';
 import { DialogNuevoCorteComponent } from './dialogs/dialog-nuevo-corte/dialog-nuevo-corte.component';
@@ -55,7 +57,6 @@ import { DialogNuevoCorteComponent } from './dialogs/dialog-nuevo-corte/dialog-n
     MatCheckboxModule,
     MatTableModule,
     MatSortModule,
-    NgClass,
     MatRippleModule,
     MatProgressSpinnerModule,
     MatMenuModule,
@@ -67,36 +68,29 @@ import { DialogNuevoCorteComponent } from './dialogs/dialog-nuevo-corte/dialog-n
 export class CortesComponent implements OnInit, OnDestroy {
   columnDefinitions = [
     { def: 'select', label: 'Checkbox', type: 'check', visible: true },
-    { def: 'id_empleado', label: '#', type: 'idTabla', visible: true },
-    { def: 's_nombre', label: 'Nombre', type: 'text', visible: true },
-    { def: 's_tipo_empleado', label: 'Tipo', type: 'text', visible: true },
-    { def: 's_sucursal', label: 'Sucursal', type: 'text', visible: true },
-    { def: 'n_telefono', label: 'Teléfono', type: 'phone', visible: true },
-    { def: 's_estado_disponibilidad', label: 'Disponibilidad', type: 'text', visible: true },
+    { def: 'id_corte', label: '#', type: 'idTabla', visible: true },
+    { def: 'd_fecha_corte', label: 'Fecha', type: 'text', visible: true },
+    { def: 'n_monto_total', label: 'Monto Total', type: 'text', visible: true },
+    { def: 'nombre_usuario', label: 'Nombre', type: 'text', visible: true },
     { def: 'b_activo', label: 'Estatus', type: 'text', visible: true },
-    { def: 'actions', label: 'Acciones', type: 'actionBtn', visible: true },
   ];
 
-  dataSource = new MatTableDataSource<empleadosModel>([]);
-  selection = new SelectionModel<empleadosModel>(true, []);
-  contextMenuPosition = { x: '0px', y: '0px' };
+
+  dataSource = new MatTableDataSource<cortesModel>([]);
+  selection = new SelectionModel<cortesModel>(true, []);
   isLoading = true;
   private destroy$ = new Subject<void>();
-
-  empleadosModel: empleadosModel[] = [];
-  data: any;
-  ruta_img: any = conexion.url_img + "/empleados/";
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
   @ViewChild('filter') filter: ElementRef | undefined;
-  @ViewChild(MatMenuTrigger) contextMenu?: MatMenuTrigger;
 
   constructor(
     public httpClient: HttpClient,
     public dialog: MatDialog,
     public EmpleadosService: EmpleadosService,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private cortesService: CortesService
   ) { }
 
   ngOnInit() {
@@ -113,22 +107,7 @@ export class CortesComponent implements OnInit, OnDestroy {
     this.destroy$.complete();
   }
 
-  refresh() {
-    this.loadData();
-  }
 
-  getDisplayedColumns(): string[] {
-    return this.columnDefinitions
-      .filter((cd) => cd.visible)
-      .map((cd) => cd.def);
-  }
-
-  getEmpleadoImage(imagen: string): string {
-    if (!imagen || imagen === 'empleado-default.png') {
-      return this.ruta_img + 'empleado-default.png';
-    }
-    return this.ruta_img + imagen;
-  }
 
   addNew() {
     this.openDialog('add');
@@ -173,13 +152,13 @@ export class CortesComponent implements OnInit, OnDestroy {
     });
   }
 
-  private updateRecord(updatedRecord: empleadosModel) {
+
+  private updateRecord(updatedRecord: cortesModel) {
     const index = this.dataSource.data.findIndex(
-      (record) => record.id_empleado === updatedRecord.id_empleado
+      (corte) => corte.id_corte === updatedRecord.id_corte
     );
     if (index !== -1) {
       this.dataSource.data[index] = updatedRecord;
-      this.dataSource._updateChangeSubscription();
     }
   }
 
@@ -189,9 +168,43 @@ export class CortesComponent implements OnInit, OnDestroy {
     this.dataSource.sort = this.sort;
   }
 
+
+
+  loadData() {
+    this.isLoading = true;
+    const token = localStorage.getItem('token') || ''; // tu token si lo usas
+
+    this.cortesService.getCortes(token).subscribe({
+      next: (res: any) => { // res es cualquier objeto devuelto por tu API
+        this.dataSource.data = res.data || []; // aseguramos que siempre sea un array
+        this.isLoading = false;
+
+        // Filtro personalizado para buscar en cualquier campo
+        this.dataSource.filterPredicate = (data: cortesModel, filter: string) => {
+          const dataStr = Object.values(data)
+            .filter(value => value !== null && value !== undefined)
+            .map(value => value.toString().toLowerCase())
+            .join(' ');
+          return dataStr.indexOf(filter) !== -1;
+        };
+      },
+      error: (err) => {
+        console.error(err);
+        this.isLoading = false;
+        this.showNotification('snackbar-danger', 'Error al cargar los cortes', 'bottom', 'center');
+      }
+    });
+  }
+
+
+
   applyFilter(event: Event) {
-    const filterValue = (event.target as HTMLInputElement).value
+    const filterValue = (event.target as HTMLInputElement).value;
     this.dataSource.filter = filterValue.trim().toLowerCase();
+  }
+
+  getDisplayedColumns(): string[] {
+    return this.columnDefinitions.filter(cd => cd.visible).map(cd => cd.def);
   }
 
   isAllSelected() {
@@ -199,63 +212,20 @@ export class CortesComponent implements OnInit, OnDestroy {
   }
 
   masterToggle() {
-    this.isAllSelected()
-      ? this.selection.clear()
-      : this.dataSource.data.forEach((row) => this.selection.select(row));
+    this.isAllSelected() ? this.selection.clear() : this.dataSource.data.forEach(row => this.selection.select(row));
   }
 
   removeSelectedRows() {
     const totalSelect = this.selection.selected.length;
     this.dataSource.data = this.dataSource.data.filter(
-      (item) => !this.selection.selected.includes(item)
+      item => !this.selection.selected.includes(item)
     );
     this.selection.clear();
-    this.showNotification(
-      'snackbar-danger',
-      `${totalSelect} registro(s) eliminado(s) correctamente...!!!`,
-      'bottom',
-      'center'
-    );
+    this.showNotification('snackbar-danger', `${totalSelect} corte(s) eliminado(s) correctamente`, 'bottom', 'center');
   }
 
-  loadData() {
-    this.isLoading = true;
-
-    this.EmpleadosService.getEmpleados("").subscribe({
-      next: (data) => {
-        this.data = data;
-        this.dataSource = new MatTableDataSource<empleadosModel>(this.data.data);
-        this.dataSource.paginator = this.paginator;
-        this.dataSource.sort = this.sort;
-        this.isLoading = false;
-
-        this.dataSource.filterPredicate = (data: empleadosModel, filter: string) => {
-          const dataStr = Object.values(data)
-            .filter(value => value !== null && value !== undefined)
-            .map(value => value.toString().toLowerCase())
-            .join(' ');
-          return dataStr.indexOf(filter) !== -1;
-        };
-
-        this.refreshTable();
-      },
-      error: (err) => {
-        console.error(err);
-        this.isLoading = false;
-        this.showNotification(
-          'snackbar-danger',
-          'Error al cargar los empleados',
-          'bottom',
-          'center'
-        );
-      },
-    });
-  }
-
-  formatPhoneNumber(phoneNumber: string): string {
-    if (!phoneNumber) return '';
-    // Eliminar guiones y espacios
-    return phoneNumber.replace(/^\-+|\-+/g, '');
+  refresh() {
+    this.loadData();
   }
 
   showNotification(
@@ -268,36 +238,25 @@ export class CortesComponent implements OnInit, OnDestroy {
       duration: 2000,
       verticalPosition: placementFrom,
       horizontalPosition: placementAlign,
-      panelClass: colorName,
+      panelClass: colorName
     });
   }
 
   exportExcel() {
     const exportData = this.dataSource.filteredData.map((x) => ({
-      'ID': x.id_empleado,
-      'Nombre': x.s_nombre,
-      'Apellido Paterno': x.s_apellido_paterno,
-      'Apellido Materno': x.s_apellido_materno,
-      'Tipo': x.s_tipo_empleado,
-      'Sucursal': x.s_sucursal,
-      'Teléfono': this.formatPhoneNumber(x.s_telefono),
-      'Correo': x.s_correo,
+      'ID Corte': x.id_corte,
+      'Fecha': x.d_fecha_corte,
+      'Monto Total': x.n_monto_total,
+      'Descripción': x.s_descripcion_corte,
       'Estatus': x.b_activo ? 'Activo' : 'Inactivo'
     }));
-
-    TableExportUtil.exportToExcel(exportData, 'empleados');
+    TableExportUtil.exportToExcel(exportData, 'cortes'); // Implementa tu util de export
   }
 
-  onContextMenu(event: MouseEvent, item: empleadosModel) {
-    event.preventDefault();
-    this.contextMenuPosition = {
-      x: `${event.clientX}px`,
-      y: `${event.clientY}px`,
-    };
-    if (this.contextMenu) {
-      this.contextMenu.menuData = { item };
-      this.contextMenu.menu?.focusFirstItem('mouse');
-      this.contextMenu.openMenu();
-    }
-  }
+
+
+
+
+
+
 }

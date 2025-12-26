@@ -1,6 +1,11 @@
 <div class="dialog-detalle-requisicion">
   <div class="dialog-header">
-    <h2 mat-dialog-title>Detalle de Requisición #{{ data.id_requisicion }}</h2>
+    <div class="header-title">
+      <h2 mat-dialog-title>Detalle de Requisición #{{ data.id_requisicion }}</h2>
+      <span class="badge-estatus" [style.background-color]="obtenerColorEstatus()">
+        {{ s_estatus_requisicion }}
+      </span>
+    </div>
     <button mat-icon-button (click)="cerrar()" class="btn-cerrar">
       <mat-icon>close</mat-icon>
     </button>
@@ -150,13 +155,21 @@
   </mat-dialog-content>
 
   <mat-dialog-actions align="end">
-    @if (esRequisicionAbierta()) {
-      <button mat-raised-button color="warn" (click)="cerrarRequisicion()" class="btn-cerrar-requisicion">
-        Cerrar Requisición
-      </button>
-    }
-    <button mat-raised-button (click)="cerrar()" class="btn-cerrar-action">
-      Cerrar
+    <button
+      mat-raised-button
+      (click)="cerrarRequisicion()"
+      [class.btn-cerrar-requisicion]="esRequisicionAbierta()"
+      [class.btn-disabled]="!esRequisicionAbierta()"
+      [disabled]="!esRequisicionAbierta()">
+      Cerrar Requisición
+    </button>
+    <button
+      mat-raised-button
+      (click)="cancelarRequisicion()"
+      [class.btn-cancelar-requisicion]="esRequisicionAbierta()"
+      [class.btn-disabled]="!esRequisicionAbierta()"
+      [disabled]="!esRequisicionAbierta()">
+      Cancelar Requisición
     </button>
   </mat-dialog-actions>
 </div>

@@ -34,7 +34,7 @@ import { Requisicion } from 'app/models/requisicionModel';
 import { RequisicionesService } from 'app/services/compras/requisiciones.service';
 import { MatDialog } from '@angular/material/dialog';
 import { DialogDetalleRequisicionComponent } from './dialogs/dialog-detalle-requisicion/dialog-detalle-requisicion.component';
-import { DialogGenerarOrdenesComponent } from './dialogs/dialog-generar-ordenes/dialog-generar-ordenes.component';
+import { DialogOrdenesCompraComponent } from './dialogs/dialog-ordenes-compra/dialog-ordenes-compra.component';
 import Swal from 'sweetalert2';
 
 @Component({
@@ -135,79 +135,23 @@ export class RequisicionesComponent implements OnInit, OnDestroy {
   }
 
   verDetalle(row: Requisicion) {
-    const dialogRef = this.dialog.open(DialogDetalleRequisicionComponent, {
+    this.dialog.open(DialogDetalleRequisicionComponent, {
       width: '90vw',
       maxWidth: '1200px',
       data: {
         id_requisicion: row.id_requisicion,
-        id_estatus_requisicion: row.id_estatus_requisicion,
         s_token: this.s_token
-      }
-    });
-
-    dialogRef.afterClosed().subscribe(result => {
-      if (result === 'cerrada') {
-        this.loadData();
       }
     });
   }
 
-  generarOrdenes(row: Requisicion) {
-    const dialogRef = this.dialog.open(DialogGenerarOrdenesComponent, {
+  verOrdenesCompra(row: Requisicion) {
+    this.dialog.open(DialogOrdenesCompraComponent, {
       width: '95vw',
-      maxWidth: '1200px',
+      maxWidth: '1400px',
       data: {
         id_requisicion: row.id_requisicion,
         s_token: this.s_token
-      }
-    });
-
-    dialogRef.afterClosed().subscribe(result => {
-      if (result === 'ordenes_generadas') {
-        Swal.fire({
-          icon: 'success',
-          title: 'Órdenes generadas',
-          text: 'Las órdenes de compra se generaron exitosamente',
-          showConfirmButton: true
-        });
-      }
-    });
-  }
-
-  esRequisicionCerrada(row: Requisicion): boolean {
-    return row.id_estatus_requisicion === 2;
-  }
-
-  editarRequisicion(row: Requisicion) {
-    Swal.fire({
-      toast: true,
-      position: 'top-end',
-      icon: 'info',
-      title: `Editar requisición #${row.id_requisicion}`,
-      showConfirmButton: false,
-      timer: 2000
-    });
-  }
-
-  deleteItem(row: Requisicion) {
-    Swal.fire({
-      title: '¿Eliminar requisición?',
-      text: `Se eliminará la requisición #${row.id_requisicion}`,
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonText: 'Sí, eliminar',
-      cancelButtonText: 'Cancelar'
-    }).then((result) => {
-      if (result.isConfirmed) {
-        this.dataSource.data = this.dataSource.data.filter(
-          (item) => item.id_requisicion !== row.id_requisicion
-        );
-        this.showNotification(
-          'snackbar-danger',
-          'Requisición eliminada correctamente',
-          'bottom',
-          'center'
-        );
       }
     });
   }

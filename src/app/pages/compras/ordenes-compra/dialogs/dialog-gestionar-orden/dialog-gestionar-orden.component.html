@@ -1,9 +1,10 @@
-<div class="dialog-detalle-orden-compra">
+<div class="dialog-gestionar-orden">
   <div class="dialog-header">
-    <div class="dialog-header-content">
-      <h2 mat-dialog-title>Detalle de Orden de Compra {{ data.s_folio_interno }}</h2>
-      <div class="dialog-info">
-        <span class="info-item"><strong>Proveedor:</strong> {{ data.s_nombre_proveedor }}</span>
+    <div class="header-info">
+      <h2 mat-dialog-title>Gestionar Orden de Compra</h2>
+      <div class="order-info">
+        <span class="info-item"><strong>Folio:</strong> {{ data.s_folio_interno }}</span>
+        <span class="info-item"><strong>Proveedor:</strong> {{ data.s_proveedor }}</span>
         <span class="info-item"><strong>Requisición:</strong> #{{ data.id_requisicion }}</span>
       </div>
     </div>
@@ -85,7 +86,7 @@
                   </mat-header-cell>
                   <mat-cell *matCellDef="let row">
                     <span class="mobile-label">{{ column.label }}:</span>
-                    <strong class="text-primary">{{ row.s_numero_parte }}</strong>
+                    <strong>{{ row.s_numero_parte }}</strong>
                   </mat-cell>
                 </ng-container>
               } @else if (column.def === 'n_cantidad_sugerida') {
@@ -98,45 +99,37 @@
                     <span class="badge badge-solid-blue">{{ row.n_cantidad_sugerida }}</span>
                   </mat-cell>
                 </ng-container>
-              } @else if (column.type === 'editable-number') {
+              } @else if (column.type === 'editable') {
                 <ng-container [matColumnDef]="column.def">
                   <mat-header-cell *matHeaderCellDef mat-sort-header>
                     <span class="truncate-text">{{ column.label }}</span>
                   </mat-header-cell>
                   <mat-cell *matCellDef="let row">
                     <span class="mobile-label">{{ column.label }}:</span>
-                    <mat-form-field class="input-editable-cell" appearance="outline">
-                      <input matInput type="number" min="0"
-                        [(ngModel)]="row[column.def]"
-                        (input)="onCantidadChange(row, $event)"
-                        class="text-center">
+                    <mat-form-field class="cantidad-input" appearance="outline">
+                      <input matInput type="number" [(ngModel)]="row.n_cantidad"
+                        (ngModelChange)="onCantidadChange()" min="1" step="1">
                     </mat-form-field>
                   </mat-cell>
                 </ng-container>
-              } @else if (column.type === 'editable-currency') {
+              } @else if (column.type === 'currency') {
                 <ng-container [matColumnDef]="column.def">
                   <mat-header-cell *matHeaderCellDef mat-sort-header>
                     <span class="truncate-text">{{ column.label }}</span>
                   </mat-header-cell>
                   <mat-cell *matCellDef="let row">
                     <span class="mobile-label">{{ column.label }}:</span>
-                    <mat-form-field class="input-editable-cell-currency" appearance="outline">
-                      <span matPrefix>$&nbsp;</span>
-                      <input matInput type="number" min="0" step="0.01"
-                        [(ngModel)]="row[column.def]"
-                        (input)="onPrecioChange(row, $event)"
-                        class="text-right">
-                    </mat-form-field>
+                    <span>${{ row[column.def] | number: '1.2-2' }}</span>
                   </mat-cell>
                 </ng-container>
-              } @else if (column.type === 'calculated-currency') {
+              } @else if (column.type === 'calculated') {
                 <ng-container [matColumnDef]="column.def">
-                  <mat-header-cell *matHeaderCellDef>
+                  <mat-header-cell *matHeaderCellDef mat-sort-header>
                     <span class="truncate-text">{{ column.label }}</span>
                   </mat-header-cell>
                   <mat-cell *matCellDef="let row">
                     <span class="mobile-label">{{ column.label }}:</span>
-                    <strong class="text-success">${{ calcularTotalRefaccion(row) | number: '1.2-2' }}</strong>
+                    <strong class="total-value">${{ calcularTotal(row) | number: '1.2-2' }}</strong>
                   </mat-cell>
                 </ng-container>
               } @else if (column.type === 'badge') {
@@ -146,7 +139,7 @@
                   </mat-header-cell>
                   <mat-cell *matCellDef="let row">
                     <span class="mobile-label">{{ column.label }}:</span>
-                    <span [class]="'badge ' + getBadgeClass(column.def, row[column.def])">{{ row[column.def] }}</span>
+                    <span class="badge badge-solid-green">{{ row[column.def] }}</span>
                   </mat-cell>
                 </ng-container>
               } @else {
@@ -185,19 +178,28 @@
       </mat-paginator>
     </div>
 
-    <!-- Total General -->
-    <div class="total-container">
-      <div class="total-label">Gran Total:</div>
-      <div class="total-amount">${{ granTotal | number: '1.2-2' }}</div>
+    <!-- Gran Total -->
+    <div class="gran-total">
+      <h3>Gran Total: <strong>${{ calcularGranTotal() | number: '1.2-2' }}</strong></h3>
     </div>
   </mat-dialog-content>
 
   <mat-dialog-actions align="end">
-    <button mat-raised-button (click)="cerrar()" class="btn-cancelar">
-      Cancelar
+    <button
+      mat-raised-button
+      (click)="aprobarOrden()"
+      [class.btn-aprobar]="esOrdenCreada()"
+      [class.btn-disabled]="!esOrdenCreada()"
+      [disabled]="!esOrdenCreada()">
+      Aprobar Orden
     </button>
-    <button mat-raised-button color="primary" (click)="guardar()" class="btn-guardar">
-      Guardar Cambios
+    <button
+      mat-raised-button
+      (click)="rechazarOrden()"
+      [class.btn-rechazar]="esOrdenCreada()"
+      [class.btn-disabled]="!esOrdenCreada()"
+      [disabled]="!esOrdenCreada()">
+      Rechazar Orden
     </button>
   </mat-dialog-actions>
 </div>

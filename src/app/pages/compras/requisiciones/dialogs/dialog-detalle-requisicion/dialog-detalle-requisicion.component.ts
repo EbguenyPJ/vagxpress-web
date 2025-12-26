@@ -57,6 +57,8 @@ export class DialogDetalleRequisicionComponent implements OnInit {
   dataSource = new MatTableDataSource<any>([]);
   selection = new SelectionModel<any>(true, []);
   isLoading = true;
+  id_estatus_requisicion: number = 0;
+  s_estatus_requisicion: string = '';
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
@@ -82,6 +84,13 @@ export class DialogDetalleRequisicionComponent implements OnInit {
           this.dataSource.data = refacciones;
           this.dataSource.paginator = this.paginator;
           this.dataSource.sort = this.sort;
+
+          // Obtener estatus de la primera refacción (todas tienen el mismo estatus de requisición)
+          if (refacciones.length > 0) {
+            this.id_estatus_requisicion = refacciones[0].id_estatus_requisicion || 0;
+            this.s_estatus_requisicion = this.obtenerNombreEstatus(this.id_estatus_requisicion);
+          }
+
           this.isLoading = false;
         } else {
           this.isLoading = false;
@@ -99,6 +108,101 @@ export class DialogDetalleRequisicionComponent implements OnInit {
           icon: 'error',
           title: 'Error',
           text: 'Ocurrió un error al cargar el detalle de la requisición'
+        });
+      }
+    );
+  }
+
+  obtenerNombreEstatus(id_estatus: number): string {
+    const estatusMap: { [key: number]: string } = {
+      1: 'Abierta',
+      2: 'Cerrada',
+      3: 'Aprobada',
+      4: 'Cancelada'
+    };
+    return estatusMap[id_estatus] || 'Desconocido';
+  }
+
+  obtenerColorEstatus(): string {
+    const coloresMap: { [key: number]: string } = {
+      1: '#4CAF50',  // Verde - Abierta
+      2: '#2196F3',  // Azul - Cerrada
+      3: '#9C27B0',  // Púrpura - Aprobada
+      4: '#F44336'   // Rojo - Cancelada
+    };
+    return coloresMap[this.id_estatus_requisicion] || '#999';
+  }
+
+  esRequisicionAbierta(): boolean {
+    return this.id_estatus_requisicion === 1;
+  }
+
+  cerrarRequisicion(): void {
+    Swal.fire({
+      title: '¿Cerrar requisición?',
+      text: 'La requisición cambiará a estatus "Cerrada"',
+      icon: 'question',
+      showCancelButton: true,
+      confirmButtonText: 'Sí, cerrar',
+      cancelButtonText: 'Cancelar'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.actualizarEstatus(2);
+      }
+    });
+  }
+
+  cancelarRequisicion(): void {
+    Swal.fire({
+      title: '¿Cancelar requisición?',
+      text: 'La requisición cambiará a estatus "Cancelada"',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Sí, cancelar',
+      cancelButtonText: 'No'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.actualizarEstatus(4);
+      }
+    });
+  }
+
+  actualizarEstatus(id_estatus: number): void {
+    const payload = {
+      id_estatus_requisicion: id_estatus
+    };
+
+    this.requisicionesService.actualizarRequisicion(
+      this.data.s_token,
+      this.data.id_requisicion,
+      payload
+    ).subscribe(
+      (response: any) => {
+        if (response.status === 'success') {
+          Swal.fire({
+            toast: true,
+            position: 'top-end',
+            icon: 'success',
+            title: 'Requisición actualizada correctamente',
+            showConfirmButton: false,
+            timer: 3000
+          });
+          this.id_estatus_requisicion = id_estatus;
+          this.s_estatus_requisicion = this.obtenerNombreEstatus(id_estatus);
+        } else {
+          Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: response.message || 'No se pudo actualizar la requisición'
+          });
+        }
+      },
+      (error) => {
+        console.error('Error al actualizar requisición:', error);
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: 'Ocurrió un error al actualizar la requisición'
         });
       }
     );
@@ -136,52 +240,6 @@ export class DialogDetalleRequisicionComponent implements OnInit {
       showConfirmButton: false,
       timer: 2000
     });
-  }
-
-  cerrarRequisicion(): void {
-    Swal.fire({
-      title: '¿Cerrar requisición?',
-      text: 'Al cerrar la requisición no se podrán hacer más cambios y podrá generar las órdenes de compra.',
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonText: 'Sí, cerrar',
-      cancelButtonText: 'Cancelar'
-    }).then((result) => {
-      if (result.isConfirmed) {
-        this.requisicionesService.cerrarRequisicion(this.data.s_token, this.data.id_requisicion).subscribe(
-          (response: any) => {
-            if (response.status === 'success') {
-              Swal.fire({
-                icon: 'success',
-                title: 'Éxito',
-                text: 'Requisición cerrada correctamente',
-                timer: 2000,
-                showConfirmButton: false
-              });
-              this.dialogRef.close('cerrada');
-            } else {
-              Swal.fire({
-                icon: 'error',
-                title: 'Error',
-                text: response.message || 'No se pudo cerrar la requisición'
-              });
-            }
-          },
-          (error) => {
-            console.error('Error al cerrar requisición:', error);
-            Swal.fire({
-              icon: 'error',
-              title: 'Error',
-              text: 'Ocurrió un error al cerrar la requisición'
-            });
-          }
-        );
-      }
-    });
-  }
-
-  esRequisicionAbierta(): boolean {
-    return this.data.id_estatus_requisicion === 1;
   }
 
   cerrar(): void {
