@@ -111,15 +111,6 @@ export class PuntoVentaComponent implements OnInit {
     this.isLoading = true;
     this.errorCarga = false;
 
-    Swal.fire({
-      title: 'Cargando datos...',
-      text: 'Por favor espera',
-      allowOutsideClick: false,
-      didOpen: () => {
-        Swal.showLoading();
-      }
-    });
-
     let completados = 0;
     let total = 4; // Ahora cargamos 4 endpoints
     let error = false;
@@ -127,7 +118,6 @@ export class PuntoVentaComponent implements OnInit {
     const verificarCompletado = () => {
       completados++;
       if (completados === total) {
-        Swal.close();
         this.isLoading = false;
 
         if (!error) {
@@ -135,16 +125,6 @@ export class PuntoVentaComponent implements OnInit {
           console.log('Datos cargados correctamente');
         } else {
           this.errorCarga = true;
-          Swal.fire({
-            icon: 'error',
-            title: 'Error al cargar datos',
-            text: 'No se pudieron cargar los datos del punto de venta',
-            confirmButtonText: 'Reintentar'
-          }).then((result) => {
-            if (result.isConfirmed) {
-              this.reintentar();
-            }
-          });
         }
       }
     };
@@ -480,6 +460,9 @@ export class PuntoVentaComponent implements OnInit {
         // Venta exitosa - limpiar carrito
         this.carrito = [];
         this.recalcularTotales();
+
+        // Recargar datos para actualizar stock
+        this.cargarDatosIniciales();
       }
     });
   }

@@ -140,13 +140,15 @@ export class DialogGestionarOrdenComponent implements OnInit {
     }).then((result) => {
       if (result.isConfirmed) {
         const payload = {
+          id_estatus_orden_compra: 2,
           refacciones: this.dataSource.data.map(item => ({
-            s_numero_parte: item.s_numero_parte,
-            n_cantidad: parseFloat(item.n_cantidad)
+            id_orden_compra_requisicion_refaccion: item.id_orden_compra_requisicion_refaccion,
+            id_requisicion_refaccion: item.id_requisicion_refaccion,
+            n_cantidad_solicitada: parseFloat(item.n_cantidad)
           }))
         };
 
-        this.ordenesCompraService.aprobarOrdenCompra(
+        this.ordenesCompraService.gestionarOrdenCompra(
           this.data.s_token,
           this.data.id_orden_compra,
           payload
@@ -193,9 +195,19 @@ export class DialogGestionarOrdenComponent implements OnInit {
       cancelButtonText: 'Cancelar'
     }).then((result) => {
       if (result.isConfirmed) {
-        this.ordenesCompraService.rechazarOrdenCompra(
+        const payload = {
+          id_estatus_orden_compra: 3,
+          refacciones: this.dataSource.data.map(item => ({
+            id_orden_compra_requisicion_refaccion: item.id_orden_compra_requisicion_refaccion,
+            id_requisicion_refaccion: item.id_requisicion_refaccion,
+            n_cantidad_solicitada: parseFloat(item.n_cantidad)
+          }))
+        };
+
+        this.ordenesCompraService.gestionarOrdenCompra(
           this.data.s_token,
-          this.data.id_orden_compra
+          this.data.id_orden_compra,
+          payload
         ).subscribe(
           (response: any) => {
             if (response.status === 'success') {
