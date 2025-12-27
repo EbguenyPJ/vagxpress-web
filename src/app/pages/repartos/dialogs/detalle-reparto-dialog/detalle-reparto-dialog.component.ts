@@ -21,6 +21,8 @@ import { conexion } from 'app/conexion';
 import { refaccionInsertadaModel } from 'app/models/refaccionInsertadaModel';
 import { CommonModule } from '@angular/common';
 import { MatDividerModule } from "@angular/material/divider";
+import { MatTooltipModule } from '@angular/material/tooltip';
+
 import Swal from "sweetalert2";
 
 
@@ -29,6 +31,7 @@ import * as L from 'leaflet';
 
 
 import { RepartosService } from 'app/services/repartos/repartos.service';
+import { EvidenciasRepartoDialogComponent } from '../evidencias-reparto-dialog/evidencias-reparto-dialog.component';
 
 
 
@@ -59,7 +62,8 @@ export interface DialogData {
     MatExpansionModule,
     DragDropModule,
     CommonModule,
-    MatDividerModule
+    MatDividerModule,
+    MatTooltipModule
   ],
   templateUrl: './detalle-reparto-dialog.component.html',
   styleUrl: './detalle-reparto-dialog.component.scss'
@@ -69,10 +73,6 @@ dialogTitle: any;
 id_orden: any;
 reparto: any;
 orden: any;
-
-url_firma: any = conexion.url_img + "/evidenciasVXM/imgFirmas/";
-url_evidencia_salida_reparto: any = conexion.url_img + "/evidenciasVXM/imgEvidenciasSalidaReparto/";
-url_evidencia_fin_reparto: any = conexion.url_img + "/evidenciasVXM/imgEvidenciasFinReparto/";
 
 
 
@@ -153,115 +153,6 @@ private capasRutas = L.featureGroup();
   }
   
   
-
-
-
-
-  //Mapa de prueba de ruta
-  // private renderMapaRuta(): void
-  // {
-  //     if (!this.mapRutaRef) return;
-
-  //     const puntos = this.normalizePuntos(this.reparto?.ruta_salida);
-  //     const puntos2 = this.normalizePuntos(this.reparto?.ruta_regreso);
-  //     this.routeStats = this.calcRutaStats(puntos);
-
-  //     if (!puntos.length) return;
-
-  //     // Crea/rehúsa el mapa
-  //     if (!this.mapRuta) {
-  //       this.mapRuta = L.map(this.mapRutaRef.nativeElement, { zoomControl: true });
-  //       L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-  //         maxZoom: 19,
-  //         attribution: '© OpenStreetMap'
-  //       }).addTo(this.mapRuta);
-  //     }
-
-  //     const latlngs = puntos.map(p => [p.lat, p.lng]) as [number, number][];
-
-  //     const poly = L.polyline(latlngs, { weight: 5, opacity: 0.9 }).addTo(this.mapRuta);
-
-  //     // Inicio / Fin
-  //     L.circleMarker(latlngs[0], { radius: 6, color: '#16a34a', fillColor: '#16a34a', fillOpacity: 1 })
-  //       .bindTooltip(`Inicio ${puntos[0].ts ?? ''}`, { direction: 'top' })
-  //       .addTo(this.mapRuta);
-
-  //     L.circleMarker(latlngs[latlngs.length - 1], { radius: 6, color: '#ef4444', fillColor: '#ef4444', fillOpacity: 1 })
-  //       .bindTooltip(`Fin ${puntos[puntos.length - 1].ts ?? ''}`, { direction: 'top' })
-  //       .addTo(this.mapRuta);
-
-  //     this.mapRuta.fitBounds(poly.getBounds(), { padding: [20, 20] });
-
-  //     // Corrige tamaño si el diálogo estaba oculto
-  //     setTimeout(() => this.mapRuta!.invalidateSize(), 0);
-  // }
-
-  // // private normalizePuntos(raw: any[]): { lat: number; lng: number; ts?: string }[] {
-  // //   const pts = (raw || []).map((p: any) => ({
-  // //     lat: Number(p.n_latitud),
-  // //     lng: Number(p.n_longitud),
-  // //     ts:  p.timestamp
-  // //   }));
-  // //   return pts.filter((pt, i, arr) =>
-  // //     i === 0 || pt.lat !== arr[i - 1].lat || pt.lng !== arr[i - 1].lng
-  // //   );
-  // // }
-
-  // //Normaliza y parsea timestamp a milisegundos. Devuelve NaN si no hay ts o no parsea.
-  // //"2025-08-16 16:40:20" -> ms (UTC). Devuelve NaN si no parsea.
-  // private parseTs(ts?: string): number {
-  //   if (!ts) return NaN;
-  //   const t = ts.trim().replace(/\s+/g, ' ');   // limpia dobles espacios
-  //   const [d, h] = t.split(' ');
-  //   if (!d || !h) return NaN;
-  //   const [yy, mm, dd] = d.split('-').map(Number);
-  //   const [HH, MM, SS = 0] = h.split(':').map(Number);
-  //   if ([yy, mm, dd, HH, MM].some(v => Number.isNaN(v))) return NaN;
-  //   return Date.UTC(yy, (mm - 1), dd, HH, MM, SS);
-  // }
-
-  // private calcRutaStats(puntos: { lat: number; lng: number; ts?: string }[]) {
-  //   const n = puntos.length;
-  //   if (n < 2) {
-  //     return { km: 0, n, durMin: 0, avgKmh: 0 };
-  //   }
-
-  //   // Distancia total (km)
-  //   let totalKm = 0;
-  //   for (let i = 1; i < n; i++) {
-  //     totalKm += this.haversineKm(
-  //       puntos[i - 1].lat, puntos[i - 1].lng,
-  //       puntos[i].lat,     puntos[i].lng
-  //     );
-  //   }
-
-  //   // Duración (min)
-  //   const t0 = this.parseTs(puntos[0].ts);
-  //   const t1 = this.parseTs(puntos[n - 1].ts);
-  //   const durMin = (!Number.isNaN(t0) && !Number.isNaN(t1))
-  //     ? Math.max(0, (t1 - t0) / 60000)
-  //     : 0;
-
-  //   const avgKmh = durMin > 0 ? (totalKm / (durMin / 60)) : 0;
-
-  //   return {
-  //     km: Math.round(totalKm * 100) / 100,
-  //     n,
-  //     durMin: Math.round(durMin * 10) / 10,
-  //     avgKmh: Math.round(avgKmh * 10) / 10
-  //   };
-  // }
-
-  // private haversineKm(lat1: number, lon1: number, lat2: number, lon2: number): number {
-  //   const R = 6371; // km
-  //   const toRad = (x: number) => x * Math.PI / 180;
-  //   const dLat = toRad(lat2 - lat1);
-  //   const dLon = toRad(lon2 - lon1);
-  //   const a = Math.sin(dLat/2)**2 + Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) * Math.sin(dLon/2)**2;
-  //   return 2 * R * Math.asin(Math.sqrt(a));
-  // }
-
-
 
   // renderizamos salida y regreso
   private renderMapaRuta(): void {
@@ -378,6 +269,27 @@ private capasRutas = L.featureGroup();
       i === 0 || pt.lat !== arr[i - 1].lat || pt.lng !== arr[i - 1].lng
     );
   }
+
+
+
+
+  abrirEvidenciasReparto(evidencias: any, tipo: any){
+    if(tipo === 3){
+      evidencias = [{s_evidencia_orden: evidencias}];
+    }
+    const dialogRef = this.dialog.open(EvidenciasRepartoDialogComponent, {
+      width: '60vw',
+      maxWidth: '100vw',
+      data: { evidencias: evidencias, tipo: tipo },
+      autoFocus: false,
+    });
+  }
+
+
+
+
+
+
 
   
 }

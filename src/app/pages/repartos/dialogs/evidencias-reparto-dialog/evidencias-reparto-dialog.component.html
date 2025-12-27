@@ -1,0 +1,50 @@
+<div class="dialogContainer">
+    <div class="modalHeader">
+      <div class="avatarDetails">
+        <div class="modalTitle">
+          Evidencias
+        </div>
+      </div>
+      <button mat-icon-button mat-dialog-close class="modal-close-button" aria-label="Close dialog" type="button">
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
+  
+    <div mat-dialog-content class="container-fluid mb-4 scrollableContent contenido-carrusel">
+      <button
+        mat-icon-button
+        class="nav left"
+        (click)="anterior()"
+        [disabled]="indexActual === 0">
+        <mat-icon>chevron_left</mat-icon>
+      </button>
+
+      <img
+        *ngIf="evidencias.length"
+        [src]="url + evidencias[indexActual].s_evidencia_orden"
+        class="imagen-carrusel"
+      />
+
+      <button
+        mat-icon-button
+        class="nav right"
+        (click)="siguiente()"
+        [disabled]="indexActual === evidencias.length - 1">
+        <mat-icon>chevron_right</mat-icon>
+      </button>
+
+    </div>
+
+    <div class="contador">
+      {{ indexActual + 1 }} / {{ evidencias.length }}
+    </div>
+
+</div>
+
+
+
+
+
+
+
+
