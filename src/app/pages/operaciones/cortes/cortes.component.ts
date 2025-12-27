@@ -33,6 +33,7 @@ import { CortesService } from 'app/services/cortes/cortes.service';
 import { DialogCrearEmpleadoComponent } from 'app/pages/administracion/empleados/dialogs/dialog-crear-empleado/dialog-crear-empleado.component';
 import { conexion } from 'app/conexion';
 import { DialogNuevoCorteComponent } from './dialogs/dialog-nuevo-corte/dialog-nuevo-corte.component';
+import { DialogDetallesCorteComponent } from './dialogs/dialog-detalles-corte/dialog-detalles-corte.component';
 
 @Component({
   selector: 'app-cortes',
@@ -67,12 +68,14 @@ import { DialogNuevoCorteComponent } from './dialogs/dialog-nuevo-corte/dialog-n
 })
 export class CortesComponent implements OnInit, OnDestroy {
   columnDefinitions = [
-    { def: 'select', label: 'Checkbox', type: 'check', visible: true },
+    //{ def: 'select', label: 'Checkbox', type: 'check', visible: true },
     { def: 'id_corte', label: '#', type: 'idTabla', visible: true },
     { def: 'd_fecha_corte', label: 'Fecha', type: 'text', visible: true },
     { def: 'n_monto_total', label: 'Monto Total', type: 'text', visible: true },
-    { def: 'nombre_usuario', label: 'Nombre', type: 'text', visible: true },
+    { def: 's_nombre_completo', label: 'Nombre', type: 'text', visible: true },
+    { def: 's_descripcion_corte', label: 'Descripción', type: 'text', visible: true }, //
     { def: 'b_activo', label: 'Estatus', type: 'text', visible: true },
+    { def: 'actions', label: 'Acciones', type: 'actionBtn', visible: true }
   ];
 
 
@@ -151,6 +154,24 @@ export class CortesComponent implements OnInit, OnDestroy {
       }
     });
   }
+
+  verDetalle(corte: any) {
+
+    console.log('Ver detalle del corte:', corte);
+    let varDirection: Direction =
+      localStorage.getItem('isRtl') === 'true' ? 'rtl' : 'ltr';
+
+    this.dialog.open(DialogDetallesCorteComponent, {
+      width: '60vw',
+      maxWidth: '95vw',
+      data: {
+        id_corte: corte.id_corte
+      },
+      direction: varDirection,
+      autoFocus: false
+    });
+  }
+
 
 
   private updateRecord(updatedRecord: cortesModel) {

@@ -7,6 +7,30 @@
     font-weight: 500;
 }
 
+
+.badge {
+    font-size: 0.75rem;
+    font-weight: 600;
+    padding: 4px 8px;
+    border-radius: 12px;
+    text-transform: uppercase;
+    display: inline-block;
+    margin-right: 4px;
+}
+
+:host ::ng-deep .badge.badge-solid-green {
+    background-color: #e6f4ea;
+    color: #1e7e34;
+    border: 1px solid #c3e6cb;
+}
+
+:host ::ng-deep .badge.badge-solid-purple {
+    background-color: #f3e8ff;
+    color: #6f42c1;
+    border: 1px solid #d6bcfa;
+}
+
+
 /* ==================== Encabezado y barra superior ==================== */
 :host ::ng-deep .materialTableHeader {
     background: linear-gradient(135deg,
@@ -146,6 +170,7 @@
     background-color: rgba(177, 18, 38, 0.1);
 }
 
+
 /* ==================== Columnas específicas ==================== */
 
 .mat-column-id_proveedor {
@@ -168,6 +193,29 @@
     overflow: visible !important;
     padding: 0 8px !important;
 }
+
+.mat-column-s_telefono {
+    width: 250px !important;
+    min-width: 250px !important;
+    flex: none !important;
+    white-space: nowrap !important;
+    overflow: visible !important;
+    padding: 0 8px !important;
+}
+
+.mat-column-s_nombre_contacto {
+    width: 250px !important;
+    min-width: 250px !important;
+    flex: none !important;
+    white-space: nowrap !important;
+    overflow: visible !important;
+    padding: 0 8px !important;
+}
+
+
+
+
+
 
 
 

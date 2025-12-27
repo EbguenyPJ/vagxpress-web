@@ -1,66 +1,72 @@
 <section class="content">
     <div class="content-block">
         <div class="block-header">
-            <app-breadcrumb [title]="'Proveedores'" [items]="['Home']" [active_item]="'Proveedores'"></app-breadcrumb>
+            <app-breadcrumb [title]="'Proveedores'" [items]="['Home']" [active_item]="'Proveedores'">
+            </app-breadcrumb>
         </div>
 
         <div class="row">
             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                 <div class="card">
 
-                    <!-- Header de la tabla -->
+                    <!-- HEADER -->
                     <div class="materialTableHeader">
 
-                        <!-- Buscador -->
+                        <!-- BUSCADOR -->
                         <div class="left">
                             <ul class="header-buttons-left ms-0">
                                 <li class="tbl-title">
                                     <h2>Lista de Proveedores</h2>
                                 </li>
                                 <li class="tbl-search-box">
-                                    <label for="search-input"><i class="material-icons search-icon">search</i></label>
+                                    <label>
+                                        <i class="material-icons search-icon">search</i>
+                                    </label>
                                     <input placeholder="Buscar" type="text" #filter (keyup)="applyFilter($event)"
-                                        class="browser-default search-field" aria-label="Search box">
+                                        class="browser-default search-field">
                                 </li>
                             </ul>
                         </div>
 
-                        <!-- Botones de la barra superior -->
+                        <!-- BOTONES -->
                         <div class="right">
                             <ul class="tbl-export-btn">
-                                <!-- Botón Mostrar/Esconder columnas -->
+
+                                <!-- MOSTRAR / OCULTAR COLUMNAS -->
                                 <li class="tbl-header-btn">
                                     <div class="m-l-10">
-                                        <button mat-icon-button color="primary" (click)="select.open()"
-                                            matTooltip="Mostrar/Ocultar Columnas">
+                                        <button mat-icon-button color="primary" [matMenuTriggerFor]="columnMenu"
+                                            matTooltip="Mostrar / Ocultar Columnas">
                                             <mat-icon>filter_list</mat-icon>
-                                            <mat-select #select [(ngModel)]="filter.value"
-                                                style="width: 200px; display: table;" class="column-filter">
-                                                <span class="table-column-label">Mostrar/Ocultar Columnas</span>
-                                                <div *ngFor="let cd of columnDefinitions">
-                                                    <mat-option>
-                                                        <mat-checkbox (click)="$event.stopPropagation()"
-                                                            [(ngModel)]="cd.visible" color="primary">
-                                                            {{ cd.label }}
-                                                        </mat-checkbox>
-                                                    </mat-option>
-                                                </div>
-                                            </mat-select>
                                         </button>
+
+                                        <mat-menu #columnMenu="matMenu">
+                                            <div class="menu-header px-3 py-2">
+                                                <strong>Mostrar / Ocultar Columnas</strong>
+                                            </div>
+
+                                            @for (cd of columnDefinitions; track cd) {
+                                            <button mat-menu-item (click)="$event.stopPropagation()">
+                                                <mat-checkbox [(ngModel)]="cd.visible" color="primary">
+                                                    {{ cd.label }}
+                                                </mat-checkbox>
+                                            </button>
+                                            }
+                                        </mat-menu>
                                     </div>
                                 </li>
 
-                                <!-- Botón agregar proveedor -->
+                                <!-- AGREGAR -->
                                 <li class="tbl-header-btn">
                                     <div class="m-l-10">
-                                        <button mat-icon-button (click)="addNew()" class="col-green"
+                                        <button mat-icon-button class="col-green" (click)="addNew()"
                                             matTooltip="Agregar Proveedor">
                                             <mat-icon>add_circle_outline</mat-icon>
                                         </button>
                                     </div>
                                 </li>
 
-                                <!-- Botón refrescar -->
+                                <!-- REFRESCAR -->
                                 <li class="tbl-header-btn">
                                     <div class="m-l-10">
                                         <button mat-icon-button (click)="refresh()" matTooltip="Refrescar">
@@ -68,79 +74,126 @@
                                         </button>
                                     </div>
                                 </li>
+
                             </ul>
                         </div>
+                    </div>
+                    <!-- END HEADER -->
 
-                    </div><!-- End table header -->
-
-                    <!-- Tabla -->
+                    <!-- TABLA -->
                     <div class="overflow-auto">
                         <div class="responsive_table">
                             <table mat-table [dataSource]="dataSource" matSort class="mat-cell advance-table">
 
-                                <!-- Columnas dinámicas -->
-                                <ng-container *ngFor="let column of columnDefinitions">
-                                    <ng-container *ngIf="column.visible && column.def !== 'actions'"
-                                        [matColumnDef]="column.def">
-                                        <mat-header-cell *matHeaderCellDef mat-sort-header>
-                                            <span class="truncate-text">{{ column.label }}</span>
-                                        </mat-header-cell>
-                                        <mat-cell *matCellDef="let row">
-                                            <span class="mobile-label">{{ column.label }}:</span>
-                                            <span class="truncate-text">
-                                                <ng-container *ngIf="column.def === 's_telefono'">{{
-                                                    formatPhoneNumber(row[column.def]) }}</ng-container>
-                                                <ng-container *ngIf="column.def === 'b_activo'">
-                                                    <span class="badge badge-solid-green"
-                                                        *ngIf="row.b_activo == 1">Activo</span>
-                                                    <span class="badge badge-solid-purple"
-                                                        *ngIf="row.b_activo != 1">Inactivo</span>
-                                                </ng-container>
-                                                <ng-container
-                                                    *ngIf="column.def !== 's_telefono' && column.def !== 'b_activo'">
-                                                    {{ row[column.def] }}
-                                                </ng-container>
-                                            </span>
-                                        </mat-cell>
+                                <!-- COLUMNAS DINÁMICAS -->
+                                @for (column of columnDefinitions; track column) {
 
-                                    </ng-container>
+                                @if (column.type === 'actionBtn') {
+                                <!-- skip -->
+                                }
+
+                                @else if (column.def === 'b_activo') {
+                                <ng-container [matColumnDef]="column.def">
+                                    <mat-header-cell *matHeaderCellDef mat-sort-header>
+                                        <span class="truncate-text">{{ column.label }}</span>
+                                    </mat-header-cell>
+
+                                    <mat-cell *matCellDef="let row">
+                                        <span class="mobile-label">{{ column.label }}:</span>
+                                        <span class="badge" [ngClass]="row.b_activo == 1
+                            ? 'badge-solid-green'
+                            : 'badge-solid-purple'">
+                                            {{ row.b_activo == 1 ? 'Activo' : 'Inactivo' }}
+                                        </span>
+                                    </mat-cell>
                                 </ng-container>
+                                }
 
-                                <!-- Acciones -->
+                                @else if (column.type === 'phone') {
+                                <ng-container [matColumnDef]="column.def">
+                                    <mat-header-cell *matHeaderCellDef mat-sort-header>
+                                        <span class="truncate-text">{{ column.label }}</span>
+                                    </mat-header-cell>
+
+                                    <mat-cell *matCellDef="let row">
+                                        <span class="mobile-label">{{ column.label }}:</span>
+                                        <mat-icon class="tbl-icon col-green">call</mat-icon>
+                                        <span class="truncate-text">
+                                            {{ formatPhoneNumber(row[column.def]) }}
+                                        </span>
+                                    </mat-cell>
+                                </ng-container>
+                                }
+
+                                @else if (column.type === 'idTabla') {
+                                <ng-container [matColumnDef]="column.def">
+                                    <mat-header-cell *matHeaderCellDef mat-sort-header class="mat-column-id_proveedor">
+                                        <span class="truncate-text">{{ column.label }}</span>
+                                    </mat-header-cell>
+
+                                    <mat-cell *matCellDef="let row" class="mat-column-id_proveedor">
+                                        <span class="mobile-label">{{ column.label }}:</span>
+                                        <span class="truncate-text">
+                                            {{ row[column.def] }}
+                                        </span>
+                                    </mat-cell>
+                                </ng-container>
+                                }
+
+                                @else {
+                                <ng-container [matColumnDef]="column.def">
+                                    <mat-header-cell *matHeaderCellDef mat-sort-header>
+                                        <span class="truncate-text">{{ column.label }}</span>
+                                    </mat-header-cell>
+
+                                    <mat-cell *matCellDef="let row">
+                                        <span class="mobile-label">{{ column.label }}:</span>
+                                        <span class="truncate-text">
+                                            {{ row[column.def] }}
+                                        </span>
+                                    </mat-cell>
+                                </ng-container>
+                                }
+                                }
+
+                                <!-- ACCIONES -->
                                 <ng-container matColumnDef="actions">
-                                    <mat-header-cell class="pr-0" *matHeaderCellDef>Acciones</mat-header-cell>
-                                    <mat-cell *matCellDef="let row; let i=index;" class="pr-0">
-                                        <button mat-icon-button color="accent"
-                                            (click)="$event.stopPropagation(); editCall(row)" matTooltip="Editar"
-                                            class="tbl-action-btn">
-                                            <app-feather-icons [icon]="'edit'" class="tbl-fav-edit"></app-feather-icons>
+                                    <mat-header-cell *matHeaderCellDef>
+                                        Acciones
+                                    </mat-header-cell>
+
+                                    <mat-cell *matCellDef="let row">
+                                        <button mat-icon-button color="accent" (click)="editCall(row)"
+                                            matTooltip="Editar">
+                                            <app-feather-icons [icon]="'edit'" class="tbl-fav-edit">
+                                            </app-feather-icons>
                                         </button>
                                     </mat-cell>
                                 </ng-container>
 
-                                <!-- Filas -->
                                 <mat-header-row *matHeaderRowDef="getDisplayedColumns()"></mat-header-row>
-                                <mat-row [@rowsAnimation] *matRowDef="let row; columns: getDisplayedColumns();"
-                                    [style.cursor]="'pointer'" matRipple></mat-row>
+                                <mat-row *matRowDef="let row; columns: getDisplayedColumns();" matRipple>
+                                </mat-row>
 
                             </table>
-                        </div><!-- End responsive_table -->
-
-                        <!-- Loading spinner -->
-                        <div *ngIf="isLoading" class="tbl-spinner">
-                            <mat-progress-spinner color="primary" [diameter]="40"
-                                mode="indeterminate"></mat-progress-spinner>
                         </div>
 
-                    </div><!-- End overflow-auto -->
+                        <!-- LOADING -->
+                        @if (isLoading) {
+                        <div class="tbl-spinner">
+                            <mat-progress-spinner color="primary" diameter="40" mode="indeterminate">
+                            </mat-progress-spinner>
+                        </div>
+                        }
 
-                    <!-- Paginador -->
-                    <mat-paginator #paginator [length]="dataSource.filteredData.length" [pageIndex]="0" [pageSize]="10"
-                        [pageSizeOptions]="[5, 10, 25, 100]">
-                    </mat-paginator>
+                        <!-- PAGINADOR -->
+                        <mat-paginator [length]="dataSource.filteredData.length" [pageSize]="10"
+                            [pageSizeOptions]="[5,10,25,100]">
+                        </mat-paginator>
 
-                </div><!-- End card -->
-            </div><!-- End col-12 -->
-        </div><!-- End row -->
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </section>

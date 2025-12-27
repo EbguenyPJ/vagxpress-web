@@ -29,7 +29,7 @@
                 <span class="material-icons label-icon">calendar_today</span>
                 Fecha de consulta
               </label>
-              <input type="date" class="form-input" [(ngModel)]="fechaConsulta" name="fechaConsulta"
+              <input type="date" class="form-input" [(ngModel)]="fechaConsulta" [max]="hoy"   name="fechaConsulta"
                 (change)="onFechaChange($event)">
             </div>
 
@@ -345,7 +345,7 @@
             <div class="conciliacion-section">
               <div class="section-title">
                 <span class="material-icons">computer</span>
-                <h4>Montos Registrados en Sistema</h4>
+                <h4>Totales Estimados</h4>
               </div>
               <div class="montos-grid">
                 <div class="monto-item" *ngFor="let r of consultaCorte?.resumen">

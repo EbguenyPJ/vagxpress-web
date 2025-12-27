@@ -3,7 +3,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatSort, MatSortModule } from '@angular/material/sort';
 import { MatSnackBar, MatSnackBarHorizontalPosition, MatSnackBarVerticalPosition } from '@angular/material/snack-bar';
-import { MatMenuModule, MatMenuTrigger } from '@angular/material/menu';
+import { MatMenuModule, MatMenuTrigger, MatMenu } from '@angular/material/menu';
 import { MatTableDataSource, MatTableModule, MatHeaderCell, MatCell } from '@angular/material/table';
 import { SelectionModel } from '@angular/cdk/collections';
 import { Subject } from 'rxjs';
@@ -55,9 +55,10 @@ import { DiaologCrearClienteComponent } from './dialog/diaolog-crear-cliente/dia
     BreadcrumbComponent, MatTableModule,
     MatPaginatorModule,
     MatSortModule,
-    FeatherIconsComponent,
-    MatCheckbox
-  ],
+    MatCheckbox,
+    MatMenu,
+    FeatherIconsComponent
+],
   templateUrl: './clientes.component.html',
   styleUrl: './clientes.component.scss'
 })
@@ -218,20 +219,37 @@ export class ClientesComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
 
-  loadData() {
-    this.isLoading = true;
+loadData() {
+  this.isLoading = true;
 
-    this.ClienteService.getClientes("").subscribe({
-      next: (resp: any) => {
-        this.dataSource.data = resp.data ?? [];
-        this.isLoading = false;
-        console.log('Clientes:', this.dataSource.data);
-      },
-      error: () => {
-        this.isLoading = false;
-      }
-    });
-  }
+  this.ClienteService.getClientes("").subscribe({
+    next: (resp) => {
+      this.data = resp;
+
+      //this.dataSource = new MatTableDataSource<clientesModel>(this.data.data);
+      this.dataSource.data = this.data.data;
+      this.dataSource.paginator = this.paginator;
+      this.dataSource.sort = this.sort;
+
+      console.log('Lista de clientes:', this.dataSource);
+
+    this.dataSource.filterPredicate = (data, filter) => {
+  return (
+    data.s_nombre_cliente?.toLowerCase().includes(filter) ||
+    data.s_numero_telefono?.includes(filter) ||
+    data.s_correo?.toLowerCase().includes(filter)
+  );
+};
+
+
+      this.isLoading = false;
+    },
+    error: (err) => {
+      console.error(err);
+      this.isLoading = false;
+    }
+  });
+}
 
 
 

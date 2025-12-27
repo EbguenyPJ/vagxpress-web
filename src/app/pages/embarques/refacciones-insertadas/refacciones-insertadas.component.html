@@ -24,7 +24,7 @@
 
 
                 
-                <mat-form-field appearance="outline" class="mt-3">
+                <mat-form-field appearance="outline" class="mt-3 no-primary">
                   <mat-label>Desde</mat-label>
                   <input matInput [matDatepicker]="pickerDesde"
                         [(ngModel)]="fechaDesde"
@@ -48,24 +48,23 @@
 
                 <li class="tbl-header-btn">
                   <div class="m-l-10">
-                    <button mat-icon-button color="primary" (click)="select.open()"
-                      matTooltip="Mostrar/Esconder Columnas">
-                      <mat-icon class="mt-2">filter_list</mat-icon>
-                      <mat-select #select [(ngModel)]="filter.value" style="width: 200px; display: table;"
-                        class="column-filter">
-                        <span class="table-column-label">Mostrar/Esconder Columnas</span>
-                        @for (cd of columnDefinitions; track cd; let i = $index) {
-                        <div>
-                          <mat-option>
-                            <mat-checkbox (click)="$event.stopPropagation()" [(ngModel)]="cd.visible" color="primary">
-                              {{cd.label}}
-                            </mat-checkbox>
-                          </mat-option>
-                        </div>
-                        }
-                      </mat-select>
-                    </button>
-                  </div>
+                <button mat-icon-button color="primary" (click)="select.open()" matTooltip="Mostrar/Esconder Columnas">
+                  <mat-icon>filter_list</mat-icon>
+                </button>
+
+                <mat-select #select [(ngModel)]="filter.value" class="column-filter hidden-select">
+                  <span class="table-column-label">Mostrar/Esconder Columnas</span>
+
+                  @for (cd of columnDefinitions; track cd) {
+                  <mat-option>
+                    <mat-checkbox (click)="$event.stopPropagation()" [(ngModel)]="cd.visible">
+                      {{ cd.label }}
+                    </mat-checkbox>
+                  </mat-option>
+                  }
+                </mat-select>
+
+              </div>
                 </li>
                 <li class="tbl-header-btn">
                   <div class="m-l-10">

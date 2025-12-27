@@ -1,0 +1,741 @@
+/* =============================================
+   OVERLAY Y MODAL
+   ============================================= */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 20px;
+
+}
+
+.modal-container {
+    width: 100%;
+    max-width: 1300px;
+    max-height: 90vh;
+    background: linear-gradient(145deg, #1a1a1a 0%, #0f0f0f 100%);
+    border-radius: 20px;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 25px 80px rgba(0, 0, 0, 0.9),
+        0 0 0 1px rgba(177, 18, 38, 0.4);
+    animation: modalSlide 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes modalSlide {
+    from {
+        opacity: 0;
+        transform: scale(0.95) translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
+}
+
+/* =============================================
+   HEADER
+   ============================================= */
+.modal-header {
+    position: relative;
+    background: linear-gradient(135deg, #b11226 0%, #e53935 100%);
+    padding: 1.5rem 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 6px 24px rgba(177, 18, 38, 0.5);
+
+    .header-content {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+
+        .header-icon {
+            font-size: 28px;
+            color: rgba(255, 255, 255, 0.95);
+            animation: iconPulse 2s ease-in-out infinite;
+        }
+
+        h2 {
+            color: #fff;
+            font-size: 1.6rem;
+            font-weight: 800;
+            margin: 0;
+            letter-spacing: -0.3px;
+            text-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+        }
+    }
+
+    .modal-close-button {
+        position: absolute;
+        top: 16px;
+        right: 16px;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        display: flex !important;
+        align-items: center;
+        justify-content: center;
+        background: rgba(255, 255, 255, 0.15);
+        border: none;
+        color: #fff;
+        cursor: pointer;
+        transition: all 0.3s ease;
+
+        mat-icon {
+            font-size: 24px;
+        }
+
+        &:hover {
+            transform: rotate(90deg) scale(1.1);
+            background: rgba(255, 255, 255, 0.3);
+        }
+    }
+}
+
+@keyframes iconPulse {
+
+    0%,
+    100% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.08);
+    }
+}
+
+/* =============================================
+   LOADING
+   ============================================= */
+.loading-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 60px 40px;
+    background: linear-gradient(180deg, rgba(26, 26, 26, 0.6) 0%, rgba(15, 15, 15, 0.9) 100%);
+}
+
+.loading-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+
+    mat-progress-spinner {
+        ::ng-deep circle {
+            stroke: #e53935;
+        }
+    }
+
+    .loading-text {
+        color: rgba(255, 255, 255, 0.75);
+        font-size: 1rem;
+        font-weight: 600;
+        margin: 0;
+        animation: textFade 2s ease-in-out infinite;
+    }
+}
+
+@keyframes textFade {
+
+    0%,
+    100% {
+        opacity: 0.4;
+    }
+
+    50% {
+        opacity: 1;
+    }
+}
+
+/* =============================================
+   CONTENT
+   ============================================= */
+.modal-content {
+    padding: 24px;
+    overflow-y: auto;
+    flex: 1;
+    background: linear-gradient(180deg, rgba(26, 26, 26, 0.6) 0%, rgba(15, 15, 15, 0.9) 100%);
+
+    &::-webkit-scrollbar {
+        width: 8px;
+    }
+
+    &::-webkit-scrollbar-track {
+        background: rgba(255, 255, 255, 0.03);
+        border-radius: 10px;
+    }
+
+    &::-webkit-scrollbar-thumb {
+        background: linear-gradient(180deg, #b11226, #e53935);
+        border-radius: 10px;
+        border: 1px solid rgba(26, 26, 26, 0.5);
+
+        &:hover {
+            background: linear-gradient(180deg, #a01020, #d32f2f);
+        }
+    }
+}
+
+/* =============================================
+   LAYOUT GRID
+   ============================================= */
+.content-grid {
+    display: grid;
+    grid-template-columns: 1fr 1.2fr;
+    gap: 20px;
+    height: 100%;
+}
+
+.left-column {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.right-column {
+    display: flex;
+    flex-direction: column;
+}
+
+/* =============================================
+   SECTION TITLES
+   ============================================= */
+.section-title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 16px;
+    background: linear-gradient(135deg, rgba(177, 18, 38, 0.15), rgba(177, 18, 38, 0.08));
+    border-bottom: 2px solid rgba(255, 255, 255, 0.08);
+    border-radius: 12px 12px 0 0;
+
+    .material-icons {
+        font-size: 20px;
+        color: #e53935;
+    }
+
+    h3 {
+        margin: 0;
+        font-size: 0.85rem;
+        font-weight: 800;
+        color: #fff;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+}
+
+/* =============================================
+   INFO CARD
+   ============================================= */
+.info-card {
+    background: linear-gradient(145deg, rgba(40, 40, 40, 0.95), rgba(30, 30, 30, 0.95));
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.5);
+    overflow: hidden;
+}
+
+.info-list {
+    padding: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.info-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 10px 12px;
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 8px;
+    border-left: 3px solid rgba(177, 18, 38, 0.4);
+    transition: all 0.3s ease;
+
+    &:hover {
+        background: rgba(255, 255, 255, 0.05);
+        border-left-color: rgba(177, 18, 38, 0.7);
+        transform: translateX(3px);
+    }
+
+    .info-icon {
+        font-size: 18px;
+        color: #b11226;
+        margin-top: 2px;
+        flex-shrink: 0;
+    }
+
+    .info-content {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+        flex: 1;
+    }
+
+    .info-key {
+        font-size: 0.7rem;
+        font-weight: 700;
+        color: rgba(255, 255, 255, 0.6);
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    .info-val {
+        font-size: 0.9rem;
+        font-weight: 600;
+        color: #fff;
+        line-height: 1.4;
+        word-break: break-word;
+    }
+}
+
+/* =============================================
+   MONTOS CARD
+   ============================================= */
+.montos-card {
+    background: linear-gradient(145deg, rgba(40, 40, 40, 0.95), rgba(30, 30, 30, 0.95));
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.5);
+    overflow: hidden;
+    flex: 1;
+}
+
+.montos-list {
+    padding: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.monto-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 12px;
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    transition: all 0.3s ease;
+
+    &:hover {
+        background: rgba(255, 255, 255, 0.05);
+        border-color: rgba(177, 18, 38, 0.3);
+        transform: translateX(3px);
+    }
+
+    &.monto-total {
+        background: linear-gradient(135deg, rgba(177, 18, 38, 0.25), rgba(177, 18, 38, 0.15));
+        border: 2px solid rgba(177, 18, 38, 0.5);
+        margin-top: 8px;
+        padding: 12px 14px;
+        position: relative;
+        overflow: hidden;
+
+        &::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.08), transparent);
+            animation: shimmer 3s infinite;
+        }
+
+        &:hover {
+            transform: scale(1.02);
+            box-shadow: 0 4px 20px rgba(177, 18, 38, 0.4);
+        }
+
+        .monto-name {
+            color: #fff;
+            font-size: 0.9rem;
+        }
+
+        .monto-value {
+            font-size: 1.5rem;
+            color: #4caf50;
+            text-shadow: 0 2px 8px rgba(76, 175, 80, 0.4);
+        }
+    }
+
+    .monto-left {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+
+        .material-icons {
+            font-size: 18px;
+            color: #e53935;
+        }
+
+        .monto-name {
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: rgba(255, 255, 255, 0.8);
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+        }
+    }
+
+    .monto-value {
+        font-size: 1.1rem;
+        font-weight: 800;
+        color: #fff;
+        letter-spacing: 0.3px;
+    }
+}
+
+@keyframes shimmer {
+    0% {
+        left: -100%;
+    }
+
+    100% {
+        left: 100%;
+    }
+}
+
+/* =============================================
+   EVIDENCIAS CARD
+   ============================================= */
+.evidencias-card {
+    background: linear-gradient(145deg, rgba(40, 40, 40, 0.95), rgba(30, 30, 30, 0.95));
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.5);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.evidencias-grid {
+    padding: 12px;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 12px;
+    overflow-y: auto;
+    max-height: calc(90vh - 200px);
+
+    &::-webkit-scrollbar {
+        width: 6px;
+    }
+
+    &::-webkit-scrollbar-track {
+        background: rgba(255, 255, 255, 0.03);
+        border-radius: 10px;
+    }
+
+    &::-webkit-scrollbar-thumb {
+        background: rgba(177, 18, 38, 0.5);
+        border-radius: 10px;
+
+        &:hover {
+            background: rgba(177, 18, 38, 0.7);
+        }
+    }
+}
+
+.evidencia-item {
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 10px;
+    overflow: hidden;
+    transition: all 0.3s ease;
+
+    &:hover {
+        border-color: rgba(177, 18, 38, 0.4);
+        box-shadow: 0 4px 16px rgba(177, 18, 38, 0.2);
+        transform: translateY(-2px);
+    }
+}
+
+.evidencia-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 10px;
+    background: rgba(177, 18, 38, 0.1);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+
+    .evidencia-num {
+        font-size: 0.7rem;
+        font-weight: 800;
+        color: #fff;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    .evidencia-badge {
+        display: flex;
+        align-items: center;
+        background: rgba(177, 18, 38, 0.3);
+        padding: 3px 6px;
+        border-radius: 6px;
+        border: 1px solid rgba(177, 18, 38, 0.4);
+
+        .material-icons {
+            font-size: 14px;
+            color: #e53935;
+        }
+    }
+}
+
+.evidencia-img-wrapper {
+    display: block;
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+    background: rgba(0, 0, 0, 0.2);
+
+    .evidencia-img {
+        width: 100%;
+        height: 140px;
+        object-fit: cover;
+        display: block;
+        transition: all 0.4s ease;
+    }
+
+    .img-overlay {
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(180deg, transparent, rgba(177, 18, 38, 0.7));
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        opacity: 0;
+        transition: all 0.3s ease;
+
+        .material-icons {
+            font-size: 32px;
+            color: #fff;
+            transform: scale(0.8);
+            transition: all 0.3s ease;
+        }
+    }
+
+    &:hover {
+        .evidencia-img {
+            transform: scale(1.1);
+        }
+
+        .img-overlay {
+            opacity: 1;
+
+            .material-icons {
+                transform: scale(1);
+            }
+        }
+    }
+}
+
+.evidencia-pdf {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 24px 16px;
+    gap: 8px;
+    background: rgba(177, 18, 38, 0.05);
+    text-decoration: none;
+    transition: all 0.3s ease;
+
+    &:hover {
+        background: rgba(177, 18, 38, 0.12);
+
+        .pdf-icon-wrapper {
+            transform: scale(1.1);
+            border-color: rgba(177, 18, 38, 0.6);
+        }
+    }
+
+    .pdf-icon-wrapper {
+        width: 50px;
+        height: 50px;
+        background: linear-gradient(135deg, rgba(177, 18, 38, 0.2), rgba(177, 18, 38, 0.1));
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border: 2px solid rgba(177, 18, 38, 0.3);
+        transition: all 0.3s ease;
+
+        .material-icons {
+            font-size: 28px;
+            color: #e53935;
+        }
+    }
+
+    .pdf-text {
+        font-size: 0.75rem;
+        font-weight: 700;
+        color: #e53935;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+}
+
+.evidencia-desc {
+    display: flex;
+    align-items: flex-start;
+    gap: 6px;
+    padding: 8px 10px;
+    background: rgba(255, 255, 255, 0.02);
+    border-top: 1px solid rgba(255, 255, 255, 0.06);
+
+    .material-icons {
+        font-size: 12px;
+        color: rgba(255, 255, 255, 0.4);
+        margin-top: 2px;
+        flex-shrink: 0;
+    }
+
+    p {
+        margin: 0;
+        font-size: 0.7rem;
+        line-height: 1.3;
+        color: rgba(255, 255, 255, 0.75);
+        font-weight: 500;
+        word-break: break-word;
+    }
+}
+
+/* =============================================
+   NO EVIDENCIAS
+   ============================================= */
+.no-evidencias {
+    background: linear-gradient(145deg, rgba(40, 40, 40, 0.95), rgba(30, 30, 30, 0.95));
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.5);
+    padding: 60px 40px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    text-align: center;
+    height: 100%;
+    justify-content: center;
+
+    .material-icons {
+        font-size: 64px;
+        color: rgba(255, 255, 255, 0.15);
+        animation: iconFloat 3s ease-in-out infinite;
+    }
+
+    h3 {
+        margin: 0;
+        font-size: 1.1rem;
+        font-weight: 800;
+        color: rgba(255, 255, 255, 0.7);
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    p {
+        margin: 0;
+        font-size: 0.9rem;
+        color: rgba(255, 255, 255, 0.45);
+        font-weight: 500;
+    }
+}
+
+@keyframes iconFloat {
+
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-8px);
+    }
+}
+
+/* =============================================
+   RESPONSIVE
+   ============================================= */
+@media (max-width: 1024px) {
+    .content-grid {
+        grid-template-columns: 1fr;
+        gap: 16px;
+    }
+
+    .evidencias-grid {
+        grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+        max-height: 400px;
+    }
+}
+
+@media (max-width: 768px) {
+    .modal-header {
+        padding: 1.2rem 1.5rem;
+
+        .header-content {
+            h2 {
+                font-size: 1.3rem;
+            }
+
+            .header-icon {
+                font-size: 24px;
+            }
+        }
+    }
+
+    .modal-content {
+        padding: 16px;
+    }
+
+    .content-grid {
+        gap: 12px;
+    }
+
+    .left-column {
+        gap: 12px;
+    }
+
+    .evidencias-grid {
+        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+        gap: 10px;
+        max-height: 350px;
+    }
+
+    .evidencia-img-wrapper .evidencia-img {
+        height: 120px;
+    }
+}
+
+@media (max-width: 480px) {
+    .modal-overlay {
+        padding: 10px;
+    }
+
+    .modal-container {
+        border-radius: 16px;
+    }
+
+    .modal-content {
+        padding: 12px;
+    }
+
+    .evidencias-grid {
+        grid-template-columns: 1fr;
+        gap: 8px;
+    }
+
+    .no-evidencias {
+        padding: 40px 20px;
+
+        .material-icons {
+            font-size: 48px;
+        }
+    }
+}

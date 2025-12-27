@@ -50,7 +50,6 @@ import { DialogAsignarPermisosComponent } from './dialog/dialog-asignar-permisos
     MatCheckboxModule,
     MatTableModule,
     MatSortModule,
-    NgClass,
     MatRippleModule,
     MatProgressSpinnerModule,
     MatMenuModule,
@@ -61,15 +60,17 @@ import { DialogAsignarPermisosComponent } from './dialog/dialog-asignar-permisos
 export class PermisosComponent implements OnInit, AfterViewInit, OnDestroy{
 
   columnDefinitions = [
-    { def: 'id', label: 'ID', type: 'number', visible: true },
+    { def: 'id', label: 'ID', type: 'idTabla', visible: true },
     { def: 'name', label: 'Usuario', type: 'text', visible: true },
-    { def: 'email', label: 'Email', type: 'email', visible: true },
-    { def: 's_nombre_completo', label: 'Nombre Completo', type: 'text', visible: true },
-    { def: 'b_activo', label: 'Estatus', type: 'boolean', visible: true },
-    { def: 'b_usuario_web', label: 'Web', type: 'switch', visible: true },
-    { def: 'b_usuario_movil', label: 'Móvil', type: 'switch', visible: true },
+    { def: 's_nombre_completo', label: 'Nombre', type: 'text', visible: true },
+    { def: 'email', label: 'Correo', type: 'email', visible: true },
+    //{ def: 'password', label: 'Contraseña', type: 'password', visible: true },
+    { def: 'b_activo', label: 'Estatus', type: 'text', visible: true },
     { def: 'actions', label: 'Acciones', type: 'actionBtn', visible: true },
+    { def: 'acceso_web', label: 'Web', type: 'switch', visible: true},
+    { def: 'acceso_movil', label: 'Móvil', type: 'switch', visible: true }
   ];
+
   dataSource = new MatTableDataSource<usuariosModel>([]);
   selection = new SelectionModel<usuariosModel>(true, []);
   contextMenuPosition = { x: '0px', y: '0px' };
@@ -103,7 +104,8 @@ export class PermisosComponent implements OnInit, AfterViewInit, OnDestroy{
 
 
   ngOnInit() {
-    this.loadData();
+
+  this.loadData();
   }
   
   ngAfterViewInit() {
@@ -177,27 +179,26 @@ export class PermisosComponent implements OnInit, AfterViewInit, OnDestroy{
 
   loadData() {
     this.isLoading = true;
-
     this.UsuariosService.getUsuarios("").subscribe({
-      next: (data) => {
-        this.data = data;
-        this.dataSource = new MatTableDataSource<usuariosModel>(this.data.data);
-        this.dataSource.paginator = this.paginator;
-        this.dataSource.sort = this.sort;
-        console.log("Lista de usuarios: ", this.dataSource);
-
-        this.dataSource.filterPredicate = (data: usuariosModel, filter: string) => {
-          const dataStr = Object.values(data)
-            .filter(value => value !== null && value !== undefined)
-            .map(value => value.toString().toLowerCase())
-            .join(' ');
-          return dataStr.indexOf(filter) !== -1;
+      next: (response: any) => {
+        if (response && response.data) {
+          this.dataSource.data = response.data.map((user: any) => ({
+            ...user,
+            acceso_web: Number(user.b_usuario_web),   // convertir a número
+            acceso_movil: Number(user.b_usuario_movil), // convertir a número
+          }));
         }
         this.isLoading = false;
       },
-      error: (err) => {
-        console.error(err);
+      error: (error: any) => {
+        console.error(error);
         this.isLoading = false;
+        this.showNotification(
+          'snackbar-danger',
+          'Error al cargar los usuarios',
+          'bottom',
+          'center'
+        );
       },
     });
   }
