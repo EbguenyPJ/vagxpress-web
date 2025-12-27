@@ -151,6 +151,12 @@
                       class="tbl-action-btn btn-edit" matTooltip="Gestionar Orden">
                       <mat-icon>edit</mat-icon>
                     </button>
+                    @if (esOrdenAprobada(row)) {
+                      <button mat-icon-button (click)="$event.stopPropagation()" (click)="descargarPdf(row)"
+                        class="tbl-action-btn btn-pdf" matTooltip="Descargar PDF">
+                        <mat-icon>picture_as_pdf</mat-icon>
+                      </button>
+                    }
                   </mat-cell>
                 </ng-container>
 

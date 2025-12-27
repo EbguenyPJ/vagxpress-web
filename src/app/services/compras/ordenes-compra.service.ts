@@ -29,23 +29,23 @@ export class OrdenesCompraService {
     return this.http.get(url, params);
   }
 
-  aprobarOrdenCompra(s_token: string, id_orden_compra: number, data: any) {
+  gestionarOrdenCompra(s_token: string, id_orden_compra: number, data: any) {
     let headers = new HttpHeaders({
       'Content-Type': 'application/json',
       'Authorization': s_token
     });
-    let url = conexion.url + 'aprobar-orden-compra/' + id_orden_compra;
+    let url = conexion.url + 'gestionar-orden-compra/' + id_orden_compra;
     let options = { headers: headers };
     return this.http.put(url, data, options);
   }
 
-  rechazarOrdenCompra(s_token: string, id_orden_compra: number) {
+  descargarOrdenCompraPdf(s_token: string, id_orden_compra: number) {
     let headers = new HttpHeaders({
       'Content-Type': 'application/json',
       'Authorization': s_token
     });
-    let url = conexion.url + 'rechazar-orden-compra/' + id_orden_compra;
-    let options = { headers: headers };
-    return this.http.put(url, {}, options);
+    let params = { headers: headers };
+    let url = conexion.url + 'descargar-orden-compra-pdf/' + id_orden_compra;
+    return this.http.get(url, params);
   }
 }

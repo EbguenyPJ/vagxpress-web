@@ -153,6 +153,69 @@ export class OrdenesCompraComponent implements OnInit, OnDestroy {
     });
   }
 
+  descargarPdf(row: OrdenCompra) {
+    Swal.fire({
+      title: 'Descargando PDF...',
+      text: 'Por favor espere',
+      allowOutsideClick: false,
+      didOpen: () => {
+        Swal.showLoading();
+      }
+    });
+
+    this.ordenesCompraService.descargarOrdenCompraPdf(this.s_token, row.id_orden_compra).subscribe(
+      (response: any) => {
+        if (response.status === 'success') {
+          Swal.close();
+
+          // Decodificar base64 y crear el blob
+          const byteCharacters = atob(response.data.file_base64);
+          const byteNumbers = new Array(byteCharacters.length);
+          for (let i = 0; i < byteCharacters.length; i++) {
+            byteNumbers[i] = byteCharacters.charCodeAt(i);
+          }
+          const byteArray = new Uint8Array(byteNumbers);
+          const blob = new Blob([byteArray], { type: 'application/pdf' });
+
+          // Crear URL y descargar
+          const url = window.URL.createObjectURL(blob);
+          const link = document.createElement('a');
+          link.href = url;
+          link.download = `${response.data.folio}.pdf`;
+          link.click();
+          window.URL.revokeObjectURL(url);
+
+          Swal.fire({
+            toast: true,
+            position: 'top-end',
+            icon: 'success',
+            title: 'PDF descargado correctamente',
+            showConfirmButton: false,
+            timer: 3000
+          });
+        } else {
+          Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: response.message || 'No se pudo descargar el PDF'
+          });
+        }
+      },
+      (error) => {
+        console.error('Error al descargar PDF:', error);
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: 'Ocurrió un error al descargar el PDF'
+        });
+      }
+    );
+  }
+
+  esOrdenAprobada(row: OrdenCompra): boolean {
+    return row.id_estatus_orden_compra === 2;
+  }
+
   private refreshTable() {
     this.paginator.pageIndex = 0;
     this.dataSource.paginator = this.paginator;
