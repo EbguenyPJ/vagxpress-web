@@ -207,7 +207,7 @@ export class PuntoVentaComponent implements OnInit {
 
     // Filtrar subcategorías de esta categoría
     this.subcategoriasMostrar = this.todasSubcategorias.filter(
-      (sub: any) => sub.id_categoria_refaccion === categoria.id
+      (sub: any) => sub.id_categoria_refaccion === categoria.id_categoria_refaccion
     );
   }
 
@@ -218,7 +218,7 @@ export class PuntoVentaComponent implements OnInit {
     // Filtrar productos de esta subcategoría
     this.productosMostrar = this.todosProductos.filter(
       (prod: any) =>
-        prod.s_categoria_refaccion === this.categoriaSeleccionada.nombre &&
+        prod.s_categoria_refaccion === this.categoriaSeleccionada.s_categoria_refaccion &&
         prod.id_subcategoria_refaccion === subcategoria.id_subcategoria_refaccion
     );
   }
@@ -235,7 +235,7 @@ export class PuntoVentaComponent implements OnInit {
     this.subcategoriaSeleccionada = null;
     // Re-filtrar subcategorías
     this.subcategoriasMostrar = this.todasSubcategorias.filter(
-      (sub: any) => sub.id_categoria_refaccion === this.categoriaSeleccionada.id
+      (sub: any) => sub.id_categoria_refaccion === this.categoriaSeleccionada.id_categoria_refaccion
     );
   }
 
