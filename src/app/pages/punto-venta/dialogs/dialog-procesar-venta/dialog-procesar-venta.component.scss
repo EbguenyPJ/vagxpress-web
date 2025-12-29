@@ -1,85 +1,124 @@
+// ==================== DIÁLOGO PROCESAR VENTA VAG XPRESS ====================
 .dialog-procesar-venta {
   min-width: 600px;
   max-width: 800px;
+  background: #1a1a1a;
+  color: #ffffff;
 }
 
+// ==================== HEADER ====================
 .dialog-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 1rem 1.5rem;
-  border-bottom: 2px solid #f0f0f0;
+  padding: 1.25rem 1.5rem;
+  background: linear-gradient(135deg, #000000 0%, #1a1a1a 100%);
+  border-bottom: 3px solid #FF0000;
+  box-shadow: 0 0 20px rgba(255, 0, 0, 0.3);
+  position: relative;
+
+  &::after {
+    content: '';
+    position: absolute;
+    bottom: -3px;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, 
+      transparent,
+      #FF0000 20%,
+      #FF0000 80%,
+      transparent
+    );
+    box-shadow: 0 0 10px rgba(255, 0, 0, 0.8);
+  }
 
   h2 {
     margin: 0;
-    font-size: 1.5rem;
-    font-weight: 600;
-    color: #333;
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: #ffffff;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
   }
 
   .btn-cerrar {
-    color: #999;
+    color: #ffffff;
+    background: rgba(255, 0, 0, 0.1);
+    border: 1px solid rgba(255, 0, 0, 0.3);
+    transition: all 0.3s ease;
 
     &:hover {
-      color: #666;
-      background-color: #f5f5f5;
+      color: #ffffff;
+      background: linear-gradient(135deg, #CC0000, #FF0000);
+      border-color: #FF0000;
+      transform: rotate(90deg);
+      box-shadow: 0 0 15px rgba(255, 0, 0, 0.5);
+    }
+
+    mat-icon {
+      color: #ffffff;
     }
   }
+}
+
+::ng-deep .mat-mdc-dialog-container {
+  background: #1a1a1a !important;
+  color: #ffffff !important;
 }
 
 ::ng-deep .mat-mdc-dialog-content {
   padding: 1.5rem !important;
   max-height: 70vh;
   overflow-y: auto;
-}
+  background: #0a0a0a;
 
-// Sección de cliente
-.seccion-cliente {
-  margin-bottom: 1.5rem;
-
-  .titulo-seccion {
-    font-size: 1.1rem;
-    font-weight: 600;
-    color: #333;
-    margin-bottom: 1rem;
+  // Scrollbar personalizado
+  &::-webkit-scrollbar {
+    width: 8px;
   }
 
-  .loading-clientes {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    padding: 1rem;
-    color: #999;
-
-    p {
-      margin: 0;
-      font-size: 0.95rem;
-    }
+  &::-webkit-scrollbar-track {
+    background: #2d2d2d;
+    border-radius: 10px;
   }
 
-  .autocomplete-cliente {
-    width: 100%;
-    font-size: 1rem;
+  &::-webkit-scrollbar-thumb {
+    background: #4a4a4a;
+    border-radius: 10px;
+    transition: background 0.2s ease;
 
-    ::ng-deep .mat-mdc-form-field-flex {
-      background-color: #f8f9fa;
-      border-radius: 8px;
-      padding: 0.5rem 1rem;
-    }
-
-    ::ng-deep .mat-mdc-text-field-wrapper {
-      padding: 0;
+    &:hover {
+      background: #FF0000;
+      box-shadow: 0 0 10px rgba(255, 0, 0, 0.5);
     }
   }
 }
 
-// Resumen de totales
+// ==================== RESUMEN DE TOTALES ====================
 .resumen-totales {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #000000 0%, #1a1a1a 100%);
   padding: 1.5rem;
   border-radius: 12px;
-  color: white;
+  color: #ffffff;
   margin-bottom: 2rem;
+  border: 2px solid #FF0000;
+  box-shadow: 
+    0 8px 24px rgba(0, 0, 0, 0.5),
+    0 0 30px rgba(255, 0, 0, 0.2);
+  position: relative;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, #FF0000, transparent);
+    box-shadow: 0 0 10px rgba(255, 0, 0, 0.8);
+  }
 
   .fila-total {
     display: flex;
@@ -87,31 +126,41 @@
     align-items: center;
     margin-bottom: 0.75rem;
     font-size: 1rem;
+    padding: 0.5rem 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 
     .label {
       font-weight: 500;
+      color: #cccccc;
     }
 
     .valor {
-      font-weight: 600;
+      font-weight: 700;
       font-size: 1.1rem;
+      color: #ffffff;
     }
   }
 
   .separador {
-    height: 1px;
-    background-color: rgba(255, 255, 255, 0.3);
+    height: 2px;
+    background: linear-gradient(90deg, transparent, #FF0000, transparent);
     margin: 1rem 0;
+    box-shadow: 0 0 10px rgba(255, 0, 0, 0.5);
   }
 
   .fila-total-final {
     margin-top: 1rem;
+    padding-top: 1rem;
 
     .label {
-      font-weight: 600;
+      font-weight: 700;
       font-size: 1rem;
       display: block;
-      margin-bottom: 0.5rem;
+      margin-bottom: 0.75rem;
+      color: #FF0000;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      text-shadow: 0 0 10px rgba(255, 0, 0, 0.5);
     }
 
     .contenedor-total {
@@ -120,30 +169,185 @@
       align-items: flex-end;
 
       .total-grande {
-        font-size: 2.5rem;
+        font-size: 2.8rem;
         font-weight: 700;
         font-family: 'Courier New', Courier, monospace;
-        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        color: #FF0000;
+        text-shadow: 
+          0 0 15px rgba(255, 0, 0, 1),
+          0 0 30px rgba(255, 0, 0, 0.6);
         margin-bottom: 0.25rem;
+        animation: glow-total 2s ease-in-out infinite alternate;
       }
 
       .total-texto {
         font-size: 0.85rem;
-        opacity: 0.9;
+        color: #999999;
         font-weight: 500;
       }
     }
   }
 }
 
-// Sección métodos de pago
+@keyframes glow-total {
+  from {
+    text-shadow: 
+      0 0 15px rgba(255, 0, 0, 0.8),
+      0 0 30px rgba(255, 0, 0, 0.4);
+  }
+  to {
+    text-shadow: 
+      0 0 25px rgba(255, 0, 0, 1),
+      0 0 40px rgba(255, 0, 0, 0.6);
+  }
+}
+
+// ==================== SECCIÓN DE CLIENTE (MEJORADA) ====================
+.seccion-cliente {
+  margin-bottom: 2rem;
+  background: linear-gradient(145deg, #1a1a1a, #0a0a0a);
+  padding: 1.5rem;
+  border-radius: 12px;
+  border: 2px solid rgba(255, 0, 0, 0.3);
+  box-shadow: 
+    0 4px 16px rgba(0, 0, 0, 0.4),
+    inset 0 1px 2px rgba(255, 0, 0, 0.1);
+  position: relative;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, #FF0000, transparent);
+    box-shadow: 0 0 10px rgba(255, 0, 0, 0.5);
+  }
+
+  .titulo-seccion {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: #FF0000;
+    margin-bottom: 1.25rem;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    text-shadow: 0 0 15px rgba(255, 0, 0, 0.6);
+
+    &::before {
+      content: '';
+      width: 4px;
+      height: 24px;
+      background: linear-gradient(180deg, #FF0000, #CC0000);
+      box-shadow: 0 0 10px rgba(255, 0, 0, 0.8);
+    }
+  }
+
+  .loading-clientes {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1.5rem;
+    color: #cccccc;
+    background: rgba(255, 0, 0, 0.05);
+    border-radius: 8px;
+    border: 1px solid rgba(255, 0, 0, 0.2);
+
+    p {
+      margin: 0;
+      font-size: 1rem;
+      font-weight: 500;
+      letter-spacing: 0.5px;
+    }
+
+    ::ng-deep .mat-mdc-progress-spinner circle {
+      stroke: #FF0000 !important;
+    }
+  }
+
+  .autocomplete-cliente {
+    width: 100%;
+    font-size: 1rem;
+
+    ::ng-deep {
+      .mat-mdc-form-field-flex {
+        background: linear-gradient(145deg, #000000, #1a1a1a);
+        border-radius: 12px;
+        padding: 1rem 1.25rem;
+        border: 2px solid rgba(255, 0, 0, 0.4);
+        transition: all 0.3s ease;
+        box-shadow: 
+          inset 0 2px 4px rgba(0, 0, 0, 0.5),
+          0 2px 8px rgba(0, 0, 0, 0.3);
+      }
+
+      .mat-mdc-text-field-wrapper {
+        padding: 0;
+      }
+
+      .mat-mdc-form-field-label {
+        color: rgba(255, 255, 255, 0.5);
+        font-weight: 500;
+        letter-spacing: 0.5px;
+      }
+
+      &.mat-focused {
+        .mat-mdc-form-field-flex {
+          border-color: #FF0000;
+          box-shadow: 
+            0 0 20px rgba(255, 0, 0, 0.5),
+            inset 0 2px 4px rgba(0, 0, 0, 0.5);
+          background: linear-gradient(145deg, #0a0a0a, #1a1a1a);
+        }
+
+        .mat-mdc-form-field-label {
+          color: #FF0000;
+          text-shadow: 0 0 10px rgba(255, 0, 0, 0.6);
+        }
+      }
+
+      input {
+        color: #ffffff;
+        caret-color: #FF0000;
+        font-size: 1.05rem;
+        font-weight: 500;
+        letter-spacing: 0.3px;
+      }
+
+      .mat-mdc-form-field-icon-suffix {
+        color: #FF0000;
+      }
+    }
+  }
+}
+
+// ==================== SECCIÓN MÉTODOS DE PAGO ====================
 .seccion-metodos-pago {
   .titulo-seccion {
     font-size: 1.1rem;
-    font-weight: 600;
-    color: #333;
+    font-weight: 700;
+    color: #ffffff;
     margin-bottom: 1.5rem;
     text-align: center;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    position: relative;
+    padding-bottom: 1rem;
+
+    &::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 100px;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, #FF0000, transparent);
+      box-shadow: 0 0 10px rgba(255, 0, 0, 0.5);
+    }
   }
 
   .loading-metodos {
@@ -152,11 +356,15 @@
     align-items: center;
     justify-content: center;
     padding: 2rem;
-    color: #999;
+    color: #999999;
 
     p {
       margin-top: 1rem;
       font-size: 0.95rem;
+    }
+
+    ::ng-deep .mat-mdc-progress-spinner circle {
+      stroke: #FF0000 !important;
     }
   }
 
@@ -174,30 +382,38 @@
       transition: all 0.3s ease;
       padding: 0.75rem;
       border-radius: 12px;
+      background: rgba(255, 255, 255, 0.03);
+      border: 2px solid transparent;
 
       &:hover {
         transform: translateY(-4px);
+        background: rgba(255, 255, 255, 0.05);
+        border-color: rgba(255, 0, 0, 0.3);
       }
 
       &.seleccionado {
+        background: rgba(255, 0, 0, 0.1);
+        border-color: #FF0000;
+
         .imagen-container {
-          border-color: #667eea;
-          box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+          border-color: #FF0000;
+          box-shadow: 0 4px 12px rgba(255, 0, 0, 0.5);
           transform: scale(1.05);
         }
 
         .nombre-metodo {
-          color: #667eea;
-          font-weight: 600;
+          color: #FF0000;
+          font-weight: 700;
+          text-shadow: 0 0 10px rgba(255, 0, 0, 0.5);
         }
       }
 
       &.no-seleccionado {
-        opacity: 0.4;
+        opacity: 0.3;
         filter: grayscale(100%);
 
         &:hover {
-          opacity: 0.6;
+          opacity: 0.5;
           filter: grayscale(70%);
         }
       }
@@ -206,11 +422,12 @@
         position: relative;
         width: 120px;
         height: 80px;
-        border: 3px solid transparent;
+        border: 3px solid rgba(255, 255, 255, 0.1);
         border-radius: 12px;
         overflow: hidden;
         transition: all 0.3s ease;
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+        background: #000000;
 
         img {
           width: 100%;
@@ -224,7 +441,7 @@
           left: 0;
           right: 0;
           bottom: 0;
-          background: rgba(102, 126, 234, 0.2);
+          background: rgba(255, 0, 0, 0.3);
           display: flex;
           align-items: center;
           justify-content: center;
@@ -233,10 +450,11 @@
             font-size: 2.5rem;
             width: 2.5rem;
             height: 2.5rem;
-            color: #667eea;
-            background-color: white;
+            color: #ffffff;
+            background: #FF0000;
             border-radius: 50%;
             padding: 0.25rem;
+            box-shadow: 0 0 20px rgba(255, 0, 0, 0.8);
           }
         }
       }
@@ -245,63 +463,44 @@
         margin-top: 0.75rem;
         font-size: 0.9rem;
         font-weight: 500;
-        color: #333;
+        color: #cccccc;
         text-align: center;
         transition: all 0.3s ease;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
       }
     }
   }
 }
 
-// Actions
-::ng-deep .mat-mdc-dialog-actions {
-  padding: 1rem 1.5rem !important;
-  border-top: 2px solid #f0f0f0;
-  gap: 1rem;
-
-  .btn-cancelar {
-    background-color: #f5f5f5;
-    color: #666;
-
-    &:hover:not([disabled]) {
-      background-color: #e0e0e0;
-    }
-  }
-
-  .btn-finalizar {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    color: white;
-    font-weight: 600;
-    padding: 0.5rem 2rem;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-
-    &:hover:not([disabled]) {
-      background: linear-gradient(135deg, #5568d3 0%, #65408b 100%);
-    }
-
-    &:disabled {
-      opacity: 0.6;
-      cursor: not-allowed;
-    }
-
-    mat-spinner {
-      margin-right: 0.5rem;
-    }
-  }
-}
-
-// Sección cuentas bancarias
+// ==================== SECCIÓN CUENTAS BANCARIAS ====================
 .seccion-cuentas-bancarias {
   margin-top: 2rem;
+  padding-top: 2rem;
+  border-top: 2px solid rgba(255, 0, 0, 0.3);
 
   .titulo-seccion {
     font-size: 1.1rem;
-    font-weight: 600;
-    color: #333;
+    font-weight: 700;
+    color: #ffffff;
     margin-bottom: 1.5rem;
     text-align: center;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    position: relative;
+    padding-bottom: 1rem;
+
+    &::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 100px;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, #FF0000, transparent);
+      box-shadow: 0 0 10px rgba(255, 0, 0, 0.5);
+    }
   }
 
   .loading-cuentas {
@@ -310,11 +509,15 @@
     align-items: center;
     justify-content: center;
     padding: 2rem;
-    color: #999;
+    color: #999999;
 
     p {
       margin-top: 1rem;
       font-size: 0.95rem;
+    }
+
+    ::ng-deep .mat-mdc-progress-spinner circle {
+      stroke: #FF0000 !important;
     }
   }
 
@@ -332,30 +535,38 @@
       transition: all 0.3s ease;
       padding: 0.75rem;
       border-radius: 12px;
+      background: rgba(255, 255, 255, 0.03);
+      border: 2px solid transparent;
 
       &:hover {
         transform: translateY(-4px);
+        background: rgba(255, 255, 255, 0.05);
+        border-color: rgba(255, 0, 0, 0.3);
       }
 
       &.seleccionado {
+        background: rgba(255, 0, 0, 0.1);
+        border-color: #FF0000;
+
         .imagen-container-circular {
-          border-color: #667eea;
-          box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+          border-color: #FF0000;
+          box-shadow: 0 4px 12px rgba(255, 0, 0, 0.5);
           transform: scale(1.05);
         }
 
         .nombre-cuenta {
-          color: #667eea;
-          font-weight: 600;
+          color: #FF0000;
+          font-weight: 700;
+          text-shadow: 0 0 10px rgba(255, 0, 0, 0.5);
         }
       }
 
       &.no-seleccionado {
-        opacity: 0.4;
+        opacity: 0.3;
         filter: grayscale(100%);
 
         &:hover {
-          opacity: 0.6;
+          opacity: 0.5;
           filter: grayscale(70%);
         }
       }
@@ -364,21 +575,24 @@
         margin-bottom: 0.75rem;
         font-size: 0.9rem;
         font-weight: 500;
-        color: #333;
+        color: #cccccc;
         text-align: center;
         transition: all 0.3s ease;
         order: -1;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
       }
 
       .imagen-container-circular {
         position: relative;
         width: 90px;
         height: 90px;
-        border: 3px solid transparent;
+        border: 3px solid rgba(255, 255, 255, 0.1);
         border-radius: 50%;
         overflow: hidden;
         transition: all 0.3s ease;
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+        background: #000000;
 
         img {
           width: 100%;
@@ -392,7 +606,7 @@
           left: 0;
           right: 0;
           bottom: 0;
-          background: rgba(102, 126, 234, 0.2);
+          background: rgba(255, 0, 0, 0.3);
           display: flex;
           align-items: center;
           justify-content: center;
@@ -401,10 +615,11 @@
             font-size: 2.5rem;
             width: 2.5rem;
             height: 2.5rem;
-            color: #667eea;
-            background-color: white;
+            color: #ffffff;
+            background: #FF0000;
             border-radius: 50%;
             padding: 0.25rem;
+            box-shadow: 0 0 20px rgba(255, 0, 0, 0.8);
           }
         }
       }
@@ -412,7 +627,96 @@
   }
 }
 
-// Responsive
+// ==================== ACTIONS ====================
+::ng-deep .mat-mdc-dialog-actions {
+  padding: 1rem 1.5rem !important;
+  background: linear-gradient(180deg, #1a1a1a 0%, #000000 100%);
+  border-top: 3px solid #FF0000;
+  gap: 1rem;
+  box-shadow: 0 -4px 20px rgba(255, 0, 0, 0.2);
+
+  .btn-cancelar {
+    background: rgba(255, 0, 0, 0.1);
+    color: #FF0000;
+    border: 2px solid rgba(255, 0, 0, 0.3);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transition: all 0.3s ease;
+
+    &:hover:not([disabled]) {
+      background: rgba(255, 0, 0, 0.2);
+      border-color: #FF0000;
+      box-shadow: 0 0 15px rgba(255, 0, 0, 0.3);
+    }
+  }
+
+  .btn-finalizar {
+    background: linear-gradient(135deg, #CC0000 0%, #FF0000 100%);
+    color: #ffffff;
+    font-weight: 700;
+    padding: 0.75rem 2rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    border: 2px solid #FF0000;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    box-shadow: 
+      0 4px 16px rgba(255, 0, 0, 0.4),
+      inset 0 1px 2px rgba(255, 255, 255, 0.2);
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+    &::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 0;
+      height: 0;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.3);
+      transform: translate(-50%, -50%);
+      transition: width 0.6s, height 0.6s;
+    }
+
+    &:hover:not([disabled]) {
+      background: linear-gradient(135deg, #FF0000 0%, #FF3333 100%);
+      transform: translateY(-2px);
+      box-shadow: 
+        0 6px 24px rgba(255, 0, 0, 0.6),
+        0 0 30px rgba(255, 0, 0, 0.3),
+        inset 0 1px 2px rgba(255, 255, 255, 0.3);
+
+      &::before {
+        width: 300px;
+        height: 300px;
+      }
+    }
+
+    &:active:not([disabled]) {
+      transform: translateY(0);
+    }
+
+    &:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      filter: grayscale(50%);
+    }
+
+    ::ng-deep .mat-mdc-progress-spinner circle {
+      stroke: #ffffff !important;
+    }
+
+    mat-spinner {
+      margin-right: 0.5rem;
+    }
+  }
+}
+
+// ==================== RESPONSIVE ====================
 @media (max-width: 768px) {
   .dialog-procesar-venta {
     min-width: unset;
@@ -433,7 +737,7 @@
     .fila-total-final {
       .contenedor-total {
         .total-grande {
-          font-size: 2rem;
+          font-size: 2.2rem;
         }
 
         .total-texto {
@@ -441,5 +745,9 @@
         }
       }
     }
+  }
+
+  .dialog-header h2 {
+    font-size: 1.3rem;
   }
 }

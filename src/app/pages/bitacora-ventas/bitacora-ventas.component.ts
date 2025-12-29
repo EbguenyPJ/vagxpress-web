@@ -1,17 +1,7 @@
-import {
-  Component,
-  ElementRef,
-  OnDestroy,
-  OnInit,
-  ViewChild,
-} from '@angular/core';
+import { Component, ElementRef, OnDestroy, OnInit, ViewChild, } from '@angular/core';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatSort, MatSortModule } from '@angular/material/sort';
-import {
-  MatSnackBar,
-  MatSnackBarHorizontalPosition,
-  MatSnackBarVerticalPosition,
-} from '@angular/material/snack-bar';
+import { MatSnackBar, MatSnackBarHorizontalPosition, MatSnackBarVerticalPosition } from '@angular/material/snack-bar';
 import { MatMenuModule, MatMenuTrigger } from '@angular/material/menu';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { SelectionModel } from '@angular/cdk/collections';
@@ -33,6 +23,9 @@ import { BreadcrumbComponent } from '@shared/components/breadcrumb/breadcrumb.co
 import { Venta } from 'app/models/ventaModel';
 import { BitacoraVentasService } from 'app/services/bitacora-ventas/bitacora-ventas.service';
 import Swal from 'sweetalert2';
+import { MatDialog } from '@angular/material/dialog';
+import { DialogDetalleVentaComponent } from './dialogs/dialog-detalle-venta/dialog-detalle-venta.component';
+import { Direction } from '@angular/cdk/bidi';
 
 @Component({
   selector: 'app-bitacora-ventas',
@@ -100,8 +93,9 @@ export class BitacoraVentasComponent implements OnInit, OnDestroy {
   constructor(
     public httpClient: HttpClient,
     public bitacoraVentasService: BitacoraVentasService,
-    private snackBar: MatSnackBar
-  ) {}
+    private snackBar: MatSnackBar,
+    public dialog: MatDialog,
+  ) { }
 
   ngOnInit() {
     const currentUserStr = localStorage.getItem('currentUser');
@@ -133,7 +127,7 @@ export class BitacoraVentasComponent implements OnInit, OnDestroy {
       .map((cd) => cd.def);
   }
 
-  verDetalle(row: Venta) {
+  /*verDetalle(row: Venta) {
     Swal.fire({
       icon: 'info',
       title: `Venta #${row.id_venta}`,
@@ -151,7 +145,24 @@ export class BitacoraVentasComponent implements OnInit, OnDestroy {
       `,
       confirmButtonText: 'Cerrar'
     });
-  }
+  }*/
+
+
+
+
+  verDetalle(venta: any) {
+  this.dialog.open(DialogDetalleVentaComponent, {
+    width: '60vw',
+    data: {
+      venta: venta
+    },
+    autoFocus: false
+  });
+}
+
+
+
+
 
   editarVenta(row: Venta) {
     Swal.fire({

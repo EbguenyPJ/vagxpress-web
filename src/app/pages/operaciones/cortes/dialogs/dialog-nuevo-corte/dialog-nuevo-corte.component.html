@@ -129,7 +129,7 @@
           <div class="metodos-grid">
 
             <!-- CRÉDITO -->
-            <div class="metodo-card">
+            <!--<div class="metodo-card">
               <div class="metodo-header">
                 <span class="material-icons">payments</span>
                 <h4>Crédito</h4>
@@ -144,10 +144,10 @@
 
                 <div class="monto-actual">
                   Total registrado: <strong>${{ getMontoMetodo(1) }}</strong>
-                </div>
+                </div>-->
 
                 <!-- Evidencias bancarias -->
-                <div class="evidencia-section" *ngIf="bancosCredito.length > 0">
+                <!--<div class="evidencia-section" *ngIf="bancosCredito.length > 0">
                   <div class="evidencia-list">
                     <div class="evidencia-preview" *ngFor="let banco of bancosCredito">
                       <span class="material-icons">account_balance</span>
@@ -167,7 +167,7 @@
                 </label>
 
               </div>
-            </div>
+            </div>-->
 
             <!-- EFECTIVO -->
             <div class="metodo-card">
@@ -210,7 +210,7 @@
             </div>
 
             <!-- TARJETA CRÉDITO -->
-            <div class="metodo-card">
+            <!--<div class="metodo-card">
               <div class="metodo-header">
                 <span class="material-icons">credit_card</span>
                 <h4>Tarjeta Crédito</h4>
@@ -224,10 +224,10 @@
                 </div>
                 <div class="monto-actual">
                   Total registrado: <strong>${{ getMontoMetodo(3) }}</strong>
-                </div>
+                </div>-->
 
                 <!-- Evidencias bancarias -->
-                <div class="evidencia-section" *ngIf="bancosTarjetaCredito.length > 0">
+                <!--<div class="evidencia-section" *ngIf="bancosTarjetaCredito.length > 0">
                   <div class="evidencia-list">
                     <div class="evidencia-preview" *ngFor="let banco of bancosTarjetaCredito">
                       <span class="material-icons">account_balance</span>
@@ -247,10 +247,10 @@
                 </label>
 
               </div>
-            </div>
+            </div>-->
 
             <!-- TARJETA DÉBITO -->
-            <div class="metodo-card">
+            <!--<div class="metodo-card">
               <div class="metodo-header">
                 <span class="material-icons">credit_card</span>
                 <h4>Tarjeta Débito</h4>
@@ -264,10 +264,10 @@
                 </div>
                 <div class="monto-actual">
                   Total registrado: <strong>${{ getMontoMetodo(4) }}</strong>
-                </div>
+                </div>-->
 
                 <!-- Evidencias bancarias -->
-                <div class="evidencia-section" *ngIf="bancosDebito.length > 0">
+               <!-- <div class="evidencia-section" *ngIf="bancosDebito.length > 0">
                   <div class="evidencia-list">
                     <div class="evidencia-preview" *ngFor="let banco of bancosDebito">
                       <span class="material-icons">account_balance</span>
@@ -287,10 +287,10 @@
                 </label>
 
               </div>
-            </div>
+            </div>-->
 
             <!-- TRANSFERENCIA -->
-            <div class="metodo-card">
+           <!-- <div class="metodo-card">
               <div class="metodo-header">
                 <span class="material-icons">account_balance</span>
                 <h4>Transferencia</h4>
@@ -304,10 +304,10 @@
                 </div>
                 <div class="monto-actual">
                   Total registrado: <strong>${{ getMontoMetodo(5) }}</strong>
-                </div>
+                </div>-->
 
                 <!-- Evidencias bancarias -->
-                <div class="evidencia-section" *ngIf="bancosTransferencia.length > 0">
+                <!--<div class="evidencia-section" *ngIf="bancosTransferencia.length > 0">
                   <div class="evidencia-list">
                     <div class="evidencia-preview" *ngFor="let banco of bancosTransferencia">
                       <span class="material-icons">account_balance</span>
@@ -327,7 +327,7 @@
                 </label>
 
               </div>
-            </div>
+            </div>-->
 
           </div>
         </div>
@@ -368,26 +368,26 @@
                 <h4>Montos Ingresados por Usuario</h4>
               </div>
               <div class="montos-grid">
-                <div class="monto-item">
+                <!--<div class="monto-item">
                   <span class="monto-label">Crédito</span>
                   <span class="monto-value">${{ montoCredito ?? 0 }}</span>
-                </div>
+                </div>-->
                 <div class="monto-item">
                   <span class="monto-label">Efectivo</span>
                   <span class="monto-value">${{ montoEfectivo ?? 0 }}</span>
                 </div>
-                <div class="monto-item">
+                <!--<div class="monto-item">
                   <span class="monto-label">Tarjeta Crédito</span>
                   <span class="monto-value">${{ montoTarjetaCredito ?? 0 }}</span>
-                </div>
-                <div class="monto-item">
+                </div>-->
+               <!-- <div class="monto-item">
                   <span class="monto-label">Tarjeta Débito</span>
                   <span class="monto-value">${{ montoTarjetaDebito ?? 0 }}</span>
-                </div>
-                <div class="monto-item">
+                </div>-->
+                <!--<div class="monto-item">
                   <span class="monto-label">Transferencia</span>
                   <span class="monto-value">${{ montoTransferencia ?? 0 }}</span>
-                </div>
+                </div>-->
               </div>
               <div class="total-section">
                 <span class="total-label">Total Usuario</span>
