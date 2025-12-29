@@ -58,12 +58,13 @@
         <label class="porcentajes-label">Porcentaje de Utilidad:</label>
         <div class="porcentajes-botones">
           <button
-            *ngFor="let porcentaje of porcentajesUtilidad"
+            *ngFor="let porcentaje of porcentajesUtilidad; let idx = index"
             class="btn btn-sm btn-porcentaje"
             [class.active]="esPorcentajeSeleccionado(item, porcentaje.id_porcentaje_utilidad)"
             (click)="onCambiarPorcentaje(i, porcentaje.id_porcentaje_utilidad)"
+            [title]="(porcentaje.n_porcentaje_utilidad | number: '1.0-0') + '%'"
           >
-            {{ porcentaje.n_porcentaje_utilidad | number: '1.2-2' }}%
+            P{{ idx + 1 }}
           </button>
         </div>
       </div>

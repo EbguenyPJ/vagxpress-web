@@ -178,8 +178,11 @@ export class PuntoVentaComponent implements OnInit {
     this.posService.getPorcentajesUtilidad(this.s_token).subscribe(
       (response: any) => {
         if (response.status === 'success') {
-          this.porcentajesUtilidad = response.data || [];
-          console.log('Porcentajes de utilidad cargados:', this.porcentajesUtilidad);
+          // Ordenar porcentajes de menor a mayor
+          this.porcentajesUtilidad = (response.data || []).sort((a: any, b: any) => {
+            return parseFloat(a.n_porcentaje_utilidad) - parseFloat(b.n_porcentaje_utilidad);
+          });
+          console.log('Porcentajes de utilidad cargados y ordenados:', this.porcentajesUtilidad);
         }
         verificarCompletado();
       },
@@ -285,13 +288,23 @@ export class PuntoVentaComponent implements OnInit {
       itemExistente.n_cantidad++;
       this.recalcularItemCarrito(itemExistente);
     } else {
-      this.carrito.push({
+      // Buscar porcentaje default (id_tipo_configuracion === 2)
+      const porcentajeDefault = this.porcentajesUtilidad.find(
+        (p: any) => parseInt(p.id_tipo_configuracion) === 2
+      );
+
+      const nuevoItem = {
         producto: producto,
         n_cantidad: 1,
-        id_porcentaje_utilidad: null, // Sin porcentaje por defecto
+        id_porcentaje_utilidad: porcentajeDefault ? porcentajeDefault.id_porcentaje_utilidad : null,
         n_precio_unitario: parseFloat(producto.n_precio_venta),
         n_subtotal: parseFloat(producto.n_precio_venta)
-      });
+      };
+
+      // Recalcular precio con porcentaje default si existe
+      this.recalcularItemCarrito(nuevoItem);
+
+      this.carrito.push(nuevoItem);
     }
 
     this.recalcularTotales();
