@@ -3,6 +3,33 @@
   max-width: 95vw;
 }
 
+.btn-mejor-precio {
+  margin-left: auto;
+  color: #ff9800 !important;
+  animation: pulse-alert 2s infinite;
+
+  .icon-alerta {
+    font-size: 1.5rem;
+    width: 1.5rem;
+    height: 1.5rem;
+  }
+
+  &:hover {
+    background-color: #fff3e0 !important;
+  }
+}
+
+@keyframes pulse-alert {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.1);
+    opacity: 0.8;
+  }
+}
+
 .dialog-header {
   display: flex;
   justify-content: space-between;
