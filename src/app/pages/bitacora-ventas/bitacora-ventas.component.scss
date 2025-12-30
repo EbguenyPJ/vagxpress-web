@@ -32,6 +32,25 @@
   }
 }
 
+.badge {
+    font-size: 0.75rem;
+    font-weight: 600;
+    padding: 4px 8px;
+    border-radius: 12px;
+    text-transform: uppercase;
+    display: inline-block;
+    margin-right: 4px;
+}
+
+:host ::ng-deep .badge.badge-solid-green {
+    background-color: #e6f4ea;
+    color: #1e7e34;
+    border: 1px solid #c3e6cb;
+}
+
+
+
+
 
 /* ==================== Ajustes generales ==================== */
 :host ::ng-deep .column-filter .mat-mdc-select-arrow {
@@ -344,3 +363,4 @@
 
 
 }
+

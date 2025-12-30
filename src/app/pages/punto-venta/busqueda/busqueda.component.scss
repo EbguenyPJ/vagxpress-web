@@ -1,9 +1,135 @@
+// ==================== BÚSQUEDA VAG XPRESS ====================
 .busqueda-container {
   position: relative;
   width: 100%;
   margin-bottom: 1rem;
+
+  // Estilos para Material Form Field
+  ::ng-deep {
+    .mat-form-field {
+      width: 100%;
+
+      // Container principal
+      .mat-form-field-wrapper {
+        padding-bottom: 0;
+      }
+
+      // Outline (borde)
+      .mat-form-field-outline {
+        color: rgba(255, 0, 0, 0.3) !important;
+        
+        .mat-form-field-outline-thick {
+          color: #FF0000 !important;
+        }
+      }
+
+      // Label
+      .mat-form-field-label {
+        color: rgba(255, 255, 255, 0.6) !important;
+        font-weight: 500 !important;
+      }
+
+      // Label cuando está focused o tiene valor
+      &.mat-focused .mat-form-field-label,
+      &.mat-form-field-should-float .mat-form-field-label {
+        color: #FF0000 !important;
+      }
+
+      // Input
+      .mat-input-element {
+        color: #ffffff !important;
+        font-weight: 500 !important;
+        letter-spacing: 0.3px !important;
+        caret-color: #FF0000 !important;
+
+        &::placeholder {
+          color: rgba(255, 255, 255, 0.4) !important;
+        }
+      }
+
+      // Fondo del input
+      .mat-form-field-flex {
+        background: linear-gradient(145deg, rgba(26, 26, 26, 0.9), rgba(45, 45, 45, 0.7)) !important;
+        border-radius: 12px !important;
+        padding: 0.5rem 1rem !important;
+        transition: all 0.3s ease !important;
+        box-shadow: 
+          0 4px 12px rgba(0, 0, 0, 0.3),
+          inset 0 2px 4px rgba(255, 0, 0, 0.1) !important;
+      }
+
+      // Cuando está focused
+      &.mat-focused .mat-form-field-flex {
+        background: linear-gradient(145deg, rgba(26, 26, 26, 1), rgba(45, 45, 45, 0.9)) !important;
+        box-shadow: 
+          0 0 0 3px rgba(255, 0, 0, 0.2),
+          0 4px 20px rgba(255, 0, 0, 0.4),
+          inset 0 2px 4px rgba(255, 0, 0, 0.2) !important;
+      }
+
+      // Prefix icon (lupa)
+      .mat-form-field-prefix {
+        .mat-icon {
+          color: #FF0000 !important;
+          margin-right: 0.5rem !important;
+          font-size: 1.5rem !important;
+          width: 1.5rem !important;
+          height: 1.5rem !important;
+        }
+      }
+
+      // Suffix button (X para limpiar)
+      .mat-form-field-suffix {
+        .mat-icon-button {
+          width: 2.25rem !important;
+          height: 2.25rem !important;
+          background: linear-gradient(135deg, #CC0000, #FF0000) !important;
+          border-radius: 50% !important;
+          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+          box-shadow: 
+            0 2px 8px rgba(255, 0, 0, 0.3),
+            inset 0 1px 2px rgba(255, 255, 255, 0.2) !important;
+
+          .mat-icon {
+            color: #ffffff !important;
+            font-size: 1.1rem !important;
+            width: 1.1rem !important;
+            height: 1.1rem !important;
+            line-height: 1 !important;
+          }
+
+          &:hover {
+            background: linear-gradient(135deg, #FF0000, #FF3333) !important;
+            transform: scale(1.1) rotate(90deg) !important;
+            box-shadow: 
+              0 4px 16px rgba(255, 0, 0, 0.5),
+              0 0 20px rgba(255, 0, 0, 0.3) !important;
+          }
+
+          &:active {
+            transform: scale(0.95) !important;
+            box-shadow: 
+              0 1px 4px rgba(255, 0, 0, 0.4),
+              inset 0 2px 4px rgba(0, 0, 0, 0.3) !important;
+          }
+        }
+      }
+
+      // Remover underline si existe
+      .mat-form-field-underline {
+        display: none !important;
+      }
+
+      // Infix
+      .mat-form-field-infix {
+        border-top: 0 !important;
+        padding: 0.75rem 0 !important;
+      }
+    }
+  }
 }
 
+// ==================== RESULTADOS DE BÚSQUEDA ====================
 .resultados-busqueda {
   position: absolute;
   top: 100%;
@@ -11,23 +137,62 @@
   right: 0;
   max-height: 400px;
   overflow-y: auto;
-  background: white;
-  border-radius: 8px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  background: #1a1a1a;
+  border-radius: 12px;
+  box-shadow: 
+    0 8px 24px rgba(0, 0, 0, 0.5),
+    0 0 0 1px rgba(255, 0, 0, 0.2),
+    0 0 30px rgba(255, 0, 0, 0.15);
   z-index: 1000;
   margin-top: 0.5rem;
+  border: 1px solid rgba(255, 0, 0, 0.3);
+  animation: slideDown 0.3s ease-out;
 }
 
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+// ==================== ITEM DE RESULTADO ====================
 .resultado-item {
   display: flex;
   align-items: center;
-  padding: 0.75rem 1rem;
+  padding: 0.875rem 1.25rem;
   cursor: pointer;
-  transition: background-color 0.2s;
-  border-bottom: 1px solid #f0f0f0;
+  transition: all 0.2s ease;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  position: relative;
+
+  // Borde rojo al lado izquierdo en hover
+  &::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 0;
+    background: linear-gradient(180deg, #CC0000, #FF0000);
+    transition: width 0.3s ease;
+  }
 
   &:hover {
-    background-color: #f8f9fa;
+    background: linear-gradient(90deg, rgba(255, 0, 0, 0.15), rgba(26, 26, 26, 0.8));
+
+    &::before {
+      width: 4px;
+      box-shadow: 0 0 10px rgba(255, 0, 0, 0.5);
+    }
+  }
+
+  &:active {
+    background: rgba(255, 0, 0, 0.2);
   }
 
   &:last-child {
@@ -35,76 +200,204 @@
   }
 }
 
+// ==================== IMAGEN DEL PRODUCTO ====================
 .producto-img-mini {
-  width: 50px;
-  height: 50px;
+  width: 55px;
+  height: 55px;
   object-fit: cover;
-  border-radius: 6px;
+  border-radius: 8px;
   margin-right: 1rem;
-  border: 1px solid #e0e0e0;
+  border: 2px solid rgba(255, 0, 0, 0.3);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  transition: all 0.3s ease;
+
+  .resultado-item:hover & {
+    border-color: #FF0000;
+    box-shadow: 0 4px 12px rgba(255, 0, 0, 0.4);
+    transform: scale(1.05);
+  }
 }
 
+// ==================== INFO DEL PRODUCTO ====================
 .producto-info {
   flex: 1;
+  min-width: 0;
 }
 
 .producto-nombre {
-  font-weight: 500;
-  color: #333;
-  margin-bottom: 0.25rem;
-  font-size: 0.95rem;
+  font-weight: 600;
+  color: #ffffff;
+  margin-bottom: 0.35rem;
+  font-size: 1rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  letter-spacing: 0.3px;
+
+  .resultado-item:hover & {
+    color: #FF3333;
+  }
 }
 
 .producto-detalles {
   font-size: 0.85rem;
-  color: #666;
+  color: #999999;
   display: flex;
   align-items: center;
   gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.marca {
+  color: #cccccc;
+  font-weight: 500;
+}
+
+.numero-parte {
+  color: #aaaaaa;
+  font-family: 'Courier New', monospace;
+  font-size: 0.8rem;
+  background: rgba(255, 255, 255, 0.05);
+  padding: 0.15rem 0.4rem;
+  border-radius: 4px;
 }
 
 .separador {
-  color: #ccc;
+  color: rgba(255, 0, 0, 0.4);
+  font-weight: 700;
 }
 
 .precio {
-  font-weight: 600;
-  color: #2196f3;
+  font-weight: 700;
+  color: #FF0000;
+  font-size: 0.95rem;
+  text-shadow: 0 0 10px rgba(255, 0, 0, 0.3);
 }
 
+// ==================== BADGE DE STOCK ====================
+.badge {
+  padding: 0.4rem 0.75rem;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  white-space: nowrap;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s ease;
+
+  &.bg-success {
+    background: linear-gradient(135deg, #00cc00, #00ff00);
+    color: #000000;
+  }
+
+  &.bg-warning {
+    background: linear-gradient(135deg, #ff8800, #ffaa00);
+    color: #000000;
+  }
+
+  &.bg-danger {
+    background: linear-gradient(135deg, #cc0000, #ff0000);
+    color: #ffffff;
+    animation: pulse-stock 2s ease-in-out infinite;
+  }
+
+  .resultado-item:hover & {
+    transform: scale(1.05);
+  }
+}
+
+@keyframes pulse-stock {
+  0%, 100% {
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  }
+  50% {
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2), 0 0 15px rgba(255, 0, 0, 0.5);
+  }
+}
+
+// ==================== SIN RESULTADOS ====================
 .sin-resultados {
-  padding: 2rem;
+  padding: 2.5rem;
   text-align: center;
-  color: #999;
+  color: #999999;
+  background: #1a1a1a;
 
   mat-icon {
-    font-size: 3rem;
-    width: 3rem;
-    height: 3rem;
-    margin-bottom: 0.5rem;
-    color: #ccc;
+    font-size: 4rem;
+    width: 4rem;
+    height: 4rem;
+    margin-bottom: 1rem;
+    color: rgba(255, 0, 0, 0.3);
+    animation: fade-icon 2s ease-in-out infinite;
   }
 
   p {
     margin: 0;
-    font-size: 0.9rem;
+    font-size: 1rem;
+    font-weight: 500;
+    color: #cccccc;
+    letter-spacing: 0.5px;
   }
 }
 
-// Scrollbar
+@keyframes fade-icon {
+  0%, 100% {
+    opacity: 0.3;
+  }
+  50% {
+    opacity: 0.6;
+  }
+}
+
+// ==================== SCROLLBAR PERSONALIZADO ====================
 .resultados-busqueda::-webkit-scrollbar {
   width: 8px;
 }
 
 .resultados-busqueda::-webkit-scrollbar-track {
-  background: #f1f1f1;
+  background: #2d2d2d;
+  border-radius: 10px;
 }
 
 .resultados-busqueda::-webkit-scrollbar-thumb {
-  background: #888;
+  background: #4a4a4a;
   border-radius: 10px;
+  transition: background 0.2s ease;
 
   &:hover {
-    background: #555;
+    background: #FF0000;
+    box-shadow: 0 0 10px rgba(255, 0, 0, 0.5);
+  }
+}
+
+// Para Firefox
+.resultados-busqueda {
+  scrollbar-width: thin;
+  scrollbar-color: #4a4a4a #2d2d2d;
+}
+
+// ==================== RESPONSIVE ====================
+@media (max-width: 768px) {
+  .producto-img-mini {
+    width: 45px;
+    height: 45px;
+  }
+
+  .producto-nombre {
+    font-size: 0.9rem;
+  }
+
+  .producto-detalles {
+    font-size: 0.75rem;
+  }
+
+  .resultado-item {
+    padding: 0.75rem 1rem;
+  }
+
+  .badge {
+    font-size: 0.65rem;
+    padding: 0.3rem 0.6rem;
   }
 }

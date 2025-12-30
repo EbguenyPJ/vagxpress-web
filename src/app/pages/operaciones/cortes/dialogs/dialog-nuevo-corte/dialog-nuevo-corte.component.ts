@@ -9,6 +9,7 @@ import { NgIf } from '@angular/common';
 import { NgFor } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import Swal from 'sweetalert2';
+import { CommonModule } from '@angular/common';
 
 
 
@@ -20,7 +21,8 @@ import Swal from 'sweetalert2';
     MatIconModule,
     NgIf,
     NgFor,
-    FormsModule],
+    FormsModule,
+    CommonModule],
   templateUrl: './dialog-nuevo-corte.component.html',
   styleUrl: './dialog-nuevo-corte.component.scss'
 })

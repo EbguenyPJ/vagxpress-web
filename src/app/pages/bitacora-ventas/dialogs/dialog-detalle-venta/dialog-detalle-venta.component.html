@@ -1,0 +1,96 @@
+<div class="detalle-venta-container">
+    <!-- Header -->
+    <div class="detalle-header">
+        <div class="header-content">
+            <mat-icon class="header-icon">receipt_long</mat-icon>
+            <h2 class="titulo-venta">Venta #{{ venta?.id_venta }}</h2>
+        </div>
+        <div class="header-badge">
+            <span class="badge-estatus" [class.estatus-completado]="venta?.s_estatus_venta === 'Completado'">
+                {{ venta?.s_estatus_venta }}
+            </span>
+        </div>
+    </div>
+
+    <!-- Contenido -->
+    <div *ngIf="!isLoading; else loading" class="detalle-contenido">
+
+        <!-- Información del Cliente -->
+        <div class="seccion-info">
+            <h3 class="seccion-titulo">
+                <mat-icon>person</mat-icon>
+                Información del Cliente
+            </h3>
+            <div class="info-card">
+                <div class="info-row">
+                    <span class="info-label">Cliente:</span>
+                    <span class="info-valor">{{ venta?.s_nombre_cliente }}</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Detalles de la Venta -->
+        <div class="seccion-info">
+            <h3 class="seccion-titulo">
+                <mat-icon>shopping_cart</mat-icon>
+                Detalles de la Venta
+            </h3>
+            <div class="info-card">
+                <div class="info-row">
+                    <span class="info-label">Cantidad de Refacciones:</span>
+                    <span class="info-valor cantidad-badge">{{ venta?.n_cantidad_refacciones }}</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Método de Pago:</span>
+                    <span class="info-valor">{{ venta?.s_metodo_pago }}</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Resumen de Totales -->
+        <div class="seccion-totales">
+            <h3 class="seccion-titulo">
+                <mat-icon>payments</mat-icon>
+                Resumen de Totales
+            </h3>
+
+            <div class="totales-card">
+                <div class="total-row">
+                    <span class="total-label">Subtotal:</span>
+                    <span class="total-valor">${{ venta?.n_subtotal | number:'1.2-2' }}</span>
+                </div>
+
+                <div class="total-row">
+                    <span class="total-label">IVA ({{ venta?.n_porcentaje_iva }}%):</span>
+                    <span class="total-valor">${{ (venta?.n_total - venta?.n_subtotal) | number:'1.2-2' }}</span>
+                </div>
+
+                <div class="separador-total"></div>
+
+                <div class="total-row total-final">
+                    <span class="total-label-final">TOTAL:</span>
+                    <div class="total-display">
+                        <span class="total-grande">${{ venta?.n_total | number:'1.2-2' }}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Loading -->
+    <ng-template #loading>
+        <div class="loading-container">
+            <mat-progress-spinner mode="indeterminate" diameter="60"></mat-progress-spinner>
+            <p class="loading-text">Cargando información de la venta...</p>
+        </div>
+    </ng-template>
+
+    <!-- Footer con botón -->
+    <div class="detalle-footer" *ngIf="!isLoading">
+        <button mat-raised-button class="btn-cerrar" (click)="cerrar()">
+            <mat-icon>close</mat-icon>
+            Cerrar
+        </button>
+    </div>
+</div>

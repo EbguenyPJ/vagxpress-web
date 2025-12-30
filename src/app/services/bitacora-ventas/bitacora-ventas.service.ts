@@ -18,4 +18,17 @@ export class BitacoraVentasService {
     let url = conexion.url + 'mostrar-ventas';
     return this.http.get(url, params);
   }
+
+  getVentaById(s_token: string, id: number) {
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': s_token
+    });
+    const url = conexion.url + 'ventas/' + id;
+    return this.http.get(url, { headers });
+  }
+
+
+
+
 }

@@ -1,0 +1,258 @@
+/* =============================================
+   CONTAINER
+   ============================================= */
+.detalle-venta-container {
+  background: linear-gradient(145deg, #1a1a1a, #0f0f0f);
+  border-radius: 20px;
+  box-shadow:
+    0 25px 80px rgba(0, 0, 0, 0.9),
+    0 0 0 1px rgba(177, 18, 38, 0.4);
+  display: flex;
+  flex-direction: column;
+  max-height: 90vh;
+  overflow: hidden;
+}
+
+/* =============================================
+   HEADER
+   ============================================= */
+.detalle-header {
+  background: linear-gradient(135deg, #b11226, #e53935);
+  padding: 1.4rem 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-shadow: 0 6px 24px rgba(177, 18, 38, 0.5);
+
+  .header-content {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+
+    .header-icon {
+      font-size: 28px;
+      color: #fff;
+      animation: iconPulse 2s ease-in-out infinite;
+    }
+
+    .titulo-venta {
+      margin: 0;
+      color: #fff;
+      font-size: 1.5rem;
+      font-weight: 800;
+      text-shadow: 0 2px 6px rgba(0, 0, 0, 0.35);
+    }
+  }
+
+  .header-badge {
+    .badge-estatus {
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-size: 0.75rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      background: rgba(255, 255, 255, 0.15);
+      color: #fff;
+
+      &.estatus-completado {
+        background: linear-gradient(135deg, #2e7d32, #4caf50);
+        box-shadow: 0 0 0 2px rgba(76, 175, 80, 0.4);
+      }
+    }
+  }
+}
+
+/* =============================================
+   CONTENT
+   ============================================= */
+.detalle-contenido {
+  padding: 24px;
+  overflow-y: auto;
+  flex: 1;
+  background: linear-gradient(180deg, rgba(26, 26, 26, 0.6), rgba(15, 15, 15, 0.9));
+}
+
+/* =============================================
+   SECCIONES
+   ============================================= */
+.seccion-info,
+.seccion-totales {
+  margin-bottom: 20px;
+}
+
+.seccion-titulo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 16px;
+  background: linear-gradient(135deg, rgba(177, 18, 38, 0.15), rgba(177, 18, 38, 0.08));
+  border-radius: 12px 12px 0 0;
+  border-bottom: 2px solid rgba(255, 255, 255, 0.08);
+  font-size: 0.85rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  color: #fff;
+  letter-spacing: 0.5px;
+
+  mat-icon {
+    color: #e53935;
+    font-size: 20px;
+  }
+}
+
+/* =============================================
+   INFO CARD
+   ============================================= */
+.info-card {
+  background: linear-gradient(145deg, rgba(40, 40, 40, 0.95), rgba(30, 30, 30, 0.95));
+  border-radius: 0 0 12px 12px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.info-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 12px;
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 8px;
+  border-left: 3px solid rgba(177, 18, 38, 0.4);
+  transition: all 0.3s ease;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.05);
+    border-left-color: rgba(177, 18, 38, 0.7);
+    transform: translateX(3px);
+  }
+
+  .info-label {
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: rgba(255, 255, 255, 0.6);
+    text-transform: uppercase;
+  }
+
+  .info-valor {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: #fff;
+  }
+
+  .cantidad-badge {
+    padding: 4px 10px;
+    border-radius: 14px;
+    background: rgba(177, 18, 38, 0.25);
+    border: 1px solid rgba(177, 18, 38, 0.5);
+  }
+}
+
+/* =============================================
+   TOTALES
+   ============================================= */
+.totales-card {
+  background: linear-gradient(145deg, rgba(40, 40, 40, 0.95), rgba(30, 30, 30, 0.95));
+  border-radius: 0 0 12px 12px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 14px;
+}
+
+.total-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 12px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.03);
+  margin-bottom: 6px;
+
+  .total-label {
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: rgba(255, 255, 255, 0.7);
+  }
+
+  .total-valor {
+    font-size: 1rem;
+    font-weight: 800;
+    color: #fff;
+  }
+
+  &.total-final {
+    margin-top: 10px;
+    background: linear-gradient(135deg, rgba(177, 18, 38, 0.25), rgba(177, 18, 38, 0.15));
+    border: 2px solid rgba(177, 18, 38, 0.5);
+
+    .total-label-final {
+      font-size: 0.85rem;
+      font-weight: 800;
+      color: #fff;
+    }
+
+    .total-grande {
+      font-size: 1.6rem;
+      font-weight: 900;
+      color: #4caf50;
+      text-shadow: 0 2px 8px rgba(76, 175, 80, 0.4);
+    }
+  }
+}
+
+.separador-total {
+  height: 1px;
+  background: rgba(255, 255, 255, 0.08);
+  margin: 10px 0;
+}
+
+/* =============================================
+   LOADING
+   ============================================= */
+.loading-container {
+  padding: 60px 40px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+
+  mat-progress-spinner ::ng-deep circle {
+    stroke: #e53935;
+  }
+
+  .loading-text {
+    font-size: 1rem;
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.75);
+  }
+}
+
+/* =============================================
+   FOOTER
+   ============================================= */
+.detalle-footer {
+  padding: 16px 24px;
+  background: rgba(15, 15, 15, 0.95);
+  display: flex;
+  justify-content: flex-end;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+
+  .btn-cerrar {
+    background: linear-gradient(135deg, #b11226, #e53935);
+    color: #fff;
+    font-weight: 800;
+    border-radius: 10px;
+    padding: 10px 18px;
+    box-shadow: 0 4px 18px rgba(177, 18, 38, 0.5);
+  }
+}
+
+/* =============================================
+   ANIMATIONS
+   ============================================= */
+@keyframes iconPulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.08); }
+}
