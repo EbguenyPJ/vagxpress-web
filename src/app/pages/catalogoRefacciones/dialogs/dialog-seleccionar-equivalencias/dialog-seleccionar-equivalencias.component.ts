@@ -16,6 +16,7 @@ import { RefaccionesService } from 'app/services/refacciones/refacciones.service
 import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
 import { ReplaySubject, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+import { ViewEncapsulation } from '@angular/core';
 
 @Component({
   selector: 'app-dialog-seleccionar-equivalencias',
@@ -33,6 +34,8 @@ import { takeUntil } from 'rxjs/operators';
     NgxMatSelectSearchModule,
   ],
   templateUrl: './dialog-seleccionar-equivalencias.component.html',
+  styleUrls: ['./dialog-seleccionar-equivalencias.component.scss'],
+  encapsulation: ViewEncapsulation.None,
 })
 export class DialogSeleccionarEquivalenciasComponent implements OnInit {
   protected refacciones: any[] = [];

@@ -1,4 +1,13 @@
-<h1 mat-dialog-title>Editar Refacción</h1>
+<h1 mat-dialog-title class="dialog-header">
+  <div class="dialog-title">
+    <mat-icon>settings</mat-icon>
+    <span>Editar Refacción</span>
+  </div>
+
+  <button mat-icon-button class="btn-cerrar" (click)="onNoClick()" aria-label="Cerrar dialog">
+    <mat-icon>close</mat-icon>
+  </button>
+</h1>
 
 <div mat-dialog-content>
   <form [formGroup]="refaccionForm">
@@ -34,9 +43,7 @@
               <mat-form-field appearance="outline" class="w-100">
                 <mat-label>Descripción</mat-label>
                 <textarea matInput formControlName="s_descripcion"></textarea>
-                <mat-icon matSuffix class="icon-principal"
-                  >description</mat-icon
-                >
+                <mat-icon matSuffix class="icon-principal">description</mat-icon>
               </mat-form-field>
             </div>
           </div>
@@ -51,44 +58,26 @@
             <div class="col-md-6">
               <mat-form-field appearance="outline" class="w-100">
                 <mat-label>Precio Compra</mat-label>
-                <input
-                  matInput
-                  type="number"
-                  formControlName="n_precio_compra"
-                />
-                <mat-icon matSuffix class="icon-comercial"
-                  >shopping_cart</mat-icon
-                >
+                <input matInput type="number" formControlName="n_precio_compra" />
+                <mat-icon matSuffix class="icon-comercial">shopping_cart</mat-icon>
               </mat-form-field>
             </div>
             <div class="col-md-6">
               <mat-form-field appearance="outline" class="w-100">
                 <mat-label>Precio Venta</mat-label>
-                <input
-                  matInput
-                  type="number"
-                  formControlName="n_precio_venta"
-                />
-                <mat-icon matSuffix class="icon-comercial"
-                  >price_check</mat-icon
-                >
+                <input matInput type="number" formControlName="n_precio_venta" />
+                <mat-icon matSuffix class="icon-comercial">price_check</mat-icon>
               </mat-form-field>
             </div>
             <div class="col-md-6">
               <mat-form-field appearance="outline" class="w-100">
                 <mat-label>Precio Mayoreo</mat-label>
-                <input
-                  matInput
-                  type="number"
-                  formControlName="n_precio_mayoreo"
-                />
+                <input matInput type="number" formControlName="n_precio_mayoreo" />
                 <mat-icon matSuffix class="icon-comercial">storefront</mat-icon>
               </mat-form-field>
             </div>
             <div class="col-md-6 d-flex align-items-center">
-              <mat-checkbox formControlName="b_importado"
-                >Es importado</mat-checkbox
-              >
+              <mat-checkbox formControlName="b_importado">Es importado</mat-checkbox>
             </div>
           </div>
         </div>
@@ -104,10 +93,8 @@
               <mat-form-field appearance="outline" class="w-100">
                 <mat-label>Marca</mat-label>
                 <mat-select formControlName="id_marca_refaccion">
-                  @for(m of marcas; track m.id_marca_refaccion){<mat-option
-                    [value]="m.id_marca_refaccion"
-                    >{{ m.s_marca_refaccion }}</mat-option
-                  >}
+                  @for(m of marcas; track m.id_marca_refaccion){<mat-option [value]="m.id_marca_refaccion">{{
+                    m.s_marca_refaccion }}</mat-option>}
                 </mat-select>
                 <mat-icon matSuffix class="icon-clasificacion">sell</mat-icon>
               </mat-form-field>
@@ -117,14 +104,10 @@
                 <mat-label>Categoría</mat-label>
                 <mat-select formControlName="id_categoria_refaccion">
                   @for(c of categorias; track
-                  c.id_categoria_refaccion){<mat-option
-                    [value]="c.id_categoria_refaccion"
-                    >{{ c.s_categoria_refaccion }}</mat-option
-                  >}
+                  c.id_categoria_refaccion){<mat-option [value]="c.id_categoria_refaccion">{{ c.s_categoria_refaccion
+                    }}</mat-option>}
                 </mat-select>
-                <mat-icon matSuffix class="icon-clasificacion"
-                  >category</mat-icon
-                >
+                <mat-icon matSuffix class="icon-clasificacion">category</mat-icon>
               </mat-form-field>
             </div>
             <div class="col-md-6">
@@ -132,24 +115,18 @@
                 <mat-label>Subcategoría</mat-label>
                 <mat-select formControlName="id_subcategoria_refaccion">
                   @for(s of subcategoriasFiltradas; track
-                  s.id_subcategoria_refaccion){<mat-option
-                    [value]="s.id_subcategoria_refaccion"
-                    >{{ s.s_subcategoria_refaccion }}</mat-option
-                  >}
+                  s.id_subcategoria_refaccion){<mat-option [value]="s.id_subcategoria_refaccion">{{
+                    s.s_subcategoria_refaccion }}</mat-option>}
                 </mat-select>
-                <mat-icon matSuffix class="icon-clasificacion"
-                  >dynamic_feed</mat-icon
-                >
+                <mat-icon matSuffix class="icon-clasificacion">dynamic_feed</mat-icon>
               </mat-form-field>
             </div>
             <div class="col-md-6">
               <mat-form-field appearance="outline" class="w-100">
                 <mat-label>Clase</mat-label>
                 <mat-select formControlName="id_clase_refaccion">
-                  @for(c of clases; track c.id_clase_refaccion){<mat-option
-                    [value]="c.id_clase_refaccion"
-                    >{{ c.s_clase_refaccion }}</mat-option
-                  >}
+                  @for(c of clases; track c.id_clase_refaccion){<mat-option [value]="c.id_clase_refaccion">{{
+                    c.s_clase_refaccion }}</mat-option>}
                 </mat-select>
                 <mat-icon matSuffix class="icon-clasificacion">star</mat-icon>
               </mat-form-field>
@@ -158,14 +135,10 @@
               <mat-form-field appearance="outline" class="w-100">
                 <mat-label>Proveedor</mat-label>
                 <mat-select formControlName="id_proveedor">
-                  @for(p of proveedores; track p.id_proveedor){<mat-option
-                    [value]="p.id_proveedor"
-                    >{{ p.s_proveedor }}</mat-option
-                  >}
+                  @for(p of proveedores; track p.id_proveedor){<mat-option [value]="p.id_proveedor">{{ p.s_proveedor
+                    }}</mat-option>}
                 </mat-select>
-                <mat-icon matSuffix class="icon-clasificacion"
-                  >local_shipping</mat-icon
-                >
+                <mat-icon matSuffix class="icon-clasificacion">local_shipping</mat-icon>
               </mat-form-field>
             </div>
           </div>
@@ -179,33 +152,21 @@
             <div class="col-md-6">
               <mat-form-field appearance="outline" class="w-100">
                 <mat-label>Stock Actual</mat-label>
-                <input
-                  matInput
-                  type="number"
-                  formControlName="n_stock_actual"
-                />
+                <input matInput type="number" formControlName="n_stock_actual" />
                 <mat-icon matSuffix class="icon-inventario">inventory</mat-icon>
               </mat-form-field>
             </div>
             <div class="col-md-6">
               <mat-form-field appearance="outline" class="w-100">
                 <mat-label>Stock Mínimo</mat-label>
-                <input
-                  matInput
-                  type="number"
-                  formControlName="n_stock_minimo"
-                />
+                <input matInput type="number" formControlName="n_stock_minimo" />
                 <mat-icon matSuffix class="icon-inventario">warning</mat-icon>
               </mat-form-field>
             </div>
             <div class="col-md-6">
               <mat-form-field appearance="outline" class="w-100">
                 <mat-label>Tiempo Reposición</mat-label>
-                <input
-                  matInput
-                  type="number"
-                  formControlName="n_tiempo_reposicion"
-                />
+                <input matInput type="number" formControlName="n_tiempo_reposicion" />
                 <mat-icon matSuffix class="icon-inventario">schedule</mat-icon>
               </mat-form-field>
             </div>
@@ -214,10 +175,7 @@
                 <mat-label>Unidad de Medida</mat-label>
                 <mat-select formControlName="id_unidad_medida">
                   @for(u of unidadesMedida; track
-                  u.id_unidad_medida){<mat-option
-                    [value]="u.id_unidad_medida"
-                    >{{ u.s_unidad_medida }}</mat-option
-                  >}
+                  u.id_unidad_medida){<mat-option [value]="u.id_unidad_medida">{{ u.s_unidad_medida }}</mat-option>}
                 </mat-select>
                 <mat-icon matSuffix class="icon-inventario">scale</mat-icon>
               </mat-form-field>
@@ -227,14 +185,10 @@
                 <mat-label>Posición en Vehículo</mat-label>
                 <mat-select formControlName="id_posicion_vehiculo">
                   @for(p of posiciones; track
-                  p.id_posicion_vehiculo){<mat-option
-                    [value]="p.id_posicion_vehiculo"
-                    >{{ p.s_posicion_vehiculo }}</mat-option
-                  >}
+                  p.id_posicion_vehiculo){<mat-option [value]="p.id_posicion_vehiculo">{{ p.s_posicion_vehiculo
+                    }}</mat-option>}
                 </mat-select>
-                <mat-icon matSuffix class="icon-inventario"
-                  >directions_car</mat-icon
-                >
+                <mat-icon matSuffix class="icon-inventario">directions_car</mat-icon>
               </mat-form-field>
             </div>
             <div class="col-md-6">
@@ -242,10 +196,8 @@
                 <mat-label>Ubicación en Almacén</mat-label>
                 <mat-select formControlName="id_ubicacion_almacen">
                   @for(u of ubicaciones; track
-                  u.id_ubicacion_almacen){<mat-option
-                    [value]="u.id_ubicacion_almacen"
-                    >{{ u.s_ubicacion_almacen }}</mat-option
-                  >}
+                  u.id_ubicacion_almacen){<mat-option [value]="u.id_ubicacion_almacen">{{ u.s_ubicacion_almacen
+                    }}</mat-option>}
                 </mat-select>
                 <mat-icon matSuffix class="icon-inventario">warehouse</mat-icon>
               </mat-form-field>
@@ -257,18 +209,14 @@
           <h4 class="form-section-title">
             <mat-icon>sync_alt</mat-icon> <span>Equivalencias</span>
           </h4>
-          <button
-            mat-stroked-button
-            color="primary"
-            (click)="abrirDialogoEquivalencias()"
-            [disabled]="!refaccionForm.get('id_subcategoria_refaccion')?.value"
-          >
+          <button mat-stroked-button color="primary" (click)="abrirDialogoEquivalencias()"
+            [disabled]="!refaccionForm.get('id_subcategoria_refaccion')?.value">
             <mat-icon>edit</mat-icon>
             <span>
               {{
-                equivalenciasSeleccionadas.length > 0
-                  ? "Editar Equivalencias"
-                  : "Agregar Equivalencias"
+              equivalenciasSeleccionadas.length > 0
+              ? "Editar Equivalencias"
+              : "Agregar Equivalencias"
               }}
             </span>
           </button>
@@ -293,13 +241,8 @@
   </form>
 
   <div mat-dialog-actions align="end">
-    <button mat-button (click)="onNoClick()">Cancelar</button>
-    <button
-      mat-raised-button
-      color="primary"
-      (click)="submit()"
-      [disabled]="!refaccionForm.valid"
-    >
+    <!--<button mat-button (click)="onNoClick()">Cancelar</button>-->
+    <button mat-raised-button class="btn-guardar" (click)="submit()" [disabled]="!refaccionForm.valid">
       Guardar Cambios
     </button>
   </div>

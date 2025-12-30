@@ -45,6 +45,7 @@ import { DialogCrearRefaccionComponent } from './dialogs/dialog-crear-refaccion/
 import { DialogEditarRefaccionComponent } from './dialogs/dialog-editar-refaccion/dialog-editar-refaccion.component';
 import { DialogCargaMasivaComponent } from './dialogs/dialog-carga-masiva/dialog-carga-masiva.component';
 
+
 @Component({
   selector: 'app-catalogo-refacciones',
   templateUrl: './catalogoRefacciones.component.html',

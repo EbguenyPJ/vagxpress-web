@@ -1,87 +1,574 @@
-form {
-  padding-top: 1rem;
-}
+// ==================== WRAPPER PRINCIPAL - TODO ENCAPSULADO ====================
+.dialog-crear-refaccion {
 
-.icon-nombre {
-  color: #4285f4;
-}
-.icon-parte {
-  color: #34a853;
-}
-.icon-marca {
-  color: #fbbc05;
-}
-.icon-categoria {
-  color: #ea4335;
-}
-.icon-subcategoria {
-  color: #673ab7;
-}
+  // ==================== HEADER CON BOTÓN CERRAR ====================
+  h1[mat-dialog-title] {
+    background: linear-gradient(135deg, #000000 0%, #1a1a1a 100%);
+    color: #ffffff;
+    padding: 1.5rem 4.5rem 1.5rem 2rem;
+    margin: -24px -24px 0 -24px;
+    border-bottom: 3px solid #E31E24;
+    box-shadow: 0 0 20px rgba(227, 30, 36, 0.3);
+    position: relative;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    font-weight: 700;
+    font-size: 1.4rem;
+    text-align: left;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+    display: block;
 
-.clase-label {
-  font-size: 1rem;
-  font-weight: 500;
-  color: rgba(0, 0, 0, 0.6);
-  margin-bottom: 0.5rem;
-  display: block;
-}
-
-.clase-radio-group {
-  display: flex;
-  justify-content: space-around;
-  padding: 0.75rem 0.5rem;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  margin-bottom: 1rem;
-}
-
-.clase-radio-text {
-  font-weight: bold;
-  font-size: 1rem;
-}
-
-:host ::ng-deep {
-  .clase-radio-group {
-    mat-radio-button[ng-reflect-value="1"].mat-mdc-radio-checked
-      .mdc-radio__inner-circle {
-      background-color: #000000;
-    }
-    mat-radio-button[ng-reflect-value="1"].mat-mdc-radio-checked
-      .mdc-radio__outer-circle {
-      border-color: #000000;
+    &::after {
+      content: '';
+      position: absolute;
+      bottom: -3px;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, 
+        transparent,
+        #E31E24 20%,
+        #E31E24 80%,
+        transparent
+      );
+      box-shadow: 0 0 10px rgba(227, 30, 36, 0.8);
     }
 
-    mat-radio-button[ng-reflect-value="2"].mat-mdc-radio-checked
-      .mdc-radio__inner-circle {
-      background-color: #ff0000;
-    }
-    mat-radio-button[ng-reflect-value="2"].mat-mdc-radio-checked
-      .mdc-radio__outer-circle {
-      border-color: #ff0000;
-    }
+    // Botón de cerrar - REDONDO EN ESQUINA DERECHA
+    .dialog-close-btn {
+      position: absolute;
+      right: 1.5rem;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 42px;
+      height: 42px;
+      background: rgba(227, 30, 36, 0.15);
+      border: 2px solid rgba(227, 30, 36, 0.5);
+      border-radius: 50% !important; // Redondo
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      overflow: hidden;
+      z-index: 10;
+      
+      mat-icon {
+        color: #E31E24;
+        font-size: 24px;
+        width: 24px;
+        height: 24px;
+        line-height: 24px;
+        filter: drop-shadow(0 0 8px rgba(227, 30, 36, 0.6));
+        transition: all 0.3s ease;
+        position: relative;
+        z-index: 2;
+      }
 
-    mat-radio-button[ng-reflect-value="3"].mat-mdc-radio-checked
-      .mdc-radio__inner-circle {
-      background-color: #0000ff;
-    }
-    mat-radio-button[ng-reflect-value="3"].mat-mdc-radio-checked
-      .mdc-radio__outer-circle {
-      border-color: #0000ff;
+      // Efecto de relleno al hover
+      &::before {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 0;
+        height: 0;
+        background: rgba(227, 30, 36, 0.4);
+        border-radius: 50%;
+        transform: translate(-50%, -50%);
+        transition: width 0.4s ease, height 0.4s ease;
+        z-index: 1;
+      }
+
+      &:hover {
+        background: rgba(227, 30, 36, 0.25);
+        border-color: #E31E24;
+        transform: translateY(-50%) rotate(90deg);
+        box-shadow: 0 0 20px rgba(227, 30, 36, 0.6);
+
+        &::before {
+          width: 100%;
+          height: 100%;
+        }
+
+        mat-icon {
+          color: #ffffff;
+          filter: drop-shadow(0 0 12px rgba(255, 255, 255, 0.8));
+        }
+      }
+
+      // Efecto de clic - RELLENO ROJO COMPLETO
+      &:active {
+        background: linear-gradient(135deg, #E31E24, #FF3333) !important;
+        border-color: #FF0000;
+        transform: translateY(-50%) rotate(90deg) scale(0.9);
+        box-shadow: 
+          0 0 30px rgba(227, 30, 36, 0.9),
+          inset 0 2px 8px rgba(0, 0, 0, 0.3);
+
+        mat-icon {
+          color: #ffffff !important;
+          filter: drop-shadow(0 0 15px rgba(255, 255, 255, 1));
+        }
+
+        &::before {
+          width: 100%;
+          height: 100%;
+          background: transparent;
+        }
+      }
     }
   }
-}
 
-.mt-3 {
-  margin-top: 1.5rem;
-}
-.mt-2 {
-  margin-top: 1rem;
-}
-mat-chip-list {
-  display: block;
-  margin-top: 1rem;
-}
+  // Dialog container override
+  ::ng-deep .mat-mdc-dialog-container {
+    background: #0a0a0a !important;
+    color: #ffffff !important;
+    padding: 0 !important;
+  }
 
-mat-chip-list mat-chip {
-  margin: 4px;
+  ::ng-deep .mat-mdc-dialog-content {
+    padding: 2rem !important;
+    max-height: 70vh;
+    overflow-y: auto;
+    background: #0a0a0a;
+    margin: 0 !important;
+
+    // Scrollbar personalizado
+    &::-webkit-scrollbar {
+      width: 10px;
+    }
+
+    &::-webkit-scrollbar-track {
+      background: #1a1a1a;
+      border-radius: 10px;
+      border: 1px solid rgba(227, 30, 36, 0.2);
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background: linear-gradient(180deg, #E31E24, #B71C1C);
+      border-radius: 10px;
+      border: 2px solid #1a1a1a;
+      box-shadow: 0 0 10px rgba(227, 30, 36, 0.5);
+      transition: all 0.2s ease;
+
+      &:hover {
+        background: linear-gradient(180deg, #FF3B41, #E31E24);
+        box-shadow: 0 0 15px rgba(227, 30, 36, 0.8);
+      }
+    }
+  }
+
+  // ==================== FORM FIELDS ====================
+  ::ng-deep {
+    .mat-mdc-form-field {
+      margin-bottom: 1rem;
+
+      .mdc-text-field--outlined {
+        background: rgba(0, 0, 0, 0.4);
+        border-radius: 10px;
+
+        .mdc-notched-outline {
+          .mdc-notched-outline__leading,
+          .mdc-notched-outline__notch,
+          .mdc-notched-outline__trailing {
+            border-color: rgba(255, 255, 255, 0.2) !important;
+            transition: all 0.3s ease;
+          }
+        }
+
+        &:hover:not(.mdc-text-field--focused) .mdc-notched-outline {
+          .mdc-notched-outline__leading,
+          .mdc-notched-outline__notch,
+          .mdc-notched-outline__trailing {
+            border-color: rgba(227, 30, 36, 0.4) !important;
+          }
+        }
+      }
+
+      // Focus state
+      &.mat-focused {
+        .mdc-text-field--outlined .mdc-notched-outline .mdc-notched-outline__leading,
+        .mdc-text-field--outlined .mdc-notched-outline .mdc-notched-outline__notch,
+        .mdc-text-field--outlined .mdc-notched-outline .mdc-notched-outline__trailing {
+          border-color: #E31E24 !important;
+          box-shadow: 0 0 8px rgba(227, 30, 36, 0.3);
+        }
+
+        .mat-mdc-form-field-label {
+          color: #E31E24 !important;
+        }
+      }
+
+      .mat-mdc-form-field-label {
+        color: rgba(255, 255, 255, 0.6) !important;
+        font-weight: 500;
+        letter-spacing: 0.5px;
+      }
+
+      input,
+      textarea {
+        color: #ffffff !important;
+        caret-color: #E31E24;
+        font-weight: 500;
+        font-size: 0.95rem;
+      }
+
+      .mat-mdc-select-value-text {
+        color: #ffffff !important;
+        font-weight: 500;
+      }
+
+      .mat-mdc-select-arrow {
+        color: rgba(255, 255, 255, 0.6) !important;
+      }
+
+      // Iconos de los campos
+      .icon-nombre,
+      .icon-parte,
+      .icon-marca,
+      .icon-categoria,
+      .icon-subcategoria {
+        color: #E31E24 !important;
+        filter: drop-shadow(0 0 8px rgba(227, 30, 36, 0.4));
+      }
+
+      // Mensajes de error
+      .mat-mdc-form-field-error {
+        color: #FF6B6B !important;
+        font-weight: 500;
+        font-size: 0.85rem;
+      }
+    }
+
+    // Select panel dropdown
+    .mat-mdc-select-panel {
+      background: #1a1a1a !important;
+      border: 2px solid #E31E24;
+      box-shadow: 0 8px 24px rgba(227, 30, 36, 0.3);
+      border-radius: 8px;
+      margin-top: 8px;
+
+      .mat-mdc-option {
+        color: #cccccc !important;
+        padding: 12px 16px;
+        transition: all 0.2s ease;
+        font-weight: 500;
+
+        &:hover {
+          background: rgba(227, 30, 36, 0.2) !important;
+          color: #ffffff !important;
+        }
+
+        &.mdc-list-item--selected {
+          background: rgba(227, 30, 36, 0.3) !important;
+          color: #E31E24 !important;
+          font-weight: 700;
+
+          &:not(:hover) {
+            background: rgba(227, 30, 36, 0.25) !important;
+          }
+        }
+      }
+    }
+  }
+
+  // ==================== CLASE DE REFACCIÓN (RADIO BUTTONS) ====================
+  .clase-label {
+    display: block;
+    color: #E31E24;
+    font-weight: 700;
+    font-size: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    margin-bottom: 1rem;
+    text-shadow: 0 0 15px rgba(227, 30, 36, 0.4);
+  }
+
+  .clase-radio-group {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    padding: 1.25rem;
+    background: linear-gradient(145deg, #1a1a1a, #0a0a0a);
+    border: 2px solid rgba(227, 30, 36, 0.3);
+    border-radius: 12px;
+    position: relative;
+
+    &::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, #E31E24, transparent);
+      box-shadow: 0 0 10px rgba(227, 30, 36, 0.5);
+    }
+  }
+
+  ::ng-deep .clase-radio-button {
+    padding: 0.75rem 1rem;
+    background: rgba(0, 0, 0, 0.4);
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    transition: all 0.3s ease;
+
+    &:hover {
+      background: rgba(227, 30, 36, 0.1);
+      border-color: rgba(227, 30, 36, 0.3);
+      transform: translateX(4px);
+    }
+
+    .mdc-radio {
+      .mdc-radio__native-control:enabled:checked + .mdc-radio__background .mdc-radio__outer-circle {
+        border-color: #E31E24 !important;
+      }
+
+      .mdc-radio__native-control:enabled + .mdc-radio__background .mdc-radio__inner-circle {
+        border-color: #E31E24 !important;
+      }
+
+      .mdc-radio__native-control:enabled:checked + .mdc-radio__background .mdc-radio__inner-circle {
+        border-color: #E31E24 !important;
+        background-color: #E31E24 !important;
+      }
+    }
+
+    &.mat-mdc-radio-checked {
+      background: rgba(227, 30, 36, 0.15);
+      border-color: #E31E24;
+      box-shadow: 0 0 15px rgba(227, 30, 36, 0.2);
+    }
+
+    .clase-radio-text {
+      font-weight: 600;
+      font-size: 0.95rem;
+      letter-spacing: 0.5px;
+      margin-left: 8px;
+    }
+  }
+
+  // ==================== BOTÓN AGREGAR EQUIVALENCIAS ====================
+  button[mat-stroked-button] {
+    width: 100%;
+    background: rgba(227, 30, 36, 0.1);
+    border: 2px solid rgba(227, 30, 36, 0.4);
+    color: #E31E24;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    padding: 0.75rem 1.5rem;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    border-radius: 8px;
+
+    mat-icon {
+      color: #E31E24;
+      filter: drop-shadow(0 0 8px rgba(227, 30, 36, 0.4));
+    }
+
+    &:hover:not([disabled]) {
+      background: rgba(227, 30, 36, 0.2);
+      border-color: #E31E24;
+      box-shadow: 0 0 20px rgba(227, 30, 36, 0.4);
+      transform: translateY(-2px);
+    }
+
+    &:disabled {
+      opacity: 0.3;
+      filter: grayscale(70%);
+      cursor: not-allowed;
+    }
+  }
+
+  // ==================== CHIPS DE EQUIVALENCIAS ====================
+  .mt-2 {
+    margin-top: 1.25rem;
+  }
+
+  .mt-3 {
+    margin-top: 1.5rem;
+  }
+
+  ::ng-deep {
+    mat-chip-set {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      padding: 1rem 0;
+    }
+
+    mat-chip {
+      background: linear-gradient(135deg, rgba(227, 30, 36, 0.25), rgba(227, 30, 36, 0.15)) !important;
+      border: 2px solid rgba(227, 30, 36, 0.5) !important;
+      color: #ffffff !important;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      transition: all 0.3s ease;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+      padding: 8px 12px;
+      border-radius: 20px;
+
+      &:hover {
+        background: linear-gradient(135deg, rgba(227, 30, 36, 0.35), rgba(227, 30, 36, 0.25)) !important;
+        border-color: #E31E24 !important;
+        box-shadow: 0 4px 12px rgba(227, 30, 36, 0.4);
+        transform: translateY(-2px);
+      }
+
+      .mat-mdc-chip-action-label {
+        color: #ffffff !important;
+        font-weight: 600;
+        font-size: 0.9rem;
+      }
+
+      button[matChipRemove] {
+        color: #E31E24 !important;
+        transition: all 0.2s ease;
+
+        mat-icon {
+          filter: drop-shadow(0 0 8px rgba(227, 30, 36, 0.4));
+        }
+
+        &:hover {
+          color: #ffffff !important;
+          background: rgba(227, 30, 36, 0.5);
+          border-radius: 50%;
+          transform: rotate(90deg);
+        }
+      }
+    }
+  }
+
+  // ==================== DIALOG ACTIONS ====================
+  div[mat-dialog-actions] {
+    padding: 1.25rem 2rem !important;
+    background: linear-gradient(180deg, #1a1a1a 0%, #000000 100%);
+    border-top: 3px solid #E31E24;
+    gap: 1rem;
+    box-shadow: 0 -4px 20px rgba(227, 30, 36, 0.2);
+    margin: 0 -24px -24px;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+
+    button {
+      padding: 0.75rem 2rem;
+      font-size: 0.95rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      transition: all 0.3s ease;
+      border-radius: 8px;
+    }
+
+    // Botón Cancelar
+    button[mat-button] {
+      background: rgba(227, 30, 36, 0.1);
+      color: #E31E24;
+      border: 2px solid rgba(227, 30, 36, 0.3);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+
+      &:hover {
+        background: rgba(227, 30, 36, 0.2);
+        border-color: #E31E24;
+        box-shadow: 0 0 20px rgba(227, 30, 36, 0.4);
+        transform: translateY(-2px);
+      }
+
+      &:active {
+        transform: translateY(0);
+      }
+    }
+
+    // Botón Guardar
+    button[mat-raised-button] {
+      background: linear-gradient(135deg, #B71C1C 0%, #E31E24 100%);
+      color: #ffffff;
+      border: 2px solid #E31E24;
+      box-shadow: 
+        0 4px 16px rgba(227, 30, 36, 0.5),
+        inset 0 1px 2px rgba(255, 255, 255, 0.2);
+      position: relative;
+      overflow: hidden;
+
+      &::before {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 0;
+        height: 0;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.3);
+        transform: translate(-50%, -50%);
+        transition: width 0.6s, height 0.6s;
+      }
+
+      &:hover:not([disabled]) {
+        background: linear-gradient(135deg, #E31E24 0%, #FF3333 100%);
+        transform: translateY(-2px);
+        box-shadow: 
+          0 6px 24px rgba(227, 30, 36, 0.7),
+          0 0 35px rgba(227, 30, 36, 0.4),
+          inset 0 1px 2px rgba(255, 255, 255, 0.3);
+
+        &::before {
+          width: 350px;
+          height: 350px;
+        }
+      }
+
+      &:active:not([disabled]) {
+        transform: translateY(0);
+        box-shadow: 
+          0 2px 8px rgba(227, 30, 36, 0.5),
+          inset 0 1px 2px rgba(255, 255, 255, 0.2);
+      }
+
+      &:disabled {
+        opacity: 0.4;
+        cursor: not-allowed;
+        filter: grayscale(60%);
+        background: linear-gradient(135deg, #4a4a4a 0%, #666666 100%);
+        border-color: #555555;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+      }
+    }
+  }
+
+  // ==================== RESPONSIVE ====================
+  @media (max-width: 768px) {
+    h1[mat-dialog-title] {
+      font-size: 1.2rem;
+      padding: 1.25rem 3rem 1.25rem 1.5rem;
+
+      .dialog-close-btn {
+        right: 0.75rem;
+        width: 38px;
+        height: 38px;
+
+        mat-icon {
+          font-size: 20px;
+          width: 20px;
+          height: 20px;
+        }
+      }
+    }
+
+    .clase-radio-group {
+      padding: 1rem;
+    }
+
+    div[mat-dialog-actions] {
+      padding: 1rem 1.5rem !important;
+      flex-direction: column;
+      gap: 0.75rem;
+
+      button {
+        width: 100%;
+        justify-content: center;
+      }
+    }
+  }
 }

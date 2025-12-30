@@ -1,0 +1,368 @@
+// ==================== DIALOG REFACCIONES EQUIVALENTES - VAG XPRESS ====================
+// IMPORTANTE: ViewEncapsulation.None debe estar en el componente TypeScript
+
+// ==================== CONTENEDOR PRINCIPAL DEL DIALOG ====================
+.cdk-overlay-pane {
+    .mat-mdc-dialog-container {
+        .mdc-dialog__surface {
+            background: linear-gradient(145deg, #252323, #1a1a1a) !important;
+            border: 2px solid rgba(255, 0, 0, 0.3) !important;
+            border-radius: 16px !important;
+            box-shadow:
+                0 8px 32px rgba(0, 0, 0, 0.7),
+                0 0 40px rgba(255, 0, 0, 0.3) !important;
+            overflow: hidden !important;
+        }
+    }
+}
+
+// ==================== TÍTULO DEL DIALOG ====================
+.mat-mdc-dialog-title {
+    background: linear-gradient(135deg, #000000 0%, #1a1a1a 100%) !important;
+    color: #ffffff !important;
+    font-size: 1.5rem !important;
+    font-weight: 700 !important;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    padding: 1.5rem 2rem !important;
+    margin: 0 !important;
+    border-bottom: 3px solid #FF0000 !important;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+    position: relative;
+
+    &::after {
+        content: '';
+        position: absolute;
+        bottom: -3px;
+        left: 0;
+        right: 0;
+        height: 3px;
+        background: linear-gradient(90deg, transparent, #FF0000 20%, #FF0000 80%, transparent);
+        box-shadow: 0 0 10px rgba(255, 0, 0, 0.8);
+    }
+}
+
+// ==================== CONTENIDO DEL DIALOG ====================
+.mat-mdc-dialog-content {
+    background: #252323 !important;
+    padding: 2rem !important;
+    color: #ffffff !important;
+    min-height: 200px;
+}
+
+// ==================== SPINNER DE CARGA ====================
+.mat-mdc-progress-spinner {
+    circle {
+        stroke: #FF0000 !important;
+    }
+}
+
+// ==================== MAT-FORM-FIELD ====================
+.mat-mdc-dialog-content .mat-mdc-form-field {
+    width: 100%;
+
+    // Label flotante
+    .mat-mdc-floating-label,
+    .mdc-floating-label {
+        color: rgba(255, 255, 255, 0.7) !important;
+        font-weight: 500 !important;
+    }
+
+    // Cuando está enfocado
+    &.mat-focused {
+
+        .mat-mdc-floating-label,
+        .mdc-floating-label {
+            color: #FF0000 !important;
+        }
+    }
+
+    // Wrapper del input/select
+    .mat-mdc-text-field-wrapper {
+        background: #000000 !important;
+        border-radius: 10px !important;
+        border: 2px solid rgba(255, 0, 0, 0.3) !important;
+        padding-left: 0 !important;
+        padding-right: 0 !important;
+    }
+
+    // Estado hover
+    .mat-mdc-text-field-wrapper:hover {
+        border-color: rgba(255, 0, 0, 0.5) !important;
+    }
+
+    // Estado focus
+    &.mat-focused .mat-mdc-text-field-wrapper {
+        border-color: #FF0000 !important;
+        box-shadow:
+            0 0 0 3px rgba(255, 0, 0, 0.2),
+            0 4px 20px rgba(255, 0, 0, 0.4) !important;
+    }
+
+    // Select trigger
+    .mat-mdc-select-trigger {
+        color: #ffffff !important;
+    }
+
+    // Valor del select
+    .mat-mdc-select-value {
+        color: #ffffff !important;
+    }
+
+    .mat-mdc-select-value-text {
+        color: #ffffff !important;
+    }
+
+    // Placeholder
+    .mat-mdc-select-placeholder {
+        color: rgba(255, 255, 255, 0.5) !important;
+    }
+
+    // Flecha del select
+    .mat-mdc-select-arrow-wrapper {
+        .mat-mdc-select-arrow {
+            color: #FF0000 !important;
+        }
+    }
+
+    // Remover línea inferior
+    .mdc-line-ripple {
+        display: none !important;
+    }
+
+    // Chips para selección múltiple
+    .mat-mdc-chip-set {
+        .mat-mdc-chip {
+            background: rgba(255, 0, 0, 0.2) !important;
+            color: #ffffff !important;
+            border: 1px solid rgba(255, 0, 0, 0.5) !important;
+
+            .mat-mdc-chip-remove {
+                color: #FF0000 !important;
+                opacity: 0.8;
+
+                &:hover {
+                    opacity: 1;
+                }
+            }
+        }
+    }
+}
+
+// ==================== SELECT PANEL ====================
+.cdk-overlay-pane {
+    .mat-mdc-select-panel {
+        background: linear-gradient(145deg, #1a1a1a, #252323) !important;
+        border: 2px solid rgba(255, 0, 0, 0.3) !important;
+        border-radius: 10px !important;
+        box-shadow:
+            0 8px 24px rgba(0, 0, 0, 0.6),
+            0 0 20px rgba(255, 0, 0, 0.3) !important;
+    }
+}
+
+// ==================== OPTIONS ====================
+.mat-mdc-option {
+    color: #ffffff !important;
+    background: transparent !important;
+
+    &:hover {
+        background: rgba(255, 0, 0, 0.1) !important;
+    }
+
+    &.mdc-list-item--selected:not(.mat-mdc-option-multiple) {
+        background: rgba(255, 0, 0, 0.2) !important;
+    }
+
+    &.mat-mdc-option-active {
+        background: rgba(255, 0, 0, 0.15) !important;
+    }
+
+    .mdc-list-item__primary-text {
+        color: #ffffff !important;
+    }
+
+    // Checkbox para múltiple selección
+    .mat-pseudo-checkbox {
+        border-color: rgba(255, 255, 255, 0.5) !important;
+
+        &::after {
+            color: #ffffff !important;
+        }
+    }
+
+    &.mat-mdc-option-multiple.mdc-list-item--selected {
+        background: rgba(255, 0, 0, 0.2) !important;
+
+        .mat-pseudo-checkbox {
+            background-color: #FF0000 !important;
+            border-color: #FF0000 !important;
+        }
+    }
+}
+
+// ==================== CAMPO DE BÚSQUEDA (ngx-mat-select-search) ====================
+.mat-select-search-panel {
+    .mat-select-search-inner {
+        background: #000000 !important;
+        border: 2px solid rgba(255, 0, 0, 0.3) !important;
+        border-radius: 8px !important;
+        padding: 10px 12px !important;
+        margin: 8px !important;
+    }
+}
+
+.mat-select-search-inner {
+    background: #000000 !important;
+    border: 2px solid rgba(255, 0, 0, 0.3) !important;
+    border-radius: 8px !important;
+    color: #ffffff !important;
+    padding: 10px 12px !important;
+    margin: 8px !important;
+    font-size: 0.95rem !important;
+    transition: all 0.3s ease !important;
+
+    input {
+        color: #ffffff !important;
+
+        &::placeholder {
+            color: rgba(255, 255, 255, 0.4) !important;
+        }
+    }
+
+    &:focus,
+    &:focus-within {
+        border-color: #FF0000 !important;
+        box-shadow:
+            0 0 0 3px rgba(255, 0, 0, 0.2),
+            0 0 12px rgba(255, 0, 0, 0.4) !important;
+        outline: none !important;
+        background: #000000 !important;
+    }
+
+    &:hover {
+        border-color: rgba(255, 0, 0, 0.5) !important;
+    }
+}
+
+// Input del search
+.mat-select-search-input {
+    color: #ffffff !important;
+    background: transparent !important;
+
+    &::placeholder {
+        color: rgba(255, 255, 255, 0.4) !important;
+    }
+}
+
+// Botón limpiar
+.mat-select-search-clear {
+    color: #FF0000 !important;
+
+    &:hover {
+        color: #FF3333 !important;
+    }
+}
+
+// Contenedor del search
+.mat-select-search {
+    border-bottom: 2px solid rgba(255, 0, 0, 0.2) !important;
+    padding-bottom: 8px !important;
+    margin-bottom: 8px !important;
+}
+
+// ==================== ACCIONES DEL DIALOG ====================
+.mat-mdc-dialog-actions {
+    background: #1a1a1a !important;
+    padding: 1.5rem 2rem !important;
+    border-top: 2px solid rgba(255, 0, 0, 0.2) !important;
+    gap: 1rem !important;
+    justify-content: flex-end !important;
+
+    // Botón Cancelar
+    .mat-mdc-button:not(.mat-mdc-raised-button) {
+        background: rgba(227, 30, 36, 0.1);
+        color: #E31E24;
+        border: 2px solid rgba(227, 30, 36, 0.3);
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+
+
+        &:hover {
+            background: rgba(227, 30, 36, 0.2);
+            border-color: #E31E24;
+            box-shadow: 0 0 20px rgba(227, 30, 36, 0.4);
+            transform: translateY(-2px);
+        }
+
+        .mat-mdc-button-persistent-ripple {
+            border-radius: 8px !important;
+        }
+
+
+
+    }
+
+    // Botón Confirmar
+    .mat-mdc-raised-button {
+        background: linear-gradient(135deg, #CC0000, #FF0000) !important;
+        color: #ffffff !important;
+        font-weight: 700 !important;
+        text-transform: uppercase !important;
+        letter-spacing: 1px !important;
+        border-radius: 8px !important;
+        box-shadow:
+            0 4px 12px rgba(255, 0, 0, 0.4),
+            inset 0 1px 2px rgba(255, 255, 255, 0.2) !important;
+
+        .mdc-button__label {
+            color: #ffffff !important;
+        }
+
+        &:hover:not([disabled]) {
+            background: linear-gradient(135deg, #FF0000, #FF3333) !important;
+            box-shadow:
+                0 6px 20px rgba(255, 0, 0, 0.6),
+                0 0 30px rgba(255, 0, 0, 0.3) !important;
+            transform: translateY(-2px);
+        }
+
+        &[disabled] {
+            background: rgba(100, 100, 100, 0.3) !important;
+            color: rgba(255, 255, 255, 0.3) !important;
+            box-shadow: none !important;
+
+            .mdc-button__label {
+                color: rgba(255, 255, 255, 0.3) !important;
+            }
+        }
+
+        .mat-mdc-button-persistent-ripple {
+            border-radius: 8px !important;
+        }
+    }
+}
+
+// ==================== RESPONSIVE ====================
+@media (max-width: 600px) {
+    .cdk-overlay-pane .mat-mdc-dialog-container .mdc-dialog__surface {
+        border-radius: 12px !important;
+    }
+
+    .mat-mdc-dialog-title {
+        font-size: 1.2rem !important;
+        padding: 1.25rem 1.5rem !important;
+    }
+
+    .mat-mdc-dialog-content {
+        padding: 1.5rem !important;
+    }
+
+    .mat-mdc-dialog-actions {
+        padding: 1.25rem 1.5rem !important;
+        flex-direction: column;
+
+        button {
+            width: 100%;
+        }
+    }
+}
