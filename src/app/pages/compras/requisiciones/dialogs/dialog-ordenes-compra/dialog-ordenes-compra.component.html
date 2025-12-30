@@ -57,6 +57,10 @@
                   <div class="refaccion-header">
                     <h4 class="refaccion-nombre">{{ item.s_nombre_refaccion }}</h4>
                     <span class="numero-parte">#{{ item.s_numero_parte }}</span>
+                    <button *ngIf="item.alerta_mejor_precio" mat-icon-button class="btn-mejor-precio"
+                      (click)="mostrarMejorPrecio(item, proveedor)" matTooltip="Mejor precio disponible">
+                      <mat-icon class="icon-alerta">local_offer</mat-icon>
+                    </button>
                   </div>
 
                   <div class="refaccion-details">
