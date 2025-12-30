@@ -1,158 +1,495 @@
-:host ::ng-deep .column-filter .mat-mdc-select-arrow {
-  display: none;
-}
+// ==================== CATÁLOGO REFACCIONES VAG XPRESS - ENCAPSULADO CON :host ====================
 
-:host ::ng-deep .advance-table .mat-mdc-header-cell {
-  font-weight: 500;
-}
-
-
-.mat-column-id_refaccion {
-  width: auto !important;
-  min-width: 80px !important;
-  flex: none !important;
-  white-space: nowrap !important;
-  overflow: visible !important;
-  padding: 0 12px !important;
-}
-
-
-.badge {
-  padding: 4px 8px;
-  border-radius: 12px;
-  font-size: 12px;
-  font-weight: 500;
-}
-.badge-solid-green {
-  background-color: #e8f5e9;
-  color: #1e8e3e;
-}
-.badge-solid-red {
-  background-color: #fce8e6;
-  color: #d93025;
-}
-
-
-.tbl-action-btn.view-icon-btn .mat-icon {
-  color: #4285F4;
-}
-
-.tbl-action-btn.edit-icon-btn .mat-icon {
-  color: #34A853;
-}
-
-.tbl-action-btn:hover .mat-icon {
-  opacity: 0.8;
-}
-
-.tbl-action-btn .mat-icon {
-  transition: color 0.2s;
-}
-
-.tbl-action-btn:hover .mat-icon {
-  color: #FBBC05;
-}
-
-
-.refacciones-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 24px;
-}
-
-
-.refaccion-card {
-  background-color: white;
-  border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
-  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
-
-  &:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
-  }
-}
-
-.card-image-container {
-  position: relative;
-  height: 200px;
-  background-color: #f0f2f5;
-
-  img {
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
-  }
-}
-
-.card-status-badge {
-  position: absolute;
-  top: 12px;
-  right: 12px;
-  padding: 4px 10px;
-  border-radius: 12px;
-  font-size: 12px;
-  font-weight: 600;
-  color: white;
-
-  &.status-disponible {
-    background-color: #34A853;
+:host {
+  // ==================== ESTILOS GLOBALES ====================
+  ::ng-deep .column-filter .mat-mdc-select-arrow {
+    display: none;
   }
 
-  &.status-agotado {
-    background-color: #EA4335;
+  ::ng-deep .advance-table .mat-mdc-header-cell {
+    font-weight: 500;
   }
-}
 
+  .mat-column-id_refaccion {
+    width: auto !important;
+    min-width: 80px !important;
+    flex: none !important;
+    white-space: nowrap !important;
+    overflow: visible !important;
+    padding: 0 12px !important;
+  }
 
-.card-content {
-  padding: 16px;
-  flex-grow: 1;
-}
+  // ==================== HEADER DE LA TABLA ====================
+  .materialTableHeader {
+    background: linear-gradient(135deg, #000000 0%, #1a1a1a 100%);
+    padding: 1.5rem;
+    border-bottom: 3px solid #FF0000;
+    box-shadow: 0 0 20px rgba(255, 0, 0, 0.3);
+    position: relative;
 
-.card-title {
-  font-size: 16px;
-  font-weight: 600;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  margin-bottom: 4px;
-}
+    &::after {
+      content: '';
+      position: absolute;
+      bottom: -3px;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, transparent, #FF0000 20%, #FF0000 80%, transparent);
+      box-shadow: 0 0 10px rgba(255, 0, 0, 0.8);
+    }
 
-.card-subtitle {
-  font-size: 13px;
-  color: #5f6368;
-  margin-bottom: 12px;
-}
+    .left {
+      .header-buttons-left {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        flex-wrap: wrap;
 
-.card-price {
-  font-size: 20px;
-  font-weight: 700;
-  color: #333;
-}
+        .tbl-title h2 {
+          color: #ffffff;
+          font-size: 1.5rem;
+          font-weight: 700;
+          text-transform: uppercase;
+          letter-spacing: 2px;
+          margin: 0;
+          text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+        }
 
-.card-footer {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 0 16px 16px 16px;
-  border-top: 1px solid #e8eaed;
-  margin-top: auto;
-}
+        // Campo de búsqueda
+        .tbl-search-box {
+          position: relative;
+          display: flex;
+          align-items: center;
 
-.card-stock {
-  font-size: 14px;
-  color: #3c4043;
-}
+          label {
+            position: absolute;
+            left: 0.75rem;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 1;
+            display: flex;
+            align-items: center;
+            height: 100%;
+            margin: 0;
 
+            .search-icon {
+              color: #FF0000;
+              font-size: 1.3rem;
+              line-height: 1;
+            }
+          }
 
-.table-img {
-  width: 40px;
-  height: 40px;
-  border-radius: 4px;
-  margin-right: 12px;
-  object-fit: cover;
+          .search-field {
+            padding: 0.75rem 1rem 0.75rem 3rem;
+            background: linear-gradient(145deg, rgba(26, 26, 26, 0.9), rgba(45, 45, 45, 0.7));
+            border: 2px solid rgba(255, 0, 0, 0.3);
+            border-radius: 10px;
+            color: #ffffff;
+            font-size: 0.95rem;
+            min-width: 300px;
+            height: 42px;
+            transition: all 0.3s ease;
+            box-shadow:
+              0 4px 12px rgba(0, 0, 0, 0.3),
+              inset 0 2px 4px rgba(255, 0, 0, 0.1);
+
+            &::placeholder {
+              color: rgba(255, 255, 255, 0.4);
+            }
+
+            &:focus {
+              outline: none;
+              border-color: #FF0000;
+              box-shadow:
+                0 0 0 3px rgba(255, 0, 0, 0.2),
+                0 4px 20px rgba(255, 0, 0, 0.4);
+              background: linear-gradient(145deg, rgba(26, 26, 26, 1), rgba(45, 45, 45, 0.9));
+            }
+          }
+        }
+
+        // Botones del header
+        .tbl-header-btn {
+          button {
+            &[mat-mini-fab] {
+              background: linear-gradient(135deg, #CC0000, #FF0000) !important;
+              box-shadow:
+                0 4px 12px rgba(255, 0, 0, 0.4),
+                inset 0 1px 2px rgba(255, 255, 255, 0.2);
+              transition: all 0.3s ease;
+
+              &:hover {
+                transform: scale(1.1);
+                box-shadow:
+                  0 6px 20px rgba(255, 0, 0, 0.6),
+                  0 0 30px rgba(255, 0, 0, 0.3);
+              }
+
+              mat-icon {
+                color: #ffffff;
+              }
+            }
+
+            &[mat-raised-button] {
+              background: rgba(255, 0, 0, 0.15) !important;
+              color: #ffffff !important;
+              border: 2px solid #FF0000;
+              font-weight: 700;
+              text-transform: uppercase;
+              letter-spacing: 1px;
+              border-radius: 8px;
+              padding: 0.5rem 1.5rem;
+              box-shadow:
+                0 4px 12px rgba(255, 0, 0, 0.3),
+                inset 0 0 20px rgba(255, 0, 0, 0.1);
+              transition: all 0.3s ease;
+
+              mat-icon {
+                color: #ffffff;
+              }
+
+              &:hover {
+                background: rgba(255, 0, 0, 0.3) !important;
+                box-shadow:
+                  0 6px 20px rgba(255, 0, 0, 0.5),
+                  0 0 30px rgba(255, 0, 0, 0.3);
+                transform: translateY(-2px);
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
+  // ==================== GRID DE REFACCIONES ====================
+  .refacciones-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1.5rem;
+    padding: 1rem 0;
+  }
+
+  // ==================== CARD DE REFACCIÓN ====================
+  .refaccion-card {
+    background: linear-gradient(145deg, #252323, #1a1a1a);
+    border-radius: 12px;
+    box-shadow:
+      0 4px 12px rgba(0, 0, 0, 0.5),
+      inset 0 1px 2px rgba(255, 0, 0, 0.1);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    border: 2px solid rgba(255, 0, 0, 0.2);
+
+    &:hover {
+      transform: translateY(-8px) scale(1.02);
+      box-shadow:
+        0 12px 28px rgba(0, 0, 0, 0.6),
+        0 0 30px rgba(255, 0, 0, 0.4),
+        inset 0 1px 2px rgba(255, 0, 0, 0.2);
+      border-color: #FF0000;
+    }
+  }
+
+  // ==================== IMAGEN DEL CARD ====================
+  .card-image-container {
+    position: relative;
+    height: 200px;
+    background: #000000;
+    border-bottom: 2px solid rgba(255, 0, 0, 0.2);
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      padding: 1rem;
+      transition: transform 0.3s ease;
+    }
+
+    .refaccion-card:hover & img {
+      transform: scale(1.05);
+    }
+  }
+
+  // ==================== BADGE DE ESTATUS ====================
+  .card-status-badge {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    padding: 0.4rem 0.85rem;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: #ffffff;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+    backdrop-filter: blur(4px);
+    z-index: 2;
+
+    &.status-disponible {
+      background: linear-gradient(135deg, #2e7d32, #4caf50);
+      box-shadow: 0 2px 8px rgba(76, 175, 80, 0.4);
+    }
+
+    &.status-agotado {
+      background: linear-gradient(135deg, #c62828, #f44336);
+      box-shadow: 0 2px 8px rgba(244, 67, 54, 0.4);
+    }
+  }
+
+  // ==================== CONTENIDO DEL CARD ====================
+  .card-content {
+    padding: 1.25rem;
+    flex-grow: 1;
+    background: linear-gradient(180deg, #252323, #1a1a1a);
+  }
+
+  .card-title {
+    font-size: 1rem;
+    font-weight: 700;
+    color: #ffffff;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin-bottom: 0.5rem;
+    letter-spacing: 0.3px;
+  }
+
+  .card-subtitle {
+    font-size: 0.85rem;
+    color: #999999;
+    margin-bottom: 0.75rem;
+    font-family: 'Courier New', monospace;
+  }
+
+  .card-price {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #FF0000;
+    font-family: 'Courier New', monospace;
+    text-shadow: 0 0 10px rgba(255, 0, 0, 0.5);
+    margin: 0;
+  }
+
+  // ==================== FOOTER DEL CARD ====================
+  .card-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 1.25rem;
+    border-top: 2px solid rgba(255, 0, 0, 0.2);
+    margin-top: auto;
+    background: #1a1a1a;
+  }
+
+  .card-stock {
+    font-size: 0.9rem;
+    color: #cccccc;
+
+    strong {
+      color: #ffffff;
+      font-weight: 700;
+      font-size: 1.1rem;
+      margin-left: 0.25rem;
+    }
+  }
+
+  // ==================== ACCIONES DEL CARD ====================
+  .card-actions {
+    display: flex;
+    gap: 0.5rem;
+  }
+
+  .tbl-action-btn {
+    width: 36px;
+    height: 36px;
+    padding: 0;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    &.view-icon-btn {
+      .mat-icon {
+        color: #4285F4;
+      }
+
+      &:hover {
+        background: rgba(66, 133, 244, 0.2);
+        border-color: #4285F4;
+        transform: scale(1.1);
+        box-shadow: 0 0 15px rgba(66, 133, 244, 0.5);
+      }
+    }
+
+    &.edit-icon-btn {
+      .mat-icon {
+        color: #34A853;
+      }
+
+      &:hover {
+        background: rgba(52, 168, 83, 0.2);
+        border-color: #34A853;
+        transform: scale(1.1);
+        box-shadow: 0 0 15px rgba(52, 168, 83, 0.5);
+      }
+    }
+
+    .mat-icon {
+      font-size: 1.2rem;
+      width: 1.2rem;
+      height: 1.2rem;
+      transition: all 0.3s ease;
+    }
+  }
+
+  // ==================== BADGES GENERALES ====================
+  .badge {
+    padding: 0.35rem 0.75rem;
+    border-radius: 12px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .badge-solid-green {
+    background: linear-gradient(135deg, #e8f5e9, #c8e6c9);
+    color: #1e8e3e;
+    box-shadow: 0 2px 4px rgba(30, 142, 62, 0.2);
+  }
+
+  .badge-solid-red {
+    background: linear-gradient(135deg, #fce8e6, #ffcdd2);
+    color: #d93025;
+    box-shadow: 0 2px 4px rgba(217, 48, 37, 0.2);
+  }
+
+  // ==================== IMAGEN DE TABLA ====================
+  .table-img {
+    width: 50px;
+    height: 50px;
+    border-radius: 8px;
+    margin-right: 12px;
+    object-fit: cover;
+    border: 2px solid rgba(255, 0, 0, 0.3);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  }
+
+  // ==================== PAGINADOR ====================
+  ::ng-deep .mat-mdc-paginator {
+    background: linear-gradient(135deg, #000000, #1a1a1a);
+    color: #ffffff;
+    border-top: 2px solid #FF0000;
+    border-radius: 0 0 12px 12px;
+
+    .mat-mdc-paginator-container {
+      justify-content: center;
+      padding: 1rem;
+    }
+
+    .mat-mdc-paginator-page-size-label,
+    .mat-mdc-paginator-range-label {
+      color: #cccccc;
+      font-weight: 500;
+    }
+
+    .mat-mdc-select-value,
+    .mat-mdc-select-arrow {
+      color: #ffffff;
+    }
+
+    .mat-mdc-icon-button {
+      color: #ffffff;
+
+      &:hover {
+        background: rgba(255, 0, 0, 0.2);
+      }
+
+      &[disabled] {
+        color: #666666;
+      }
+    }
+  }
+
+  // ==================== CARD PRINCIPAL ====================
+  .card {
+    background: #252323;
+    border-radius: 16px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+    border: 1px solid rgba(255, 0, 0, 0.2);
+    overflow: hidden;
+
+    .p-4 {
+      background: rgb(37, 35, 35);
+      padding: 2rem;
+    }
+  }
+
+  // ==================== RESPONSIVE ====================
+  @media (max-width: 1200px) {
+    .refacciones-grid {
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 1.25rem;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .materialTableHeader {
+      .left .header-buttons-left {
+        flex-direction: column;
+        align-items: stretch;
+
+        .tbl-search-box .search-field {
+          width: 100%;
+          min-width: unset;
+        }
+      }
+    }
+
+    .refacciones-grid {
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 1rem;
+    }
+
+    .card-image-container {
+      height: 160px;
+    }
+
+    .card-content {
+      padding: 1rem;
+    }
+
+    .card-title {
+      font-size: 0.95rem;
+    }
+
+    .card-price {
+      font-size: 1.3rem;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .refacciones-grid {
+      grid-template-columns: 1fr;
+      gap: 0.75rem;
+    }
+
+    .card-footer {
+      flex-direction: column;
+      gap: 0.75rem;
+      align-items: flex-start;
+    }
+
+    .card-actions {
+      width: 100%;
+      justify-content: flex-end;
+    }
+  }
 }

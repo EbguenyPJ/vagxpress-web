@@ -1,85 +1,641 @@
-$color-nombre: #1e88e5;
-$color-no-parte: #43a047;
-$color-marca: #8e24aa;
-$color-categoria: #fb8c00;
-$color-subcategoria: #e53935;
-$color-clase: #673ab7;
+// ==================== DIÁLOGO CARGA MASIVA VAG XPRESS ====================
 
-.form-container {
-  display: flex;
-  gap: 1rem;
-  width: 100%;
-  margin-bottom: 1.5rem;
-}
+:host {
+  // ==================== HEADER ====================
+  h1[mat-dialog-title] {
+    background: linear-gradient(135deg, #000000 0%, #1a1a1a 100%);
+    color: #ffffff;
+    padding: 1.5rem 2rem;
+    margin: -24px -24px 0 -24px;
+    border-bottom: 3px solid #E31E24;
+    box-shadow: 0 0 20px rgba(227, 30, 36, 0.3);
+    position: relative;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    font-weight: 700;
+    font-size: 1.4rem;
+    text-align: center;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
 
-.actions-container {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-  flex: 0 1 25%;
-}
-
-
-.add-button-container {
-  width: 100%;
-  button {
-    width: 100%;
+    &::after {
+      content: '';
+      position: absolute;
+      bottom: -3px;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, 
+        transparent,
+        #E31E24 20%,
+        #E31E24 80%,
+        transparent
+      );
+      box-shadow: 0 0 10px rgba(227, 30, 36, 0.8);
+    }
   }
-}
-.campo-clase {
-  width: 100%;
-}
 
+  // Dialog container override
+  ::ng-deep .mat-mdc-dialog-container {
+    background: #0a0a0a !important;
+    color: #ffffff !important;
+    padding: 0 !important;
+  }
 
-.campo-nombre { flex: 1 1 20%; }
-.campo-no-parte { flex: 1 1 15%; }
-.campo-marca { flex: 1 1 15%; }
-.campo-lista { flex: 1 1 15%; }
+  ::ng-deep .mat-mdc-dialog-content {
+    padding: 2rem !important;
+    max-height: 70vh;
+    overflow-y: auto;
+    background: #0a0a0a;
+    margin: 0 !important;
 
-.clase-radio-group {
-  display: flex;
-  justify-content: space-around;
-  width: 100%;
-  border: 1px solid rgba(0, 0, 0, 0.12);
-  border-radius: 4px;
-  padding: 0.5rem 0;
-}
+    // Scrollbar personalizado
+    &::-webkit-scrollbar {
+      width: 10px;
+    }
 
-.clase-radio-text {
-  font-weight: 500;
-}
+    &::-webkit-scrollbar-track {
+      background: #1a1a1a;
+      border-radius: 10px;
+      border: 1px solid rgba(227, 30, 36, 0.2);
+    }
 
-.icon-nombre { color: $color-nombre; }
-.icon-no-parte { color: $color-no-parte; }
-.icon-marca { color: $color-marca; }
-.icon-categoria { color: $color-categoria; }
-.icon-subcategoria { color: $color-subcategoria; }
+    &::-webkit-scrollbar-thumb {
+      background: linear-gradient(180deg, #E31E24, #B71C1C);
+      border-radius: 10px;
+      border: 2px solid #1a1a1a;
+      box-shadow: 0 0 10px rgba(227, 30, 36, 0.5);
+      transition: all 0.2s ease;
 
-::ng-deep {
-  .header-nombre { color: $color-nombre !important; }
-  .header-no-parte { color: $color-no-parte !important; }
-  .header-marca { color: $color-marca !important; }
-  .header-categoria { color: $color-categoria !important; }
-  .header-subcategoria { color: $color-subcategoria !important; }
-  .header-clase { color: $color-clase !important; }
+      &:hover {
+        background: linear-gradient(180deg, #FF3B41, #E31E24);
+        box-shadow: 0 0 15px rgba(227, 30, 36, 0.8);
+      }
+    }
+  }
 
-  .clase-pill {
-    color: white;
-    padding: 3px 10px;
+  // ==================== FORM CONTAINER ====================
+  .form-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+    margin-bottom: 2rem;
+    padding: 1.5rem;
+    background: linear-gradient(145deg, #1a1a1a, #0a0a0a);
+    border: 2px solid rgba(227, 30, 36, 0.3);
     border-radius: 12px;
-    font-size: 0.75rem;
-    font-weight: 500;
+    position: relative;
+
+    &::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, #E31E24, transparent);
+      box-shadow: 0 0 10px rgba(227, 30, 36, 0.5);
+    }
   }
 
-  .edit-button { color: #5ce270; :hover { background-color: #f1ee94; } }
-  .delete-button { color: #d32f2f; :hover { background-color: #f1ee94; } }
+  // ==================== FORM FIELDS ====================
+  ::ng-deep {
+    .mat-mdc-form-field {
+      width: 100%;
 
-  .clase-radio-1.mat-mdc-radio-checked .mdc-radio__inner-circle { background-color: #000000; }
-  .clase-radio-1.mat-mdc-radio-checked .mdc-radio__outer-circle { border-color: #000000; }
+      &.mat-form-field-appearance-fill {
+        .mat-mdc-text-field-wrapper {
+          background: rgba(0, 0, 0, 0.4);
+          border-radius: 10px;
+          border: 1px solid rgba(255, 255, 255, 0.2);
+          transition: all 0.3s ease;
 
-  .clase-radio-2.mat-mdc-radio-checked .mdc-radio__inner-circle { background-color: #FF0000; }
-  .clase-radio-2.mat-mdc-radio-checked .mdc-radio__outer-circle { border-color: #FF0000; }
+          &:hover {
+            border-color: rgba(227, 30, 36, 0.4);
+          }
+        }
 
-  .clase-radio-3.mat-mdc-radio-checked .mdc-radio__inner-circle { background-color: #0000FF; }
-  .clase-radio-3.mat-mdc-radio-checked .mdc-radio__outer-circle { border-color: #0000FF; }
+        &.mat-focused {
+          .mat-mdc-text-field-wrapper {
+            border-color: #E31E24;
+            box-shadow: 0 0 8px rgba(227, 30, 36, 0.3);
+          }
+
+          .mat-mdc-form-field-label {
+            color: #E31E24 !important;
+          }
+        }
+      }
+
+      .mat-mdc-form-field-label {
+        color: rgba(255, 255, 255, 0.6) !important;
+        font-weight: 500;
+        letter-spacing: 0.5px;
+      }
+
+      input {
+        color: #ffffff !important;
+        caret-color: #E31E24;
+        font-weight: 500;
+      }
+
+      .mat-mdc-select-value-text {
+        color: #ffffff !important;
+        font-weight: 500;
+      }
+
+      .mat-mdc-select-arrow {
+        color: rgba(255, 255, 255, 0.6) !important;
+      }
+
+      // Iconos
+      .icon-nombre,
+      .icon-no-parte,
+      .icon-marca,
+      .icon-categoria,
+      .icon-subcategoria {
+        color: #E31E24 !important;
+        filter: drop-shadow(0 0 8px rgba(227, 30, 36, 0.4));
+      }
+    }
+
+    // Select panel dropdown - NEGRO CON TEXTO BLANCO
+    .mat-mdc-select-panel {
+      background: #000000 !important;
+      border: 2px solid #E31E24;
+      box-shadow: 0 8px 24px rgba(227, 30, 36, 0.3);
+      border-radius: 8px;
+
+      .mat-mdc-option {
+        color: #ffffff !important;
+        padding: 12px 16px;
+        transition: all 0.2s ease;
+
+        &:hover {
+          background: rgba(227, 30, 36, 0.2) !important;
+          color: #ffffff !important;
+        }
+
+        &.mdc-list-item--selected {
+          background: rgba(227, 30, 36, 0.3) !important;
+          color: #ffffff !important;
+          font-weight: 700;
+        }
+      }
+    }
+  }
+
+  // ==================== ACTIONS CONTAINER ====================
+  .actions-container {
+    grid-column: 1 / -1;
+    display: flex;
+    gap: 1rem;
+    align-items: flex-end;
+    flex-wrap: wrap;
+  }
+
+  // ==================== RADIO BUTTONS DE CLASE ====================
+  .campo-clase {
+    flex: 1;
+    min-width: 200px;
+  }
+
+  .clase-radio-group {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    padding: 0.75rem;
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 8px;
+    border: 1px solid rgba(227, 30, 36, 0.2);
+  }
+
+  ::ng-deep .clase-radio-group {
+    .mat-mdc-radio-button {
+      padding: 0.5rem 0.75rem;
+      background: rgba(0, 0, 0, 0.4);
+      border-radius: 8px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      transition: all 0.3s ease;
+
+      &:hover {
+        background: rgba(227, 30, 36, 0.1);
+        border-color: rgba(227, 30, 36, 0.3);
+      }
+
+      &.mat-mdc-radio-checked {
+        background: rgba(227, 30, 36, 0.15);
+        border-color: #E31E24;
+        box-shadow: 0 0 10px rgba(227, 30, 36, 0.2);
+      }
+
+      .mdc-radio {
+        .mdc-radio__native-control:enabled:checked + .mdc-radio__background .mdc-radio__outer-circle {
+          border-color: #E31E24 !important;
+        }
+
+        .mdc-radio__native-control:enabled:checked + .mdc-radio__background .mdc-radio__inner-circle {
+          border-color: #E31E24 !important;
+          background-color: #E31E24 !important;
+        }
+      }
+
+      .clase-radio-text {
+        font-weight: 600;
+        font-size: 0.9rem;
+        letter-spacing: 0.5px;
+      }
+    }
+  }
+
+  // ==================== BOTÓN AGREGAR ====================
+  .add-button-container {
+    button[mat-raised-button] {
+      background: linear-gradient(135deg, #B71C1C 0%, #E31E24 100%);
+      color: #ffffff;
+      font-weight: 700;
+      padding: 0.75rem 2rem;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      border: 2px solid #E31E24;
+      box-shadow: 
+        0 4px 16px rgba(227, 30, 36, 0.5),
+        inset 0 1px 2px rgba(255, 255, 255, 0.2);
+      transition: all 0.3s ease;
+
+      &:hover {
+        background: linear-gradient(135deg, #E31E24 0%, #FF3333 100%);
+        transform: translateY(-2px);
+        box-shadow: 
+          0 6px 24px rgba(227, 30, 36, 0.7),
+          0 0 35px rgba(227, 30, 36, 0.4);
+      }
+
+      &:active {
+        transform: translateY(0);
+      }
+    }
+  }
+
+  // ==================== SEPARADOR ====================
+  hr {
+    border: none;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, #E31E24, transparent);
+    margin: 2rem 0;
+    box-shadow: 0 0 10px rgba(227, 30, 36, 0.5);
+  }
+
+  // ==================== TABLA MEJORADA ====================
+  .table-responsive {
+    overflow-x: auto;
+    background: linear-gradient(145deg, #1a1a1a, #0a0a0a);
+    border-radius: 12px;
+    padding: 0;
+    border: 2px solid rgba(227, 30, 36, 0.4);
+    position: relative;
+    box-shadow: 
+      0 8px 24px rgba(0, 0, 0, 0.5),
+      inset 0 1px 2px rgba(227, 30, 36, 0.1);
+
+    &::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, transparent, #E31E24 20%, #E31E24 80%, transparent);
+      box-shadow: 0 0 10px rgba(227, 30, 36, 0.8);
+      z-index: 1;
+    }
+  }
+
+  ::ng-deep {
+    .mat-mdc-table {
+      background: transparent;
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0;
+
+      // Headers de la tabla - MEJORADOS
+      .mat-mdc-header-row {
+        background: linear-gradient(135deg, #000000 0%, #1a1a1a 100%);
+        border-bottom: 3px solid #E31E24;
+        box-shadow: 0 2px 8px rgba(227, 30, 36, 0.3);
+      }
+
+      .mat-mdc-header-cell {
+        color: #E31E24 !important;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 1.5px;
+        font-size: 0.85rem;
+        padding: 1.25rem 1rem;
+        border-bottom: none;
+        text-shadow: 
+          0 0 10px rgba(227, 30, 36, 0.6),
+          0 2px 4px rgba(0, 0, 0, 0.8);
+        position: relative;
+
+        &::after {
+          content: '';
+          position: absolute;
+          bottom: 0;
+          left: 0;
+          right: 0;
+          height: 1px;
+          background: linear-gradient(90deg, transparent, rgba(227, 30, 36, 0.5), transparent);
+        }
+      }
+
+      // Filas de la tabla - MEJORADAS
+      .mat-mdc-row {
+        background: rgba(0, 0, 0, 0.4);
+        border-bottom: 1px solid rgba(227, 30, 36, 0.15);
+        transition: all 0.3s ease;
+        position: relative;
+
+        &::before {
+          content: '';
+          position: absolute;
+          left: 0;
+          top: 0;
+          bottom: 0;
+          width: 3px;
+          background: transparent;
+          transition: all 0.3s ease;
+        }
+
+        &:hover {
+          background: linear-gradient(90deg, rgba(227, 30, 36, 0.15), rgba(227, 30, 36, 0.05));
+          transform: translateX(4px);
+          box-shadow: 
+            -3px 0 15px rgba(227, 30, 36, 0.3),
+            inset 0 0 20px rgba(227, 30, 36, 0.1);
+
+          &::before {
+            background: linear-gradient(180deg, #E31E24, #B71C1C);
+            box-shadow: 0 0 10px rgba(227, 30, 36, 0.8);
+          }
+
+          .mat-mdc-cell {
+            color: #ffffff;
+          }
+        }
+
+        &:nth-child(even) {
+          background: rgba(0, 0, 0, 0.5);
+
+          &:hover {
+            background: linear-gradient(90deg, rgba(227, 30, 36, 0.15), rgba(227, 30, 36, 0.05));
+          }
+        }
+      }
+
+      .mat-mdc-cell {
+        color: #cccccc;
+        padding: 1rem;
+        border-bottom: none;
+        font-size: 0.9rem;
+        font-weight: 500;
+        transition: color 0.3s ease;
+      }
+    }
+  }
+
+  // ==================== CLASE PILL MEJORADO ====================
+  .clase-pill {
+    display: inline-block;
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: #ffffff;
+    box-shadow: 
+      0 4px 12px rgba(0, 0, 0, 0.4),
+      inset 0 1px 2px rgba(255, 255, 255, 0.2);
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    transition: all 0.3s ease;
+
+    &:hover {
+      transform: scale(1.05);
+      box-shadow: 
+        0 6px 16px rgba(0, 0, 0, 0.5),
+        0 0 15px rgba(255, 255, 255, 0.2);
+    }
+  }
+
+  // ==================== BOTONES DE ACCIÓN EN TABLA - MEJORADOS ====================
+  .edit-button,
+  .delete-button {
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+
+    mat-icon {
+      filter: drop-shadow(0 0 8px rgba(227, 30, 36, 0.4));
+      transition: all 0.3s ease;
+      position: relative;
+      z-index: 1;
+    }
+
+    &::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 0;
+      height: 0;
+      border-radius: 50%;
+      transform: translate(-50%, -50%);
+      transition: width 0.4s ease, height 0.4s ease;
+    }
+
+    &:hover {
+      transform: scale(1.15) rotate(5deg);
+
+      &::before {
+        width: 100%;
+        height: 100%;
+      }
+    }
+  }
+
+  .edit-button {
+    background: rgba(227, 30, 36, 0.1);
+    border: 1px solid rgba(227, 30, 36, 0.3);
+
+    mat-icon {
+      color: #E31E24 !important;
+    }
+
+    &::before {
+      background: rgba(227, 30, 36, 0.3);
+    }
+
+    &:hover {
+      border-color: #E31E24;
+      box-shadow: 
+        0 0 20px rgba(227, 30, 36, 0.5),
+        inset 0 0 10px rgba(227, 30, 36, 0.2);
+
+      mat-icon {
+        filter: drop-shadow(0 0 12px rgba(227, 30, 36, 0.8));
+      }
+    }
+  }
+
+  .delete-button {
+    background: rgba(255, 107, 107, 0.1);
+    border: 1px solid rgba(255, 107, 107, 0.3);
+
+    mat-icon {
+      color: #FF6B6B !important;
+    }
+
+    &::before {
+      background: rgba(255, 107, 107, 0.3);
+    }
+
+    &:hover {
+      border-color: #FF6B6B;
+      box-shadow: 
+        0 0 20px rgba(255, 107, 107, 0.5),
+        inset 0 0 10px rgba(255, 107, 107, 0.2);
+
+      mat-icon {
+        filter: drop-shadow(0 0 12px rgba(255, 107, 107, 0.8));
+      }
+    }
+  }
+
+  // ==================== DIALOG ACTIONS ====================
+  div[mat-dialog-actions] {
+    padding: 1.25rem 2rem !important;
+    background: linear-gradient(180deg, #1a1a1a 0%, #000000 100%);
+    border-top: 3px solid #E31E24;
+    gap: 1rem;
+    box-shadow: 0 -4px 20px rgba(227, 30, 36, 0.2);
+    margin: 0 -24px -24px;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+
+    button {
+      padding: 0.75rem 2rem;
+      font-size: 0.95rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      transition: all 0.3s ease;
+      border-radius: 8px;
+    }
+
+    // Botón Cancelar
+    button[mat-button] {
+      background: rgba(227, 30, 36, 0.1);
+      color: #E31E24;
+      border: 2px solid rgba(227, 30, 36, 0.3);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+
+      &:hover {
+        background: rgba(227, 30, 36, 0.2);
+        border-color: #E31E24;
+        box-shadow: 0 0 20px rgba(227, 30, 36, 0.4);
+        transform: translateY(-2px);
+      }
+
+      &:active {
+        transform: translateY(0);
+      }
+    }
+
+    // Botón Guardar Todo
+    button[mat-raised-button] {
+      background: linear-gradient(135deg, #B71C1C 0%, #E31E24 100%);
+      color: #ffffff;
+      border: 2px solid #E31E24;
+      box-shadow: 
+        0 4px 16px rgba(227, 30, 36, 0.5),
+        inset 0 1px 2px rgba(255, 255, 255, 0.2);
+      position: relative;
+      overflow: hidden;
+
+      &::before {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 0;
+        height: 0;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.3);
+        transform: translate(-50%, -50%);
+        transition: width 0.6s, height 0.6s;
+      }
+
+      &:hover {
+        background: linear-gradient(135deg, #E31E24 0%, #FF3333 100%);
+        transform: translateY(-2px);
+        box-shadow: 
+          0 6px 24px rgba(227, 30, 36, 0.7),
+          0 0 35px rgba(227, 30, 36, 0.4),
+          inset 0 1px 2px rgba(255, 255, 255, 0.3);
+
+        &::before {
+          width: 350px;
+          height: 350px;
+        }
+      }
+
+      &:active {
+        transform: translateY(0);
+        box-shadow: 
+          0 2px 8px rgba(227, 30, 36, 0.5),
+          inset 0 1px 2px rgba(255, 255, 255, 0.2);
+      }
+    }
+  }
+
+  // ==================== RESPONSIVE ====================
+  @media (max-width: 992px) {
+    h1[mat-dialog-title] {
+      font-size: 1.2rem;
+      padding: 1.25rem 1.5rem;
+    }
+
+    .form-container {
+      grid-template-columns: 1fr;
+      padding: 1rem;
+    }
+
+    .actions-container {
+      flex-direction: column;
+      gap: 1rem;
+
+      .campo-clase,
+      .add-button-container {
+        width: 100%;
+      }
+
+      button[mat-raised-button] {
+        width: 100%;
+      }
+    }
+
+    div[mat-dialog-actions] {
+      padding: 1rem 1.5rem !important;
+      flex-direction: column;
+
+      button {
+        width: 100%;
+        justify-content: center;
+      }
+    }
+  }
 }
