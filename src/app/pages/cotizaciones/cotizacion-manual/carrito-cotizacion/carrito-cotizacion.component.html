@@ -1,0 +1,128 @@
+<div class="carrito-container">
+  <!-- Header -->
+  <div class="carrito-header">
+    <h5 class="mb-0">
+      <mat-icon>assignment</mat-icon>
+      Cotización
+    </h5>
+    <span class="badge bg-primary" *ngIf="totalItems > 0">{{ totalItems }}</span>
+  </div>
+
+  <!-- Items -->
+  <div class="carrito-items" *ngIf="carrito.length > 0">
+    <div class="carrito-item" *ngFor="let item of carrito; let i = index">
+
+      <!-- Bloque Superior: Imagen, Info y Botón Eliminar -->
+      <div class="item-superior">
+        <img
+          [src]="obtenerUrlImagen(item.producto.s_imagen_refaccion)"
+          [alt]="item.producto.s_nombre_refaccion"
+          class="item-imagen"
+          loading="eager"
+          onerror="this.onerror=null; this.src='assets/images/default-product.png';"
+        />
+        <div class="item-info-basica">
+          <h6 class="mb-1">{{ item.producto.s_nombre_refaccion }}</h6>
+          <small class="text-muted d-block">{{ item.producto.s_marca_refaccion }}</small>
+          <small class="text-muted d-block">No. Parte: {{ item.producto.s_numero_parte }}</small>
+        </div>
+        <button
+          class="btn btn-sm btn-danger btn-eliminar"
+          (click)="onEliminar(i)"
+          title="Eliminar producto"
+        >
+          <mat-icon>delete</mat-icon>
+        </button>
+      </div>
+
+      <!-- Controles de Cantidad -->
+      <div class="item-cantidad">
+        <div class="cantidad-controls">
+          <button
+            class="btn btn-sm btn-outline-secondary"
+            (click)="onDecrementar(i)"
+          >
+            <mat-icon>remove</mat-icon>
+          </button>
+          <span class="cantidad">{{ item.n_cantidad }}</span>
+          <button
+            class="btn btn-sm btn-outline-secondary"
+            (click)="onIncrementar(i)"
+          >
+            <mat-icon>add</mat-icon>
+          </button>
+        </div>
+      </div>
+
+      <!-- Porcentajes de Utilidad -->
+      <div class="item-porcentajes">
+        <label class="porcentajes-label">Porcentaje de Utilidad:</label>
+        <div class="porcentajes-botones">
+          <button
+            *ngFor="let porcentaje of porcentajesUtilidad; let idx = index"
+            class="btn btn-sm btn-porcentaje"
+            [class.active]="esPorcentajeSeleccionado(item, porcentaje.id_porcentaje_utilidad)"
+            (click)="onCambiarPorcentaje(i, porcentaje.id_porcentaje_utilidad)"
+            [title]="(porcentaje.n_porcentaje_utilidad | number: '1.0-0') + '%'"
+          >
+            P{{ idx + 1 }}
+          </button>
+        </div>
+      </div>
+
+      <!-- Precio y Subtotal -->
+      <div class="item-totales">
+        <div class="precio-info">
+          <small class="text-muted">Precio Unit.:</small>
+          <strong class="precio-valor">${{ item.n_precio_unitario | number: '1.2-2' }}</strong>
+        </div>
+        <div class="subtotal-info">
+          <small class="text-muted">Subtotal:</small>
+          <strong class="subtotal-valor text-success">${{ item.n_subtotal | number: '1.2-2' }}</strong>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Vacío -->
+  <div class="carrito-vacio" *ngIf="carrito.length === 0">
+    <mat-icon>assignment</mat-icon>
+    <p class="mb-0">Cotización vacía</p>
+    <small class="text-muted">Agrega productos para comenzar</small>
+  </div>
+
+  <!-- Footer con totales -->
+  <div class="carrito-footer" *ngIf="carrito.length > 0">
+    <div class="resumen mb-3">
+      <div class="d-flex justify-content-between mb-2">
+        <span>Subtotal:</span>
+        <strong>${{ n_subtotal | number: '1.2-2' }}</strong>
+      </div>
+      <div class="d-flex justify-content-between mb-2">
+        <span>IVA (16%):</span>
+        <strong>${{ n_iva | number: '1.2-2' }}</strong>
+      </div>
+    </div>
+
+    <!-- Total Retro -->
+    <div class="total-retro mb-3">
+      <div class="retro-display">
+        <div class="retro-label">TOTAL</div>
+        <div class="retro-amount">${{ n_total | number: '1.2-2' }}</div>
+      </div>
+    </div>
+
+    <!-- Botones -->
+    <div class="d-grid gap-2">
+      <button class="btn btn-outline-danger" (click)="onVaciar()">
+        <mat-icon>delete_sweep</mat-icon>
+        Vaciar
+      </button>
+      <button class="btn btn-primary btn-lg" (click)="onGuardar()">
+        <mat-icon>save</mat-icon>
+        Guardar Cotización
+      </button>
+    </div>
+  </div>
+</div>

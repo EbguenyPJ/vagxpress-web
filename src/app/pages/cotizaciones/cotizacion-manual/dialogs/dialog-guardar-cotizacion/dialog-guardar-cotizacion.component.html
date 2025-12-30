@@ -1,0 +1,84 @@
+<div class="dialog-guardar-cotizacion">
+  <div class="dialog-header">
+    <h2 mat-dialog-title>Guardar Cotización</h2>
+    <button mat-icon-button (click)="cerrar()" class="btn-cerrar">
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+
+  <mat-dialog-content>
+    <!-- Loading clientes -->
+    <div class="loading-container" *ngIf="isLoadingClientes">
+      <mat-progress-spinner color="primary" [diameter]="40" mode="indeterminate"></mat-progress-spinner>
+      <p>Cargando clientes...</p>
+    </div>
+
+    <!-- Formulario -->
+    <div class="form-container" *ngIf="!isLoadingClientes">
+      <!-- Selector de cliente con autocomplete -->
+      <mat-form-field appearance="outline" class="w-100">
+        <mat-label>Cliente</mat-label>
+        <input
+          type="text"
+          matInput
+          [formControl]="clienteControl"
+          [matAutocomplete]="auto"
+          placeholder="Buscar cliente...">
+        <mat-icon matPrefix>person</mat-icon>
+        <mat-autocomplete
+          #auto="matAutocomplete"
+          [displayWith]="mostrarCliente.bind(this)"
+          (optionSelected)="onClienteSeleccionado($event)">
+          <mat-option *ngFor="let cliente of clientesFiltrados | async" [value]="cliente">
+            <div class="cliente-option">
+              <strong>{{ cliente.s_nombre_cliente || cliente.s_razon_social }}</strong>
+              <small *ngIf="cliente.s_rfc">RFC: {{ cliente.s_rfc }}</small>
+            </div>
+          </mat-option>
+        </mat-autocomplete>
+      </mat-form-field>
+
+      <!-- Resumen de la cotización -->
+      <div class="resumen-cotizacion">
+        <h4>Resumen de la Cotización</h4>
+        <div class="resumen-item">
+          <span>Productos:</span>
+          <strong>{{ data.carrito.length }}</strong>
+        </div>
+        <div class="resumen-item">
+          <span>Subtotal:</span>
+          <strong>${{ data.n_subtotal | number: '1.2-2' }}</strong>
+        </div>
+        <div class="resumen-item">
+          <span>IVA (16%):</span>
+          <strong>${{ data.n_iva | number: '1.2-2' }}</strong>
+        </div>
+        <div class="resumen-item total">
+          <span>Total:</span>
+          <strong>${{ data.n_total | number: '1.2-2' }}</strong>
+        </div>
+      </div>
+    </div>
+  </mat-dialog-content>
+
+  <mat-dialog-actions align="end">
+    <button mat-button (click)="cerrar()" [disabled]="isGuardando">
+      Cancelar
+    </button>
+    <button
+      mat-raised-button
+      color="primary"
+      (click)="guardarCotizacion()"
+      [disabled]="isGuardando || isLoadingClientes">
+      <mat-icon *ngIf="!isGuardando">save</mat-icon>
+      <mat-progress-spinner
+        *ngIf="isGuardando"
+        [diameter]="20"
+        mode="indeterminate"
+        color="primary">
+      </mat-progress-spinner>
+      <span *ngIf="!isGuardando">Guardar Cotización</span>
+      <span *ngIf="isGuardando">Guardando...</span>
+    </button>
+  </mat-dialog-actions>
+</div>

@@ -1,0 +1,147 @@
+.dialog-guardar-cotizacion {
+  min-width: 500px;
+}
+
+.dialog-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 1.5rem;
+  border-bottom: 1px solid #e0e0e0;
+
+  h2 {
+    margin: 0;
+    font-size: 1.5rem;
+    color: #333;
+  }
+
+  .btn-cerrar {
+    color: #666;
+  }
+}
+
+mat-dialog-content {
+  padding: 1.5rem;
+  min-height: 250px;
+}
+
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  gap: 1rem;
+
+  p {
+    margin: 0;
+    color: #666;
+    font-size: 0.9rem;
+  }
+}
+
+.form-container {
+  .w-100 {
+    width: 100%;
+  }
+
+  mat-form-field {
+    margin-bottom: 1rem;
+  }
+}
+
+.cliente-option {
+  display: flex;
+  flex-direction: column;
+  padding: 0.25rem 0;
+
+  strong {
+    font-size: 0.95rem;
+    color: #333;
+  }
+
+  small {
+    font-size: 0.8rem;
+    color: #666;
+    margin-top: 0.15rem;
+  }
+}
+
+.resumen-cotizacion {
+  background: #f5f5f5;
+  border-radius: 8px;
+  padding: 1rem;
+  margin-top: 1rem;
+
+  h4 {
+    margin: 0 0 1rem 0;
+    font-size: 1rem;
+    color: #333;
+    font-weight: 600;
+  }
+
+  .resumen-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.5rem 0;
+    border-bottom: 1px solid #e0e0e0;
+
+    &:last-child {
+      border-bottom: none;
+    }
+
+    span {
+      color: #666;
+      font-size: 0.9rem;
+    }
+
+    strong {
+      color: #333;
+      font-size: 0.95rem;
+    }
+
+    &.total {
+      margin-top: 0.5rem;
+      padding-top: 1rem;
+      border-top: 2px solid #1976d2;
+
+      span {
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: #333;
+      }
+
+      strong {
+        font-size: 1.2rem;
+        color: #1976d2;
+      }
+    }
+  }
+}
+
+mat-dialog-actions {
+  padding: 1rem 1.5rem;
+  border-top: 1px solid #e0e0e0;
+
+  button {
+    margin-left: 0.5rem;
+
+    mat-icon,
+    mat-progress-spinner {
+      margin-right: 0.5rem;
+      vertical-align: middle;
+    }
+
+    mat-progress-spinner {
+      display: inline-block;
+    }
+  }
+}
+
+// Responsive
+@media (max-width: 600px) {
+  .dialog-guardar-cotizacion {
+    min-width: auto;
+    width: 100%;
+  }
+}
