@@ -15,10 +15,11 @@
       <!-- Bloque Superior: Imagen, Info y Botón Eliminar -->
       <div class="item-superior">
         <img
-          [src]="item.producto.s_imagen_refaccion"
+          [src]="obtenerUrlImagen(item.producto.s_imagen_refaccion)"
           [alt]="item.producto.s_nombre_refaccion"
           class="item-imagen"
-          (error)="$any($event.target).src='assets/images/default-product.png'"
+          loading="eager"
+          onerror="this.onerror=null; this.src='assets/images/default-product.png';"
         />
         <div class="item-info-basica">
           <h6 class="mb-1">{{ item.producto.s_nombre_refaccion }}</h6>

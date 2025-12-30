@@ -1,90 +1,61 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, map, Observable } from 'rxjs';
-
-const IVA_RATE = 0.16;
+import { HttpHeaders, HttpClient } from '@angular/common/http';
+import { conexion } from '../../conexion';
 
 @Injectable({
-  providedIn: 'root',
+  providedIn: 'root'
 })
 export class CotizacionService {
-  private itemsSubject = new BehaviorSubject<any[]>([]);
-  public items$ = this.itemsSubject.asObservable();
 
-  public subtotal$: Observable<number>;
-  public iva$: Observable<number>;
-  public total$: Observable<number>;
+  constructor(private http: HttpClient) { }
 
-  constructor() {
-    this.subtotal$ = this.items$.pipe(
-      map((items) =>
-        items.reduce(
-          (acc, item) => acc + item.cantidad * item.n_precio_venta,
-          0
-        )
-      )
-    );
-
-    this.iva$ = this.subtotal$.pipe(map((subtotal) => subtotal * IVA_RATE));
-
-    this.total$ = this.subtotal$.pipe(
-      map((subtotal) => subtotal * (1 + IVA_RATE))
-    );
-  }
-
-  agregarItem(refaccion: any) {
-    const itemsActuales = this.itemsSubject.getValue();
-    const itemExistente = itemsActuales.find(
-      (item) => item.id_refaccion === refaccion.id_refaccion
-    );
-
-    if (!itemExistente) {
-      const nuevoItem = { ...refaccion, cantidad: 1 };
-      this.itemsSubject.next([...itemsActuales, nuevoItem]);
-    } else {
-      this.incrementarCantidad(refaccion.id_refaccion);
-    }
-  }
-
-  incrementarCantidad(idRefaccion: number) {
-    const itemsActuales = this.itemsSubject.getValue();
-    const nuevosItems = itemsActuales.map((item) => {
-      if (item.id_refaccion === idRefaccion) {
-        return { ...item, cantidad: item.cantidad + 1 };
-      }
-      return item;
+  getCotizaciones(s_token: string) {
+    let headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': s_token
     });
-    this.itemsSubject.next(nuevosItems);
+    let params = { headers: headers };
+    let url = conexion.url + 'mostrar-cotizaciones';
+    return this.http.get(url, params);
   }
 
-  decrementarCantidad(idRefaccion: number) {
-    const itemsActuales = this.itemsSubject.getValue();
-    let nuevosItems = itemsActuales.map((item) => {
-      if (item.id_refaccion === idRefaccion && item.cantidad > 1) {
-        return { ...item, cantidad: item.cantidad - 1 };
-      }
-      return item;
+  getCotizacion(s_token: string, id_cotizacion: number) {
+    let headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': s_token
     });
-
-    const item = nuevosItems.find((i) => i.id_refaccion === idRefaccion);
-    if (item && item.cantidad <= 1) {
-      this.eliminarItem(idRefaccion);
-    } else {
-      this.itemsSubject.next(nuevosItems);
-    }
+    let params = { headers: headers };
+    let url = conexion.url + 'mostrar-cotizacion/' + id_cotizacion;
+    return this.http.get(url, params);
   }
 
-  eliminarItem(idRefaccion: number) {
-    const itemsActuales = this.itemsSubject.getValue();
-    const nuevosItems = itemsActuales.filter(
-      (item) => item.id_refaccion !== idRefaccion
-    );
-    this.itemsSubject.next(nuevosItems);
+  crearCotizacion(s_token: string, data: any) {
+    let headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': s_token
+    });
+    let url = conexion.url + 'crear-cotizacion';
+    let options = { headers: headers };
+    return this.http.post(url, data, options);
   }
 
-  obtenerItems() {
-    return this.itemsSubject.getValue();
+  actualizarCotizacion(s_token: string, id_cotizacion: number, data: any) {
+    let headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': s_token
+    });
+    let url = conexion.url + 'actualizar-cotizacion/' + id_cotizacion;
+    let options = { headers: headers };
+    return this.http.put(url, data, options);
   }
-  vaciarCotizacion() {
-    this.itemsSubject.next([]);
+
+  eliminarCotizacion(s_token: string, id_cotizacion: number) {
+    let headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': s_token
+    });
+    let options = { headers: headers };
+    let url = conexion.url + 'eliminar-cotizacion/' + id_cotizacion;
+    return this.http.delete(url, options);
   }
 }

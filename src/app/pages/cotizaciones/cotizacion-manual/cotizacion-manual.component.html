@@ -1,126 +1,85 @@
 <section class="content">
   <div class="content-block">
-    @for (breadscrum of breadscrums; track breadscrum) {
-    <div class="block-header">
-      <app-breadcrumb
-        [title]="breadscrum.title"
-        [items]="breadscrum.items"
-        [active_item]="breadscrum.active"
-      >
-      </app-breadcrumb>
+
+    <!-- Loader inicial -->
+    <div class="loader-inicial" *ngIf="isLoading">
+      <div class="loader-content">
+        <div class="spinner"></div>
+        <h3>Cargando datos...</h3>
+        <p>Por favor espera mientras se cargan las categorías y productos</p>
+      </div>
     </div>
-    }
 
-    <div class="cotizacion-manual-container">
-      <div class="catalogo-column">
-        <mat-card>
-          <mat-card-header>
-            <mat-card-title>Seleccionar Refacciones</mat-card-title>
-          </mat-card-header>
-          <mat-card-content>
-            <div class="search-container">
-              <mat-form-field appearance="outline" class="search-bar">
-                <mat-label>Buscar Refacción...</mat-label>
-                <input matInput [formControl]="searchControl" />
-                <mat-icon matSuffix>search</mat-icon>
-              </mat-form-field>
-            </div>
+    <!-- Error de carga -->
+    <div class="error-carga" *ngIf="errorCarga && !isLoading">
+      <div class="error-content">
+        <i class="material-icons error-icon">error_outline</i>
+        <h3>Error al cargar datos</h3>
+        <p>No se pudieron cargar los datos. Por favor, verifica tu conexión e intenta nuevamente.</p>
+        <button class="btn-reintentar" (click)="reintentar()">
+          <i class="material-icons">refresh</i>
+          Reintentar
+        </button>
+      </div>
+    </div>
 
-            <app-catalogo-seleccion
-              [filtroExterno$]="filtroParaCatalogo$"
-            ></app-catalogo-seleccion>
-          </mat-card-content>
-        </mat-card>
+    <!-- Contenido principal -->
+    <div class="cotizacion-container" *ngIf="!isLoading && !errorCarga">
+      <!-- Panel Izquierdo: Catálogo -->
+      <div class="panel-catalogo">
+        <!-- Barra de búsqueda -->
+        <div class="busqueda-wrapper">
+          <app-busqueda-pos
+            [buscarProductos]="onBusquedaProductos.bind(this)"
+            [buscarPorCodigoQR]="onBuscarPorCodigoQR.bind(this)"
+            [habilitarFocus]="habilitarFocusBusqueda"
+            (productoSeleccionado)="onProductoSeleccionado($event)">
+          </app-busqueda-pos>
+        </div>
+
+        <!-- Contenido dinámico según la vista -->
+        <div class="catalogo-contenido">
+          <!-- Vista de Categorías y Subcategorías -->
+          <app-categorias-pos
+            *ngIf="vistaActual === 'categorias' || vistaActual === 'subcategorias'"
+            [vistaActual]="vistaActual"
+            [categoriaSeleccionada]="categoriaSeleccionada"
+            [categoriasMostrar]="categoriasMostrar"
+            [subcategoriasMostrar]="subcategoriasMostrar"
+            (categoriaSelected)="onCategoriaSeleccionada($event)"
+            (subcategoriaSelected)="onSubcategoriaSeleccionada($event)"
+            (volverCategorias)="volverACategorias()">
+          </app-categorias-pos>
+
+          <!-- Vista de Productos -->
+          <app-productos-pos
+            *ngIf="vistaActual === 'productos'"
+            [categoriaSeleccionada]="categoriaSeleccionada"
+            [subcategoriaSeleccionada]="subcategoriaSeleccionada"
+            [productosMostrar]="productosMostrar"
+            (productoSeleccionado)="onProductoSeleccionado($event)"
+            (volver)="volverASubcategorias()">
+          </app-productos-pos>
+        </div>
       </div>
 
-      <div class="resumen-column">
-        <mat-card class="sticky-card">
-          <mat-card-header>
-            <mat-card-title>Resumen de Cotización</mat-card-title>
-          </mat-card-header>
-
-          @if (itemsEnCotizacion$ | async; as items) {
-          <mat-card-content class="resumen-content">
-            @if (items.length === 0) {
-            <div class="empty-cart">
-              <mat-icon>shopping_cart_off</mat-icon>
-              <p>Tu cotización está vacía</p>
-              <small>Agrega refacciones desde el catálogo</small>
-            </div>
-            } @else {
-            <ul class="resumen-list">
-              @for (item of items; track item.id_refaccion) {
-              <li class="resumen-item">
-                <div class="item-info">
-                  <span class="item-name">{{ item.s_nombre_refaccion }}</span>
-                  <span class="item-price">{{
-                    item.n_precio_venta | currency : "MXN"
-                  }}</span>
-                </div>
-                <div class="item-actions">
-                  <div class="quantity-controls">
-                    <button
-                      mat-icon-button
-                      color="warn"
-                      (click)="decrementar(item.id_refaccion)"
-                    >
-                      <mat-icon>remove_circle</mat-icon>
-                    </button>
-
-                    <span>{{ item.cantidad }}</span>
-
-                    <button
-                      mat-icon-button
-                      color="primary"
-                      (click)="incrementar(item.id_refaccion)"
-                    >
-                      <mat-icon>add_circle</mat-icon>
-                    </button>
-                  </div>
-                  <button
-                    mat-icon-button
-                    color="warn"
-                    matTooltip="Quitar"
-                    (click)="removerItem(item.id_refaccion)"
-                  >
-                    <mat-icon>delete</mat-icon>
-                  </button>
-                </div>
-              </li>
-              }
-            </ul>
-
-            <mat-divider></mat-divider>
-
-            <div class="totals-section">
-              <div class="total-row">
-                <span>Subtotal:</span>
-                <span>{{ subtotal$ | async | currency : "MXN" }}</span>
-              </div>
-              <div class="total-row">
-                <span>IVA (16%):</span>
-                <span>{{ iva$ | async | currency : "MXN" }}</span>
-              </div>
-              <div class="total-row total-final">
-                <strong>Total:</strong>
-                <strong>{{ total$ | async | currency : "MXN" }}</strong>
-              </div>
-            </div>
-            }
-          </mat-card-content>
-          <mat-card-actions>
-            <button
-              mat-raised-button
-              color="primary"
-              class="w-100"
-              [disabled]="items.length === 0"
-            >
-              Guardar Cotización
-            </button>
-          </mat-card-actions>
-          }
-        </mat-card>
+      <!-- Panel Derecho: Carrito -->
+      <div class="panel-carrito">
+        <app-carrito-cotizacion
+          [carrito]="carrito"
+          [porcentajesUtilidad]="porcentajesUtilidad"
+          [n_subtotal]="n_subtotal"
+          [n_iva]="n_iva"
+          [n_total]="n_total"
+          (incrementar)="incrementarCantidad($event)"
+          (decrementar)="decrementarCantidad($event)"
+          (eliminar)="eliminarDelCarrito($event)"
+          (vaciar)="vaciarCarrito()"
+          (guardar)="guardarCotizacion()"
+          (cambiarPorcentaje)="cambiarPorcentajeUtilidad($event.index, $event.id_porcentaje)">
+        </app-carrito-cotizacion>
       </div>
     </div>
   </div>
 </section>
+
