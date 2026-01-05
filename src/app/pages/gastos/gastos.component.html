@@ -1,32 +1,48 @@
 <section class="content">
     <div class="content-block">
+
+        <!-- BREADCRUMB -->
         <div class="block-header">
-            <app-breadcrumb [title]="'Clientes'" [items]="['Home']" [active_item]="'Clientes'"></app-breadcrumb>
+            <app-breadcrumb [title]="'Gastos'" [items]="['Home']" [active_item]="'Gastos'">
+            </app-breadcrumb>
         </div>
 
         <div class="row">
             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                 <div class="card">
 
-                    <!-- HEADER -->
+                    <!-- ================= HEADER ================= -->
                     <div class="materialTableHeader">
+
+                        <!-- LEFT -->
                         <div class="left">
                             <ul class="header-buttons-left ms-0">
                                 <li class="tbl-title">
-                                    <h2>Lista de Clientes</h2>
+                                    <h2>Lista de Gastos</h2>
                                 </li>
+
                                 <li class="tbl-search-box">
-                                    <label><i class="material-icons search-icon">search</i></label>
-                                    <input placeholder="Buscar" type="text" (keyup)="applyFilter($event)"
+                                    <label>
+                                        <i class="material-icons search-icon">search</i>
+                                    </label>
+                                    <input type="text" placeholder="Buscar" (keyup)="applyFilter($event)"
                                         class="browser-default search-field">
                                 </li>
                             </ul>
                         </div>
 
-                        <div class="right">
-                            <ul class="tbl-export-btn">
+                        <div class="total-box ">
+                            <span class="label">Total:</span>
+                            <span class="amount">{{ totalGastos | currency:'MXN':'symbol-narrow' }}</span>
+                        </div>
 
-                                <!-- MOSTRAR / OCULTAR COLUMNAS -->
+
+                        <!-- RIGHT -->
+                        <div class="right">
+                            <ul class="tbl-export-btn d-flex align-items-center">
+
+
+                                <!-- COLUMNAS -->
                                 <li class="tbl-header-btn">
                                     <div class="m-l-10">
                                         <button mat-icon-button color="primary" [matMenuTriggerFor]="columnMenu"
@@ -54,7 +70,7 @@
                                 <li class="tbl-header-btn">
                                     <div class="m-l-10">
                                         <button mat-icon-button class="col-green" (click)="addNew()"
-                                            matTooltip="Agregar Cliente">
+                                            matTooltip="Agregar Gasto">
                                             <mat-icon>add_circle_outline</mat-icon>
                                         </button>
                                     </div>
@@ -69,46 +85,76 @@
                                     </div>
                                 </li>
 
+                                <!-- EXCEL -->
+                                <li>
+                                    <div class="export-button m-l-10">
+                                        <button mat-icon-button class="col-blue" (click)="exportExcel()"
+                                            matTooltip="Descargar Excel">
+                                            <mat-icon class="material-icons-outlined">
+                                                file_download
+                                            </mat-icon>
+                                        </button>
+                                    </div>
+                                </li>
+
                             </ul>
                         </div>
-                    </div>
-                    <!-- END HEADER -->
+                        <div class="fecha-rango d-flex gap-2 ">
+                            <!-- FECHA INICIO -->
+                            <li>
+                                <mat-form-field appearance="outline" class="mt-3 no-primary fecha-field">
+                                    <mat-label>Inicio</mat-label>
+                                    <input matInput [matDatepicker]="pickerInicio" [(ngModel)]="fechaInicio"
+                                        (dateChange)="onFechaChange()">
+                                    <mat-datepicker-toggle matSuffix [for]="pickerInicio"></mat-datepicker-toggle>
+                                    <mat-datepicker #pickerInicio></mat-datepicker>
+                                </mat-form-field>
+                            </li>
 
+                            <!-- FECHA FIN -->
+                            <li>
+                                <mat-form-field appearance="outline" class="mt-3 fecha-field">
+                                    <mat-label>Fin</mat-label>
+                                    <input matInput [matDatepicker]="pickerFin" [(ngModel)]="fechaFin"
+                                        (dateChange)="onFechaChange()">
+                                    <mat-datepicker-toggle matSuffix [for]="pickerFin"></mat-datepicker-toggle>
+                                    <mat-datepicker #pickerFin></mat-datepicker>
+                                </mat-form-field>
+                            </li>
+                        </div>
+                    </div>
+                    <!-- ================= END HEADER ================= -->
+
+                    <!-- ================= TABLE ================= -->
                     <div class="overflow-auto">
                         <div class="responsive_table">
                             <table mat-table [dataSource]="dataSource" matSort class="mat-cell advance-table">
 
-                                <!-- COLUMNAS DINÁMICAS -->
                                 @for (column of columnDefinitions; track column) {
-                                @if (column.type !== 'actionBtn') {
+                                @if (column.type !== 'actions') {
 
                                 <ng-container [matColumnDef]="column.def">
                                     <mat-header-cell *matHeaderCellDef mat-sort-header>
-                                        <span class="truncate-text">{{ column.label }}</span>
+                                        {{ column.label }}
                                     </mat-header-cell>
 
                                     <mat-cell *matCellDef="let row">
                                         <span class="mobile-label">{{ column.label }}:</span>
 
-                                        <!-- PHONE -->
-                                        @if (column.type === 'phone') {
-                                        <mat-icon class="tbl-icon col-green">call</mat-icon>
-                                        <span class="truncate-text">{{ row[column.def] || '—' }}</span>
+                                        @if (column.def === 'b_movil') {
+                                        <mat-icon [ngClass]="row.b_movil === 1 ? 'icon-movil' : 'icon-web'">
+                                            {{ row.b_movil === 1 ? 'smartphone' : 'language' }}
+                                        </mat-icon>
                                         }
-
-                                        <!-- STATUS -->
-                                        @else if (column.def === 'b_activo') {
-                                        <span class="badge"
-                                            [ngClass]="row.b_activo == 1 ? 'badge-solid-green' : 'badge-solid-purple'">
-                                            {{ row.b_activo == 1 ? 'Activo' : 'Inactivo' }}
-                                        </span>
+                                        @else if (column.def === 'costo') {
+                                        {{ row.costo | currency:'MXN':'symbol-narrow':'1.2-2' }}
                                         }
-
-                                        <!-- DEFAULT -->
+                                        @else if (column.def === 'fecha') {
+                                        {{ row.fecha | date:'dd/MM/yyyy' }}
+                                        }
                                         @else {
-                                        <span class="truncate-text">{{ row[column.def] || '—' }}</span>
+                                        {{ row[column.def] || '—' }}
                                         }
-
                                     </mat-cell>
                                 </ng-container>
 
@@ -119,10 +165,8 @@
                                 <ng-container matColumnDef="actions">
                                     <mat-header-cell *matHeaderCellDef>Acciones</mat-header-cell>
                                     <mat-cell *matCellDef="let row">
-                                        <button mat-icon-button color="accent" (click)="editCall(row)"
-                                            matTooltip="Editar">
-                                            <app-feather-icons [icon]="'edit'" class="tbl-fav-edit">
-                                            </app-feather-icons>
+                                        <button mat-icon-button (click)="verDetalles(row)" matTooltip="Ver detalle">
+                                            <mat-icon style="color: #4597e4;">visibility</mat-icon>
                                         </button>
                                     </mat-cell>
                                 </ng-container>
@@ -136,8 +180,8 @@
                         <!-- LOADING -->
                         @if (isLoading) {
                         <div class="tbl-spinner">
-                            <mat-progress-spinner color="primary" [diameter]="40"
-                                mode="indeterminate"></mat-progress-spinner>
+                            <mat-progress-spinner color="primary" [diameter]="40" mode="indeterminate">
+                            </mat-progress-spinner>
                         </div>
                         }
 

@@ -1,0 +1,109 @@
+<div class="content-block">
+    <!-- Botón de cerrar -->
+    <button mat-icon-button class="close-btn" aria-label="Cerrar" mat-dialog-close>
+        <mat-icon>close</mat-icon>
+    </button>
+
+    <!-- Encabezado -->
+    <div class="block-header">
+        <h2>
+            <span class="title">Registrar Gastos</span>
+            <!--<span class="sucursal-info">{{ sucursalNombre }}</span>-->
+        </h2>
+    </div>
+
+    <div class="dialog-split-content">
+        <div class="column form-column">
+            <div class="scrollableContent mb-4">
+                <form [formGroup]="gastosForm" (ngSubmit)="submit()">
+
+                    <!-- Tipo de Gasto -->
+                    <div class="row g-3 mb-3">
+                        <div class="col-12">
+                            <label class="form-label">Tipo de Gasto</label>
+                            <select class="form-select" formControlName="id_tipo_gasto">
+                                <option [ngValue]="null" disabled>Seleccionar tipo de gasto</option>
+                                <option *ngFor="let tipo of tiposGasto" [ngValue]="tipo.id_tipo_gasto">
+                                    {{ tipo.s_tipo_gasto }}
+                                </option>
+                            </select>
+                            <div class="text-warning small mt-1"
+                                *ngIf="gastosForm.get('id_tipo_gasto')?.invalid && gastosForm.get('id_tipo_gasto')?.touched">
+                                El tipo de gasto es requerido
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Cantidad | Costo -->
+                    <div class="row g-3 mb-3">
+                        <div class="col-md-6 col-12">
+                            <label class="form-label">Cantidad</label>
+                            <input type="number" class="form-control" formControlName="n_cantidad" min="1"
+                                placeholder="Ingrese cantidad...">
+                            <div class="text-warning small mt-1"
+                                *ngIf="gastosForm.get('n_cantidad')?.invalid && gastosForm.get('n_cantidad')?.touched">
+                                La cantidad debe ser mayor o igual a 1
+                            </div>
+                        </div>
+
+                        <div class="col-md-6 col-12">
+                            <label class="form-label">Costo</label>
+                            <input type="number" class="form-control" formControlName="n_costo" min="0"
+                                placeholder="Ingrese costo...">
+                            <div class="text-warning small mt-1"
+                                *ngIf="gastosForm.get('n_costo')?.invalid && gastosForm.get('n_costo')?.touched">
+                                El costo debe ser mayor o igual a 0
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Fecha del Gasto -->
+                    <div class="row g-3 mb-3">
+                        <div class="col-12">
+                            <label class="form-label">Fecha del Gasto</label>
+                            <input type="date" class="form-control" formControlName="d_fecha_gasto" [max]="hoy">
+                        </div>
+                    </div>
+
+                    <!-- Concepto -->
+                    <div class="row g-3 mb-3">
+                        <div class="col-12">
+                            <label class="form-label">Concepto</label>
+                            <input type="text" class="form-control" formControlName="s_concepto"
+                                placeholder="Ingrese concepto...">
+                            <div class="text-warning small mt-1"
+                                *ngIf="gastosForm.get('s_concepto')?.invalid && gastosForm.get('s_concepto')?.touched">
+                                El concepto es requerido
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Archivo -->
+                    <div class="row mb-3">
+                        <div class="col-12">
+                            <label class="form-label">Adjuntar evidencia</label>
+                            <div style="position: relative;">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24"
+                                    fill="none" stroke="currentColor" stroke-width="2"
+                                    style="position: absolute; left: 12px; top: 50%; transform: translateY(-50%); pointer-events: none; color: #007bff;">
+                                    <path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z" />
+                                </svg>
+                                <input type="file" id="inputFile" #inputFile (change)="onFileSelected($event)"
+                                    class="form-control" style="padding-left: 40px;">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Botones -->
+                    <div class="row">
+                        <div class="col-12 d-flex justify-content-end gap-2">
+                            <button type="submit" class="formSubmitBtn" [disabled]="!gastosForm.valid">Guardar</button>
+                            <button type="button" class="formSubmitBtnCancelar" mat-dialog-close>Cancelar</button>
+                        </div>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

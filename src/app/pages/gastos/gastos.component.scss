@@ -1,0 +1,551 @@
+/* ==================== Ajustes generales ==================== */
+:host ::ng-deep .column-filter .mat-mdc-select-arrow {
+    display: none !important;
+}
+
+:host ::ng-deep .advance-table .mat-mdc-header-cell {
+    font-weight: 500;
+}
+
+/* ==================== Encabezado y barra superior ==================== */
+:host ::ng-deep .materialTableHeader {
+    background: linear-gradient(135deg,
+            #7f0c19 0%,
+            #b11226 50%,
+            #e53935 100%);
+    padding: 15px 20px;
+    border-radius: 12px 12px 0 0;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 4px 18px rgba(0, 0, 0, 0.45);
+    color: #ffffff;
+    gap: 15px;
+}
+
+/* ==================== Título ==================== */
+:host ::ng-deep .tbl-title h2 {
+    color: #ffffff;
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin: 0;
+    text-shadow: 0 3px 6px rgba(0, 0, 0, 0.6);
+}
+
+/* ==================== Buscador ==================== */
+:host ::ng-deep .tbl-search-box {
+    display: flex;
+    align-items: center;
+    background: rgba(0, 0, 0, 0.45);
+    border-radius: 25px;
+    padding: 5px 12px;
+    transition: all 0.3s ease;
+}
+
+:host ::ng-deep .tbl-search-box:hover {
+    background: rgba(0, 0, 0, 0.65);
+}
+
+:host ::ng-deep .tbl-search-box input {
+    width: 0;
+    opacity: 0;
+    padding: 8px 12px;
+    border-radius: 20px;
+    border: none;
+    background: transparent;
+    color: #ffffff;
+    transition: all 0.3s ease;
+    font-size: 0.95rem;
+}
+
+:host ::ng-deep .tbl-search-box input::placeholder {
+    color: rgba(255, 255, 255, 0.7);
+}
+
+:host ::ng-deep .tbl-search-box:hover input,
+:host ::ng-deep .tbl-search-box input:focus {
+    width: 200px;
+    opacity: 1;
+    outline: none;
+}
+
+:host ::ng-deep .tbl-search-box .search-icon {
+    cursor: pointer;
+    color: #ffffff;
+    font-size: 22px;
+    transition: transform 0.2s ease;
+}
+
+:host ::ng-deep .tbl-search-box .search-icon:hover {
+    transform: scale(1.1);
+}
+
+/* ==================== Botones del header ==================== */
+:host ::ng-deep .tbl-export-btn {
+    display: flex;
+    gap: 8px;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+:host ::ng-deep .tbl-export-btn button {
+    background: rgba(0, 0, 0, 0.5);
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    color: #ffffff;
+}
+
+:host ::ng-deep .tbl-export-btn button:hover {
+    background: #b11226;
+    transform: translateY(-2px);
+}
+
+:host ::ng-deep .tbl-export-btn mat-icon {
+    color: #ffffff;
+}
+
+
+
+
+
+/* ==================== Tabla ==================== */
+:host ::ng-deep .advance-table {
+    width: 100%;
+    border-collapse: separate;
+    font-family: 'Roboto', sans-serif;
+    background: #f2f2f2;
+    box-shadow: 0 0 0 6px #1e1e1e;
+}
+
+/* ==================== Encabezado columnas ==================== */
+
+:host ::ng-deep .advance-table thead {
+    background-color: #1e1e1e8d;
+}
+
+/* Texto de los headers */
+:host ::ng-deep .advance-table thead .mat-mdc-header-cell,
+:host ::ng-deep .advance-table thead .mat-mdc-header-cell span,
+:host ::ng-deep .advance-table thead .mat-sort-header-content {
+    color: #ffffff !important;
+}
+
+/* Flechas de ordenamiento */
+:host ::ng-deep .advance-table thead .mat-sort-header-arrow {
+    color: #ffffff !important;
+}
+
+/* ==================== Filas ==================== */
+:host ::ng-deep .advance-table mat-row:nth-child(even) {
+    background-color: #ededed;
+}
+
+:host ::ng-deep .advance-table mat-row:hover {
+    background-color: rgba(177, 18, 38, 0.1);
+}
+
+.badge {
+    font-size: 0.75rem;
+    font-weight: 600;
+    padding: 4px 8px;
+    border-radius: 12px;
+    text-transform: uppercase;
+    display: inline-block;
+    margin-right: 4px;
+}
+
+:host ::ng-deep .badge.badge-solid-green {
+    background-color: #e6f4ea;
+    color: #1e7e34;
+    border: 1px solid #c3e6cb;
+}
+
+:host ::ng-deep .badge.badge-solid-purple {
+    background-color: #f3e8ff;
+    color: #6f42c1;
+    border: 1px solid #d6bcfa;
+}
+
+
+/* ==================== Columnas específicas ==================== */
+
+.mat-column-id {
+    //background: #767575;
+    //background: #65923f  ;
+    width: auto !important;
+    min-width: 100px !important;
+    flex: none !important;
+    white-space: nowrap !important;
+    overflow: visible !important;
+    padding: 0 8px !important;
+}
+
+.mat-column-b_movil {
+    //background: #767575;
+    //background: #65923f  ;
+    width: auto !important;
+    min-width: 100px !important;
+    flex: none !important;
+    white-space: nowrap !important;
+    overflow: visible !important;
+    padding: 0 8px !important;
+}
+
+.mat-column-cantidad {
+    //background: #767575;
+    //background: #65923f  ;
+    width: auto !important;
+    min-width: 100px !important;
+    flex: none !important;
+    white-space: nowrap !important;
+    overflow: visible !important;
+    padding: 0 8px !important;
+}
+
+
+
+
+.mat-column-costo {
+    width: 200px !important;
+    min-width: 200px !important;
+    flex: none !important;
+    white-space: nowrap !important;
+    overflow: visible !important;
+    padding: 0 8px !important;
+}
+
+
+
+
+
+/* ==================== Icono ver ==================== */
+.btn-icon-azul .mat-icon.tbl-fav-eye {
+    color: #b11226 !important;
+}
+
+/* ==================== SnackBar oculto ==================== */
+::ng-deep .mat-mdc-snack-bar-container {
+    display: none !important;
+}
+
+/* ==================== Badges ==================== */
+.badge-solid-green {
+    background-color: #1e1e1e;
+    color: #ffffff;
+}
+
+.badge-solid-red {
+    background-color: #b11226;
+    color: #ffffff;
+}
+
+.badge-solid-purple {
+    background-color: #444444;
+    color: #ffffff;
+}
+
+/* ==================== Iconos de origen ==================== */
+.origen-container {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.origen-container i {
+    font-size: 1.2rem;
+    transition: transform 0.2s ease;
+}
+
+.origen-container i:hover {
+    transform: scale(1.2);
+}
+
+
+
+/* ---------------- Media Queries para móvil ---------------- */
+@media (max-width: 600px) {
+    :host ::ng-deep .materialTableHeader {
+        justify-content: center;
+        padding: 8px 10px;
+    }
+
+    /* Ajuste del título */
+    :host ::ng-deep .tbl-title h2 {
+        font-size: 1.2rem;
+        margin-bottom: 6px;
+    }
+
+    /* Ajuste del buscador */
+    :host ::ng-deep .tbl-search-box {
+        justify-content: center;
+        width: 100%;
+    }
+
+    :host ::ng-deep .tbl-search-box input {
+        width: 140px;
+        /* más pequeño en móviles */
+    }
+
+    /* Columna ID verde solo en móvil */
+    :host ::ng-deep .mat-column-id {
+        background-color: #dc6815 !important;
+        /* mismo verde que encabezado */
+        color: #fff;
+        /* texto blanco para contraste */
+    }
+
+    .mat-column-b_movil,
+    .mat-column-concepto,
+    .mat-column-cantidad,
+    .mat-column-costo,
+    .mat-column-tipo_gasto,
+    .mat-column-fecha,
+    .mat-column-usuario_crea,
+    .mat-column-actions {
+        min-width: 80px !important;
+        /* ancho mínimo para móvil */
+        width: auto !important;
+        /* se adapta al espacio disponible */
+        flex: 1 1 auto !important;
+        /* permite crecer proporcionalmente */
+        white-space: nowrap !important;
+        /* evita salto de línea */
+        overflow: hidden !important;
+        /* corta el texto largo */
+        text-overflow: ellipsis !important;
+        /* agrega "..." si es largo */
+        padding: 0 4px !important;
+        /* reduce padding horizontal */
+        text-align: center !important;
+        /* centra el contenido */
+    }
+
+
+
+
+
+
+}
+
+
+
+
+
+/* Estilos para los mat-form-field de fecha con clase mt-3 */
+/* Contenedor del input - este tiene el fondo negro */
+:host ::ng-deep .mt-3.mat-mdc-form-field .mat-mdc-text-field-wrapper {
+    background: rgba(0, 0, 0, 0.5);
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+
+:host ::ng-deep .mt-3.mat-mdc-form-field:hover .mat-mdc-text-field-wrapper {
+    background: #b11226;
+}
+
+/* Label del datepicker */
+:host ::ng-deep .mt-3.mat-mdc-form-field .mat-mdc-floating-label {
+    color: rgba(255, 255, 255, 0.95) !important;
+    font-weight: 500;
+    font-size: 0.85rem;
+}
+
+
+
+/* Input del datepicker */
+:host ::ng-deep .mt-3.mat-mdc-form-field .mat-mdc-input-element {
+    color: #ffffff !important;
+    font-weight: 500;
+    caret-color: #ffffff;
+    font-size: 0.9rem;
+}
+
+
+
+:host ::ng-deep .fecha-rango {
+    list-style: none;
+}
+
+:host ::ng-deep .fecha-rango li::marker {
+    content: none;
+}
+
+/* 🔥 Forzar color visible del icono del datepicker */
+:host ::ng-deep .fecha-rango .mat-datepicker-toggle-default-icon {
+    color: #ffffff !important;
+    fill: #ffffff !important;
+}
+
+
+/* ==================== FECHAS – RESPONSIVE AJUSTE FINO ==================== */
+@media (max-width: 768px) {
+
+    :host ::ng-deep .fecha-rango {
+        display: flex !important;
+        flex-direction: column !important;
+        width: 80% !important;
+        gap: 0 !important;
+        margin-top: 8px;
+    }
+
+    
+
+    :host ::ng-deep .fecha-rango .mat-mdc-form-field {
+        margin-bottom: 0 !important;
+    }
+
+
+    :host ::ng-deep .fecha-rango li {
+        list-style: none !important;
+        width: 100% !important;
+    }
+
+    :host ::ng-deep .fecha-rango .mat-mdc-form-field {
+        width: 100% !important;
+        max-width: 100% !important;
+    }
+
+    /* 🔧 Caja más delgada */
+    :host ::ng-deep .fecha-rango .mat-mdc-text-field-wrapper {
+        min-height: 44px !important;
+        /* ⬅️ MEDIANO */
+        padding: 0 8px !important;
+        border-radius: 12px !important;
+    }
+
+    /* 🔧 Input menos grueso */
+    :host ::ng-deep .fecha-rango .mat-mdc-input-element {
+        font-size: 0.75rem !important;
+        padding: 10px 12px !important;
+        /* ⬅️ clave */
+        line-height: 0.75 !important;
+    }
+
+    /* Label equilibrado */
+    :host ::ng-deep .fecha-rango .mat-mdc-floating-label {
+        font-size: 0.85rem !important;
+        font-weight: 500 !important;
+    }
+
+    /* Icono calendario más discreto */
+    :host ::ng-deep .fecha-rango .mat-datepicker-toggle-default-icon {
+        font-size: 22px !important;
+        width: 22px !important;
+        height: 22px !important;
+    }
+}
+
+
+
+
+
+/* ---------------- Icono de "Ver" en columna de acciones ---------------- */
+/* Ícono cuando es móvil */
+.icon-movil {
+    color: #1976d2 !important;
+    /* Verde Google */
+}
+
+/* Ícono cuando es web */
+.icon-web {
+    color: #4086ff !important;
+    /* Azul Google */
+}
+
+
+/* ---------------- Caja del total VAG XPRESS ---------------- */
+.total-box {
+    background: linear-gradient(135deg, #000000 0%, #1a1a1a 100%);
+    padding: 15px 30px;
+    border-radius: 12px;
+    box-shadow:
+        0 4px 12px rgba(0, 0, 0, 0.5),
+        0 0 20px rgba(255, 0, 0, 0.3),
+        inset 0 1px 2px rgba(255, 0, 0, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+    border: 2px solid rgba(255, 0, 0, 0.4);
+    border-left: 5px solid #FF0000;
+    height: fit-content;
+    min-width: 200px;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+    margin-left: auto;
+    margin-right: 20px;
+
+    &::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: linear-gradient(90deg, transparent, #FF0000 20%, #FF0000 80%, transparent);
+        box-shadow: 0 0 10px rgba(255, 0, 0, 0.8);
+    }
+
+    &:hover {
+        transform: translateY(-3px) scale(1.02);
+        box-shadow:
+            0 8px 24px rgba(0, 0, 0, 0.6),
+            0 0 35px rgba(255, 0, 0, 0.5),
+            inset 0 1px 2px rgba(255, 0, 0, 0.2);
+        border-color: #FF0000;
+    }
+
+    .label {
+        font-weight: 700;
+        font-size: 16px;
+        color: #cccccc;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+    }
+
+    .amount {
+        font-weight: 800;
+        font-size: 24px;
+        color: #FF0000;
+        font-family: 'Courier New', monospace;
+        text-shadow:
+            0 0 15px rgba(255, 0, 0, 0.6),
+            0 2px 4px rgba(0, 0, 0, 0.8);
+        letter-spacing: 1px;
+    }
+}
+
+
+/* ==================== RESPONSIVE MÓVIL ==================== */
+@media (max-width: 600px) {
+    :host ::ng-deep .mt-3.mat-mdc-form-field {
+        min-width: 130px;
+        max-width: 150px;
+        margin-right: 4px;
+    }
+
+    /* Calendario en móvil más compacto */
+    :host ::ng-deep .mat-datepicker-content {
+        max-width: 340px;
+    }
+
+    :host ::ng-deep .mat-calendar-content {
+        padding: 12px;
+    }
+
+    :host ::ng-deep .mat-calendar-body-cell-content {
+        width: 36px;
+        height: 36px;
+        line-height: 36px;
+        font-size: 0.9rem;
+    }
+
+    :host ::ng-deep .mat-calendar-table-header th {
+        font-size: 0.8rem;
+        padding: 8px 0;
+    }
+}
