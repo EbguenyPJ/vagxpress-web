@@ -1,0 +1,627 @@
+// ==================== DIALOG DETALLE GASTO - ESTILO EMPLEADOS ====================
+
+:host {
+
+    // ==================== CONTENEDOR PRINCIPAL ====================
+    .dialogContainer {
+        position: relative;
+        background-color: rgba(177, 18, 38, 0.15);
+        padding: 20px;
+        border-radius: 16px;
+        overflow-y: auto;
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+
+        &::-webkit-scrollbar {
+            display: none;
+        }
+    }
+
+    // ==================== HEADER ====================
+    .modalHeader {
+        background: linear-gradient(135deg, #7f0c19 0%, #b11226 50%, #e53935 100%);
+        border-radius: 12px;
+        padding: 1rem;
+        text-align: center;
+        position: relative;
+        z-index: 2;
+        box-shadow: 0 6px 20px rgba(30, 30, 30, 0.5);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 20px;
+
+        h2 {
+            font-size: 2rem;
+            color: #ffffff;
+            margin: 0;
+            font-weight: 700;
+            text-shadow: 0 3px 6px rgba(30, 30, 30, 0.6);
+            letter-spacing: 0.5px;
+        }
+    }
+
+    // ==================== BOTÓN CERRAR ====================
+    .modal-close-button {
+        background-color: rgba(255, 255, 255, 0.2) !important;
+        width: 35px;
+        height: 35px;
+        position: absolute;
+        top: 50%;
+        right: 20px;
+        transform: translateY(-50%);
+        z-index: 10;
+        padding: 0;
+        border-radius: 50%;
+        color: #ffffff;
+        display: flex !important;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.3s ease;
+        border: 2px solid rgba(255, 255, 255, 0.4);
+        backdrop-filter: blur(10px);
+
+        mat-icon {
+            font-size: 22px;
+            color: #ffffff;
+        }
+
+        &:hover {
+            background-color: rgba(255, 255, 255, 0.35) !important;
+            transform: translateY(-50%) scale(1.1) rotate(90deg);
+            border-color: #ffffff;
+            box-shadow: 0 4px 16px rgba(255, 255, 255, 0.3);
+        }
+
+        &:active {
+            transform: translateY(-50%) scale(1.05) rotate(90deg);
+        }
+    }
+
+    // ==================== CONTENIDO ====================
+    .modalContent {
+        background-color: rgba(50, 50, 50, 0.95);
+        border-radius: 12px;
+        padding: 20px;
+        box-shadow: 0 6px 20px rgba(30, 30, 30, 0.4);
+    }
+
+    // ==================== LAYOUT PRINCIPAL ====================
+    .main-layout {
+        display: flex;
+        gap: 24px;
+        align-items: flex-start;
+
+        @media (max-width: 992px) {
+            flex-direction: column;
+        }
+    }
+
+    // ==================== TICKET (IZQUIERDA) ====================
+    .ticket-container {
+        flex: 1;
+        background: linear-gradient(135deg, #ffffff 0%, #f5f5f5 100%);
+        border-radius: 16px;
+        box-shadow: 0 8px 24px rgba(30, 30, 30, 0.3);
+        overflow: hidden;
+        position: relative;
+    }
+
+    .ticket-edge {
+        height: 20px;
+        background: linear-gradient(135deg, #7f0c19 0%, #b11226 50%, #e53935 100%);
+        position: relative;
+
+        &.top {
+            &::after {
+                content: '';
+                position: absolute;
+                bottom: -10px;
+                left: 0;
+                right: 0;
+                height: 10px;
+                background: radial-gradient(circle at 10px -5px, transparent 10px, #ffffff 10px);
+                background-size: 20px 20px;
+                background-position: 0 0;
+            }
+        }
+
+        &.bottom {
+            &::before {
+                content: '';
+                position: absolute;
+                top: -10px;
+                left: 0;
+                right: 0;
+                height: 10px;
+                background: radial-gradient(circle at 10px 15px, transparent 10px, #ffffff 10px);
+                background-size: 20px 20px;
+                background-position: 0 0;
+            }
+        }
+    }
+
+    .ticket-body {
+        padding: 24px;
+        background: #ffffff;
+    }
+
+    .ticket-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin: 12px 0;
+
+        &.origen-row {
+            margin-top: 16px;
+        }
+    }
+
+    .ticket-label {
+        color: #1e1e1e;
+        font-weight: 700;
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    .ticket-value {
+        color: #444444;
+        font-weight: 500;
+        font-size: 0.95rem;
+        text-align: right;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+
+        mat-icon {
+            font-size: 20px;
+            width: 20px;
+            height: 20px;
+        }
+    }
+
+    .ticket-divider {
+        height: 1px;
+        background: linear-gradient(90deg, transparent, #e0e0e0, transparent);
+        margin: 8px 0;
+    }
+
+    .ticket-total-divider {
+        height: 2px;
+        background: linear-gradient(135deg, #7f0c19 0%, #b11226 50%, #e53935 100%);
+        margin: 16px 0;
+        box-shadow: 0 2px 6px rgba(177, 18, 38, 0.3);
+    }
+
+    .ticket-total {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 16px;
+        background: linear-gradient(135deg, rgba(127, 12, 25, 0.1) 0%, rgba(177, 18, 38, 0.1) 100%);
+        border-radius: 12px;
+        margin-top: 12px;
+    }
+
+    .total-label {
+        color: #b11226;
+        font-weight: 900;
+        font-size: 1.3rem;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        text-shadow: 0 2px 4px rgba(177, 18, 38, 0.2);
+    }
+
+    .total-value {
+        color: #7f0c19;
+        font-weight: 900;
+        font-size: 1.8rem;
+        text-shadow: 0 2px 6px rgba(127, 12, 25, 0.3);
+    }
+
+    // ==================== EVIDENCIA (DERECHA) ====================
+    .evidence-section {
+        flex: 1;
+        background: #ffffff;
+        border-radius: 12px;
+        padding: 20px;
+        box-shadow: 0 6px 20px rgba(30, 30, 30, 0.3);
+    }
+
+    .section-title {
+        color: #b11226;
+        font-weight: 900;
+        font-size: 1.5rem;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        margin: 0 0 20px 0;
+        text-align: center;
+        text-shadow: 0 2px 4px rgba(177, 18, 38, 0.2);
+        padding-bottom: 12px;
+        border-bottom: 3px solid;
+        border-image: linear-gradient(90deg, transparent, #b11226, transparent) 1;
+    }
+
+    .file-type {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 16px;
+        background: linear-gradient(135deg, rgba(127, 12, 25, 0.1) 0%, rgba(177, 18, 38, 0.1) 100%);
+        border-radius: 10px;
+        margin-bottom: 16px;
+        box-shadow: 0 2px 8px rgba(177, 18, 38, 0.15);
+    }
+
+    .file-icon {
+        font-size: 32px;
+        width: 32px;
+        height: 32px;
+        color: #b11226;
+        filter: drop-shadow(0 2px 4px rgba(177, 18, 38, 0.3));
+    }
+
+    .file-text {
+        color: #1e1e1e;
+        font-weight: 700;
+        font-size: 1.1rem;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    // ==================== CONTENEDOR DE EVIDENCIA ====================
+    .evidence-container {
+        margin-top: 20px;
+    }
+
+    .evidence-preview {
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0 6px 20px rgba(30, 30, 30, 0.2);
+        background: #f5f5f5;
+    }
+
+    .img-container {
+        img {
+            width: 100%;
+            height: auto;
+            display: block;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+
+            &:hover {
+                transform: scale(1.05);
+            }
+        }
+    }
+
+    .video-container {
+        video {
+            width: 100%;
+            height: auto;
+            display: block;
+            border-radius: 12px;
+        }
+    }
+
+    .audio-container {
+        padding: 20px;
+        background: #ffffff;
+        border-radius: 12px;
+        box-shadow: 0 4px 12px rgba(30, 30, 30, 0.15);
+
+        audio {
+            width: 100%;
+        }
+    }
+
+    .doc-container {
+        padding: 24px;
+        text-align: center;
+        background: linear-gradient(135deg, #f5f5f5, #ffffff);
+        border-radius: 12px;
+        box-shadow: 0 4px 12px rgba(30, 30, 30, 0.15);
+    }
+
+    .doc-info {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 20px;
+    }
+
+    .doc-icon {
+        font-size: 64px;
+        width: 64px;
+        height: 64px;
+
+        &.pdf-icon {
+            color: #d32f2f;
+        }
+
+        &.excel-icon {
+            color: #217346;
+        }
+
+        &.word-icon {
+            color: #2b579a;
+        }
+    }
+
+    .file-extension {
+        color: #1e1e1e;
+        font-weight: 900;
+        font-size: 1.5rem;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+
+    .doc-container button {
+        background: linear-gradient(135deg, #7f0c19 0%, #b11226 50%, #e53935 100%) !important;
+        color: #ffffff !important;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        padding: 12px 32px;
+        border-radius: 10px;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 12px rgba(177, 18, 38, 0.3);
+        position: relative;
+        overflow: hidden;
+
+        &::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: left 0.5s;
+        }
+
+        &:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(177, 18, 38, 0.6);
+
+            &::before {
+                left: 100%;
+            }
+        }
+
+        &:active {
+            transform: translateY(-1px);
+        }
+    }
+
+    .no-evidence {
+        padding: 40px;
+        text-align: center;
+        color: #888888;
+
+        mat-icon {
+            font-size: 64px;
+            width: 64px;
+            height: 64px;
+            color: #b0b0b0;
+            margin-bottom: 16px;
+        }
+
+        p {
+            font-size: 1.1rem;
+            font-weight: 500;
+            margin: 0;
+        }
+    }
+
+    // ==================== OVERLAY IMAGEN ====================
+    .overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.95);
+        z-index: 9999;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        backdrop-filter: blur(10px);
+
+        &.animated-overlay {
+            animation: fadeIn 0.3s ease;
+        }
+    }
+
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+        }
+
+        to {
+            opacity: 1;
+        }
+    }
+
+    .img-wrapper {
+        position: relative;
+        max-width: 90%;
+        max-height: 90vh;
+        animation: zoomIn 0.3s ease;
+    }
+
+    @keyframes zoomIn {
+        from {
+            transform: scale(0.8);
+            opacity: 0;
+        }
+
+        to {
+            transform: scale(1);
+            opacity: 1;
+        }
+    }
+
+    .overlay-img {
+        max-width: 100%;
+        max-height: 90vh;
+        border-radius: 12px;
+        box-shadow: 0 12px 48px rgba(0, 0, 0, 0.5);
+    }
+
+    .btn-cerrar {
+        position: absolute;
+        top: -15px;
+        right: -15px;
+        background: linear-gradient(135deg, #7f0c19 0%, #b11226 50%, #e53935 100%);
+        color: #ffffff;
+        border: 3px solid #ffffff;
+        border-radius: 50%;
+        width: 45px;
+        height: 45px;
+        font-size: 28px;
+        font-weight: 700;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 4px 16px rgba(177, 18, 38, 0.5);
+        transition: all 0.3s ease;
+
+        &:hover {
+            transform: scale(1.15) rotate(90deg);
+            box-shadow: 0 6px 24px rgba(177, 18, 38, 0.7);
+        }
+
+        &:active {
+            transform: scale(1.05) rotate(90deg);
+        }
+    }
+
+    // ==================== RESPONSIVE ====================
+    @media (max-width: 992px) {
+        .main-layout {
+            flex-direction: column;
+        }
+
+        .ticket-container,
+        .evidence-section {
+            width: 100%;
+        }
+    }
+
+    @media (max-width: 768px) {
+        .dialogContainer {
+            padding: 15px;
+        }
+
+        .modalHeader {
+            h2 {
+                font-size: 1.5rem;
+            }
+        }
+
+        .modal-close-button {
+            width: 32px;
+            height: 32px;
+
+            mat-icon {
+                font-size: 20px;
+            }
+        }
+
+        .modalContent {
+            padding: 15px;
+        }
+
+        .ticket-body {
+            padding: 16px;
+        }
+
+        .total-label {
+            font-size: 1.1rem;
+        }
+
+        .total-value {
+            font-size: 1.5rem;
+        }
+
+        .section-title {
+            font-size: 1.2rem;
+        }
+    }
+
+    @media (max-width: 576px) {
+        .dialogContainer {
+            padding: 10px;
+        }
+
+        .modalHeader {
+            padding: 0.75rem;
+
+            h2 {
+                font-size: 1.25rem;
+            }
+        }
+
+        .modal-close-button {
+            width: 30px;
+            height: 30px;
+            right: 15px;
+
+            mat-icon {
+                font-size: 18px;
+            }
+        }
+
+        .modalContent {
+            padding: 12px;
+        }
+
+        .main-layout {
+            gap: 16px;
+        }
+
+        .ticket-body {
+            padding: 12px;
+        }
+
+        .ticket-row {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 4px;
+        }
+
+        .ticket-value {
+            text-align: left;
+        }
+
+        .total-label {
+            font-size: 1rem;
+        }
+
+        .total-value {
+            font-size: 1.3rem;
+        }
+
+        .section-title {
+            font-size: 1rem;
+        }
+
+        .evidence-section {
+            padding: 15px;
+        }
+
+        .doc-icon {
+            font-size: 48px;
+            width: 48px;
+            height: 48px;
+        }
+
+        .file-extension {
+            font-size: 1.2rem;
+        }
+    }
+}

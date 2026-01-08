@@ -26,9 +26,12 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatCardModule } from '@angular/material/card';
+import { DashboardService } from 'app/services/dashboard/dashboard.service';
 import { NewOrderListComponent } from '@shared/components/new-order-list/new-order-list.component';
 import { DocumentListComponent } from '@shared/components/document-list/document-list.component';
 import { TableCardComponent } from '@shared/components/table-card/table-card.component';
+import { CommonModule } from '@angular/common';
+
 export type chartOptions = {
   series: ApexAxisChartSeries;
   series2: ApexNonAxisChartSeries;
@@ -63,9 +66,33 @@ export type chartOptions = {
     NewOrderListComponent,
     DocumentListComponent,
     TableCardComponent,
+    CommonModule
   ],
 })
 export class MainComponent {
+  totalOrdenes: number = 0;
+  totalOrdenesReparto: number = 0;
+  totalOrdenesCompraHoy: number = 0;
+  totalRequisicionesAprobadasHoy: number = 0;
+  topClientes: any[] = [];
+  topRefaccionesCriticas: any[] = [];
+  topMas: any[] = [];
+  topMenos: any[] = [];
+  acumuladoVentasHoy: number = 0;
+
+  fechaHoraActual!: Date;
+  private intervaloId!: any;
+
+  ventasPorMetodoHoy: any[] = [];
+  topRefaccionistas: any[] = [];
+
+  public topProveedoresChartOptions: any;
+
+
+
+
+
+
   @ViewChild('chart') chart?: ChartComponent;
   public areaChartOptions!: Partial<chartOptions>;
   public barChartOptions!: Partial<chartOptions>;
@@ -92,162 +119,180 @@ export class MainComponent {
     75.5: { color: 'red' },
   };
 
-  constructor() {
-    this.chart1();
+  constructor(private DashboardService: DashboardService) {
+    //this.chart1();
+    this.chartVentas();
     this.chart2();
     this.smallChart();
     this.smallChart2();
+    this.TopProveedoresActivosChart();
   }
-  private chart1() {
-    let ts2 = 1484418600000;
-    const dates = [];
-    for (let i = 0; i < 120; i++) {
-      ts2 = ts2 + 86400000;
-      dates.push([ts2, dataSeries[1][i].value]);
-    }
-    this.areaChartOptions = {
-      series: [
-        {
-          name: 'Booking Per Day',
-          data: dates,
-        },
-      ],
-      chart: {
-        type: 'area',
-        stacked: false,
-        height: 250,
-        toolbar: {
-          show: true,
-        },
-        foreColor: '#9aa0ac',
-      },
-      colors: ['#9F8DF1', '#E79A3B'],
-      dataLabels: {
-        enabled: false,
-      },
-      markers: {
-        size: 0,
-      },
-      fill: {
-        type: 'gradient',
-        gradient: {
-          shadeIntensity: 1,
-          inverseColors: false,
-          opacityFrom: 0.5,
-          opacityTo: 0,
-        },
-      },
-      stroke: {
-        curve: 'smooth',
-      },
-      yaxis: {
-        labels: {
-          formatter: function (val) {
-            return (val / 1000000).toFixed(0);
-          },
-        },
-        title: {
-          text: 'Booking',
-        },
-      },
-      xaxis: {
-        type: 'datetime',
-      },
-      legend: {
-        show: true,
-        position: 'top',
-        horizontalAlign: 'center',
-        offsetX: 0,
-        offsetY: 0,
-      },
 
-      tooltip: {
-        theme: 'dark',
-        marker: {
-          show: true,
+  ngOnInit(): void {
+    this.fechaHoraActual = new Date();
+    this.intervaloId = setInterval(() => {
+      this.fechaHoraActual = new Date();
+    }, 1000);
+
+    this.cargarTotalOrdenes();
+    this.cargarOrdenesEnRepartoHoy();
+    this.cargarOrdenesCompraHoy();
+    this.cargarRequisicionesAprobadasHoy();
+    this.cargarTopClientes();
+    this.cargarAcumuladoVentasHoy();
+    this.cargarTopRefaccionistas();
+    this.TopRefaccionesCriticas();
+  }
+
+
+
+
+  private chartVentas(): void {
+
+    this.DashboardService.getVentasPagadasPorDia("").subscribe((data: [number, number][]) => {
+
+      setTimeout(() => {
+        this.chart?.updateOptions(this.areaChartOptions!, true, true);
+      }, 100);
+
+      this.areaChartOptions = {
+        series: [
+          {
+            name: 'Ventas pagadas',
+            data: data
+          }
+        ],
+        chart: {
+          type: 'area',
+          stacked: false,
+          height: 250,
+          toolbar: {
+            show: true
+          },
+          foreColor: '#fefcfcff'
         },
-        x: {
-          show: true,
+        colors: ['#e53935'], // 🔴 rojo
+        dataLabels: {
+          enabled: false
         },
-        y: {
-          formatter: function (val) {
-            return (val / 1000000).toFixed(0);
+        markers: {
+          size: 0
+        },
+        fill: {
+          type: 'gradient',
+          gradient: {
+            shadeIntensity: 1,
+            inverseColors: false,
+            opacityFrom: 0.5,
+            opacityTo: 0
+          }
+        },
+        stroke: {
+          curve: 'smooth'
+        },
+        yaxis: {
+          labels: {
+            formatter: (val: number) => val.toFixed(0)
+          },
+          title: {
+            text: 'Ventas'
+          }
+        },
+        xaxis: {
+          type: 'datetime',
+          min: new Date(new Date().setMonth(new Date().getMonth() - 1)).getTime(),
+          max: new Date().getTime(),
+          labels: { datetimeUTC: true }
+        },
+        legend: {
+          show: true,
+          position: 'top',
+          horizontalAlign: 'center'
+        },
+        tooltip: {
+          theme: 'dark',
+          marker: {
+            show: true
+          },
+          x: {
+            show: true
+          },
+          y: {
+            formatter: (val: number) => val.toFixed(0)
+          }
+        }
+      };
+
+    });
+  }
+
+
+
+private chart2() {
+  const token = localStorage.getItem('token') || '';
+
+  this.DashboardService.getTop5Refacciones(token).subscribe((resp: any) => {
+    if (resp) {
+      this.topMas = resp.top_mas;     // top 5 más vendidos
+      this.topMenos = resp.top_menos; // top 5 menos vendidos
+
+      this.barChartOptions = {
+        series: [
+          {
+            name: 'Más Vendidos',
+            data: this.topMas.map(item => +item.total_vendida),
+          },
+        ],
+        chart: {
+          type: 'bar',
+          height: 350,
+          toolbar: { show: false },
+        },
+        plotOptions: {
+          bar: {
+            horizontal: false,      // barras verticales
+            columnWidth: '50%',
+            borderRadius: 5,        // bordes redondeados
           },
         },
-      },
-    };
-  }
-  private chart2() {
-    this.barChartOptions = {
-      series: [
-        {
-          name: 'Net Profit',
-          data: [44, 55, 57, 56, 61, 58],
+        colors: ['#FF4C4C'],       // color rojo uniforme
+        dataLabels: {
+          enabled: true,            // mostrar números en las barras
+          style: {
+            colors: ['#ffffff'],    // color de los números dentro de las barras (blanco)
+            fontWeight: 'bold',
+          },
+          formatter: (val: number) => val.toString()
         },
-        {
-          name: 'Revenue',
-          data: [76, 85, 101, 98, 87, 105],
-        },
-      ],
-      chart: {
-        type: 'bar',
-        height: 350,
-        toolbar: {
-          show: false,
-        },
-        dropShadow: {
-          enabled: true,
-          color: '#000',
-          top: 18,
-          left: 7,
-          blur: 10,
-          opacity: 0.2,
-        },
-        foreColor: '#9aa0ac',
-      },
-      colors: ['#5C9FFB', '#AEAEAE'],
-      plotOptions: {
-        bar: {
-          horizontal: false,
-          columnWidth: '50%',
-          borderRadius: 5,
-        },
-      },
-      legend: {
-        show: false,
-      },
-      dataLabels: {
-        enabled: false,
-      },
-      stroke: {
-        show: true,
-        width: 2,
-        colors: ['transparent'],
-      },
-      xaxis: {
-        categories: ['jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
-      },
-      yaxis: {
-        title: {
-          text: '$ (thousands)',
-        },
-      },
-      tooltip: {
-        theme: 'dark',
-        marker: {
+        stroke: {
           show: true,
+          width: 2,
+          colors: ['transparent'],
         },
-        x: {
-          show: true,
+        xaxis: {
+          categories: this.topMas.map(item => item.s_nombre_refaccion),
         },
-        y: {
-          formatter: function (val) {
-            return '$ ' + val + ' thousands';
+        yaxis: {
+          title: { text: 'Cantidad Vendida' },
+        },
+        legend: { show: false },
+        tooltip: {
+          y: {
+            formatter: (val: number) => val + ' unidades',
           },
         },
-      },
-    };
-  }
+      };
+    }
+  });
+}
+
+
+
+
+
+
+
+
   private smallChart() {
     this.circleChartOptions = {
       series2: [76, 67, 61, 90],
@@ -307,200 +352,313 @@ export class MainComponent {
       ],
     };
   }
+
+
+
   private smallChart2() {
-    this.pieChartOptions = {
-      series2: [44, 55, 13, 43, 22],
-      chart: {
-        type: 'donut',
-        width: 200,
+    const token = localStorage.getItem('token') || '';
+
+    this.DashboardService.getVentasMetodosPagosHoy(token).subscribe({
+      next: (resp) => {
+        if (resp && resp.ventas_por_metodo_pago_hoy) {
+          const data = resp.ventas_por_metodo_pago_hoy;
+
+          this.pieChartOptions = {
+            series2: data.map((item: any) =>
+              Number(item.total_ventas)
+            ),
+            chart: {
+              type: 'donut',
+              width: 400,
+            },
+            labels: data.map((item: any) =>
+              item.s_metodo_pago
+            ),
+            legend: {
+              show: true,
+              position: 'bottom',
+            },
+            dataLabels: {
+              enabled: false,
+            },
+            responsive: [
+              {
+                breakpoint: 480,
+                options: {
+                  chart: {
+                    width: 180,
+                  },
+                  legend: {
+                    show: false,
+                  },
+                },
+              },
+            ],
+          };
+        }
       },
-      legend: {
-        show: false,
-      },
-      dataLabels: {
-        enabled: false,
-      },
-      labels: ['Science', 'Mathes', 'Economics', 'History', 'Music'],
-      responsive: [
-        {
-          breakpoint: 480,
-          options: {},
-        },
-      ],
-    };
+      error: (err) => {
+        console.error('Error ventas por método de pago', err);
+      }
+    });
   }
 
-  // document list
 
-  documentList = [
-    {
-      title: 'Java Programming',
-      type: '.doc',
-      size: 4.3,
-      icon: 'far fa-file-word',
-      iconClass: 'primary-rgba text-primary',
-      textClass: '',
-    },
-    {
-      title: 'Angular Theory',
-      type: '.xls',
-      size: 2.5,
-      icon: 'far fa-file-excel',
-      iconClass: 'success-rgba text-success',
-      textClass: '',
-    },
-    {
-      title: 'Maths Sums Solution',
-      type: '.pdf',
-      size: 10.5,
-      icon: 'far fa-file-pdf',
-      iconClass: 'danger-rgba text-danger',
-      textClass: '',
-    },
-    {
-      title: 'Submit Science Journal',
-      type: '.zip',
-      size: 53.2,
-      icon: 'far fa-file-archive',
-      iconClass: 'info-rgba text-info',
-      textClass: '',
-    },
-    {
-      title: 'Marketing Instructions',
-      type: '.doc',
-      size: 5.3,
-      icon: 'far fa-file-word',
-      iconClass: 'primary-rgba text-primary',
-      textClass: '',
-    },
-  ];
+  private cargarTopRefaccionistas(): void {
+    const token = localStorage.getItem('token') || '';
 
-  // recent order data
+    this.DashboardService.getRefaccionistaMasVentas(token).subscribe({
+      next: (resp: any) => {
+        console.log('RESPUESTA 👉', resp);
 
-  orderData = [
-    {
-      id: 'ID7865',
-      name: 'Jens Brincker',
-      phone: '(123)123456',
-      address: 'Customer Address',
-      item: 'iPhone X',
-      orderDate: '05/22/2021',
-      quantity: 2,
-      paymentMethod: 'Credit Card',
-      status: 'Paid',
-      invoice: 'download link',
-      img: 'assets/images/user/user1.jpg',
-      detailsButton: 'Details',
-    },
-    {
-      id: 'ID9357',
-      name: 'Mark Harry',
-      phone: '(123)123456',
-      address: 'Customer Address',
-      item: 'Pixel 2',
-      orderDate: '06/12/2021',
-      quantity: 1,
-      paymentMethod: 'COD',
-      status: 'Unpaid',
-      invoice: 'download link',
-      img: 'assets/images/user/user2.jpg',
-      detailsButton: 'Details',
-    },
-    {
-      id: 'ID3987',
-      name: 'Anthony Davie',
-      phone: '(123)123456',
-      address: 'Customer Address',
-      item: 'OnePlus',
-      orderDate: '02/02/2021',
-      quantity: 5,
-      paymentMethod: 'Debit Card',
-      status: 'Pending',
-      invoice: 'download link',
-      img: 'assets/images/user/user3.jpg',
-      detailsButton: 'Details',
-    },
-    {
-      id: 'ID2483',
-      name: 'David Perry',
-      phone: '(123)123456',
-      address: 'Customer Address',
-      item: 'Moto Z2',
-      orderDate: '01/10/2021',
-      quantity: 2,
-      paymentMethod: 'Credit Card',
-      status: 'Paid',
-      invoice: 'download link',
-      img: 'assets/images/user/user4.jpg',
-      detailsButton: 'Details',
-    },
-    {
-      id: 'ID2986',
-      name: 'John Doe',
-      phone: '(123)123456',
-      address: 'Customer Address',
-      item: 'Samsung F62',
-      orderDate: '05/20/2021',
-      quantity: 3,
-      paymentMethod: 'Net Banking',
-      status: 'Unpaid',
-      invoice: 'download link',
-      img: 'assets/images/user/user5.jpg',
-      detailsButton: 'Details',
-    },
-    {
-      id: 'ID1267',
-      name: 'Sarah Smith',
-      phone: '(123)123456',
-      address: 'Customer Address',
-      item: 'iPhone 12',
-      orderDate: '07/10/2021',
-      quantity: 1,
-      paymentMethod: 'COD',
-      status: 'Paid',
-      invoice: 'download link',
-      img: 'assets/images/user/user6.jpg',
-      detailsButton: 'Details',
-    },
-    {
-      id: 'ID3398',
-      name: 'Cara Stevens',
-      phone: '(123)123456',
-      address: 'Customer Address',
-      item: 'Moto Gs5',
-      orderDate: '04/11/2021',
-      quantity: 2,
-      paymentMethod: 'UPI Payment',
-      status: 'Pending',
-      invoice: 'download link',
-      img: 'assets/images/user/user7.jpg',
-      detailsButton: 'Details',
-    },
-    {
-      id: 'ID9965',
-      name: 'Ashton Cox',
-      phone: '(123)123456',
-      address: 'Customer Address',
-      item: 'Pixel 2',
-      orderDate: '05/14/2021',
-      quantity: 4,
-      paymentMethod: 'Credit Card',
-      status: 'Paid',
-      invoice: 'download link',
-      img: 'assets/images/user/user8.jpg',
-      detailsButton: 'Details',
-    },
-  ];
+        if (
+          resp &&
+          resp.top_5_refaccionistas_ingresos &&
+          resp.top_5_refaccionistas_ingresos.length > 0
+        ) {
+          this.topRefaccionistas = resp.top_5_refaccionistas_ingresos.map(
+            (item: any) => ({
+              id: item.id_usuario,
+              nombre: item.refaccionista,
+              totalVentas: item.total_ventas,
+              montoTotal: Number(item.monto_total_vendido)
+            })
+          );
+        } else {
+          this.topRefaccionistas = [];
+        }
+      },
+      error: (err) => {
+        console.error('Error al cargar top refaccionistas', err);
+        this.topRefaccionistas = [];
+      }
+    });
+  }
 
-  orderColumnDefinitions = [
-    { def: 'id', label: 'Order ID', type: 'text' },
-    { def: 'name', label: 'Customer Name', type: 'text' },
-    { def: 'item', label: 'Item', type: 'text' },
-    { def: 'orderDate', label: 'Order Date', type: 'date' },
-    { def: 'quantity', label: 'Quantity', type: 'number' },
-    { def: 'paymentMethod', label: 'Payment', type: 'text' },
-    { def: 'status', label: 'Status', type: 'text' },
-    { def: 'invoice', label: 'Invoice', type: 'file' },
-    { def: 'detailsButton', label: 'Details', type: 'button' },
-  ];
+
+
+  cargarTotalOrdenes(): void {
+
+    const token = localStorage.getItem('token') || '';
+
+    this.DashboardService.getVentasHoy(token).subscribe({
+      next: (resp: any) => {
+        this.totalOrdenes = resp.total_ventas_hoy;
+      },
+      error: (err) => {
+        console.error('Error al obtener órdenes', err);
+      }
+    });
+  }
+
+
+  cargarOrdenesEnRepartoHoy(): void {
+
+    const token = localStorage.getItem('token') || '';
+
+    this.DashboardService.getOrdenesEnRepartoHoy(token).subscribe({
+      next: (resp) => {
+        console.log('REPARTOS HOY 🚚', resp);
+        this.totalOrdenesReparto = resp.total_ordenes_reparto_hoy;
+      },
+      error: (err) => {
+        console.error('Error al obtener repartos hoy ❌', err);
+      }
+    });
+  }
+
+
+
+  cargarOrdenesCompraHoy(): void {
+
+    const token = localStorage.getItem('token') || '';
+
+    this.DashboardService.getOrdenesCompraHoy(token).subscribe({
+      next: (resp) => {
+        console.log('ÓRDENES COMPRA HOY 🧾', resp);
+        this.totalOrdenesCompraHoy = resp.total_ordenes_compra_hoy;
+      },
+      error: (err) => {
+        console.error('ERROR ÓRDENES COMPRA HOY ❌', err);
+      }
+    });
+  }
+
+
+  cargarRequisicionesAprobadasHoy(): void {
+
+    const token = localStorage.getItem('token') || '';
+
+    this.DashboardService.getRequisicionesAprobadasHoy(token).subscribe({
+      next: (resp) => {
+        //console.log('REQUISICIONES APROBADAS HOY ✅', resp);
+        this.totalRequisicionesAprobadasHoy = resp.total_requisiciones_aprobadas_hoy;
+      },
+      error: (err) => {
+        console.error('ERROR REQUISICIONES HOY ', err);
+      }
+    });
+  }
+
+
+
+  cargarTopClientes(): void {
+    const token = localStorage.getItem('token') || '';
+
+    this.DashboardService.getTop5ClientesConMasVentas(token).subscribe({
+      next: (resp: any[]) => {
+        // Solo si resp es array
+        if (Array.isArray(resp)) {
+          this.topClientes = resp.map((item) => ({
+            nombre: item.s_nombre_cliente,
+            totalVentas: item.total_ventas,
+            montoTotal: item.monto_total
+          }));
+        }
+      },
+      error: (err) => {
+        console.error('Error al cargar top clientes', err);
+      }
+    });
+  }
+
+
+
+
+  TopRefaccionesCriticas(): void {
+    const token = localStorage.getItem('token') || '';
+
+    this.DashboardService.getRefaccionistaStockMinimo(token).subscribe({
+      next: (resp: any) => {
+        // resp es un objeto, no un array
+        const lista = resp?.top_5_refacciones_criticas;
+        if (Array.isArray(lista)) {
+          this.topRefaccionesCriticas = lista.map(item => ({
+            id: item.id_refaccion,
+            nombre: item.s_nombre_refaccion,
+            categoria: item.s_categoria_refaccion,
+            stockActual: item.n_stock_actual,
+            stockMinimo: item.n_stock_minimo,
+            stockMaximo: item.n_stock_maximo,
+            tiempoReposicion: item.n_tiempo_reposicion
+          }));
+        } else {
+          this.topRefaccionesCriticas = [];
+        }
+      },
+      error: (err) => {
+        console.error('Error al cargar top refacciones críticas', err);
+        this.topRefaccionesCriticas = [];
+      }
+    });
+  }
+
+
+
+
+
+
+
+  cargarAcumuladoVentasHoy(): void {
+    const token = localStorage.getItem('token') || '';
+
+    this.DashboardService.getVentasAcumuladasHoy(token).subscribe({
+      next: (resp: any) => {
+        this.acumuladoVentasHoy = resp.acumulado_ventas_hoy;
+      },
+      error: (err) => {
+        console.error('Error al cargar ventas acumuladas del día', err);
+      }
+    });
+  }
+
+
+
+  /* ----------- RELOJ ---------------- */
+  ngOnDestroy(): void {
+    if (this.intervaloId) {
+      clearInterval(this.intervaloId);
+    }
+  }
+
+  getHoraFormateada(): string {
+    return this.fechaHoraActual.toLocaleTimeString('es-MX', {
+      hour: '2-digit',
+      minute: '2-digit',
+      second: '2-digit',
+      hour12: true
+    });
+  }
+
+  getFechaFormateada(): string {
+    return this.fechaHoraActual.toLocaleDateString('es-MX', {
+      weekday: 'long',
+      day: '2-digit',
+      month: 'long',
+      year: 'numeric'
+    });
+  }
+
+
+  TopProveedoresActivosChart(): void {
+    const token = localStorage.getItem('token') || '';
+
+    this.DashboardService.getProveedoresActivos(token).subscribe({
+      next: (resp: any) => {
+        if (resp && resp.top_proveedores_refacciones) {
+          const proveedores = resp.top_proveedores_refacciones.map((item: any) => item.proveedor);
+          const refaccionesActivas = resp.top_proveedores_refacciones.map((item: any) => item.total_refacciones);
+
+          this.topProveedoresChartOptions = {
+            series: [
+              {
+                name: 'Refacciones Activas',
+                data: refaccionesActivas
+              }
+            ],
+            chart: {
+              type: 'bar',
+              height: 350
+            },
+            plotOptions: {
+              bar: {
+                horizontal: false,  // barras verticales
+                columnWidth: '50%'  // ancho de la barra
+              }
+            },
+            dataLabels: {
+              enabled: true
+            },
+            xaxis: {
+              categories: proveedores,
+              title: {
+                text: 'Proveedores'
+              }
+            },
+            yaxis: {
+              title: {
+                text: 'Total Refacciones'
+              }
+            },
+            colors: ['#FF4C4C'],  // rojo
+            tooltip: {
+              y: {
+                formatter: (val: number) => val.toString()
+              }
+            }
+          };
+        }
+      },
+      error: (err) => console.error('Error al cargar top proveedores', err)
+    });
+  }
+
+
+
+
+
 }
+
+
+
+

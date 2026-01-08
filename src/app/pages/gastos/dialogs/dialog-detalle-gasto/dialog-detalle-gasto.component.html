@@ -1,0 +1,204 @@
+<div class="dialogContainer" *ngIf="data">
+
+    <!-- ENCABEZADO -->
+    <div class="modalHeader">
+        <h2>DETALLE DEL GASTO</h2>
+        <button mat-icon-button class="modal-close-button" (click)="cerrar()">
+            <mat-icon>close</mat-icon>
+        </button>
+    </div>
+
+    <div class="modalContent">
+
+        <!-- LAYOUT PRINCIPAL -->
+        <div class="main-layout">
+
+            <!-- TICKET (IZQUIERDA) -->
+            <div class="ticket-container">
+
+                <div class="ticket-edge top"></div>
+
+                <div class="ticket-body">
+
+                    <div class="ticket-row">
+                        <span class="ticket-label">Concepto:</span>
+                        <span class="ticket-value">{{ data?.concepto }}</span>
+                    </div>
+
+                    <div class="ticket-divider"></div>
+
+                    <div class="ticket-row">
+                        <span class="ticket-label">Tipo de gasto:</span>
+                        <span class="ticket-value">{{ data?.tipo_gasto }}</span>
+                    </div>
+
+                    <div class="ticket-divider"></div>
+
+                    <!--<div class="ticket-row">
+                        <span class="ticket-label">Categoría:</span>
+                        <span class="ticket-value">{{ data?.categoria_gasto }}</span>
+                    </div>-->
+
+                    <div class="ticket-divider"></div>
+
+                    <div class="ticket-row">
+                        <span class="ticket-label">Cantidad:</span>
+                        <span class="ticket-value">{{ data?.cantidad }}</span>
+                    </div>
+
+                    <div class="ticket-divider"></div>
+
+                    <div class="ticket-row">
+                        <span class="ticket-label">Fecha:</span>
+                        <span class="ticket-value">{{ data?.fecha }}</span>
+                    </div>
+
+                    <div class="ticket-divider"></div>
+
+                    <!--<div class="ticket-row">
+                        <span class="ticket-label">Sucursal:</span>
+                        <span class="ticket-value">{{ data?.s_sucursal }}</span>
+                    </div>-->
+
+
+                    <div class="ticket-divider"></div>
+
+                    <div class="ticket-row">
+                        <span class="ticket-label">Creado por:</span>
+                        <span class="ticket-value">{{ data?.usuario_crea }}</span>
+                    </div>
+
+                    <div class="ticket-divider"></div>
+
+                    <div class="ticket-row">
+                        <span class="ticket-label">Fecha de creación:</span>
+                        <span class="ticket-value">{{ data?.fecha_creacion }}</span>
+                    </div>
+
+                    <div class="ticket-total-divider"></div>
+
+                    <div class="ticket-total">
+                        <span class="total-label">TOTAL:</span>
+                        <span class="total-value">
+                            {{ data?.costo | currency:'MXN':'symbol-narrow' }}
+                        </span>
+                    </div>
+
+                </div>
+
+                <div class="ticket-edge bottom"></div>
+
+            </div>
+
+            <!-- EVIDENCIA (DERECHA) -->
+            <div class="evidence-section">
+
+                <h3 class="section-title">EVIDENCIA</h3>
+
+                <!-- TIPO DE ARCHIVO -->
+                <div class="file-type">
+                    <mat-icon class="file-icon">
+                        <ng-container [ngSwitch]="data?.tipo_evidencia">
+                            <span *ngSwitchCase="1">image</span>
+                            <span *ngSwitchCase="2">movie</span>
+                            <span *ngSwitchCase="3">audiotrack</span>
+                            <span *ngSwitchCase="4">description</span>
+                            <span *ngSwitchDefault>info</span>
+                        </ng-container>
+                    </mat-icon>
+
+                    <span class="file-text">
+                        <ng-container [ngSwitch]="data?.tipo_evidencia">
+                            <span *ngSwitchCase="1">Imagen</span>
+                            <span *ngSwitchCase="2">Video</span>
+                            <span *ngSwitchCase="3">Audio</span>
+                            <span *ngSwitchCase="4">Documento</span>
+                            <span *ngSwitchDefault>Sin evidencia</span>
+                        </ng-container>
+                    </span>
+                </div>
+
+                <!-- ORIGEN -->
+                <div class="ticket-row origen-row">
+                    <span class="ticket-label">Origen:</span>
+                    <span class="ticket-value">
+                        <mat-icon *ngIf="data?.b_movil === 1" color="primary">smartphone</mat-icon>
+                        <mat-icon *ngIf="data?.b_movil === 0" color="accent">language</mat-icon>
+                    </span>
+                </div>
+
+                <div class="ticket-divider"></div>
+
+                <!-- CONTENIDO EVIDENCIA -->
+                <div class="evidence-container" [ngSwitch]="data?.tipo_evidencia">
+
+                    <!-- IMAGEN -->
+                    <div *ngSwitchCase="1" class="evidence-preview img-container">
+                        <img [src]="data?.url_evidencia" alt="Evidencia" (click)="verImagen(data?.url_evidencia)">
+                    </div>
+
+                    <!-- VIDEO -->
+                    <div *ngSwitchCase="2" class="evidence-preview video-container">
+                        <video controls>
+                            <source [src]="data?.url_evidencia" type="video/mp4">
+                        </video>
+                    </div>
+
+                    <!-- AUDIO -->
+                    <div *ngSwitchCase="3" class="audio-container">
+                        <audio controls>
+                            <source [src]="data?.url_evidencia">
+                        </audio>
+                    </div>
+
+                    <!-- DOCUMENTO -->
+                    <div *ngSwitchCase="4" class="doc-container">
+
+                        <div class="doc-info">
+                            <mat-icon class="doc-icon pdf-icon" *ngIf="data?.url_evidencia?.endsWith('.pdf')">
+                                picture_as_pdf
+                            </mat-icon>
+
+                            <mat-icon class="doc-icon excel-icon"
+                                *ngIf="data?.url_evidencia?.endsWith('.xls') || data?.url_evidencia?.endsWith('.xlsx')">
+                                grid_on
+                            </mat-icon>
+
+                            <mat-icon class="doc-icon word-icon"
+                                *ngIf="data?.url_evidencia?.endsWith('.doc') || data?.url_evidencia?.endsWith('.docx')">
+                                description
+                            </mat-icon>
+
+                            <span class="file-extension">
+                                {{ data?.url_evidencia?.split('.').pop()?.toUpperCase() || 'ARCHIVO' }}
+                            </span>
+                        </div>
+
+                        <button mat-raised-button color="primary" (click)="descargarDocumento()">
+                            Ver Documento
+                        </button>
+
+                    </div>
+
+                    <!-- SIN EVIDENCIA -->
+                    <div *ngSwitchDefault class="no-evidence">
+                        <mat-icon>info</mat-icon>
+                        <p>No hay evidencia adjunta</p>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- OVERLAY IMAGEN -->
+        <div class="overlay animated-overlay" *ngIf="mostrarOverlay">
+            <div class="img-wrapper">
+                <button class="btn-cerrar" (click)="cerrarOverlay()">×</button>
+                <img [src]="imagenGrande" class="overlay-img" />
+            </div>
+        </div>
+
+    </div>
+</div>

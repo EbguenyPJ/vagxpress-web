@@ -29,6 +29,7 @@ import { Direction } from '@angular/cdk/bidi';
 
 
 
+
 import { clientesModel } from 'app/models/clientesModel'
 import { conexion } from 'app/conexion';
 import { ClientesService } from 'app/services/clientes/clientes.service';
@@ -36,7 +37,10 @@ import { DiaologCrearClienteComponent } from './dialog/diaolog-crear-cliente/dia
 
 @Component({
   selector: 'app-clientes',
+  standalone: true,
   imports: [
+  BreadcrumbComponent,
+    FeatherIconsComponent,
     CommonModule,
     MatCardModule,
     MatFormFieldModule,
@@ -48,16 +52,13 @@ import { DiaologCrearClienteComponent } from './dialog/diaolog-crear-cliente/dia
     ReactiveFormsModule,
     FormsModule,
     MatOptionModule,
-    MatPaginator,
-    MatProgressSpinner,
-    MatHeaderCell,
-    MatCell,
-    BreadcrumbComponent, MatTableModule,
-    MatPaginatorModule,
+    MatCheckboxModule,
+    MatTableModule,
     MatSortModule,
-    MatCheckbox,
-    MatMenu,
-    FeatherIconsComponent
+    MatRippleModule,
+    MatProgressSpinnerModule,
+    MatMenuModule,
+    MatPaginatorModule,
 ],
   templateUrl: './clientes.component.html',
   styleUrl: './clientes.component.scss'

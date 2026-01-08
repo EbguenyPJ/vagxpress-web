@@ -1,0 +1,465 @@
+// ==================== DIALOG GASTOS - ESTILO EMPLEADOS ====================
+
+:host {
+
+    // ==================== CONTENEDOR PRINCIPAL ====================
+    .content-block {
+        position: relative;
+        background-color: rgba(177, 18, 38, 0.15);
+        padding: 20px;
+        border-radius: 16px;
+        overflow-y: auto;
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+
+        &::-webkit-scrollbar {
+            display: none;
+        }
+    }
+
+    // ==================== BOTÓN CERRAR ====================
+    .close-btn {
+        background-color: rgba(255, 255, 255, 0.2) !important;
+        width: 35px;
+        height: 35px;
+        position: absolute;
+        top: 28px;
+        right: 28px;
+        z-index: 10;
+        padding: 0;
+        border-radius: 50%;
+        color: #ffffff;
+        display: flex !important;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.3s ease;
+        border: 2px solid rgba(255, 255, 255, 0.4);
+        backdrop-filter: blur(10px);
+
+        mat-icon {
+            font-size: 22px;
+            color: #ffffff;
+        }
+
+        &:hover {
+            background-color: rgba(255, 255, 255, 0.35) !important;
+            transform: scale(1.1) rotate(90deg);
+            border-color: #ffffff;
+            box-shadow: 0 4px 16px rgba(255, 255, 255, 0.3);
+        }
+
+        &:active {
+            transform: scale(1.05) rotate(90deg);
+        }
+    }
+
+    // ==================== HEADER ====================
+    .block-header {
+        background: linear-gradient(135deg, #7f0c19 0%, #b11226 50%, #e53935 100%);
+        border-radius: 12px;
+        padding: 1rem;
+        text-align: center;
+        position: relative;
+        z-index: 2;
+        box-shadow: 0 6px 20px rgba(30, 30, 30, 0.5);
+
+        h2 {
+            font-size: 2rem;
+            color: #ffffff;
+            margin: 0;
+            font-weight: 700;
+            text-shadow: 0 3px 6px rgba(30, 30, 30, 0.6);
+            letter-spacing: 0.5px;
+
+            .title {
+                color: #ffffff;
+                font-weight: 700;
+            }
+
+            .sucursal-info {
+                color: #ffffff;
+                font-weight: 900;
+            }
+        }
+    }
+
+    // ==================== CONTENIDO ====================
+    .dialog-split-content {
+        margin-top: 15px;
+    }
+
+    .form-column {
+        width: 100%;
+    }
+
+    .scrollableContent {
+        max-height: 70vh;
+        overflow-y: auto;
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+
+        &::-webkit-scrollbar {
+            display: none;
+        }
+    }
+
+    // ==================== FORMULARIO ====================
+    form {
+        background-color: rgba(50, 50, 50, 0.95);
+        border-radius: 12px;
+        padding: 20px;
+        box-shadow: 0 6px 20px rgba(30, 30, 30, 0.4);
+    }
+
+    // ==================== LABELS ====================
+    .form-label {
+        color: #ffffff !important;
+        font-weight: 700;
+        font-size: 0.95rem;
+        margin-bottom: 8px;
+        display: block;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        text-shadow: 0 2px 4px rgba(30, 30, 30, 0.3);
+    }
+
+    // ==================== INPUTS Y SELECTS ====================
+    .form-control,
+    .form-select {
+        background-color: #ffffff;
+        color: #1e1e1e;
+        border: 2px solid transparent;
+        border-radius: 8px;
+        padding: 10px;
+        font-weight: 500;
+        font-size: 0.9rem;
+        transition: all 0.3s ease;
+        width: 100%;
+        box-shadow: 0 2px 6px rgba(30, 30, 30, 0.15);
+
+        &::placeholder {
+            color: rgba(30, 30, 30, 0.5);
+            font-weight: 500;
+            font-size: 0.85rem;
+        }
+
+        &:hover {
+            box-shadow: 0 3px 10px rgba(177, 18, 38, 0.2);
+            transform: translateY(-1px);
+        }
+
+        &:focus {
+            border-color: #b11226;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(177, 18, 38, 0.3);
+            transform: translateY(-2px);
+        }
+    }
+
+    // Select especial
+    .form-select {
+        cursor: pointer;
+        appearance: none;
+        background-image: url("data:image/svg+xml,%3Csvg width='14' height='8' viewBox='0 0 14 8' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1L7 7L13 1' stroke='%231e1e1e' stroke-width='2' stroke-linecap='round'/%3E%3C/svg%3E");
+        background-repeat: no-repeat;
+        background-position: right 15px center;
+        padding-right: 40px;
+
+        option {
+            background: #ffffff;
+            color: #1e1e1e;
+            padding: 10px;
+        }
+    }
+
+    // Input file especial
+    input[type="file"] {
+        cursor: pointer;
+
+        &::file-selector-button {
+            background: linear-gradient(135deg, #7f0c19 0%, #b11226 50%, #e53935 100%);
+            color: #ffffff;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-weight: 700;
+            cursor: pointer;
+            margin-right: 10px;
+            transition: all 0.3s ease;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            position: relative;
+            overflow: hidden;
+
+            &::before {
+                content: '';
+                position: absolute;
+                top: 0;
+                left: -100%;
+                width: 100%;
+                height: 100%;
+                background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+                transition: left 0.5s;
+            }
+
+            &:hover {
+                box-shadow: 0 4px 12px rgba(177, 18, 38, 0.5);
+                transform: translateY(-2px);
+
+                &::before {
+                    left: 100%;
+                }
+            }
+
+            &:active {
+                transform: translateY(0);
+            }
+        }
+    }
+
+    // Icono del input file
+    svg {
+        color: #b11226 !important;
+        filter: drop-shadow(0 2px 4px rgba(177, 18, 38, 0.3));
+    }
+
+    // ==================== MENSAJES DE ERROR ====================
+    .text-warning {
+        color: #e53935 !important;
+        font-weight: 600;
+        font-size: 0.85rem;
+        margin-top: 6px;
+        text-shadow: 0 1px 3px rgba(30, 30, 30, 0.3);
+        display: block;
+    }
+
+    // ==================== BOTONES ====================
+    .formSubmitBtn,
+    .formSubmitBtnCancelar {
+        padding: 12px 32px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        border-radius: 10px;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        box-shadow: 0 4px 12px rgba(30, 30, 30, 0.3);
+        border: none;
+        cursor: pointer;
+    }
+
+    // Botón Guardar
+    .formSubmitBtn {
+        background: linear-gradient(135deg, #7f0c19 0%, #b11226 50%, #e53935 100%) !important;
+        color: #ffffff !important;
+        position: relative;
+        overflow: hidden;
+
+        &::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: left 0.5s;
+        }
+
+        &:hover:not(:disabled) {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(177, 18, 38, 0.6);
+
+            &::before {
+                left: 100%;
+            }
+        }
+
+        &:active:not(:disabled) {
+            transform: translateY(-1px);
+        }
+
+        &:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+    }
+
+    // Botón Cancelar
+    .formSubmitBtnCancelar {
+        background: linear-gradient(135deg, #1e1e1e, #444444) !important;
+        color: #ffffff !important;
+
+        &:hover {
+            background: linear-gradient(135deg, #444444, #5a5a5a) !important;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(30, 30, 30, 0.5);
+        }
+
+        &:active {
+            transform: translateY(-1px);
+        }
+    }
+
+    // ==================== ESPACIADO Y GRID ====================
+    .mb-3 {
+        margin-bottom: 1.5rem;
+    }
+
+    .mb-4 {
+        margin-bottom: 2rem;
+    }
+
+    .mt-1 {
+        margin-top: 0.5rem;
+    }
+
+    .g-3 {
+        --bs-gutter-x: 1rem;
+        --bs-gutter-y: 1rem;
+    }
+
+    .gap-2 {
+        gap: 12px;
+    }
+
+    .small {
+        font-size: 0.85rem;
+    }
+
+    .row {
+        display: flex;
+        flex-wrap: wrap;
+        margin-left: calc(-0.5 * var(--bs-gutter-x, 1rem));
+        margin-right: calc(-0.5 * var(--bs-gutter-x, 1rem));
+        margin-top: calc(-1 * var(--bs-gutter-y, 0));
+
+        >* {
+            padding-left: calc(var(--bs-gutter-x, 1rem) * 0.5);
+            padding-right: calc(var(--bs-gutter-x, 1rem) * 0.5);
+            margin-top: var(--bs-gutter-y, 0);
+        }
+    }
+
+    .col-12 {
+        flex: 0 0 auto;
+        width: 100%;
+    }
+
+    .col-md-6 {
+        flex: 0 0 auto;
+        width: 50%;
+    }
+
+    .d-flex {
+        display: flex;
+    }
+
+    .justify-content-end {
+        justify-content: flex-end;
+    }
+
+    // ==================== SELECT PANEL DROPDOWN ====================
+    ::ng-deep .mat-mdc-select-panel {
+        background: #ffffff;
+        border-radius: 12px;
+        box-shadow: 0 8px 32px rgba(30, 30, 30, 0.3);
+        border: 2px solid #b11226;
+        margin-top: 8px;
+
+        .mat-mdc-option {
+            transition: all 0.2s ease;
+            color: #1e1e1e;
+            font-weight: 500;
+
+            &:hover {
+                background: rgba(177, 18, 38, 0.1) !important;
+                color: #b11226;
+            }
+
+            &.mat-mdc-option-active,
+            &.mdc-list-item--selected {
+                background: rgba(177, 18, 38, 0.15) !important;
+                color: #b11226;
+                font-weight: 700;
+            }
+        }
+    }
+
+    // ==================== RESPONSIVE ====================
+    @media (max-width: 768px) {
+        .content-block {
+            padding: 15px;
+        }
+
+        .block-header {
+            h2 {
+                font-size: 1.5rem;
+            }
+        }
+
+        .close-btn {
+            top: 23px;
+            right: 23px;
+            width: 32px;
+            height: 32px;
+
+            mat-icon {
+                font-size: 20px;
+            }
+        }
+
+        form {
+            padding: 15px;
+        }
+
+        .col-md-6 {
+            width: 100%;
+        }
+    }
+
+    @media (max-width: 576px) {
+        .content-block {
+            padding: 10px;
+        }
+
+        .block-header {
+            padding: 0.75rem;
+
+            h2 {
+                font-size: 1.25rem;
+            }
+        }
+
+        .close-btn {
+            top: 18px;
+            right: 18px;
+            width: 30px;
+            height: 30px;
+
+            mat-icon {
+                font-size: 18px;
+            }
+        }
+
+        form {
+            padding: 12px;
+        }
+
+        .formSubmitBtn,
+        .formSubmitBtnCancelar {
+            width: 100%;
+            padding: 10px 24px;
+        }
+
+        .d-flex.gap-2 {
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .justify-content-end {
+            justify-content: stretch;
+        }
+    }
+}
