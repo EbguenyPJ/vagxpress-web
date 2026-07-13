@@ -1,49 +1,43 @@
-# VagXpress — Web
+# RefaccionesFront — VagXpress
 
-Frontend web de **VagXpress**, un sistema **POS (punto de venta) para refaccionarías**. Construido con **Angular 19** y Angular Material.
+Frontend Angular 19 (standalone components, Material + Bootstrap) del
+sistema de gestión de refaccionaria. Backend en el repo `API-Refaccionaria`.
 
-> Backend: **vagxpress-api** (Laravel 10) — carpeta `../API-Refaccionaria`.
+## Desarrollo local
 
-## Tecnologías
-
-- **Angular** 19 (standalone APIs)
-- **Angular Material** 19
-- **Bootstrap** 5.3
-- **Chart.js** 4.4 (dashboards y reportes)
-- **RxJS** 7.8 · **TypeScript**
-
-## Módulos
-
-- **Punto de venta** — venta de refacciones, carrito, búsqueda y procesamiento de pago.
-- **Bitácora de ventas** — historial y detalle de ventas, estatus y métodos de pago.
-- **Catálogo de refacciones** — alta, edición, detalle y equivalencias.
-- **Compras** — requisiciones y órdenes de compra (con aprobación/rechazo y PDF).
-- **Cotizaciones** — cotización manual y gestión de catálogos.
-- **Embarques** — recepción e inserción de refacciones.
-- **Operaciones** — cortes de caja.
-- **Clientes**, **Proveedores**, **Repartos**, **Gastos**.
-- **Administración** y **Configuraciones**.
-
-## Requisitos
-
-- Node.js 18+ y npm
-- Angular CLI 19 (`npm i -g @angular/cli`)
-
-## Instalación y ejecución
+Requisitos: Node 20+, el API corriendo en `http://127.0.0.1:8000`
+(ver README del backend).
 
 ```bash
 npm install
-npm start          # ng serve  ->  http://localhost:4200
+npm start        # http://localhost:4200
 ```
 
-Configura la URL de la API en `src/environments/environment.development.ts`
-(apuntando a la instancia local de la API **vagxpress-api**).
+Usuario local: **admin / admin123**.
 
-## Scripts
+Los entornos viven en `src/environments/` (`environment.development.ts`
+se usa en `ng serve` vía fileReplacements). `src/app/conexion.ts` es un
+puente deprecado que re-exporta el environment.
 
-| Comando         | Descripción                         |
-| --------------- | ----------------------------------- |
-| `npm start`     | Servidor de desarrollo (`ng serve`) |
-| `npm run build` | Build de producción (`ng build`)    |
-| `npm test`      | Pruebas unitarias (`ng test`)       |
-| `npm run lint`  | Análisis de código (`ng lint`)      |
+## Arquitectura
+
+```
+src/app/core/          Sesión, guards funcionales, interceptors, modelos
+  service/auth.service      Login/logout con token Sanctum
+  service/storage.service   Único acceso a localStorage
+  service/notification.service  SweetAlert2 envuelto
+  interceptor/jwt            Único origen del header Authorization
+  interceptor/error          401 centralizado → logout + login
+  models/                    ApiResponse<T> y tipos de dominio
+src/app/services/      Servicios de dominio tipados (ApiBase)
+src/app/pages/         Pantallas de negocio (una carpeta por módulo)
+src/app/layout/        Header, sidebar (menú por permisos), temas
+```
+
+## Deuda conocida
+
+- `ng lint` reporta ~800 errores heredados (`any` y estilo en componentes
+  cuya lógica visual se conservó tal cual). El tipado real lo garantiza
+  `ng build` (TypeScript strict), que compila sin errores.
+- Los directorios `calendar/`, `contacts/`, `forms/` y `extra-pages/` son
+  demos de la plantilla, no están ruteados y se conservan a propósito.

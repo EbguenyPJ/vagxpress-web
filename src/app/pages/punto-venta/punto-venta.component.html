@@ -35,6 +35,16 @@
             [habilitarFocus]="habilitarFocusBusqueda"
             (productoSeleccionado)="onProductoSeleccionado($event)">
           </app-busqueda-pos>
+
+          <button
+            mat-stroked-button
+            color="primary"
+            class="btn-buscar-vehiculo"
+            (click)="abrirBusquedaVehiculo()"
+          >
+            <mat-icon>directions_car</mat-icon>
+            Buscar por vehículo
+          </button>
         </div>
 
         <!-- Contenido dinámico según la vista -->

@@ -17,7 +17,7 @@ import { MatExpansionModule } from '@angular/material/expansion';
 import { MatSelectionListChange } from '@angular/material/list';
 import { CdkDragDrop } from '@angular/cdk/drag-drop';
 import { DragDropModule } from '@angular/cdk/drag-drop';
-import { conexion } from 'app/conexion';
+import { environment } from 'environments/environment';
 import { refaccionInsertadaModel } from 'app/models/refaccionInsertadaModel';
 import { CommonModule } from '@angular/common';
 import { MatDividerModule } from "@angular/material/divider";
@@ -128,11 +128,12 @@ private capasRutas = L.featureGroup();
       }
     });
 
-    this.RepartosService.getDetalleReparto("", this.id_orden).subscribe({
-      next: (response) => {
+    this.RepartosService.getDetalleReparto(this.id_orden).subscribe({
+      next: (response: any) => {
         this.reparto = response;
         this.reparto = this.reparto.data;
-        this.orden = this.reparto.orden[0];
+        // El API nuevo devuelve `orden` como objeto único (antes era un array de un elemento).
+        this.orden = this.reparto.orden;
         console.log("Reparto: ", this.reparto);
 
 
@@ -144,7 +145,7 @@ private capasRutas = L.featureGroup();
 
         Swal.close();
       },
-      error: (error) => {
+      error: (error: any) => {
         Swal.close();
         Swal.fire('Error', 'Hubo un error', 'error');
         console.log(error);

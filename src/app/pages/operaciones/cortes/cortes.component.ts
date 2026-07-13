@@ -31,7 +31,7 @@ import { empleadosModel } from 'app/models/empleadosModel';
 import { cortesModel } from 'app/models/cortesModel';
 import { CortesService } from 'app/services/cortes/cortes.service';
 import { DialogCrearEmpleadoComponent } from 'app/pages/administracion/empleados/dialogs/dialog-crear-empleado/dialog-crear-empleado.component';
-import { conexion } from 'app/conexion';
+import { environment } from 'environments/environment';
 import { DialogNuevoCorteComponent } from './dialogs/dialog-nuevo-corte/dialog-nuevo-corte.component';
 import { DialogDetallesCorteComponent } from './dialogs/dialog-detalles-corte/dialog-detalles-corte.component';
 
@@ -195,7 +195,7 @@ export class CortesComponent implements OnInit, OnDestroy {
     this.isLoading = true;
     const token = localStorage.getItem('token') || ''; // tu token si lo usas
 
-    this.cortesService.getCortes(token).subscribe({
+    this.cortesService.getCortes().subscribe({
       next: (res: any) => { // res es cualquier objeto devuelto por tu API
         this.dataSource.data = res.data || []; // aseguramos que siempre sea un array
         this.isLoading = false;
@@ -209,7 +209,7 @@ export class CortesComponent implements OnInit, OnDestroy {
           return dataStr.indexOf(filter) !== -1;
         };
       },
-      error: (err) => {
+      error: (err: any) => {
         console.error(err);
         this.isLoading = false;
         this.showNotification('snackbar-danger', 'Error al cargar los cortes', 'bottom', 'center');

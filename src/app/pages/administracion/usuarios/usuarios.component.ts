@@ -224,8 +224,8 @@ export class UsuariosComponent implements OnInit, OnDestroy {
   loadData() {
     this.isLoading = true;
 
-    this.UsuariosService.getUsuarios("").subscribe({
-      next: (data) => {
+    this.UsuariosService.getUsuarios().subscribe({
+      next: (data: any) => {
         this.data = data;
         this.dataSource = new MatTableDataSource<usuariosModel>(this.data.data);
         this.dataSource.paginator = this.paginator;
@@ -241,7 +241,7 @@ export class UsuariosComponent implements OnInit, OnDestroy {
         }
         this.isLoading = false;
       },
-      error: (err) => {
+      error: (err: any) => {
         console.error(err);
         this.isLoading = false;
       },

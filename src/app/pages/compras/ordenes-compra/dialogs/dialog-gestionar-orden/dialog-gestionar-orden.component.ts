@@ -75,7 +75,7 @@ export class DialogGestionarOrdenComponent implements OnInit {
   cargarDetalle(): void {
     this.isLoading = true;
 
-    this.ordenesCompraService.getOrdenCompra(this.data.s_token, this.data.id_orden_compra).subscribe(
+    this.ordenesCompraService.getOrdenCompraById(this.data.id_orden_compra).subscribe(
       (response: any) => {
         if (response.status === 'success') {
           const refacciones = response.data || [];
@@ -148,11 +148,7 @@ export class DialogGestionarOrdenComponent implements OnInit {
           }))
         };
 
-        this.ordenesCompraService.gestionarOrdenCompra(
-          this.data.s_token,
-          this.data.id_orden_compra,
-          payload
-        ).subscribe(
+        this.ordenesCompraService.gestionarOrden(this.data.id_orden_compra, payload).subscribe(
           (response: any) => {
             if (response.status === 'success') {
               Swal.fire({
@@ -204,11 +200,7 @@ export class DialogGestionarOrdenComponent implements OnInit {
           }))
         };
 
-        this.ordenesCompraService.gestionarOrdenCompra(
-          this.data.s_token,
-          this.data.id_orden_compra,
-          payload
-        ).subscribe(
+        this.ordenesCompraService.gestionarOrden(this.data.id_orden_compra, payload).subscribe(
           (response: any) => {
             if (response.status === 'success') {
               Swal.fire({

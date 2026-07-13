@@ -19,7 +19,7 @@ import { EmpleadosService } from 'app/services/empleados/empleados.service';
 //import { CatalogosService } from 'app/services/catalogos/catalogos.service';
 import { CatalogosService } from 'app/services/catalogos/catalogos.service';
 import { CommonModule } from '@angular/common';//Para que funcione ngFor en Angular 19
-import { conexion } from 'app/conexion';
+import { environment } from 'environments/environment';
 import Swal from 'sweetalert2';
 
 
@@ -61,7 +61,7 @@ export class DialogCrearEmpleadoComponent {
   empleadosModel: empleadosModel;
   imagenBase64: string | null = null;
   selectedFileName: string = '';
-  ruta_img: any = conexion.url_img + "/empleados/";
+  ruta_img: any = environment.imgUrl + "/empleados/";
   actualizarImagen: boolean = false;
   url: string | null = null;
   // Variables globales
@@ -193,11 +193,11 @@ export class DialogCrearEmpleadoComponent {
     console.log('🚀 FORM DATA FINAL (ENVÍO A API):', JSON.parse(JSON.stringify(formData)));
 
     const serviceCall = this.action === 'edit'
-      ? this.EmpleadosService.actualizarEmpleado("", this.empleadosModel.id_empleado, formData)
-      : this.EmpleadosService.crearEmpleado("", formData);
+      ? this.EmpleadosService.actualizarEmpleado(this.empleadosModel.id_empleado, formData)
+      : this.EmpleadosService.crearEmpleado(formData);
 
     serviceCall.subscribe({
-      next: (response) => {
+      next: (response: any) => {
         console.log(' RESPUESTA API:', response);
         Swal.fire(
           'Éxito',
@@ -206,7 +206,7 @@ export class DialogCrearEmpleadoComponent {
         );
         this.dialogRef.close(response);
       },
-      error: (error) => {
+      error: (error: any) => {
         console.error(' ERROR API COMPLETO:', error);
         console.error('ERROR BODY:', error.error);
 
@@ -228,11 +228,11 @@ export class DialogCrearEmpleadoComponent {
     //     // Update existing leave request
 
     //     this.UsuariosService.updateempleadosModel(formData).subscribe({
-    //       next: (response) => {
+    //       next: (response: any) => {
     //         // console.log('Update Response:', response);
     //         this.dialogRef.close(response); // Close with the response data
     //       },
-    //       error: (error) => {
+    //       error: (error: any) => {
     //         console.error('Update Error:', error);
     //         // Handle error if necessary
     //       },
@@ -240,11 +240,11 @@ export class DialogCrearEmpleadoComponent {
     //   } else {
     //     // Add new leave request
     //     this.UsuariosService.addempleadosModel(formData).subscribe({
-    //       next: (response) => {
+    //       next: (response: any) => {
     //         // console.log('Add Response:', response);
     //         this.dialogRef.close(response); // Close with the response data
     //       },
-    //       error: (error) => {
+    //       error: (error: any) => {
     //         console.error('Add Error:', error);
     //         // Handle error if necessary
     //       },
@@ -282,7 +282,7 @@ export class DialogCrearEmpleadoComponent {
   // --------------------- Obtener Catalogos ---------------------//
 
   getTiposEmpleados() {
-    this.CatalogosService.GetAll('', 'tipos-empleados').subscribe(data => {
+    this.CatalogosService.GetAll('tipos-empleados').subscribe(data => {
       this.tiposEmpleados = data;
       this.tiposEmpleados = this.tiposEmpleados.data;
       console.log("Tipos de empleados: ", this.tiposEmpleados);
@@ -293,7 +293,7 @@ export class DialogCrearEmpleadoComponent {
   }
 
   async getProfesiones() {
-    this.CatalogosService.GetAll('', 'profesiones').subscribe(data => {
+    this.CatalogosService.GetAll('profesiones').subscribe(data => {
       this.profesiones = data;
       this.profesiones = this.profesiones.data;
       console.log("Tipos profesiones: ", this.profesiones);
@@ -307,7 +307,7 @@ export class DialogCrearEmpleadoComponent {
   }
 
   async getGradosEstudios() {
-    this.CatalogosService.GetAll('', 'grados-estudios').subscribe(data => {
+    this.CatalogosService.GetAll('grados-estudios').subscribe(data => {
       this.gradosEstudios = data;
       this.gradosEstudios = this.gradosEstudios.data;
       console.log("Grados estudios: ", this.gradosEstudios);
@@ -321,7 +321,7 @@ export class DialogCrearEmpleadoComponent {
   }
 
   async getSucursales() {
-    this.CatalogosService.GetAll('', 'sucursales').subscribe(data => {
+    this.CatalogosService.GetAll('sucursales').subscribe(data => {
       this.sucursales = data;
       this.sucursales = this.sucursales.data;
       console.log("Sucursales: ", this.sucursales);

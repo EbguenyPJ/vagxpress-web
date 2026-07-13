@@ -59,7 +59,7 @@ export class DialogSeleccionarEquivalenciasComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.refaccionesService.getRefacciones('').subscribe({
+    this.refaccionesService.getRefacciones().subscribe({
       next: (res: any) => {
         this.refacciones = res.data.filter(
           (ref: any) =>
@@ -70,7 +70,7 @@ export class DialogSeleccionarEquivalenciasComponent implements OnInit {
         this.filteredRefaccionesMulti.next(this.refacciones.slice());
         this.isLoading = false;
       },
-      error: (err) => {
+      error: (err: any) => {
         console.error('Error al cargar refacciones', err);
         this.isLoading = false;
       },

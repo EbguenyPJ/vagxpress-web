@@ -103,8 +103,8 @@ export class DialogNuevoCorteComponent implements OnInit {
     this.bancosDebito = [];
     this.bancosTransferencia = [];
 
-    this.cortesService.getCorteCajaDesglosado(token, fecha).subscribe({
-      next: (resp) => {
+    this.cortesService.getCorteCajaDesglosado(fecha).subscribe({
+      next: (resp: any) => {
         if (resp.status === 'success') {
           this.consultaCorte = resp;
           this.totalDia = parseFloat(resp.total_general);
@@ -120,7 +120,7 @@ export class DialogNuevoCorteComponent implements OnInit {
           this.totalDia = 0;
         }
       },
-      error: (err) => {
+      error: (err: any) => {
         console.error(err);
         this.consultaCorte = null;
         this.totalDia = 0;
@@ -140,8 +140,8 @@ export class DialogNuevoCorteComponent implements OnInit {
     this.ventasCorte = [];
     this.totalVentasDia = 0;
 
-    this.cortesService.getVentasCorte(token, fecha).subscribe({
-      next: (resp) => {
+    this.cortesService.getVentasCorte(fecha).subscribe({
+      next: (resp: any) => {
         if (resp.status === 'success') {
           this.ventasCorte = resp.data;
           this.totalVentasDia = resp.total_dia || this.ventasCorte.reduce((sum, v) => sum + parseFloat(v.n_total), 0);
@@ -151,7 +151,7 @@ export class DialogNuevoCorteComponent implements OnInit {
           this.totalVentasDia = 0;
         }
       },
-      error: (err) => {
+      error: (err: any) => {
         console.error(err);
         this.ventasCorte = [];
         this.totalVentasDia = 0;
@@ -234,7 +234,7 @@ export class DialogNuevoCorteComponent implements OnInit {
   private confirmarGuardarCorte(token: string, data: any) {
     Swal.fire({ title: 'Guardando corte...', didOpen: () => Swal.showLoading(), allowOutsideClick: false });
 
-    this.cortesService.crearCorte(token, data).subscribe({
+    this.cortesService.crearCorte(data).subscribe({
       next: (resp: any) => {
         if (!resp?.id_corte) {
           Swal.fire({ icon: 'error', title: 'No se recibió el ID del corte' });
@@ -246,8 +246,17 @@ export class DialogNuevoCorteComponent implements OnInit {
         if (this.evidencias.length > 0) {
           Swal.fire({ title: 'Subiendo evidencias...', didOpen: () => Swal.showLoading(), allowOutsideClick: false });
 
-          this.cortesService.subirEvidenciasCorte(token, idCorte, this.evidencias).subscribe({
-            next: (res) => {
+          const formData = new FormData();
+          formData.append('id_corte', String(idCorte));
+          this.evidencias.forEach((evidencia, i) => {
+            formData.append(`evidencias[${i}][archivo]`, evidencia.archivo);
+            formData.append(`evidencias[${i}][id_metodo_pago]`, String(evidencia.id_metodo_pago));
+            formData.append(`evidencias[${i}][id_tipo_evidencia]`, String(evidencia.id_tipo_evidencia));
+            formData.append(`evidencias[${i}][s_descripcion]`, evidencia.s_descripcion ?? '');
+          });
+
+          this.cortesService.subirEvidencias(formData).subscribe({
+            next: (res: any) => {
               this.evidencias = [];
               Swal.fire({ icon: 'success', title: 'Corte y evidencias guardados correctamente' });
               this.resetMontos();
@@ -255,7 +264,7 @@ export class DialogNuevoCorteComponent implements OnInit {
               this.cargarVentasCorte(this.fechaConsulta);
               console.log('Respuesta al subir evidencias:', res);
             },
-            error: (err) => {
+            error: (err: any) => {
               console.error('Error al subir evidencias:', err);
               Swal.fire({ icon: 'warning', title: 'Corte guardado, pero error al subir evidencias' });
               this.resetMontos();
@@ -269,7 +278,7 @@ export class DialogNuevoCorteComponent implements OnInit {
           this.cargarVentasCorte(this.fechaConsulta);
         }
       },
-      error: (err) => {
+      error: (err: any) => {
         console.error('Error al guardar el corte:', err);
         Swal.fire({ icon: 'error', title: 'Error al guardar el corte' });
       }

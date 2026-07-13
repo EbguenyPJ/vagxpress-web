@@ -39,7 +39,7 @@ import { rowsAnimation, TableExportUtil } from '@shared';
 import { RefaccionesService } from 'app/services/refacciones/refacciones.service';
 import { refaccionModel } from 'app/models/refaccionModel';
 import { Subject } from 'rxjs';
-import { conexion } from 'app/conexion';
+import { environment } from 'environments/environment';
 import { DialogDetalleRefaccionComponent } from './dialogs/dialog-detalle-refaccion/dialog-detalle-refaccion.component';
 import { DialogCrearRefaccionComponent } from './dialogs/dialog-crear-refaccion/dialog-crear-refaccion.component';
 import { DialogEditarRefaccionComponent } from './dialogs/dialog-editar-refaccion/dialog-editar-refaccion.component';
@@ -99,7 +99,7 @@ export class CatalogoRefaccionesComponent
   private destroy$ = new Subject<void>();
   data: any;
 
-  ruta_img: string = conexion.url_img;
+  ruta_img: string = environment.imgUrl;
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild('filter') filter: ElementRef | undefined;
@@ -200,8 +200,8 @@ export class CatalogoRefaccionesComponent
 
   loadData() {
     this.isLoading = true;
-    this.refaccionesService.getRefacciones('').subscribe({
-      next: (data) => {
+    this.refaccionesService.getRefacciones().subscribe({
+      next: (data: any) => {
         this.data = data;
         this.dataSource.data = this.data.data.map(
           (item: any) => new refaccionModel(item)
@@ -220,7 +220,7 @@ export class CatalogoRefaccionesComponent
           return dataStr.indexOf(filter) !== -1;
         };
       },
-      error: (err) => {
+      error: (err: any) => {
         console.error('Error al cargar refacciones:', err);
         this.isLoading = false;
         this.showNotification(

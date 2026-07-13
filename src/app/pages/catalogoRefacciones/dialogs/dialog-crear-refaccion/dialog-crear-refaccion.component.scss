@@ -572,3 +572,52 @@
     }
   }
 }
+
+/* ===== Compatibilidad Vehicular — tarjetas de regla ===== */
+.compat-ayuda {
+  margin: 4px 0 12px;
+  font-size: 0.82rem;
+  color: rgba(0, 0, 0, 0.55);
+  line-height: 1.45;
+}
+
+.reglas-lista {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.regla-card {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  border-left: 4px solid #3f51b5;
+  border-radius: 8px;
+  background: #fafafa;
+
+  .regla-icon {
+    color: #3f51b5;
+    flex-shrink: 0;
+  }
+
+  .regla-resumen {
+    flex: 1;
+    font-size: 0.85rem;
+    line-height: 1.4;
+  }
+
+  .regla-remove {
+    flex-shrink: 0;
+    color: rgba(0, 0, 0, 0.45);
+  }
+
+  &.es-universal {
+    border-left-color: #ff9800;
+
+    .regla-icon {
+      color: #ff9800;
+    }
+  }
+}

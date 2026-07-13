@@ -1,120 +1,103 @@
 import { Injectable } from '@angular/core';
-import { HttpHeaders, HttpClient } from '@angular/common/http';
-import { conexion } from '../../conexion';
 import { Observable } from 'rxjs';
+import { ApiResponse } from '@core/models/api-response';
+import { FilaCatalogo, Proveedor, RefaccionDetalle, RefaccionListado } from '@core/models/dominio';
+import { ApiBase } from '../api-base';
 
-@Injectable({
-  providedIn: 'root',
-})
-export class RefaccionesService {
-  constructor(private http: HttpClient) {}
+export interface ReglaCompatibilidadPayload {
+  id_marcas?: number[];
+  id_modelos?: number[];
+  id_generaciones?: number[];
+  id_motores?: number[];
+  s_resumen?: string | null;
+}
 
-  getRefacciones(s_token: string) {
-    let headers = new HttpHeaders({
-      'Content-Type': 'application/json',
-      Authorization: s_token,
-    });
-    let params = { headers: headers };
-    let url = conexion.url + 'mostrar-refacciones';
-    return this.http.get(url, params);
+export interface GuardarRefaccionPayload {
+  s_nombre_refaccion: string;
+  s_numero_parte?: string | null;
+  s_imagen_refaccion?: string | null;
+  n_precio_compra?: number;
+  n_precio_venta?: number;
+  n_precio_mayoreo?: number;
+  n_stock_actual?: number;
+  id_marca_refaccion?: number | null;
+  id_unidad_medida?: number | null;
+  id_proveedor?: number | null;
+  id_clase_refaccion?: number | null;
+  id_categoria_refaccion?: number | null;
+  id_subcategoria_refaccion?: number | null;
+  id_posicion_vehiculo?: number | null;
+  id_ubicacion_almacen?: number | null;
+  b_importado?: 0 | 1;
+  refacciones_equivalentes?: number[] | { id_refaccion: number }[];
+  reglas_compatibilidad?: ReglaCompatibilidadPayload[];
+}
+
+export interface RefaccionMasivaPayload {
+  s_nombre_refaccion: string;
+  s_numero_parte: string;
+  id_marca_refaccion: number;
+  id_categoria_refaccion: number;
+  id_subcategoria_refaccion: number;
+}
+
+@Injectable({ providedIn: 'root' })
+export class RefaccionesService extends ApiBase {
+  getRefacciones(): Observable<ApiResponse<RefaccionListado[]>> {
+    return this.http.get<ApiResponse<RefaccionListado[]>>(`${this.apiUrl}/refacciones`);
   }
 
-  getRefaccionById(s_token: string, id_refaccion: number) {
-    let headers = new HttpHeaders({
-      'Content-Type': 'application/json',
-      Authorization: s_token,
-    });
-    let params = { headers: headers };
-    let url = `${conexion.url}mostrar-refaccion-id/${id_refaccion}`;
-    return this.http.get(url, params);
+  getRefaccionById(idRefaccion: number): Observable<ApiResponse<RefaccionDetalle>> {
+    return this.http.get<ApiResponse<RefaccionDetalle>>(`${this.apiUrl}/refacciones/${idRefaccion}`);
   }
 
-  crearRefaccion(s_token: string, data: any) {
-    let headers = new HttpHeaders({
-      'Content-Type': 'application/json',
-      Authorization: s_token,
-    });
-    let url = conexion.url + 'crear-refaccion';
-    return this.http.post(url, data, { headers: headers });
+  crearRefaccion(payload: GuardarRefaccionPayload): Observable<ApiResponse<RefaccionDetalle>> {
+    return this.http.post<ApiResponse<RefaccionDetalle>>(`${this.apiUrl}/refacciones`, payload);
   }
 
-  getMarcas(s_token: string) {
-    let headers = new HttpHeaders({
-      'Content-Type': 'application/json',
-      Authorization: s_token,
-    });
-    return this.http.get(conexion.url + 'mostrar-marcas-refacciones', {
-      headers: headers,
-    });
+  editarRefaccion(idRefaccion: number, payload: GuardarRefaccionPayload): Observable<ApiResponse<RefaccionDetalle>> {
+    return this.http.put<ApiResponse<RefaccionDetalle>>(`${this.apiUrl}/refacciones/${idRefaccion}`, payload);
   }
 
-  getCategorias(s_token: string) {
-    let headers = new HttpHeaders({
-      'Content-Type': 'application/json',
-      Authorization: s_token,
-    });
-    return this.http.get(conexion.url + 'mostrar-categorias-refacciones', {
-      headers: headers,
-    });
+  crearRefaccionesMasivo(refacciones: RefaccionMasivaPayload[]): Observable<ApiResponse<RefaccionDetalle[]>> {
+    return this.http.post<ApiResponse<RefaccionDetalle[]>>(`${this.apiUrl}/refacciones/masivo`, { refacciones });
   }
 
-  getSubcategorias(s_token: string) {
-    let headers = new HttpHeaders({
-      'Content-Type': 'application/json',
-      Authorization: s_token,
-    });
-    return this.http.get(conexion.url + 'mostrar-subcategorias-refacciones', {
-      headers: headers,
-    });
+  // ── Catálogos que consumen los diálogos de alta/edición ──────────────
+
+  getMarcas(): Observable<ApiResponse<FilaCatalogo[]>> {
+    return this.catalogo('marcas-refacciones');
   }
 
-  editarRefaccion(s_token: string, id_refaccion: number, data: any) {
-    let headers = new HttpHeaders({
-      'Content-Type': 'application/json',
-      Authorization: s_token,
-    });
-    let url = `${conexion.url}editar-refaccion/${id_refaccion}`;
-    return this.http.put(url, data, { headers: headers });
+  getCategorias(): Observable<ApiResponse<FilaCatalogo[]>> {
+    return this.catalogo('categorias-refacciones');
   }
 
-  getClases(s_token: string) {
-    const headers = new HttpHeaders({ Authorization: s_token });
-    return this.http.get(conexion.url + 'mostrar-clases-refacciones', {
-      headers,
-    });
+  getSubcategorias(): Observable<ApiResponse<FilaCatalogo[]>> {
+    return this.catalogo('subcategorias-refacciones');
   }
 
-  getUnidadesMedida(s_token: string) {
-    const headers = new HttpHeaders({ Authorization: s_token });
-    return this.http.get(conexion.url + 'mostrar-unidades-medida', { headers });
+  getClases(): Observable<ApiResponse<FilaCatalogo[]>> {
+    return this.catalogo('clases-refacciones');
   }
 
-  getPosicionesVehiculo(s_token: string) {
-    const headers = new HttpHeaders({ Authorization: s_token });
-    return this.http.get(conexion.url + 'mostrar-posiciones-vehiculo', {
-      headers,
-    });
+  getUnidadesMedida(): Observable<ApiResponse<FilaCatalogo[]>> {
+    return this.catalogo('unidades-medida');
   }
 
-  getUbicacionesAlmacen(s_token: string) {
-    const headers = new HttpHeaders({ Authorization: s_token });
-    return this.http.get(conexion.url + 'mostrar-ubicaciones-almacen', {
-      headers,
-    });
+  getPosicionesVehiculo(): Observable<ApiResponse<FilaCatalogo[]>> {
+    return this.catalogo('posiciones-vehiculo');
   }
 
-  getProveedores(s_token: string) {
-    const headers = new HttpHeaders({ Authorization: s_token });
-    return this.http.get(conexion.url + 'mostrar-proveedores', { headers });
+  getUbicacionesAlmacen(): Observable<ApiResponse<FilaCatalogo[]>> {
+    return this.catalogo('ubicaciones-almacen');
   }
 
-  crearRefaccionesMasivo(s_token: string, data: { refacciones: any[] }) {
-    let headers = new HttpHeaders({
-      'Content-Type': 'application/json',
-      Authorization: s_token,
-    });
+  getProveedores(): Observable<ApiResponse<Proveedor[]>> {
+    return this.http.get<ApiResponse<Proveedor[]>>(`${this.apiUrl}/proveedores`);
+  }
 
-    let url = conexion.url + 'crear-refacciones-masivo';
-    return this.http.post(url, data, { headers: headers });
+  private catalogo(slug: string): Observable<ApiResponse<FilaCatalogo[]>> {
+    return this.http.get<ApiResponse<FilaCatalogo[]>>(`${this.apiUrl}/catalogos/${slug}`);
   }
 }

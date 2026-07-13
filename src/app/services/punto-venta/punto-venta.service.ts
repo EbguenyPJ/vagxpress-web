@@ -1,91 +1,60 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { conexion } from 'app/conexion';
+import { Observable } from 'rxjs';
+import { ApiResponse } from '@core/models/api-response';
+import { ClienteSelector, FilaCatalogo, RefaccionListado } from '@core/models/dominio';
+import { ApiBase } from '../api-base';
 
-@Injectable({
-  providedIn: 'root'
-})
-export class PuntoVentaService {
+export interface RenglonVentaPayload {
+  id_refaccion: number;
+  n_cantidad: number;
+  id_porcentaje_utilidad?: number | null;
+}
 
-  constructor(private http: HttpClient) { }
+export interface CrearVentaPayload {
+  id_cliente: number;
+  id_metodo_pago: number;
+  id_cuenta_bancaria?: number | null;
+  refacciones: RenglonVentaPayload[];
+}
 
-  getCategorias(s_token: string) {
-    let headers = new HttpHeaders({
-      'Content-Type': 'application/json',
-      'Authorization': s_token
-    });
-    let params = { headers: headers };
-    let url = conexion.url + 'mostrar-categorias-refacciones';
-    return this.http.get(url, params);
+export interface VentaCreada {
+  status: string;
+  message: string;
+  data: unknown[];
+  ticket_base64: string;
+}
+
+@Injectable({ providedIn: 'root' })
+export class PuntoVentaService extends ApiBase {
+  getCategorias(): Observable<ApiResponse<FilaCatalogo[]>> {
+    return this.http.get<ApiResponse<FilaCatalogo[]>>(`${this.apiUrl}/catalogos/categorias-refacciones`);
   }
 
-  getSubcategorias(s_token: string) {
-    let headers = new HttpHeaders({
-      'Content-Type': 'application/json',
-      'Authorization': s_token
-    });
-    let params = { headers: headers };
-    let url = conexion.url + 'mostrar-subcategorias-refacciones';
-    return this.http.get(url, params);
+  getSubcategorias(): Observable<ApiResponse<FilaCatalogo[]>> {
+    return this.http.get<ApiResponse<FilaCatalogo[]>>(`${this.apiUrl}/catalogos/subcategorias-refacciones`);
   }
 
-  getProductos(s_token: string) {
-    let headers = new HttpHeaders({
-      'Content-Type': 'application/json',
-      'Authorization': s_token
-    });
-    let params = { headers: headers };
-    let url = conexion.url + 'mostrar-refacciones';
-    return this.http.get(url, params);
+  getProductos(): Observable<ApiResponse<RefaccionListado[]>> {
+    return this.http.get<ApiResponse<RefaccionListado[]>>(`${this.apiUrl}/refacciones`);
   }
 
-  getPorcentajesUtilidad(s_token: string) {
-    let headers = new HttpHeaders({
-      'Content-Type': 'application/json',
-      'Authorization': s_token
-    });
-    let params = { headers: headers };
-    let url = conexion.url + 'mostrar-porcentajes-utilidad';
-    return this.http.get(url, params);
+  getPorcentajesUtilidad(): Observable<ApiResponse<FilaCatalogo[]>> {
+    return this.http.get<ApiResponse<FilaCatalogo[]>>(`${this.apiUrl}/catalogos/porcentajes-utilidad`);
   }
 
-  getMetodosPago(s_token: string) {
-    let headers = new HttpHeaders({
-      'Content-Type': 'application/json',
-      'Authorization': s_token
-    });
-    let params = { headers: headers };
-    let url = conexion.url + 'mostrar-metodos-pagos';
-    return this.http.get(url, params);
+  getMetodosPago(): Observable<ApiResponse<FilaCatalogo[]>> {
+    return this.http.get<ApiResponse<FilaCatalogo[]>>(`${this.apiUrl}/catalogos/metodos-pago`);
   }
 
-  getClientes(s_token: string) {
-    let headers = new HttpHeaders({
-      'Content-Type': 'application/json',
-      'Authorization': s_token
-    });
-    let params = { headers: headers };
-    let url = conexion.url + 'mostrar-clientes';
-    return this.http.get(url, params);
+  getClientes(): Observable<ApiResponse<ClienteSelector[]>> {
+    return this.http.get<ApiResponse<ClienteSelector[]>>(`${this.apiUrl}/clientes/selector`);
   }
 
-  getCuentasBancarias(s_token: string) {
-    let headers = new HttpHeaders({
-      'Content-Type': 'application/json',
-      'Authorization': s_token
-    });
-    let params = { headers: headers };
-    let url = conexion.url + 'mostrar-cuentas-bancarias';
-    return this.http.get(url, params);
+  getCuentasBancarias(): Observable<ApiResponse<FilaCatalogo[]>> {
+    return this.http.get<ApiResponse<FilaCatalogo[]>>(`${this.apiUrl}/catalogos/cuentas-bancarias`);
   }
 
-  crearVenta(s_token: string, data: any) {
-    let headers = new HttpHeaders({
-      'Content-Type': 'application/json',
-      'Authorization': s_token
-    });
-    let url = conexion.url + 'crear-venta';
-    let options = { headers: headers };
-    return this.http.post(url, data, options);
+  crearVenta(payload: CrearVentaPayload): Observable<VentaCreada> {
+    return this.http.post<VentaCreada>(`${this.apiUrl}/ventas`, payload);
   }
 }

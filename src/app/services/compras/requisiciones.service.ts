@@ -1,61 +1,57 @@
 import { Injectable } from '@angular/core';
-import { HttpHeaders, HttpClient } from '@angular/common/http';
-import { conexion } from '../../conexion';
+import { Observable } from 'rxjs';
+import { ApiResponse } from '@core/models/api-response';
+import { RequisicionListado } from '@core/models/dominio';
+import { ApiBase } from '../api-base';
 
-@Injectable({
-  providedIn: 'root'
-})
-export class RequisicionesService {
+export interface RenglonRequisicion {
+  id_requisicion: number;
+  id_requisicion_refaccion: number;
+  id_refaccion: number;
+  s_nombre_refaccion: string | null;
+  s_numero_parte: string | null;
+  n_costo_unitario: string | number | null;
+  n_precio_venta: string | number | null;
+  n_stock_actual: number | null;
+  n_tiempo_reposicion: number | null;
+  n_cantidad_sugerida: number;
+  id_motivo_pedido: number | null;
+  s_motivo_pedido: string | null;
+  id_prioridad: number | null;
+  s_prioridad: string | null;
+  id_estatus_requisicion: number;
+  s_estatus_requisicion: string | null;
+}
 
-  constructor(private http: HttpClient) { }
+export interface GrupoProveedorRequisicion {
+  id_proveedor: number | null;
+  s_proveedor: string;
+  total_estimado_proveedor: number;
+  cantidad_refacciones_proveedor: number;
+  items: (RenglonRequisicion & {
+    costo_estimado_refaccion: number;
+    alerta_mejor_precio: boolean;
+    mejor_opcion: { id_proveedor: number; s_proveedor: string | null; n_ultimo_costo: string | number; d_fecha_ultima_compra: string | null; n_ahorro_unitario: number } | null;
+  })[];
+}
 
-  getRequisiciones(s_token: string) {
-    let headers = new HttpHeaders({
-      'Content-Type': 'application/json',
-      'Authorization': s_token
-    });
-    let params = { headers: headers };
-    let url = conexion.url + 'mostrar-requisiciones';
-    return this.http.get(url, params);
+@Injectable({ providedIn: 'root' })
+export class RequisicionesService extends ApiBase {
+  getRequisiciones(): Observable<ApiResponse<RequisicionListado[]>> {
+    return this.http.get<ApiResponse<RequisicionListado[]>>(`${this.apiUrl}/requisiciones`);
   }
 
-  getDetalleRequisicion(s_token: string, id_requisicion: number) {
-    let headers = new HttpHeaders({
-      'Content-Type': 'application/json',
-      'Authorization': s_token
-    });
-    let params = { headers: headers };
-    let url = conexion.url + 'mostrar-requisicion/' + id_requisicion;
-    return this.http.get(url, params);
+  getRequisicionById(idRequisicion: number): Observable<ApiResponse<RenglonRequisicion[]>> {
+    return this.http.get<ApiResponse<RenglonRequisicion[]>>(`${this.apiUrl}/requisiciones/${idRequisicion}`);
   }
 
-  actualizarRequisicion(s_token: string, id_requisicion: number, data: any) {
-    let headers = new HttpHeaders({
-      'Content-Type': 'application/json',
-      'Authorization': s_token
+  actualizarEstatus(idRequisicion: number, idEstatus: number): Observable<ApiResponse<unknown>> {
+    return this.http.put<ApiResponse<unknown>>(`${this.apiUrl}/requisiciones/${idRequisicion}`, {
+      id_estatus_requisicion: idEstatus,
     });
-    let url = conexion.url + 'actualizar-requisicion/' + id_requisicion;
-    let options = { headers: headers };
-    return this.http.put(url, data, options);
   }
 
-  getRequisicionPorProveedor(s_token: string, id_requisicion: number) {
-    let headers = new HttpHeaders({
-      'Content-Type': 'application/json',
-      'Authorization': s_token
-    });
-    let params = { headers: headers };
-    let url = conexion.url + 'mostrar-requisicion-por-proveedor/' + id_requisicion;
-    return this.http.get(url, params);
-  }
-
-  crearOrdenesCompras(s_token: string, data: any) {
-    let headers = new HttpHeaders({
-      'Content-Type': 'application/json',
-      'Authorization': s_token
-    });
-    let url = conexion.url + 'crear-ordenes-compras';
-    let options = { headers: headers };
-    return this.http.post(url, data, options);
+  getPorProveedor(idRequisicion: number): Observable<ApiResponse<GrupoProveedorRequisicion[]>> {
+    return this.http.get<ApiResponse<GrupoProveedorRequisicion[]>>(`${this.apiUrl}/requisiciones/${idRequisicion}/por-proveedor`);
   }
 }

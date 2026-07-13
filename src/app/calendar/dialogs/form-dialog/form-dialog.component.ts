@@ -105,14 +105,14 @@ export class FormDialogComponent {
         this.calendarService
           .updateCalendar(this.calendarForm.getRawValue())
           .subscribe({
-            next: (response) => {
+            next: (response: any) => {
               const updatedResponse = {
                 data: response,
                 action: 'edit',
               };
               this.dialogRef.close(updatedResponse);
             },
-            error: (error) => {
+            error: (error: unknown) => {
               console.error('Update Error:', error);
               // Optionally display an error message to the user
             },
@@ -122,10 +122,10 @@ export class FormDialogComponent {
         this.calendarService
           .addCalendar(this.calendarForm.getRawValue())
           .subscribe({
-            next: (response) => {
+            next: (response: any) => {
               this.dialogRef.close(response); // Close dialog and return newly added doctor data
             },
-            error: (error) => {
+            error: (error: unknown) => {
               console.error('Add Error:', error);
               // Optionally display an error message to the user
             },
@@ -139,7 +139,7 @@ export class FormDialogComponent {
       this.calendarService
         .deleteCalendar(this.calendarForm.getRawValue())
         .subscribe({
-          next: (response) => {
+          next: (response: any) => {
             const updatedResponse = {
               data: response,
               action: 'delete',
@@ -147,7 +147,7 @@ export class FormDialogComponent {
             // Close dialog and pass the updated response with the extra message
             this.dialogRef.close(updatedResponse);
           },
-          error: (error) => {
+          error: (error: unknown) => {
             console.error('Update Error:', error);
             // Optionally display an error message to the user
           },

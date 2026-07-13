@@ -196,7 +196,7 @@ export class RequisicionesComponent implements OnInit, OnDestroy {
   loadData() {
     this.isLoading = true;
 
-    this.requisicionesService.getRequisiciones(this.s_token).subscribe(
+    this.requisicionesService.getRequisiciones().subscribe(
       (response: any) => {
         if (response.status === 'success') {
           const requisiciones = response.data.map((req: any) => new Requisicion(req));

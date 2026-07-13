@@ -4,7 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatIconModule } from '@angular/material/icon';
-import { conexion } from 'app/conexion';
+import { environment } from 'environments/environment';
 
 @Component({
   selector: 'app-busqueda-pos',
@@ -31,7 +31,7 @@ export class BusquedaComponent implements AfterViewInit, OnDestroy {
   resultados: any[] = [];
   mostrarResultados: boolean = false;
   timeoutBusqueda: any;
-  urlImagenes: string = conexion.url_img;
+  urlImagenes: string = environment.imgUrl;
 
   // Variables para detección de scanner
   bufferScanner: string = '';

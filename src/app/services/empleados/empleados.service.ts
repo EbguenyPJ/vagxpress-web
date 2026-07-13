@@ -1,92 +1,46 @@
 import { Injectable } from '@angular/core';
-import { HttpHeaders, HttpClient } from '@angular/common/http';
-import { conexion } from '../../conexion';
+import { Observable } from 'rxjs';
+import { ApiResponse } from '@core/models/api-response';
+import { Empleado, HabilidadEmpleado } from '@core/models/dominio';
+import { ApiBase } from '../api-base';
 
-@Injectable({
-  providedIn: 'root'
-})
-export class EmpleadosService {
+export type GuardarEmpleadoPayload = Partial<Empleado> & { s_foto_empleado?: string | null };
 
-  constructor(private http: HttpClient) { }
-
-  getEmpleados(s_token: string) {
-    let headers = new HttpHeaders({
-      'Content-Type': 'application/json',
-      'Authorization': s_token
-    });
-    let url = conexion.url + 'empleado/listar-empleados';
-    return this.http.get(url, { headers });
+@Injectable({ providedIn: 'root' })
+export class EmpleadosService extends ApiBase {
+  getEmpleados(): Observable<ApiResponse<Empleado[]>> {
+    return this.http.get<ApiResponse<Empleado[]>>(`${this.apiUrl}/empleados`);
   }
 
-  getEmpleadoPorUsuario(s_token: string, id_usuario: number) {
-    let headers = new HttpHeaders({
-      'Content-Type': 'application/json',
-      'Authorization': s_token
-    });
-    let url = conexion.url + 'obtener-empleado-por-usuario/' + id_usuario;
-    return this.http.get(url, { headers });
+  getEmpleadosSinUsuario(): Observable<ApiResponse<Empleado[]>> {
+    return this.http.get<ApiResponse<Empleado[]>>(`${this.apiUrl}/empleados/sin-usuario`);
   }
 
-  getEmpleadosSinUsuario(s_token: string) {
-    let headers = new HttpHeaders({
-      'Content-Type': 'application/json',
-      'Authorization': s_token
-    });
-    let url = conexion.url + 'empleado/listar-empleados-sin-usuario';
-    return this.http.get(url, { headers });
+  getEmpleadoPorUsuario(idUsuario: number): Observable<ApiResponse<Empleado>> {
+    return this.http.get<ApiResponse<Empleado>>(`${this.apiUrl}/empleados/usuario/${idUsuario}`);
   }
 
-  crearEmpleado(s_token: string, data: any) {
-    let headers = new HttpHeaders({
-      'Content-Type': 'application/json',
-      'Authorization': s_token
-    });
-    let url = conexion.url + 'empleado/crear-empleado';
-    return this.http.post(url, data, { headers });
+  getEmpleadosPorSucursal(idSucursal: number): Observable<ApiResponse<Empleado[]>> {
+    return this.http.get<ApiResponse<Empleado[]>>(`${this.apiUrl}/empleados/sucursal/${idSucursal}`);
   }
 
-  actualizarEmpleado(s_token: string, id: number, data: any) {
-    let headers = new HttpHeaders({
-      'Content-Type': 'application/json',
-      'Authorization': s_token
-    });
-    let url = conexion.url + 'empleado/actualizar-empleado/' + id;
-    return this.http.put(url, data, { headers });
+  getGerenteSucursal(idSucursal: number): Observable<ApiResponse<Empleado>> {
+    return this.http.get<ApiResponse<Empleado>>(`${this.apiUrl}/empleados/sucursal/${idSucursal}/gerente`);
   }
 
-  getHabilidadesEmpleado(s_token: string, id_empleado: number) {
-    let headers = new HttpHeaders({
-      'Content-Type': 'application/json',
-      'Authorization': s_token
-    });
-    let url = conexion.url + 'habilidades-empleados/' + id_empleado;
-    return this.http.get(url, { headers });
+  crearEmpleado(payload: GuardarEmpleadoPayload): Observable<ApiResponse<Empleado>> {
+    return this.http.post<ApiResponse<Empleado>>(`${this.apiUrl}/empleados`, payload);
   }
 
-  actualizarHabilidadesEmpleado(s_token: string, id_empleado: number, data: any[]) {
-    let headers = new HttpHeaders({
-      'Content-Type': 'application/json',
-      'Authorization': s_token
-    });
-    let url = conexion.url + 'actualizar-habilidades-empleado/' + id_empleado;
-    return this.http.put(url, data, { headers });
+  actualizarEmpleado(idEmpleado: number, payload: GuardarEmpleadoPayload): Observable<ApiResponse<Empleado>> {
+    return this.http.put<ApiResponse<Empleado>>(`${this.apiUrl}/empleados/${idEmpleado}`, payload);
   }
 
-  getGerenteBySucursal(s_token: string, id_sucursal: number) {
-    let headers = new HttpHeaders({
-      'Content-Type': 'application/json',
-      'Authorization': s_token
-    });
-    let url = conexion.url + 'empleados-gerente/' + id_sucursal;
-    return this.http.get(url, { headers });
+  getHabilidades(idEmpleado: number): Observable<ApiResponse<HabilidadEmpleado[]>> {
+    return this.http.get<ApiResponse<HabilidadEmpleado[]>>(`${this.apiUrl}/empleados/${idEmpleado}/habilidades`);
   }
 
-  getEmpleadosBySucursal(s_token: string, id_sucursal: number) {
-    let headers = new HttpHeaders({
-      'Content-Type': 'application/json',
-      'Authorization': s_token
-    });
-    let url = conexion.url + 'empleados-sucursal/' + id_sucursal;
-    return this.http.get(url, { headers });
+  actualizarHabilidades(idEmpleado: number, habilidades: Pick<HabilidadEmpleado, 'id_habilidad_empleado' | 'id_habilidad' | 'n_nivel_dominio'>[]): Observable<ApiResponse<HabilidadEmpleado[]>> {
+    return this.http.put<ApiResponse<HabilidadEmpleado[]>>(`${this.apiUrl}/empleados/${idEmpleado}/habilidades`, { habilidades });
   }
 }

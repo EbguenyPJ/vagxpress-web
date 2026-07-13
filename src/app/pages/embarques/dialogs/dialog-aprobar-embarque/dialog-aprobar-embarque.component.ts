@@ -17,7 +17,7 @@ import { MatExpansionModule } from '@angular/material/expansion';
 import { MatSelectionListChange } from '@angular/material/list';
 import { CdkDragDrop } from '@angular/cdk/drag-drop';
 import { DragDropModule } from '@angular/cdk/drag-drop';
-import { conexion } from 'app/conexion';
+import { environment } from 'environments/environment';
 import { embarqueModel } from 'app/models/embarqueModel';
 import { CommonModule } from '@angular/common';
 // Animations
@@ -69,8 +69,8 @@ export class DialogAprobarEmbarqueComponent {
   dialogTitle: string;
   embarque: any;
   id_embarque: any;
-  url_img: any = conexion.url_img + "/evidenciasVXM/imgFacturaEmbarque/";
-  url_pdf: any = conexion.url_img + "/evidenciasVXM/pdfFacturaEmbarque/";
+  url_img: any = environment.imgUrl + "/evidenciasVXM/imgFacturaEmbarque/";
+  url_pdf: any = environment.imgUrl + "/evidenciasVXM/pdfFacturaEmbarque/";
   pdfSeguro!: SafeResourceUrl;
 
   
@@ -108,8 +108,8 @@ export class DialogAprobarEmbarqueComponent {
       }
     });
 
-    this.EmbarqueService.getEmbarque("", this.id_embarque).subscribe({
-      next: (response) => {
+    this.EmbarqueService.getEmbarque(this.id_embarque).subscribe({
+      next: (response: any) => {
         this.embarque = response;
         this.embarque = this.embarque.data;
         
@@ -120,7 +120,7 @@ export class DialogAprobarEmbarqueComponent {
         console.log("Embarque: ", this.embarque);
         Swal.close();
       },
-      error: (error) => {
+      error: (error: any) => {
         Swal.close();
         Swal.fire('Error', 'Hubo un error', 'error');
         console.log(error);
@@ -144,13 +144,13 @@ export class DialogAprobarEmbarqueComponent {
     const id_usuario = currentUserData?.id_usuario;
     this.embarque.id_usuario = id_usuario;
     console.log("Embarque: ", this.embarque);
-    this.EmbarqueService.aprobarEmbarque("", this.embarque, this.id_embarque).subscribe({
-      next: (response) => {
+    this.EmbarqueService.aprobarEmbarque(this.id_embarque, this.embarque).subscribe({
+      next: (response: any) => {
         Swal.close();
         Swal.fire('Exito', 'El embarque se aprobó', 'success');
         this.dialogRef.close(response);
       },
-      error: (error) => {
+      error: (error: any) => {
         Swal.close();
         Swal.fire('Error', 'Hubo un error', 'error');
         console.log(error);
@@ -177,13 +177,13 @@ export class DialogAprobarEmbarqueComponent {
     const id_usuario = currentUserData?.id_usuario;
     this.embarque.id_usuario = id_usuario;
     console.log("Embarque: ", this.embarque);
-    this.EmbarqueService.rechazarEmbarque("", this.embarque, this.id_embarque).subscribe({
-      next: (response) => {
+    this.EmbarqueService.rechazarEmbarque(this.id_embarque).subscribe({
+      next: (response: any) => {
         Swal.close();
         Swal.fire('Exito', 'El embarque se rechazó', 'success');
         this.dialogRef.close(response);
       },
-      error: (error) => {
+      error: (error: any) => {
         Swal.close();
         Swal.fire('Error', 'Hubo un error', 'error');
         console.log(error);

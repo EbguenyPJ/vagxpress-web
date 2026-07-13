@@ -8,11 +8,12 @@ import { MatButtonModule } from '@angular/material/button';
 import { NgScrollbar } from 'ngx-scrollbar';
 import { UnsubscribeOnDestroyAdapter } from '@shared';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
+import { forkJoin } from 'rxjs';
 import { SidebarService } from './sidebar.service';
 import { DialogPerfilUsuarioComponent } from './dialogs/dialog-perfil-usuario/dialog-perfil-usuario.component';
 import { MatDialog } from '@angular/material/dialog';
 import { Direction } from '@angular/cdk/bidi';
-import { conexion } from 'app/conexion';
+import { environment } from 'environments/environment';
 import { EmpleadosService } from 'app/services/empleados/empleados.service';
 import { UsuariosService } from 'app/services/usuarios/usuarios.service';
 
@@ -48,7 +49,7 @@ export class SidebarComponent extends UnsubscribeOnDestroyAdapter implements OnI
   idUsuario?: any;
 
   userPhoto: string = 'empleado-default.png';
-  ruta_img: string = conexion.url_img + "/empleados/";
+  ruta_img: string = environment.imgUrl + "/empleados/";
   userPosition: string = '';
 
   hasWebAccess: boolean = false;
@@ -191,41 +192,48 @@ export class SidebarComponent extends UnsubscribeOnDestroyAdapter implements OnI
 
 
 
-  async getUserModules() {
-    this.sidebarService.getUserModules('', this.idUsuario).subscribe((moduloResponse: any) => {
-      this.sidebarService.getCategoriasModulos('').subscribe((categoriaResponse: any) => {
-        const modulos = moduloResponse.data;
-        const categorias = categoriaResponse.data;
+  getUserModules(): void {
+    forkJoin({
+      modulos: this.sidebarService.getUserModules(this.idUsuario),
+      categorias: this.sidebarService.getCategoriasModulos(),
+    }).subscribe(({ modulos: moduloResponse, categorias: categoriaResponse }) => {
+      const modulos = moduloResponse.data;
+      const categorias = categoriaResponse.data;
 
-        const groupedSidebar = categorias.map((categoria: any) => {
+      this.sidebarItems = categorias
+        .map((categoria) => {
           const modulosDeCategoria = modulos.filter(
-            (mod: any) => mod.id_categoria_modulo === categoria.id_categoria_modulo
+            (mod) => mod.id_categoria_modulo === categoria['id_categoria_modulo'],
           );
 
-          // Solo agregar categoría si tiene módulos activos
-          if (modulosDeCategoria.length === 0) return null;
+          // Una categoría solo aparece si el usuario tiene módulos en ella.
+          if (modulosDeCategoria.length === 0) {
+            return null;
+          }
 
           return {
-            title: categoria.s_categoria_modulo,
+            path: '',
+            title: String(categoria['s_categoria_modulo'] ?? ''),
+            iconType: '',
+            icon: '',
+            class: '',
+            badge: '',
+            badgeClass: '',
             groupTitle: true,
-            submenu: modulosDeCategoria.map((mod: any) => ({
-              path: mod.s_ruta,
-              title: mod.s_modulo,
-              iconType: "material-icons-outlined",
-              icon: mod.s_icono,
-              class: "",
+            submenu: modulosDeCategoria.map((mod) => ({
+              path: mod.s_ruta ?? '',
+              title: mod.s_modulo ?? '',
+              iconType: 'material-icons-outlined',
+              icon: mod.s_icono ?? '',
+              class: '',
               groupTitle: false,
-              badge: "",
-              badgeClass: "",
-              submenu: []
-            }))
+              badge: '',
+              badgeClass: '',
+              submenu: [] as RouteInfo[],
+            })),
           };
-        }).filter((item: any) => item !== null); // Quitar categorías vacías
-
-        this.sidebarItems = groupedSidebar;
-
-        //console.log("Menú lateral agrupado por categorías:", this.sidebarItems);
-      });
+        })
+        .filter((item): item is NonNullable<typeof item> => item !== null);
     });
   }
 
@@ -286,7 +294,7 @@ export class SidebarComponent extends UnsubscribeOnDestroyAdapter implements OnI
       return;
     }
 
-    this.empleadosService.getEmpleados('').subscribe({
+    this.empleadosService.getEmpleados().subscribe({
       next: (response: any) => {
         if (response && response.data && Array.isArray(response.data)) {
           const empleado = response.data.find((e: any) => e.id_empleado == idEmpleado);
@@ -300,7 +308,7 @@ export class SidebarComponent extends UnsubscribeOnDestroyAdapter implements OnI
           this.userPhoto = 'empleado-default.png';
         }
       },
-      error: (err) => {
+      error: (err: any) => {
         this.userPhoto = 'empleado-default.png';
       }
     });
@@ -330,19 +338,21 @@ export class SidebarComponent extends UnsubscribeOnDestroyAdapter implements OnI
     return baseUrl + fotoPath;
   }
 
-  async loadUserData() {
-    const token = this.authService.currentUserValue.token;
-    const userId = this.authService.currentUserValue.id_usuario;
+  loadUserData(): void {
+    const sesion = this.authService.sesion;
+    if (!sesion) {
+      return;
+    }
 
-    this.usuariosService.getPerfilUsuario(token, userId).subscribe({
+    this.usuariosService.getPerfil(sesion.id_usuario).subscribe({
       next: (response: any) => {
-        if (response && response.length > 0) {
-          const userData = response[0];
+        if (response?.data) {
+          const userData = response.data;
           this.hasWebAccess = userData.b_usuario_web == 1;
           this.hasMobileAccess = userData.b_usuario_movil == 1;
         }
       },
-      error: (err) => {
+      error: (err: any) => {
         console.error('Error al cargar datos del usuario', err);
       }
     });

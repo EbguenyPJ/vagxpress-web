@@ -1,53 +1,35 @@
 import { Injectable } from '@angular/core';
-import { HttpHeaders, HttpClient, HttpParams } from '@angular/common/http';
-import { conexion } from '../../conexion';
+import { Observable } from 'rxjs';
+import { ApiResponse } from '@core/models/api-response';
+import { Cliente, ClienteSelector, FilaCatalogo } from '@core/models/dominio';
+import { ApiBase } from '../api-base';
 
-@Injectable({
-  providedIn: 'root'
-})
-export class ClientesService {
+export type GuardarClientePayload = Partial<Omit<Cliente, 'id_cliente' | 'b_activo' | 'n_saldo_actual'>> & {
+  s_nombre_cliente: string;
+  id_tipo_cliente: number;
+};
 
-  constructor(private http: HttpClient) { }
-
-  getClientes(s_token: string) {
-    let headers = new HttpHeaders({
-      'Content-Type': 'application/json',
-      'Authorization': s_token
-    });
-    let params = { headers: headers };
-    let url = conexion.url + 'cliente/listar-clientes'
-    return this.http.get(url, params);
+@Injectable({ providedIn: 'root' })
+export class ClientesService extends ApiBase {
+  getClientes(): Observable<ApiResponse<Cliente[]>> {
+    return this.http.get<ApiResponse<Cliente[]>>(`${this.apiUrl}/clientes`);
   }
 
-
-  GetAll(s_token: string, ruta: any) {
-    let headers = new HttpHeaders({
-      'Content-Type': 'application/json',
-      'Authorization': s_token
-    });
-    let params = { headers: headers };
-    let url = conexion.url + ruta
-    return this.http.get(url, params);
+  /** Selector ligero del punto de venta (nombre + crédito disponible). */
+  getSelector(): Observable<ApiResponse<ClienteSelector[]>> {
+    return this.http.get<ApiResponse<ClienteSelector[]>>(`${this.apiUrl}/clientes/selector`);
   }
 
-  crearCliente(s_token: string, data: any) {
-    let headers = new HttpHeaders({
-      'Content-Type': 'application/json',
-      'Authorization': s_token
-    });
-    let url = conexion.url + 'cliente/crear-cliente';
-    return this.http.post(url, data, { headers });
+  /** @deprecated Catálogo genérico usado por el diálogo de alta; usar CatalogosService. */
+  GetAll(catalogo: string): Observable<ApiResponse<FilaCatalogo[]>> {
+    return this.http.get<ApiResponse<FilaCatalogo[]>>(`${this.apiUrl}/catalogos/${catalogo}`);
   }
 
-
-  actualizarCliente(s_token: string, id: number, data: any) {
-    let headers = new HttpHeaders({
-      'Content-Type': 'application/json',
-      'Authorization': s_token
-    });
-    let url = conexion.url + 'cliente/actualizar-cliente/' + id;
-    return this.http.put(url, data, { headers });
+  crearCliente(payload: GuardarClientePayload): Observable<ApiResponse<Cliente>> {
+    return this.http.post<ApiResponse<Cliente>>(`${this.apiUrl}/clientes`, payload);
   }
 
-
+  actualizarCliente(idCliente: number, payload: GuardarClientePayload): Observable<ApiResponse<Cliente>> {
+    return this.http.put<ApiResponse<Cliente>>(`${this.apiUrl}/clientes/${idCliente}`, payload);
+  }
 }

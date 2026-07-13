@@ -163,7 +163,7 @@ export class OrdenesCompraComponent implements OnInit, OnDestroy {
       }
     });
 
-    this.ordenesCompraService.descargarOrdenCompraPdf(this.s_token, row.id_orden_compra).subscribe(
+    this.ordenesCompraService.descargarPdf(row.id_orden_compra).subscribe(
       (response: any) => {
         if (response.status === 'success') {
           Swal.close();
@@ -256,7 +256,7 @@ export class OrdenesCompraComponent implements OnInit, OnDestroy {
   loadData() {
     this.isLoading = true;
 
-    this.ordenesCompraService.getOrdenesCompra(this.s_token).subscribe(
+    this.ordenesCompraService.getOrdenesCompra().subscribe(
       (response: any) => {
         if (response.status === 'success') {
           const ordenes = response.data.map((ord: any) => new OrdenCompra(ord));

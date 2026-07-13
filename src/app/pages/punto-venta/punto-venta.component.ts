@@ -3,8 +3,10 @@ import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import Swal from 'sweetalert2';
 import { MatDialog } from '@angular/material/dialog';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
 import { BreadcrumbComponent } from '@shared/components/breadcrumb/breadcrumb.component';
-import { conexion } from 'app/conexion';
+import { environment } from 'environments/environment';
 
 // Servicios
 import { PuntoVentaService } from 'app/services/punto-venta/punto-venta.service';
@@ -17,6 +19,7 @@ import { BusquedaComponent } from './busqueda/busqueda.component';
 
 // Dialogs
 import { DialogProcesarVentaComponent } from './dialogs/dialog-procesar-venta/dialog-procesar-venta.component';
+import { DialogBuscarVehiculoComponent } from './dialogs/dialog-buscar-vehiculo/dialog-buscar-vehiculo.component';
 
 @Component({
   selector: 'app-punto-venta',
@@ -27,7 +30,9 @@ import { DialogProcesarVentaComponent } from './dialogs/dialog-procesar-venta/di
     CategoriasComponent,
     ProductosComponent,
     CarritoComponent,
-    BusquedaComponent
+    BusquedaComponent,
+    MatButtonModule,
+    MatIconModule
   ],
   templateUrl: './punto-venta.component.html',
   styleUrls: ['./punto-venta.component.scss'],
@@ -70,7 +75,7 @@ export class PuntoVentaComponent implements OnInit {
   habilitarFocusBusqueda: boolean = true;
 
   // URL base para imágenes
-  urlImagenes: string = conexion.url_img;
+  urlImagenes: string = environment.imgUrl;
 
   // Breadcrumb
   breadscrums = [
@@ -130,7 +135,7 @@ export class PuntoVentaComponent implements OnInit {
     };
 
     // Cargar categorías
-    this.posService.getCategorias(this.s_token).subscribe(
+    this.posService.getCategorias().subscribe(
       (response: any) => {
         if (response.status === 'success') {
           this.todasCategorias = response.data || [];
@@ -145,7 +150,7 @@ export class PuntoVentaComponent implements OnInit {
     );
 
     // Cargar subcategorías
-    this.posService.getSubcategorias(this.s_token).subscribe(
+    this.posService.getSubcategorias().subscribe(
       (response: any) => {
         if (response.status === 'success') {
           this.todasSubcategorias = response.data || [];
@@ -160,7 +165,7 @@ export class PuntoVentaComponent implements OnInit {
     );
 
     // Cargar productos
-    this.posService.getProductos(this.s_token).subscribe(
+    this.posService.getProductos().subscribe(
       (response: any) => {
         if (response.status === 'success') {
           this.todosProductos = response.data || [];
@@ -175,7 +180,7 @@ export class PuntoVentaComponent implements OnInit {
     );
 
     // Cargar porcentajes de utilidad
-    this.posService.getPorcentajesUtilidad(this.s_token).subscribe(
+    this.posService.getPorcentajesUtilidad().subscribe(
       (response: any) => {
         if (response.status === 'success') {
           // Ordenar porcentajes de menor a mayor
@@ -276,6 +281,19 @@ export class PuntoVentaComponent implements OnInit {
 
   onProductoSeleccionado(producto: any): void {
     this.agregarAlCarrito(producto);
+  }
+
+  // Abre la búsqueda por vehículo; el resultado elegido se agrega al carrito.
+  abrirBusquedaVehiculo(): void {
+    const dialogRef = this.dialog.open(DialogBuscarVehiculoComponent, {
+      width: '640px',
+    });
+
+    dialogRef.afterClosed().subscribe((refaccion) => {
+      if (refaccion) {
+        this.agregarAlCarrito(refaccion);
+      }
+    });
   }
 
   agregarAlCarrito(producto: any): void {

@@ -30,7 +30,7 @@ import { Direction } from '@angular/cdk/bidi';
 
 
 import { clientesModel } from 'app/models/clientesModel'
-import { conexion } from 'app/conexion';
+import { environment } from 'environments/environment';
 import { ClientesService } from 'app/services/clientes/clientes.service';
 import { GastosService } from 'app/services/gastos/gastos.service';
 import { MatDatepickerToggle, MatDatepicker } from "@angular/material/datepicker";
@@ -71,8 +71,8 @@ import { DialogDetalleGastoComponent } from './dialogs/dialog-detalle-gasto/dial
     ReactiveFormsModule,
   ],
   templateUrl: './gastos.component.html',
-  styleUrl: './gastos.component.scss'
-
+  styleUrl: './gastos.component.scss',
+  animations: [rowsAnimation],
 })
 export class GastosComponent implements OnInit {
 
@@ -174,18 +174,21 @@ export class GastosComponent implements OnInit {
     //const idSucursal = this.data.sucursal.id_sucursal;
     this.isLoading = true;
 
-    this.gastosService.getGastos(token).subscribe({
+    this.gastosService.getGastos().subscribe({
       next: (data: any) => {
         // Filtrar por rango de fechas en Angular
+        // Comparación en fecha LOCAL: toISOString() desplazaba el día por
+        // la zona horaria y ocultaba los gastos del día por la noche.
+        const aFechaLocal = (fecha: Date): string => {
+          const y = fecha.getFullYear();
+          const m = String(fecha.getMonth() + 1).padStart(2, '0');
+          const d = String(fecha.getDate()).padStart(2, '0');
+          return `${y}-${m}-${d}`;
+        };
+
         const gastosFiltrados = (data.data || []).filter((item: any) => {
-          const fechaGasto = new Date(item.d_fecha_gasto);
-
-          // Normalizar fechas
-          const fechaGastoStr = fechaGasto.toISOString().split('T')[0];
-          const fechaInicioStr = this.fechaInicio.toISOString().split('T')[0];
-          const fechaFinStr = this.fechaFin.toISOString().split('T')[0];
-
-          return fechaGastoStr >= fechaInicioStr && fechaGastoStr <= fechaFinStr;
+          const fechaGastoStr = aFechaLocal(new Date(item.d_fecha_gasto));
+          return fechaGastoStr >= aFechaLocal(this.fechaInicio) && fechaGastoStr <= aFechaLocal(this.fechaFin);
         });
 
         // Mapear al formato de las columnas

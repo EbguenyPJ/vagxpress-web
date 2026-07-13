@@ -238,7 +238,7 @@ export class BitacoraVentasComponent implements OnInit, OnDestroy {
   loadData() {
     this.isLoading = true;
 
-    this.bitacoraVentasService.getVentas(this.s_token).subscribe({
+    this.bitacoraVentasService.getVentas().subscribe({
       next: (response: any) => {
         if (response.status === 'success') {
           this.dataSource.data = response.data.map((v: any) => new Venta(v));
@@ -250,7 +250,7 @@ export class BitacoraVentasComponent implements OnInit, OnDestroy {
           this.isLoading = false;
         }
       },
-      error: (err) => {
+      error: (err: any) => {
         console.error('Error al cargar ventas:', err);
         this.isLoading = false;
         Swal.fire({

@@ -42,15 +42,15 @@ export class RepartosComponent {
       }
     });
 
-    this.RepartosService.getAllRepartos("").subscribe({
-      next: (response) => {
+    this.RepartosService.getRepartos().subscribe({
+      next: (response: any) => {
         this.repartos = response;
         this.repartos = this.repartos.data;
         
         console.log("Repartos: ", this.repartos);
         Swal.close();
       },
-      error: (error) => {
+      error: (error: any) => {
         Swal.close();
         Swal.fire('Error', 'Hubo un error', 'error');
         console.log(error);

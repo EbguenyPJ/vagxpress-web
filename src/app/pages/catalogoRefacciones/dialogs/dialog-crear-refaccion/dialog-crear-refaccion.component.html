@@ -130,6 +130,38 @@
             }
           </mat-chip-set>
         </div>
+
+        <div class="col-md-12 mt-3">
+          <label class="clase-label">Compatibilidad Vehicular</label>
+          <p class="compat-ayuda">
+            Define a qué autos le queda esta refacción. Una regla sin condiciones
+            la marca como universal; sin reglas, no tiene compatibilidad definida.
+          </p>
+
+          <button mat-stroked-button color="primary" (click)="abrirConstructorRegla()">
+            <mat-icon>add_circle_outline</mat-icon>
+            Agregar Nueva Regla
+          </button>
+
+          <div class="reglas-lista mt-2">
+            @for (regla of reglasCompatibilidad; track $index) {
+            <div class="regla-card" [class.es-universal]="regla._labels?.universal">
+              <mat-icon class="regla-icon">{{
+                regla._labels?.universal ? 'public' : 'directions_car'
+              }}</mat-icon>
+              <span class="regla-resumen">{{ regla.s_resumen }}</span>
+              <button
+                mat-icon-button
+                class="regla-remove"
+                (click)="removerRegla($index)"
+                aria-label="Quitar regla"
+              >
+                <mat-icon>delete_outline</mat-icon>
+              </button>
+            </div>
+            }
+          </div>
+        </div>
       </div>
     </form>
   </div>

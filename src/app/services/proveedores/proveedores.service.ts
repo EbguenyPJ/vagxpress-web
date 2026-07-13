@@ -1,42 +1,24 @@
 import { Injectable } from '@angular/core';
-import { HttpHeaders, HttpClient } from '@angular/common/http';
-import { conexion } from '../../conexion';
+import { Observable } from 'rxjs';
+import { ApiResponse } from '@core/models/api-response';
+import { Proveedor } from '@core/models/dominio';
+import { ApiBase } from '../api-base';
 
-@Injectable({
-  providedIn: 'root'
-})
-export class ProveedoresService {
+export type GuardarProveedorPayload = Partial<Omit<Proveedor, 'id_proveedor' | 'b_activo'>> & {
+  s_proveedor: string;
+};
 
-  constructor(private http: HttpClient) { }
-
-
-    getProveedores(s_token: string) {
-    let headers = new HttpHeaders({
-      'Content-Type': 'application/json',
-      'Authorization': s_token
-    });
-    let url = conexion.url + 'proveedor/listar-proveedores';
-    return this.http.get(url, { headers });
+@Injectable({ providedIn: 'root' })
+export class ProveedoresService extends ApiBase {
+  getProveedores(): Observable<ApiResponse<Proveedor[]>> {
+    return this.http.get<ApiResponse<Proveedor[]>>(`${this.apiUrl}/proveedores`);
   }
 
-    crearProveedor(s_token: string, data: any) {
-    let headers = new HttpHeaders({
-      'Content-Type': 'application/json',
-      'Authorization': s_token
-    });
-    let url = conexion.url + 'proveedor/crear-proveedor';
-    return this.http.post(url, data, { headers });
+  crearProveedor(payload: GuardarProveedorPayload): Observable<ApiResponse<Proveedor>> {
+    return this.http.post<ApiResponse<Proveedor>>(`${this.apiUrl}/proveedores`, payload);
   }
 
-  actualizarProveedor(s_token: string, id: number, data: any) {
-    let headers = new HttpHeaders({
-      'Content-Type': 'application/json',
-      'Authorization': s_token
-    });
-    let url = conexion.url + 'proveedor/actualizar-proveedor/' + id;
-    return this.http.put(url, data, { headers });
+  actualizarProveedor(idProveedor: number, payload: GuardarProveedorPayload): Observable<ApiResponse<Proveedor>> {
+    return this.http.put<ApiResponse<Proveedor>>(`${this.apiUrl}/proveedores/${idProveedor}`, payload);
   }
-
-
-
 }

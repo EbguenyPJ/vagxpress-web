@@ -1,51 +1,55 @@
 import { Injectable } from '@angular/core';
-import { HttpHeaders, HttpClient } from '@angular/common/http';
-import { conexion } from '../../conexion';
+import { Observable } from 'rxjs';
+import { ApiResponse } from '@core/models/api-response';
+import { OrdenCompraListado } from '@core/models/dominio';
+import { ApiBase } from '../api-base';
 
-@Injectable({
-  providedIn: 'root'
-})
-export class OrdenesCompraService {
+export interface GenerarOrdenesPayload {
+  ordenes: {
+    id_requisicion: number;
+    id_proveedor?: number | null;
+    refacciones: { id_requisicion_refaccion: number; b_autorizada: 0 | 1 }[];
+  }[];
+}
 
-  constructor(private http: HttpClient) { }
+export interface GestionarOrdenPayload {
+  id_estatus_orden_compra: number; // 2=Aprobada, 3=Rechazada
+  refacciones: { id_requisicion_refaccion: number; n_cantidad_solicitada: number }[];
+}
 
-  getOrdenesCompra(s_token: string) {
-    let headers = new HttpHeaders({
-      'Content-Type': 'application/json',
-      'Authorization': s_token
-    });
-    let params = { headers: headers };
-    let url = conexion.url + 'mostrar-ordenes-compras';
-    return this.http.get(url, params);
+export interface RenglonOrdenCompra {
+  id_orden_compra_requisicion_refaccion: number;
+  s_nombre_refaccion: string | null;
+  s_numero_parte: string | null;
+  id_requisicion_refaccion: number;
+  n_cantidad_sugerida: number | null;
+  n_cantidad_solicitada: number | null;
+  n_costo_unitario: string | number | null;
+  id_motivo_pedido: number | null;
+  s_motivo_pedido: string | null;
+  id_prioridad: number | null;
+  s_prioridad: string | null;
+}
+
+@Injectable({ providedIn: 'root' })
+export class OrdenesCompraService extends ApiBase {
+  getOrdenesCompra(): Observable<ApiResponse<OrdenCompraListado[]>> {
+    return this.http.get<ApiResponse<OrdenCompraListado[]>>(`${this.apiUrl}/ordenes-compra`);
   }
 
-  getOrdenCompra(s_token: string, id_orden_compra: number) {
-    let headers = new HttpHeaders({
-      'Content-Type': 'application/json',
-      'Authorization': s_token
-    });
-    let params = { headers: headers };
-    let url = conexion.url + 'mostrar-orden-compra/' + id_orden_compra;
-    return this.http.get(url, params);
+  getOrdenCompraById(idOrdenCompra: number): Observable<ApiResponse<RenglonOrdenCompra[]>> {
+    return this.http.get<ApiResponse<RenglonOrdenCompra[]>>(`${this.apiUrl}/ordenes-compra/${idOrdenCompra}`);
   }
 
-  gestionarOrdenCompra(s_token: string, id_orden_compra: number, data: any) {
-    let headers = new HttpHeaders({
-      'Content-Type': 'application/json',
-      'Authorization': s_token
-    });
-    let url = conexion.url + 'gestionar-orden-compra/' + id_orden_compra;
-    let options = { headers: headers };
-    return this.http.put(url, data, options);
+  generarOrdenes(payload: GenerarOrdenesPayload): Observable<ApiResponse<OrdenCompraListado[]>> {
+    return this.http.post<ApiResponse<OrdenCompraListado[]>>(`${this.apiUrl}/ordenes-compra`, payload);
   }
 
-  descargarOrdenCompraPdf(s_token: string, id_orden_compra: number) {
-    let headers = new HttpHeaders({
-      'Content-Type': 'application/json',
-      'Authorization': s_token
-    });
-    let params = { headers: headers };
-    let url = conexion.url + 'descargar-orden-compra-pdf/' + id_orden_compra;
-    return this.http.get(url, params);
+  gestionarOrden(idOrdenCompra: number, payload: GestionarOrdenPayload): Observable<ApiResponse<null>> {
+    return this.http.put<ApiResponse<null>>(`${this.apiUrl}/ordenes-compra/${idOrdenCompra}/gestionar`, payload);
+  }
+
+  descargarPdf(idOrdenCompra: number): Observable<ApiResponse<{ folio: string; file_base64: string }>> {
+    return this.http.get<ApiResponse<{ folio: string; file_base64: string }>>(`${this.apiUrl}/ordenes-compra/${idOrdenCompra}/pdf`);
   }
 }

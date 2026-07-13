@@ -17,7 +17,6 @@ import { ClientesComponent } from './pages/clientes/clientes.component';
 
 import { BitacoraVentasComponent } from './pages/bitacora-ventas/bitacora-ventas.component';
 import { CortesComponent } from './pages/operaciones/cortes/cortes.component';
-import { EmbarquesComponent } from './pages/embarques/embarques.component';
 
 import { TabsComponent } from './pages/embarques/tabs/tabs.component';
 

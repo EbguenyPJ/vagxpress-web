@@ -28,7 +28,7 @@ import { Direction } from '@angular/cdk/bidi';
 
 
 import { ProveedoresService } from 'app/services/proveedores/proveedores.service';
-import { conexion } from 'app/conexion';
+import { environment } from 'environments/environment';
 import { DialogCrearProveedorComponent } from './dialog/dialog-crear-proveedor/dialog-crear-proveedor.component';
 
 @Component({
@@ -54,7 +54,8 @@ import { DialogCrearProveedorComponent } from './dialog/dialog-crear-proveedor/d
     MatMenuModule,
     MatPaginatorModule,],
   templateUrl: './proveedores.component.html',
-  styleUrl: './proveedores.component.scss'
+  styleUrl: './proveedores.component.scss',
+  animations: [rowsAnimation],
 })
 export class ProveedoresComponent implements OnInit, OnDestroy{
 
@@ -75,7 +76,7 @@ export class ProveedoresComponent implements OnInit, OnDestroy{
   isLoading = true;
   private destroy$ = new Subject<void>();
   data: any;
-  ruta_img: any = conexion.url_img + "/proveedores/";
+  ruta_img: any = environment.imgUrl + "/proveedores/";
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
@@ -137,8 +138,8 @@ getDisplayedColumns(): string[] {
   loadData() {
     this.isLoading = true;
 
-    this.ProveedoresService.getProveedores("").subscribe({
-      next: (res) => {
+    this.ProveedoresService.getProveedores().subscribe({
+      next: (res: any) => {
         console.log('Respuesta del API:', res);
         this.data = res;
         this.dataSource = new MatTableDataSource<any>(this.data.data);
@@ -155,7 +156,7 @@ getDisplayedColumns(): string[] {
           return dataStr.indexOf(filter) !== -1;
         };
       },
-      error: (err) => {
+      error: (err: any) => {
         console.error(err);
         this.isLoading = false;
         this.showNotification('snackbar-danger', 'Error al cargar los proveedores', 'bottom', 'center');

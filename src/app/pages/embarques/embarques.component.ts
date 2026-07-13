@@ -47,7 +47,8 @@ import { EmbarqueService } from 'app/services/embarque/embarque.service';
     BreadcrumbComponent
 ],
   templateUrl: './embarques.component.html',
-  styleUrl: './embarques.component.scss'
+  styleUrl: './embarques.component.scss',
+  animations: [rowsAnimation],
 })
 export class EmbarquesComponent {
   columnDefinitions = [
@@ -203,8 +204,8 @@ export class EmbarquesComponent {
   loadData() {
     this.isLoading = true;
 
-    this.EmbarqueService.getAllEmbarques("").subscribe({
-      next: (data) => {
+    this.EmbarqueService.getAllEmbarques().subscribe({
+      next: (data: any) => {
         this.data = data;
         this.dataSource = new MatTableDataSource<embarqueModel>(this.data.data);
         this.dataSource.paginator = this.paginator;
@@ -221,7 +222,7 @@ export class EmbarquesComponent {
 
         this.refreshTable();
       },
-      error: (err) => {
+      error: (err: any) => {
         console.error(err);
         this.isLoading = false;
         this.showNotification(

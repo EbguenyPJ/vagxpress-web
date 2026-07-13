@@ -87,7 +87,7 @@ export class DialogProcesarVentaComponent implements OnInit {
 
   cargarClientes(): void {
     this.isLoadingClientes = true;
-    this.posService.getClientes(this.data.s_token).subscribe(
+    this.posService.getClientes().subscribe(
       (response: any) => {
         if (response.status === 'success') {
           this.clientes = response.data || [];
@@ -114,7 +114,7 @@ export class DialogProcesarVentaComponent implements OnInit {
 
   cargarMetodosPago(): void {
     this.isLoadingMetodos = true;
-    this.posService.getMetodosPago(this.data.s_token).subscribe(
+    this.posService.getMetodosPago().subscribe(
       (response: any) => {
         if (response.status === 'success') {
           this.metodosPago = response.data || [];
@@ -135,7 +135,7 @@ export class DialogProcesarVentaComponent implements OnInit {
 
   cargarCuentasBancarias(): void {
     this.isLoadingCuentas = true;
-    this.posService.getCuentasBancarias(this.data.s_token).subscribe(
+    this.posService.getCuentasBancarias().subscribe(
       (response: any) => {
         if (response.status === 'success') {
           this.cuentasBancarias = response.data || [];
@@ -242,7 +242,7 @@ export class DialogProcesarVentaComponent implements OnInit {
       id_cuenta_bancaria: this.id_cuenta_bancaria_seleccionada || null
     };
 
-    this.posService.crearVenta(this.data.s_token, payload).subscribe(
+    this.posService.crearVenta(payload).subscribe(
       (response: any) => {
         this.isProcessing = false;
         if (response.status === 'success') {

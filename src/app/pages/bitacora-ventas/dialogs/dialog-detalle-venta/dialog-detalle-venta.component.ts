@@ -39,7 +39,7 @@ cargarDetalle() {
   const s_token = localStorage.getItem('s_token') || '';
 
   this.BitacoraVentasService
-    .getVentaById(s_token, this.data.id_venta)
+    .getVentaById(this.data.id_venta)
     .subscribe({
       next: (res: any) => {
         console.log('Respuesta del servicio:', res);
@@ -50,7 +50,7 @@ cargarDetalle() {
         this.isLoading = false;
         console.log('Venta cargada en dialog:', this.venta);
       },
-      error: (err) => {
+      error: (err: any) => {
         console.error('Error al cargar venta:', err);
         this.isLoading = false;
       }

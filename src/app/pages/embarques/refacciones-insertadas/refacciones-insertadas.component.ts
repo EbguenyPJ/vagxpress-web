@@ -51,7 +51,8 @@ import { DialogRefaccionesInsertadasComponent } from '../dialogs/dialog-refaccio
     MatDatepickerModule
 ],
   templateUrl: './refacciones-insertadas.component.html',
-  styleUrl: './refacciones-insertadas.component.scss'
+  styleUrl: './refacciones-insertadas.component.scss',
+  animations: [rowsAnimation],
 })
 export class RefaccionesInsertadasComponent {
   columnDefinitions = [
@@ -222,8 +223,8 @@ export class RefaccionesInsertadasComponent {
   loadData() {
     this.isLoading = true;
 
-    this.EmbarqueService.getRefaccionesInsertadas("").subscribe({
-      next: (data) => {
+    this.EmbarqueService.getRefaccionesInsertadas().subscribe({
+      next: (data: any) => {
         this.data = data;
         this.dataSource = new MatTableDataSource<refaccionInsertadaModel>(this.data.data);
         this.dataSource.paginator = this.paginator;
@@ -277,7 +278,7 @@ export class RefaccionesInsertadasComponent {
 
         this.refreshTable();
       },
-      error: (err) => {
+      error: (err: any) => {
         console.error(err);
         this.isLoading = false;
         this.showNotification(

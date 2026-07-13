@@ -1,19 +1,18 @@
-import { Injectable } from '@angular/core';
-import { Router, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
-
+import { inject } from '@angular/core';
+import { CanActivateFn, Router } from '@angular/router';
 import { AuthService } from '../service/auth.service';
 
-@Injectable({
-  providedIn: 'root',
-})
-export class AuthGuard  {
-  constructor(private authService: AuthService, private router: Router) {}
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
-    if (this.authService.currentUserValue) {
-      return true;
-    }
-    this.router.navigate(['/authentication/signin']);
-    return false;
+/** Bloquea las rutas de la app si no hay sesión. */
+export const authGuard: CanActivateFn = () => {
+  const authService = inject(AuthService);
+  const router = inject(Router);
+
+  if (authService.sesion) {
+    return true;
   }
-}
+
+  return router.createUrlTree(['/authentication/signin']);
+};
+
+/** @deprecated Alias de clase para rutas legadas; usar authGuard. */
+export { authGuard as AuthGuard };

@@ -18,7 +18,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatCardModule } from '@angular/material/card';
 
 import { RefaccionesService } from 'app/services/refacciones/refacciones.service';
-import { conexion } from 'app/conexion';
+import { environment } from 'environments/environment';
 import Swal from 'sweetalert2';
 
 @Component({
@@ -55,10 +55,11 @@ export class DialogDetalleRefaccionComponent implements OnInit {
   loadRefaccionData() {
     this.isLoading = true;
     const idRefaccion = this.dataDialog.id_refaccion;
-    this.refaccionesService.getRefaccionById('', idRefaccion).subscribe({
+    this.refaccionesService.getRefaccionById(idRefaccion).subscribe({
       next: (response: any) => {
-        if (response.status === 'success' && response.data.length > 0) {
-          this.refaccionData = response.data[0];
+        if (response.status === 'success' && response.data) {
+          // El API nuevo devuelve la refacción como objeto único (antes venía en data[0]).
+          this.refaccionData = response.data;
         } else {
           Swal.fire(
             'Error',
@@ -68,7 +69,7 @@ export class DialogDetalleRefaccionComponent implements OnInit {
         }
         this.isLoading = false;
       },
-      error: (err) => {
+      error: (err: any) => {
         Swal.fire(
           'Error',
           'No se pudo cargar la información de la refacción.',

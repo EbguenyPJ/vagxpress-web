@@ -92,16 +92,16 @@ export class DialogCargaMasivaComponent implements OnInit {
   cargarCatalogos() {
     forkJoin({
       marcas: this.refaccionesService
-        .getMarcas('')
+        .getMarcas()
         .pipe(catchError(() => of({ data: [] }))),
       categorias: this.refaccionesService
-        .getCategorias('')
+        .getCategorias()
         .pipe(catchError(() => of({ data: [] }))),
       subcategorias: this.refaccionesService
-        .getSubcategorias('')
+        .getSubcategorias()
         .pipe(catchError(() => of({ data: [] }))),
       clases: this.refaccionesService
-        .getClases('')
+        .getClases()
         .pipe(catchError(() => of({ data: [] }))),
     }).subscribe((res: any) => {
       this.marcas = res.marcas.data;
@@ -223,13 +223,12 @@ export class DialogCargaMasivaComponent implements OnInit {
         Swal.showLoading();
       },
     });
-    const payload = { refacciones: this.refaccionesParaCargar };
-    this.refaccionesService.crearRefaccionesMasivo('', payload).subscribe({
+    this.refaccionesService.crearRefaccionesMasivo(this.refaccionesParaCargar).subscribe({
       next: () => {
         Swal.fire('¡Éxito!', 'Las refacciones han sido guardadas.', 'success');
         this.dialogRef.close(true);
       },
-      error: (err) => {
+      error: (err: any) => {
         console.error(err);
         Swal.fire('Error', 'No se pudieron guardar las refacciones.', 'error');
       },

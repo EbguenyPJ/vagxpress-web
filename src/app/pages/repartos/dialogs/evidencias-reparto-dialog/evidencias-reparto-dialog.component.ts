@@ -17,7 +17,7 @@ import { MatExpansionModule } from '@angular/material/expansion';
 import { MatSelectionListChange } from '@angular/material/list';
 import { CdkDragDrop } from '@angular/cdk/drag-drop';
 import { DragDropModule } from '@angular/cdk/drag-drop';
-import { conexion } from 'app/conexion';
+import { environment } from 'environments/environment';
 import { refaccionInsertadaModel } from 'app/models/refaccionInsertadaModel';
 import { CommonModule } from '@angular/common';
 import { MatDividerModule } from "@angular/material/divider";
@@ -77,13 +77,13 @@ export class EvidenciasRepartoDialogComponent {
     console.log("Evidencias: ", this.evidencias);
     console.log("Tipo: ", this.tipo);
     if(this.tipo === 1){
-      this.url = conexion.url_img + "/evidenciasVXM/imgEvidenciasSalidaReparto/";
+      this.url = environment.imgUrl + "/evidenciasVXM/imgEvidenciasSalidaReparto/";
     }
     if(this.tipo === 2){
-      this.url = conexion.url_img + "/evidenciasVXM/imgEvidenciasFinReparto/";
+      this.url = environment.imgUrl + "/evidenciasVXM/imgEvidenciasFinReparto/";
     }
     if(this.tipo === 3){
-      this.url = conexion.url_img + "/evidenciasVXM/imgFirmas/";
+      this.url = environment.imgUrl + "/evidenciasVXM/imgFirmas/";
     }
   }
 

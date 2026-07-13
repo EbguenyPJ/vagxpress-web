@@ -55,7 +55,8 @@ import { DialogAsignarPermisosComponent } from './dialog/dialog-asignar-permisos
     MatMenuModule,
     MatPaginatorModule, MatSlideToggle],
   templateUrl: './permisos.component.html',
-  styleUrl: './permisos.component.scss'
+  styleUrl: './permisos.component.scss',
+  animations: [rowsAnimation],
 })
 export class PermisosComponent implements OnInit, AfterViewInit, OnDestroy{
 
@@ -179,7 +180,7 @@ export class PermisosComponent implements OnInit, AfterViewInit, OnDestroy{
 
   loadData() {
     this.isLoading = true;
-    this.UsuariosService.getUsuarios("").subscribe({
+    this.UsuariosService.getUsuarios().subscribe({
       next: (response: any) => {
         if (response && response.data) {
           this.dataSource.data = response.data.map((user: any) => ({
@@ -270,7 +271,7 @@ export class PermisosComponent implements OnInit, AfterViewInit, OnDestroy{
           row.loading_movil = true;
         }
 
-        this.PermisosService.ActualizarWebMovil('', id_usuario, tipo === 'web' ? checked : undefined, tipo === 'movil' ? checked : undefined)
+        this.UsuariosService.actualizarAccesos(id_usuario, tipo === 'web' ? { b_usuario_web: checked ? 1 : 0 } : { b_usuario_movil: checked ? 1 : 0 })
           .subscribe({
             next: (response: any) => {
               if (response && response.success) {

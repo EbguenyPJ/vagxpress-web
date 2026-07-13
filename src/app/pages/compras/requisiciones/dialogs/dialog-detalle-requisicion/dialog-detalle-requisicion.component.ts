@@ -76,11 +76,11 @@ export class DialogDetalleRequisicionComponent implements OnInit {
   cargarDetalle(): void {
     this.isLoading = true;
 
-    this.requisicionesService.getDetalleRequisicion(this.data.s_token, this.data.id_requisicion).subscribe(
+    this.requisicionesService.getRequisicionById(this.data.id_requisicion).subscribe(
       (response: any) => {
         if (response.status === 'success') {
-          // La respuesta viene en data[0] según la estructura proporcionada
-          const refacciones = response.data[0] || [];
+          // El API nuevo devuelve los renglones directamente en `data` (antes venían envueltos en data[0]).
+          const refacciones = response.data || [];
           this.dataSource.data = refacciones;
           this.dataSource.paginator = this.paginator;
           this.dataSource.sort = this.sort;
@@ -172,11 +172,7 @@ export class DialogDetalleRequisicionComponent implements OnInit {
       id_estatus_requisicion: id_estatus
     };
 
-    this.requisicionesService.actualizarRequisicion(
-      this.data.s_token,
-      this.data.id_requisicion,
-      payload
-    ).subscribe(
+    this.requisicionesService.actualizarEstatus(this.data.id_requisicion, id_estatus).subscribe(
       (response: any) => {
         if (response.status === 'success') {
           Swal.fire({

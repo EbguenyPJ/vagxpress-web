@@ -1,0 +1,65 @@
+<h2 mat-dialog-title>Constructor de Reglas de Compatibilidad</h2>
+
+<mat-dialog-content>
+  <div *ngIf="cargando" class="constructor-cargando">
+    <mat-spinner [diameter]="36"></mat-spinner>
+    <span>Cargando catálogos…</span>
+  </div>
+
+  <div *ngIf="!cargando" class="constructor-campos">
+    <p class="constructor-ayuda">
+      Selecciona las condiciones del vehículo. Cada campo admite varias opciones.
+      Deja <strong>todos los campos vacíos</strong> para una regla universal.
+    </p>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Marcas</mat-label>
+      <mat-select [formControl]="marcasCtrl" multiple>
+        <mat-option *ngFor="let m of marcas" [value]="m.id_marca_vehiculo">
+          {{ m.s_marca_vehiculo }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Modelos</mat-label>
+      <mat-select [formControl]="modelosCtrl" multiple [disabled]="!modelosFiltrados.length">
+        <mat-option *ngFor="let m of modelosFiltrados" [value]="m.id_modelo_vehiculo">
+          {{ m.s_modelo_vehiculo }}
+        </mat-option>
+      </mat-select>
+      <mat-hint *ngIf="!marcasCtrl.value.length">Elige una marca primero</mat-hint>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Generaciones / Años</mat-label>
+      <mat-select [formControl]="generacionesCtrl" multiple [disabled]="!generacionesFiltradas.length">
+        <mat-option *ngFor="let g of generacionesFiltradas" [value]="g.id_generacion">
+          {{ g.s_generacion }} ({{ g.n_anio_inicio }}<span *ngIf="g.n_anio_fin">–{{ g.n_anio_fin }}</span>)
+        </mat-option>
+      </mat-select>
+      <mat-hint *ngIf="!modelosCtrl.value.length">Elige un modelo primero</mat-hint>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Motores</mat-label>
+      <mat-select [formControl]="motoresCtrl" multiple>
+        <mat-option *ngFor="let mo of motores" [value]="mo.id_motor">
+          {{ mo.s_motor }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <div class="constructor-resumen" [class.es-universal]="esUniversal">
+      <mat-icon>{{ esUniversal ? 'public' : 'check_circle' }}</mat-icon>
+      <span>{{ resumen }}</span>
+    </div>
+  </div>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button (click)="cancelar()">Cancelar</button>
+  <button mat-raised-button color="primary" [disabled]="cargando" (click)="guardar()">
+    <mat-icon>check</mat-icon> Guardar Regla
+  </button>
+</mat-dialog-actions>

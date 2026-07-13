@@ -1,83 +1,39 @@
 import { Injectable } from '@angular/core';
-import { HttpHeaders, HttpClient } from '@angular/common/http';
-import { conexion } from '../../conexion';
+import { Observable } from 'rxjs';
+import { ApiResponse } from '@core/models/api-response';
+import { Usuario } from '@core/models/dominio';
+import { ApiBase } from '../api-base';
 
-@Injectable({
-  providedIn: 'root'
-})
-export class UsuariosService {
+export interface RegistrarUsuarioPayload {
+  id_empleado: number;
+  name: string;
+  password: string;
+  id_tipo_usuario: number;
+}
 
-  constructor(private http: HttpClient) { }
-
-  getUsuarios(s_token: string) {
-    let headers = new HttpHeaders({
-      'Content-Type': 'application/json',
-      'Authorization': s_token
-    });
-    let params = { headers: headers };
-    let url = conexion.url + 'listar-usuarios'
-    return this.http.get(url, params);
+@Injectable({ providedIn: 'root' })
+export class UsuariosService extends ApiBase {
+  getUsuarios(): Observable<ApiResponse<Usuario[]>> {
+    return this.http.get<ApiResponse<Usuario[]>>(`${this.apiUrl}/usuarios`);
   }
 
-
-  getPerfilUsuario(s_token: string, id_usuario: number) {
-    let headers = new HttpHeaders({
-      'Content-Type': 'application/json',
-      'Authorization': s_token
-    });
-    let params = { headers: headers };
-    let url = conexion.url + 'perfil-de-usuario/' + id_usuario
-    return this.http.get(url, params);
+  registrarUsuario(payload: RegistrarUsuarioPayload): Observable<ApiResponse<Usuario>> {
+    return this.http.post<ApiResponse<Usuario>>(`${this.apiUrl}/usuarios`, payload);
   }
 
-
-  crearUsuario(s_token: string, data: any) {
-    let headers = new HttpHeaders({
-      'Content-Type': 'application/json; multipart/form-data',
-      'Token': s_token
-    });
-    let url = conexion.url + 'registrar-usuario'
-    let options = { headers: headers };
-
-    return this.http.post(url, data, options);
+  getPerfil(idUsuario: number): Observable<ApiResponse<Usuario & Record<string, unknown>>> {
+    return this.http.get<ApiResponse<Usuario & Record<string, unknown>>>(`${this.apiUrl}/usuarios/${idUsuario}/perfil`);
   }
 
-
-  actualizarEstatusUsuario(s_token: string, id_usuario: number, data: any) {
-    let headers = new HttpHeaders({
-      'Content-Type': 'application/json',
-      'Token': s_token
-    });
-    let url = conexion.url + 'User/actualizar-estado-usuario/' + id_usuario
-    let options = { headers: headers };
-
-    return this.http.put(url, data, options);
+  actualizarAccesos(idUsuario: number, accesos: { b_usuario_web?: 0 | 1; b_usuario_movil?: 0 | 1 }): Observable<ApiResponse<Usuario>> {
+    return this.http.put<ApiResponse<Usuario>>(`${this.apiUrl}/usuarios/${idUsuario}/accesos`, accesos);
   }
 
-
-  cambiarTipoUsuario(s_token: string, id_usuario: number, data: any) {
-    let headers = new HttpHeaders({
-      'Content-Type': 'application/json',
-      'Token': s_token
-    });
-    let url = conexion.url + 'TipoUsuario/actualizar-tipo-usuario/' + id_usuario
-    let options = { headers: headers };
-
-    return this.http.put(url, data, options);
+  actualizarEstatus(idUsuario: number, activo: 0 | 1): Observable<ApiResponse<Usuario>> {
+    return this.http.put<ApiResponse<Usuario>>(`${this.apiUrl}/usuarios/${idUsuario}/estatus`, { b_activo: activo });
   }
 
-
-
-  getTiposUsuarios(s_token: string) {
-    let headers = new HttpHeaders({
-      'Content-Type': 'application/json',
-      'Authorization': s_token
-    });
-    let params = { headers: headers };
-    let url = conexion.url + 'tipos-usuarios'
-    return this.http.get(url, params);
+  actualizarTipoUsuario(idUsuario: number, idTipoUsuario: number): Observable<ApiResponse<Usuario>> {
+    return this.http.put<ApiResponse<Usuario>>(`${this.apiUrl}/usuarios/${idUsuario}/tipo-usuario`, { id_tipo_usuario: idTipoUsuario });
   }
-
-
-
 }

@@ -5,7 +5,7 @@ import { OnInit } from '@angular/core';
 import { CortesService } from 'app/services/cortes/cortes.service';
 import { CommonModule } from '@angular/common';
 import { MatProgressSpinner } from "@angular/material/progress-spinner";
-import { conexion } from 'app/conexion';
+import { environment } from 'environments/environment';
 import { MatIcon } from "@angular/material/icon";
 
 
@@ -21,7 +21,7 @@ export class DialogDetallesCorteComponent implements OnInit{
   corte: any = null;
   isLoading = true;
   evidencias: any[] = [];
-  urlEvidencias: string = conexion.url_img + '/evidenciasCortes/';
+  urlEvidencias: string = environment.imgUrl + '/evidenciasCortes/';
 
 
   constructor(
@@ -37,7 +37,7 @@ export class DialogDetallesCorteComponent implements OnInit{
 
   cargarDetalle() {
     this.isLoading = true;
-    this.cortesService.getCorteById('', this.data.id_corte).subscribe({
+    this.cortesService.getCorteById(this.data.id_corte).subscribe({
       next: (res: any) => {
         console.log('Respuesta del servicio:', res);
         // ⚠ Asegúrate de usar exactamente lo que devuelve tu backend
@@ -47,7 +47,7 @@ export class DialogDetallesCorteComponent implements OnInit{
         console.log('Corte cargado:', this.corte);
         console.log('Evidencias cargadas:', this.evidencias);
       },
-      error: (err) => {
+      error: (err: any) => {
         console.error('Error al cargar corte:', err);
         this.isLoading = false;
       }

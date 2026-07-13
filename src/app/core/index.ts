@@ -6,6 +6,8 @@ export { DirectionService } from './service/direction.service';
 export { RightSidebarService } from './service/rightsidebar.service';
 
 // models
-
-export { User } from './models/user';
+export { StorageService } from './service/storage.service';
+export { NotificationService } from './service/notification.service';
+export type { Sesion } from './models/sesion';
+export type { ApiResponse } from './models/api-response';
 export { InConfiguration } from './models/config.interface';

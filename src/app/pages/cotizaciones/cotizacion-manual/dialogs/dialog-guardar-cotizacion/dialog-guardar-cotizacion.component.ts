@@ -11,7 +11,7 @@ import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
 import { CotizacionService } from 'app/services/cotizacion/cotizacion.service';
-import { ClienteService } from 'app/services/cliente/cliente.service';
+import { ClientesService } from 'app/services/clientes/clientes.service';
 import Swal from 'sweetalert2';
 
 @Component({
@@ -44,7 +44,7 @@ export class DialogGuardarCotizacionComponent implements OnInit {
     public dialogRef: MatDialogRef<DialogGuardarCotizacionComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
     private cotizacionService: CotizacionService,
-    private clienteService: ClienteService
+    private clienteService: ClientesService
   ) {
     this.clientesFiltrados = this.clienteControl.valueChanges.pipe(
       startWith(''),
@@ -59,7 +59,7 @@ export class DialogGuardarCotizacionComponent implements OnInit {
   cargarClientes(): void {
     this.isLoadingClientes = true;
 
-    this.clienteService.getClientes(this.data.s_token).subscribe(
+    this.clienteService.getSelector().subscribe(
       (response: any) => {
         if (response.status === 'success') {
           this.clientes = response.data || [];
@@ -131,7 +131,7 @@ export class DialogGuardarCotizacionComponent implements OnInit {
       }))
     };
 
-    this.cotizacionService.crearCotizacion(this.data.s_token, payload).subscribe(
+    this.cotizacionService.crearCotizacion(payload).subscribe(
       (response: any) => {
         this.isGuardando = false;
         if (response.status === 'success') {

@@ -16,7 +16,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 //Agregados
 import { ClientesService } from 'app/services/clientes/clientes.service';
 import { CommonModule } from '@angular/common';//Para que funcione ngFor en Angular 19
-import { conexion } from 'app/conexion';
+import { environment } from 'environments/environment';
 import Swal from 'sweetalert2';
 import { DialogData } from 'app/contacts/form/form.component';
 import { clientesModel } from 'app/models/clientesModel';
@@ -50,7 +50,7 @@ export class DiaologCrearClienteComponent {
   tiposClientes: any;
   imagenBase64: string | null = null;
   selectedFileName: string = '';
-  ruta_img: any = conexion.url_img + "/empleados/";
+  ruta_img: any = environment.imgUrl + "/empleados/";
   actualizarImagen: boolean = false;
   url: string | null = null;
 
@@ -151,11 +151,11 @@ export class DiaologCrearClienteComponent {
   }
 
   const request = this.action === 'edit'
-    ? this.ClienteService.actualizarCliente('', this.clientesModel.id_cliente, formData)
-    : this.ClienteService.crearCliente('', formData);
+    ? this.ClienteService.actualizarCliente(this.clientesModel.id_cliente, formData)
+    : this.ClienteService.crearCliente(formData);
 
   request.subscribe({
-    next: (resp) => {
+    next: (resp: any) => {
       Swal.fire(
         'Éxito',
         `Cliente ${this.action === 'edit' ? 'actualizado' : 'creado'} correctamente`,
@@ -163,7 +163,7 @@ export class DiaologCrearClienteComponent {
       );
       this.dialogRef.close(resp);
     },
-    error: (err) => {
+    error: (err: any) => {
       console.error('ERROR DETALLE:', err);
       Swal.fire(
         'Error',
@@ -190,7 +190,7 @@ export class DiaologCrearClienteComponent {
   // --------------------- Obtener Catalogos ---------------------//
 
   getTiposClientes() {
-    this.ClienteService.GetAll('', 'tipos-cliente').subscribe(data => {
+    this.ClienteService.GetAll('tipos-cliente').subscribe(data => {
       this.tiposClientes = data;
       this.tiposClientes = this.tiposClientes.data;
       console.log("Tipos de clientes: ", this.tiposClientes);

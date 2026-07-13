@@ -8,6 +8,7 @@ import { MatDialogModule, MatDialogContent, MatDialogActions, MatDialogClose, MA
 import { FormsModule } from '@angular/forms';
 import { PermisosService } from 'app/services/permisos/permisos.service';
 import { UsuariosService } from 'app/services/usuarios/usuarios.service';
+import { CatalogosService } from 'app/services/catalogos/catalogos.service';
 import Swal from 'sweetalert2';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatSelectModule } from "@angular/material/select";
@@ -45,6 +46,7 @@ export class DialogAsignarPermisosComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) public data: { usuario: any },
     private permisosService: PermisosService,
     private usuariosService: UsuariosService,
+    private catalogosService: CatalogosService,
     private snackBar: MatSnackBar,
   ) {
     this.usuario = data.usuario;
@@ -63,9 +65,7 @@ export class DialogAsignarPermisosComponent implements OnInit {
     this.mensaje = 'Guardando cambios...';
     this.mensajeColor = 'accent';
 
-    this.permisosService.actualizarModulosUsuario(
-      '',
-      this.usuario.id,
+    this.permisosService.actualizarModulosUsuario(this.usuario.id,
       this.modulosUsuario
     ).subscribe({
       next: (response: any) => {
@@ -92,7 +92,7 @@ export class DialogAsignarPermisosComponent implements OnInit {
           this.manejarError(null, errorMsg);
         }
       },
-      error: (error) => this.manejarError(error, 'Error al guardar cambios')
+      error: (error: any) => this.manejarError(error, 'Error al guardar cambios')
     });
   }
 
@@ -102,7 +102,7 @@ cargarModulosDisponibles(): void {
     this.isLoading = true;
     this.mensaje = 'Cargando módulos disponibles...';
 
-    this.permisosService.getModulosDisponibles('')
+    this.permisosService.getModulosDisponibles()
       .subscribe({
         next: (response: any) => {
           // Manejo seguro de la respuesta sin asumir estructura
@@ -117,13 +117,13 @@ cargarModulosDisponibles(): void {
           this.categorias = this.extraerCategorias(this.modulos);
           this.cargarModulosUsuario();
         },
-        error: (error) => this.manejarError(error, 'Error al cargar módulos disponibles')
+        error: (error: any) => this.manejarError(error, 'Error al cargar módulos disponibles')
       });
   }
 
   cargarModulosUsuario(): void {
     this.mensaje = 'Cargando permisos actuales...';
-    this.permisosService.getModulosUsuario('', this.usuario.id)
+    this.permisosService.getModulosUsuario(this.usuario.id)
       .subscribe({
         next: (response: any) => {
           let modulosUsuario: any[] = [];
@@ -137,7 +137,7 @@ cargarModulosDisponibles(): void {
           this.isLoading = false;
           this.mensaje = '';
         },
-        error: (error) => this.manejarError(error, 'Error al cargar permisos del usuario')
+        error: (error: any) => this.manejarError(error, 'Error al cargar permisos del usuario')
       });
   }
 
@@ -233,11 +233,8 @@ cargarModulosDisponibles(): void {
       if (result.isConfirmed) {
         usuario.loading = true;
 
-        localStorage.setItem('s_token', 'tu_token_aqui');
-        const s_token = localStorage.getItem('s_token') || '';
-
         // Pasa el token real y el body con b_activo
-        this.usuariosService.actualizarEstatusUsuario(s_token, usuario.id, { b_activo: checked })
+        this.usuariosService.actualizarEstatus(usuario.id, checked ? 1 : 0)
           .subscribe({
             next: (response: any) => {
               if (response && response.status === 'success') {
@@ -281,9 +278,7 @@ cargarModulosDisponibles(): void {
       if (result.isConfirmed) {
         usuario.loading = true;
 
-        const s_token = localStorage.getItem('s_token') || '';
-
-        this.usuariosService.cambiarTipoUsuario(s_token, usuario.id, { id_tipo_usuario: nuevoTipoId })
+        this.usuariosService.actualizarTipoUsuario(usuario.id, nuevoTipoId)
           .subscribe({
             next: (response: any) => {
               usuario.loading = false;
@@ -305,7 +300,7 @@ cargarModulosDisponibles(): void {
                 );
               }
             },
-            error: (err) => {
+            error: (err: any) => {
               usuario.loading = false;
               this.showNotification(
                 'snackbar-danger',
@@ -326,8 +321,7 @@ cargarModulosDisponibles(): void {
   
 // Cargar tipos de usuariosß
   cargarTiposUsuarios() {
-    const s_token = localStorage.getItem('s_token') || '';
-    this.usuariosService.getTiposUsuarios(s_token).subscribe({
+    this.catalogosService.obtener('tipos-usuarios').subscribe({
       next: (res: any) => {
         if (res && Array.isArray(res.data)) {
           this.tiposUsuarios = res.data; // Aquí tomamos data de la API

@@ -17,7 +17,7 @@ import { MatExpansionModule } from '@angular/material/expansion';
 import { MatSelectionListChange } from '@angular/material/list';
 import { CdkDragDrop } from '@angular/cdk/drag-drop';
 import { DragDropModule } from '@angular/cdk/drag-drop';
-import { conexion } from 'app/conexion';
+import { environment } from 'environments/environment';
 import { refaccionInsertadaModel } from 'app/models/refaccionInsertadaModel';
 import { CommonModule } from '@angular/common';
 // Animations
@@ -92,7 +92,7 @@ export class DialogRefaccionesInsertadasComponent {
   }
 
 
-  async getEmbarquesRefaccionesInsertadas(){
+  getEmbarquesRefaccionesInsertadas(): void {
     Swal.fire({
       title: '¡Espere un momento!',
       html: 'Cargando datos...',
@@ -102,15 +102,15 @@ export class DialogRefaccionesInsertadasComponent {
       }
     });
 
-    this.EmbarqueService.getEmbarquesRefaccionesInsertadas("", this.id_refaccion).subscribe({
-      next: (response) => {
+    this.EmbarqueService.getEmbarquesRefaccion(this.id_refaccion).subscribe({
+      next: (response: any) => {
         this.embarques = response;
         this.embarques = this.embarques.data;
         
         console.log("Embarques: ", this.embarques);
         Swal.close();
       },
-      error: (error) => {
+      error: (error: any) => {
         Swal.close();
         Swal.fire('Error', 'Hubo un error', 'error');
         console.log(error);
@@ -119,7 +119,7 @@ export class DialogRefaccionesInsertadasComponent {
   }
 
 
-  async getEmbarquesRefaccionesInsertadasNuevas(){
+  getEmbarquesRefaccionesInsertadasNuevas(): void {
     Swal.fire({
       title: '¡Espere un momento!',
       html: 'Cargando datos...',
@@ -129,15 +129,15 @@ export class DialogRefaccionesInsertadasComponent {
       }
     });
 
-    this.EmbarqueService.getEmbarquesRefaccionesInsertadasNuevas("", this.id_pre_registro_refaccion).subscribe({
-      next: (response) => {
+    this.EmbarqueService.getEmbarquesPreRegistro(this.id_pre_registro_refaccion).subscribe({
+      next: (response: any) => {
         this.embarques = response;
         this.embarques = this.embarques.data;
         
         console.log("Embarques: ", this.embarques);
         Swal.close();
       },
-      error: (error) => {
+      error: (error: any) => {
         Swal.close();
         Swal.fire('Error', 'Hubo un error', 'error');
         console.log(error);

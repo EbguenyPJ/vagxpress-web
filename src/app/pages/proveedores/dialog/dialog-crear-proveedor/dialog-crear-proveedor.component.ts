@@ -16,7 +16,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 import { ProveedoresService } from 'app/services/proveedores/proveedores.service';
-import { conexion } from 'app/conexion';
+import { environment } from 'environments/environment';
 import Swal from 'sweetalert2';
 
 
@@ -46,7 +46,7 @@ export class DialogCrearProveedorComponent {
   proveedorData: any;
   imagenBase64: string | null = null;
   selectedFileName: string = '';
-  ruta_img: string = conexion.url_img + "/proveedores/";
+  ruta_img: string = environment.imgUrl + "/proveedores/";
   actualizarImagen: boolean = false;
   url: string | null = null;
 
@@ -111,15 +111,15 @@ createForm(): FormGroup {
     }
 
     const serviceCall = this.action === 'edit'
-      ? this.ProveedoresService.actualizarProveedor("", this.proveedorData.id_proveedor, formData)
-      : this.ProveedoresService.crearProveedor("", formData);
+      ? this.ProveedoresService.actualizarProveedor(this.proveedorData.id_proveedor, formData)
+      : this.ProveedoresService.crearProveedor(formData);
 
     serviceCall.subscribe({
-      next: (response) => {
+      next: (response: any) => {
         Swal.fire('Éxito', `Proveedor ${this.action === 'edit' ? 'actualizado' : 'creado'} correctamente`, 'success');
         this.dialogRef.close(response);
       },
-      error: (error) => {
+      error: (error: any) => {
         let errorMessage =
           error.error?.message ||
           error.message ||

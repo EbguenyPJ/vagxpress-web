@@ -112,7 +112,7 @@ export class ContactsComponent implements OnInit, OnDestroy {
 
   loadData() {
     this.contactsService.getAllContacts().subscribe({
-      next: (data) => {
+      next: (data: any) => {
         this.dataSource.data = data;
         this.isLoading = false;
         this.refreshTable();
@@ -121,7 +121,7 @@ export class ContactsComponent implements OnInit, OnDestroy {
             value.toString().toLowerCase().includes(filter)
           );
       },
-      error: (err) => console.error(err),
+      error: (err: unknown) => console.error(err),
     });
   }
 

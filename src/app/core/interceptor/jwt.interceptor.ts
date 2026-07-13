@@ -1,23 +1,20 @@
+import { HttpEvent, HttpHandler, HttpInterceptor, HttpRequest } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { HttpRequest, HttpHandler, HttpEvent, HttpInterceptor } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { AuthService } from '../service/auth.service';
+import { environment } from '../../../environments/environment';
+import { StorageService } from '../service/storage.service';
 
+/** Única fuente del header Authorization: token Sanctum en peticiones al API. */
 @Injectable()
 export class JwtInterceptor implements HttpInterceptor {
-  constructor(private authenticationService: AuthService) {}
+  constructor(private readonly storage: StorageService) {}
 
-  intercept(
-    request: HttpRequest<any>,
-    next: HttpHandler
-  ): Observable<HttpEvent<any>> {
-    // add authorization header with jwt token if available
-    const currentUser = this.authenticationService.currentUserValue;
-    if (currentUser && currentUser.token) {
+  intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
+    const token = this.storage.obtenerToken();
+
+    if (token && request.url.startsWith(environment.apiUrl)) {
       request = request.clone({
-        setHeaders: {
-          Authorization: `Bearer ${currentUser.token}`,
-        },
+        setHeaders: { Authorization: `Bearer ${token}` },
       });
     }
 

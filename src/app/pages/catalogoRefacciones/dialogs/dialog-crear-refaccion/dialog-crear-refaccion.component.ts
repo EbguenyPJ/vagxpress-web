@@ -29,6 +29,7 @@ import Swal from 'sweetalert2';
 
 import { MatChipsModule } from '@angular/material/chips';
 import { DialogSeleccionarEquivalenciasComponent } from '../dialog-seleccionar-equivalencias/dialog-seleccionar-equivalencias.component';
+import { DialogConstructorReglaComponent } from '../dialog-constructor-regla/dialog-constructor-regla.component';
 
 @Component({
   selector: 'app-dialog-crear-refaccion',
@@ -59,6 +60,7 @@ export class DialogCrearRefaccionComponent implements OnInit {
   subcategoriasFiltradas: any[] = [];
   clases: any[] = [];
   equivalenciasSeleccionadas: any[] = [];
+  reglasCompatibilidad: any[] = [];
 
   constructor(
     private fb: FormBuilder,
@@ -95,16 +97,16 @@ export class DialogCrearRefaccionComponent implements OnInit {
 
     forkJoin({
       marcas: this.refaccionesService
-        .getMarcas('')
+        .getMarcas()
         .pipe(catchError(() => of({ data: [] }))),
       categorias: this.refaccionesService
-        .getCategorias('')
+        .getCategorias()
         .pipe(catchError(() => of({ data: [] }))),
       subcategorias: this.refaccionesService
-        .getSubcategorias('')
+        .getSubcategorias()
         .pipe(catchError(() => of({ data: [] }))),
       clases: this.refaccionesService
-        .getClases('')
+        .getClases()
         .pipe(catchError(() => of({ data: [] }))),
     }).subscribe({
       next: (respuestas: any) => {
@@ -115,7 +117,7 @@ export class DialogCrearRefaccionComponent implements OnInit {
 
         Swal.close();
       },
-      error: (err) => {
+      error: (err: any) => {
         console.error('Error al cargar catálogos:', err);
         Swal.fire({
           icon: 'error',
@@ -164,6 +166,22 @@ export class DialogCrearRefaccionComponent implements OnInit {
     }
   }
 
+  abrirConstructorRegla(): void {
+    const dialogRef = this.dialog.open(DialogConstructorReglaComponent, {
+      width: '640px',
+    });
+
+    dialogRef.afterClosed().subscribe((regla) => {
+      if (regla) {
+        this.reglasCompatibilidad.push(regla);
+      }
+    });
+  }
+
+  removerRegla(index: number): void {
+    this.reglasCompatibilidad.splice(index, 1);
+  }
+
   escucharCambiosDeCategoria() {
     this.refaccionForm
       .get('id_categoria_refaccion')
@@ -181,10 +199,21 @@ export class DialogCrearRefaccionComponent implements OnInit {
 
   submit() {
     if (this.refaccionForm.valid) {
+      const payload = {
+        ...this.refaccionForm.value,
+        reglas_compatibilidad: this.reglasCompatibilidad.map((r) => ({
+          id_marcas: r.id_marcas,
+          id_modelos: r.id_modelos,
+          id_generaciones: r.id_generaciones,
+          id_motores: r.id_motores,
+          s_resumen: r.s_resumen,
+        })),
+      };
+
       this.refaccionesService
-        .crearRefaccion('', this.refaccionForm.value)
+        .crearRefaccion(payload)
         .subscribe({
-          next: (response) => {
+          next: (response: any) => {
             Swal.fire(
               '¡Éxito!',
               'La refacción ha sido creada correctamente.',
@@ -192,7 +221,7 @@ export class DialogCrearRefaccionComponent implements OnInit {
             );
             this.dialogRef.close(true);
           },
-          error: (err) => {
+          error: (err: any) => {
             Swal.fire('Error', 'No se pudo crear la refacción.', 'error');
             console.error(err);
           },

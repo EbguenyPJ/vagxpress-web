@@ -9,6 +9,7 @@ import { MatDividerModule } from '@angular/material/divider';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { FormsModule } from '@angular/forms';
+import { OrdenesCompraService } from 'app/services/compras/ordenes-compra.service';
 import { RequisicionesService } from 'app/services/compras/requisiciones.service';
 import Swal from 'sweetalert2';
 
@@ -39,7 +40,8 @@ export class DialogOrdenesCompraComponent implements OnInit {
   constructor(
     public dialogRef: MatDialogRef<DialogOrdenesCompraComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
-    private requisicionesService: RequisicionesService
+    private requisicionesService: RequisicionesService,
+    private ordenesCompraService: OrdenesCompraService,
   ) {}
 
   ngOnInit(): void {
@@ -49,7 +51,7 @@ export class DialogOrdenesCompraComponent implements OnInit {
   cargarDatos(): void {
     this.isLoading = true;
 
-    this.requisicionesService.getRequisicionPorProveedor(this.data.s_token, this.data.id_requisicion).subscribe(
+    this.requisicionesService.getPorProveedor(this.data.id_requisicion).subscribe(
       (response: any) => {
         if (response.status === 'success') {
           this.proveedores = response.data || [];
@@ -170,7 +172,7 @@ export class DialogOrdenesCompraComponent implements OnInit {
   }
 
   enviarOrdenesCompra(payload: any, mensajeExito: string): void {
-    this.requisicionesService.crearOrdenesCompras(this.data.s_token, payload).subscribe(
+    this.ordenesCompraService.generarOrdenes(payload).subscribe(
       (response: any) => {
         if (response.status === 'success') {
           Swal.fire({

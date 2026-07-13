@@ -31,7 +31,7 @@ import { Direction } from '@angular/cdk/bidi';
 
 
 import { clientesModel } from 'app/models/clientesModel'
-import { conexion } from 'app/conexion';
+import { environment } from 'environments/environment';
 import { ClientesService } from 'app/services/clientes/clientes.service';
 import { DiaologCrearClienteComponent } from './dialog/diaolog-crear-cliente/diaolog-crear-cliente.component';
 
@@ -61,7 +61,8 @@ import { DiaologCrearClienteComponent } from './dialog/diaolog-crear-cliente/dia
     MatPaginatorModule,
 ],
   templateUrl: './clientes.component.html',
-  styleUrl: './clientes.component.scss'
+  styleUrl: './clientes.component.scss',
+  animations: [rowsAnimation],
 })
 export class ClientesComponent implements OnInit, OnDestroy, AfterViewInit {
 
@@ -85,7 +86,7 @@ export class ClientesComponent implements OnInit, OnDestroy, AfterViewInit {
 
   clientesModel: clientesModel[] = [];
   data: any;
-  ruta_img: string = conexion.ruta_img_front + "clientes/";
+  ruta_img: string = environment.rutaImgFront + "clientes/";
   tiposClientes: any[] = [];
 
 
@@ -223,8 +224,8 @@ export class ClientesComponent implements OnInit, OnDestroy, AfterViewInit {
 loadData() {
   this.isLoading = true;
 
-  this.ClienteService.getClientes("").subscribe({
-    next: (resp) => {
+  this.ClienteService.getClientes().subscribe({
+    next: (resp: any) => {
       this.data = resp;
 
       //this.dataSource = new MatTableDataSource<clientesModel>(this.data.data);
@@ -245,7 +246,7 @@ loadData() {
 
       this.isLoading = false;
     },
-    error: (err) => {
+    error: (err: any) => {
       console.error(err);
       this.isLoading = false;
     }

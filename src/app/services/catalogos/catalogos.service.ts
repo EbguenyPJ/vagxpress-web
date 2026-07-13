@@ -1,56 +1,18 @@
 import { Injectable } from '@angular/core';
-import { HttpHeaders, HttpClient } from '@angular/common/http';
-import { conexion } from '../../conexion';
+import { Observable } from 'rxjs';
+import { ApiResponse } from '@core/models/api-response';
+import { FilaCatalogo } from '@core/models/dominio';
+import { ApiBase } from '../api-base';
 
-@Injectable({
-  providedIn: 'root'
-})
-export class CatalogosService {
-
-  constructor(private http: HttpClient) { }
-
-
-  GetAll(s_token: string, ruta: any) {
-    let headers = new HttpHeaders({
-      'Content-Type': 'application/json',
-      'Authorization': s_token
-    });
-    let params = { headers: headers };
-    let url = conexion.url + ruta
-    return this.http.get(url, params);
+/** Catálogos de solo lectura: GET /catalogos/{slug}. */
+@Injectable({ providedIn: 'root' })
+export class CatalogosService extends ApiBase {
+  obtener(catalogo: string): Observable<ApiResponse<FilaCatalogo[]>> {
+    return this.http.get<ApiResponse<FilaCatalogo[]>>(`${this.apiUrl}/catalogos/${catalogo}`);
   }
 
-
-    GetById(s_token: string, ruta: string, id: number) {
-    let headers = new HttpHeaders({
-      'Content-Type': 'application/json',
-      'Token': s_token
-    });
-    let params = { headers: headers };
-    let url = conexion.url + ruta + '/' + id
-    return this.http.get(url, params);
+  /** @deprecated Alias legado; usar obtener(). */
+  GetAll(catalogo: string): Observable<ApiResponse<FilaCatalogo[]>> {
+    return this.obtener(catalogo);
   }
-
-
-  Post(s_token: string, ruta: any, data: any) {
-    let headers = new HttpHeaders({
-      'Content-Type': 'application/json',
-      'Authorization': s_token
-    });
-    let url = conexion.url + ruta
-    let options = { headers: headers };
-    return this.http.post(url, data, options);
-  }
-
-
-  Update(s_token: string, ruta: any, data: any, id: any) {
-    let headers = new HttpHeaders({
-      'Content-Type': 'application/json',
-      'Token': s_token
-    });
-    let options = { headers: headers };
-    let url = conexion.url + ruta + '/' + id
-    return this.http.put(url, data, options);
-  }
-
 }

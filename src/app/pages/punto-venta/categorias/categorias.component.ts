@@ -1,6 +1,6 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { conexion } from 'app/conexion';
+import { environment } from 'environments/environment';
 
 @Component({
   selector: 'app-categorias-pos',
@@ -20,7 +20,7 @@ export class CategoriasComponent {
   @Output() subcategoriaSelected = new EventEmitter<any>();
   @Output() volverCategorias = new EventEmitter<void>();
 
-  urlImagenes: string = conexion.url_img;
+  urlImagenes: string = environment.imgUrl;
 
   onCategoriaClick(categoria: any): void {
     this.categoriaSelected.emit(categoria);

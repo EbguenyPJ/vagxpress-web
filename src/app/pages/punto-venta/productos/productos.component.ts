@@ -1,6 +1,6 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { conexion } from 'app/conexion';
+import { environment } from 'environments/environment';
 
 @Component({
   selector: 'app-productos-pos',
@@ -17,7 +17,7 @@ export class ProductosComponent {
   @Output() productoSeleccionado = new EventEmitter<any>();
   @Output() volver = new EventEmitter<void>();
 
-  urlImagenes: string = conexion.url_img;
+  urlImagenes: string = environment.imgUrl;
 
   onProductoClick(producto: any): void {
     // Permitir agregar incluso si no hay stock (puede ser por pedido)

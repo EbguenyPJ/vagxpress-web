@@ -1,28 +1,31 @@
-import { AuthService } from '../service/auth.service';
+import { HttpErrorResponse, HttpEvent, HttpHandler, HttpInterceptor, HttpRequest } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { HttpRequest, HttpHandler, HttpEvent, HttpInterceptor } from '@angular/common/http';
-import { Observable, throwError } from 'rxjs';
-import { catchError } from 'rxjs/operators';
+import { Router } from '@angular/router';
+import { Observable, catchError, throwError } from 'rxjs';
+import { AuthService } from '../service/auth.service';
 
+/**
+ * Manejo central de errores HTTP: un 401 cierra la sesión y regresa al
+ * login; el resto se propaga con el HttpErrorResponse completo para que
+ * cada pantalla decida (422 pinta errores de formulario, 5xx notifica).
+ */
 @Injectable()
 export class ErrorInterceptor implements HttpInterceptor {
-  constructor(private authenticationService: AuthService) {}
+  constructor(
+    private readonly authService: AuthService,
+    private readonly router: Router,
+  ) {}
 
-  intercept(
-    request: HttpRequest<any>,
-    next: HttpHandler
-  ): Observable<HttpEvent<any>> {
+  intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
     return next.handle(request).pipe(
-      catchError((err) => {
-        if (err.status === 401) {
-          // auto logout if 401 response returned from api
-          this.authenticationService.logout();
-          location.reload();
+      catchError((error: HttpErrorResponse) => {
+        if (error.status === 401 && !request.url.endsWith('/auth/login')) {
+          this.authService.logout();
+          this.router.navigate(['/authentication/signin']);
         }
 
-        const error = err.error.message || err.statusText;
-        return throwError(error);
-      })
+        return throwError(() => error);
+      }),
     );
   }
 }

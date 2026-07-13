@@ -1,34 +1,16 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { conexion } from 'app/conexion';
+import { Observable } from 'rxjs';
+import { ApiResponse } from '@core/models/api-response';
+import { Venta } from '@core/models/dominio';
+import { ApiBase } from '../api-base';
 
-@Injectable({
-  providedIn: 'root'
-})
-export class BitacoraVentasService {
-
-  constructor(private http: HttpClient) { }
-
-  getVentas(s_token: string) {
-    let headers = new HttpHeaders({
-      'Content-Type': 'application/json',
-      'Authorization': s_token
-    });
-    let params = { headers: headers };
-    let url = conexion.url + 'mostrar-ventas';
-    return this.http.get(url, params);
+@Injectable({ providedIn: 'root' })
+export class BitacoraVentasService extends ApiBase {
+  getVentas(): Observable<ApiResponse<Venta[]>> {
+    return this.http.get<ApiResponse<Venta[]>>(`${this.apiUrl}/ventas`);
   }
 
-  getVentaById(s_token: string, id: number) {
-    const headers = new HttpHeaders({
-      'Content-Type': 'application/json',
-      'Authorization': s_token
-    });
-    const url = conexion.url + 'ventas/' + id;
-    return this.http.get(url, { headers });
+  getVentaById(idVenta: number): Observable<ApiResponse<Venta>> {
+    return this.http.get<ApiResponse<Venta>>(`${this.apiUrl}/ventas/${idVenta}`);
   }
-
-
-
-
 }

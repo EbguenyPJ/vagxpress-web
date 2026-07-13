@@ -15,7 +15,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 
 // agregados
 // import { AlertasService } from 'app/services/alertas/alertas.service';
-import { VersionesService } from 'app/services/versiones/versiones.service';
+import { VersionesService } from 'app/services/versiones.service';
 import { AcercaDeComponent } from './dialogs/acerca-de/acerca-de.component';
 
 // Animations
@@ -216,21 +216,17 @@ export class HeaderComponent implements OnInit
   }
 
 
-  async getUltimaVersion() {
-    this.VersionesService.getUltimaVersion("").subscribe(
-      (respuesta: any) => {
-        const data = respuesta?.data;
-        if (Array.isArray(data) && data.length > 0) {
-          this.ultimaVersionGeneral = data[0];
-          console.log("ultima version: ", this.ultimaVersionGeneral);
+  getUltimaVersion(): void {
+    this.VersionesService.getUltimaVersion().subscribe({
+      next: (respuesta) => {
+        if (respuesta.data) {
+          this.ultimaVersionGeneral = respuesta.data;
         } else {
           Swal.fire('Advertencia', 'No se encontró ninguna versión registrada', 'warning');
         }
       },
-      error => {
-        Swal.fire('Error', 'No se pudo cargar la última versión', 'error');
-      }
-    );
+      error: () => Swal.fire('Error', 'No se pudo cargar la última versión', 'error'),
+    });
   }
 
 
@@ -275,14 +271,9 @@ export class HeaderComponent implements OnInit
   }
 
 
-  logout()
-  {
-    // this.stopAlertasPolling = true;
-    this.authService.logout().subscribe((res) => {
-      if (!res.success) {
-        this.router.navigate(['/authentication/signin']);
-      }
-    });
+  logout(): void {
+    this.authService.logout();
+    this.router.navigate(['/authentication/signin']);
   }
 
   abrirVersiones()

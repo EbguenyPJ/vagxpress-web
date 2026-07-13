@@ -29,7 +29,7 @@ import { Direction } from '@angular/cdk/bidi';
 import { EmpleadosService } from 'app/services/empleados/empleados.service';
 import { empleadosModel } from 'app/models/empleadosModel';
 import { DialogCrearEmpleadoComponent } from './dialogs/dialog-crear-empleado/dialog-crear-empleado.component';
-import { conexion } from 'app/conexion';
+import { environment } from 'environments/environment';
 
 @Component({
   selector: 'app-empleados',
@@ -84,7 +84,7 @@ export class EmpleadosComponent implements OnInit, OnDestroy {
 
   empleadosModel: empleadosModel[] = [];
   data: any;
-  ruta_img: any = conexion.url_img + "/empleados/";
+  ruta_img: any = environment.imgUrl + "/empleados/";
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
@@ -220,8 +220,8 @@ export class EmpleadosComponent implements OnInit, OnDestroy {
   loadData() {
     this.isLoading = true;
 
-    this.EmpleadosService.getEmpleados("").subscribe({
-      next: (data) => {
+    this.EmpleadosService.getEmpleados().subscribe({
+      next: (data: any) => {
         this.data = data;
         this.dataSource = new MatTableDataSource<empleadosModel>(this.data.data);
         this.dataSource.paginator = this.paginator;
@@ -238,7 +238,7 @@ export class EmpleadosComponent implements OnInit, OnDestroy {
 
         this.refreshTable();
       },
-      error: (err) => {
+      error: (err: any) => {
         console.error(err);
         this.isLoading = false;
         this.showNotification(

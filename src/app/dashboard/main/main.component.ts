@@ -149,7 +149,7 @@ export class MainComponent {
 
   private chartVentas(): void {
 
-    this.DashboardService.getVentasPagadasPorDia("").subscribe((data: [number, number][]) => {
+    this.DashboardService.getVentasPagadasPorDia().subscribe((data: [number, number][]) => {
 
       setTimeout(() => {
         this.chart?.updateOptions(this.areaChartOptions!, true, true);
@@ -231,7 +231,7 @@ export class MainComponent {
 private chart2() {
   const token = localStorage.getItem('token') || '';
 
-  this.DashboardService.getTop5Refacciones(token).subscribe((resp: any) => {
+  this.DashboardService.getTop5RefaccionesVendidas().subscribe((resp: any) => {
     if (resp) {
       this.topMas = resp.top_mas;     // top 5 más vendidos
       this.topMenos = resp.top_menos; // top 5 menos vendidos
@@ -358,8 +358,8 @@ private chart2() {
   private smallChart2() {
     const token = localStorage.getItem('token') || '';
 
-    this.DashboardService.getVentasMetodosPagosHoy(token).subscribe({
-      next: (resp) => {
+    this.DashboardService.getVentasMetodosPagosHoy().subscribe({
+      next: (resp: any) => {
         if (resp && resp.ventas_por_metodo_pago_hoy) {
           const data = resp.ventas_por_metodo_pago_hoy;
 
@@ -397,7 +397,7 @@ private chart2() {
           };
         }
       },
-      error: (err) => {
+      error: (err: any) => {
         console.error('Error ventas por método de pago', err);
       }
     });
@@ -407,7 +407,7 @@ private chart2() {
   private cargarTopRefaccionistas(): void {
     const token = localStorage.getItem('token') || '';
 
-    this.DashboardService.getRefaccionistaMasVentas(token).subscribe({
+    this.DashboardService.getTop5Refaccionistas().subscribe({
       next: (resp: any) => {
         console.log('RESPUESTA 👉', resp);
 
@@ -428,7 +428,7 @@ private chart2() {
           this.topRefaccionistas = [];
         }
       },
-      error: (err) => {
+      error: (err: any) => {
         console.error('Error al cargar top refaccionistas', err);
         this.topRefaccionistas = [];
       }
@@ -441,11 +441,11 @@ private chart2() {
 
     const token = localStorage.getItem('token') || '';
 
-    this.DashboardService.getVentasHoy(token).subscribe({
+    this.DashboardService.getVentasHoy().subscribe({
       next: (resp: any) => {
         this.totalOrdenes = resp.total_ventas_hoy;
       },
-      error: (err) => {
+      error: (err: any) => {
         console.error('Error al obtener órdenes', err);
       }
     });
@@ -456,12 +456,12 @@ private chart2() {
 
     const token = localStorage.getItem('token') || '';
 
-    this.DashboardService.getOrdenesEnRepartoHoy(token).subscribe({
-      next: (resp) => {
+    this.DashboardService.getOrdenesEnRepartoHoy().subscribe({
+      next: (resp: any) => {
         console.log('REPARTOS HOY 🚚', resp);
         this.totalOrdenesReparto = resp.total_ordenes_reparto_hoy;
       },
-      error: (err) => {
+      error: (err: any) => {
         console.error('Error al obtener repartos hoy ❌', err);
       }
     });
@@ -473,12 +473,12 @@ private chart2() {
 
     const token = localStorage.getItem('token') || '';
 
-    this.DashboardService.getOrdenesCompraHoy(token).subscribe({
-      next: (resp) => {
+    this.DashboardService.getOrdenesCompraHoy().subscribe({
+      next: (resp: any) => {
         console.log('ÓRDENES COMPRA HOY 🧾', resp);
         this.totalOrdenesCompraHoy = resp.total_ordenes_compra_hoy;
       },
-      error: (err) => {
+      error: (err: any) => {
         console.error('ERROR ÓRDENES COMPRA HOY ❌', err);
       }
     });
@@ -489,12 +489,12 @@ private chart2() {
 
     const token = localStorage.getItem('token') || '';
 
-    this.DashboardService.getRequisicionesAprobadasHoy(token).subscribe({
-      next: (resp) => {
+    this.DashboardService.getRequisicionesAprobadasHoy().subscribe({
+      next: (resp: any) => {
         //console.log('REQUISICIONES APROBADAS HOY ✅', resp);
         this.totalRequisicionesAprobadasHoy = resp.total_requisiciones_aprobadas_hoy;
       },
-      error: (err) => {
+      error: (err: any) => {
         console.error('ERROR REQUISICIONES HOY ', err);
       }
     });
@@ -505,7 +505,7 @@ private chart2() {
   cargarTopClientes(): void {
     const token = localStorage.getItem('token') || '';
 
-    this.DashboardService.getTop5ClientesConMasVentas(token).subscribe({
+    this.DashboardService.getTop5Clientes().subscribe({
       next: (resp: any[]) => {
         // Solo si resp es array
         if (Array.isArray(resp)) {
@@ -516,7 +516,7 @@ private chart2() {
           }));
         }
       },
-      error: (err) => {
+      error: (err: any) => {
         console.error('Error al cargar top clientes', err);
       }
     });
@@ -528,7 +528,7 @@ private chart2() {
   TopRefaccionesCriticas(): void {
     const token = localStorage.getItem('token') || '';
 
-    this.DashboardService.getRefaccionistaStockMinimo(token).subscribe({
+    this.DashboardService.getRefaccionesCriticas().subscribe({
       next: (resp: any) => {
         // resp es un objeto, no un array
         const lista = resp?.top_5_refacciones_criticas;
@@ -546,7 +546,7 @@ private chart2() {
           this.topRefaccionesCriticas = [];
         }
       },
-      error: (err) => {
+      error: (err: any) => {
         console.error('Error al cargar top refacciones críticas', err);
         this.topRefaccionesCriticas = [];
       }
@@ -562,11 +562,11 @@ private chart2() {
   cargarAcumuladoVentasHoy(): void {
     const token = localStorage.getItem('token') || '';
 
-    this.DashboardService.getVentasAcumuladasHoy(token).subscribe({
+    this.DashboardService.getAcumuladoVentasHoy().subscribe({
       next: (resp: any) => {
         this.acumuladoVentasHoy = resp.acumulado_ventas_hoy;
       },
-      error: (err) => {
+      error: (err: any) => {
         console.error('Error al cargar ventas acumuladas del día', err);
       }
     });
@@ -603,7 +603,7 @@ private chart2() {
   TopProveedoresActivosChart(): void {
     const token = localStorage.getItem('token') || '';
 
-    this.DashboardService.getProveedoresActivos(token).subscribe({
+    this.DashboardService.getTopProveedores().subscribe({
       next: (resp: any) => {
         if (resp && resp.top_proveedores_refacciones) {
           const proveedores = resp.top_proveedores_refacciones.map((item: any) => item.proveedor);
@@ -649,7 +649,7 @@ private chart2() {
           };
         }
       },
-      error: (err) => console.error('Error al cargar top proveedores', err)
+      error: (err: any) => console.error('Error al cargar top proveedores', err)
     });
   }
 

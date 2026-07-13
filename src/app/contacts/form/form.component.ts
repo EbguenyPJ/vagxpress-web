@@ -128,13 +128,13 @@ export class ContactFormComponent {
       const contactData = this.contactsForm.getRawValue();
       if (this.action === 'edit') {
         this.contactsService.updateContact(contactData).subscribe({
-          next: (response) => this.dialogRef.close(response),
-          error: (error) => console.error('Update Error:', error),
+          next: (response: any) => this.dialogRef.close(response),
+          error: (error: unknown) => console.error('Update Error:', error),
         });
       } else {
         this.contactsService.addContact(contactData).subscribe({
-          next: (response) => this.dialogRef.close(response),
-          error: (error) => console.error('Add Error:', error),
+          next: (response: any) => this.dialogRef.close(response),
+          error: (error: unknown) => console.error('Add Error:', error),
         });
       }
     }

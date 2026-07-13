@@ -111,31 +111,31 @@ export class DialogEditarRefaccionComponent implements OnInit {
 
     const observables = {
       refaccion: this.refaccionesService
-        .getRefaccionById('', this.data.refaccion.id_refaccion)
+        .getRefaccionById(this.data.refaccion.id_refaccion)
         .pipe(catchError(() => of({ data: [] }))),
       marcas: this.refaccionesService
-        .getMarcas('')
+        .getMarcas()
         .pipe(catchError(() => of({ data: [] }))),
       categorias: this.refaccionesService
-        .getCategorias('')
+        .getCategorias()
         .pipe(catchError(() => of({ data: [] }))),
       subcategorias: this.refaccionesService
-        .getSubcategorias('')
+        .getSubcategorias()
         .pipe(catchError(() => of({ data: [] }))),
       clases: this.refaccionesService
-        .getClases('')
+        .getClases()
         .pipe(catchError(() => of({ data: [] }))),
       unidadesMedida: this.refaccionesService
-        .getUnidadesMedida('')
+        .getUnidadesMedida()
         .pipe(catchError(() => of({ data: [] }))),
       posiciones: this.refaccionesService
-        .getPosicionesVehiculo('')
+        .getPosicionesVehiculo()
         .pipe(catchError(() => of({ data: [] }))),
       ubicaciones: this.refaccionesService
-        .getUbicacionesAlmacen('')
+        .getUbicacionesAlmacen()
         .pipe(catchError(() => of({ data: [] }))),
       proveedores: this.refaccionesService
-        .getProveedores('')
+        .getProveedores()
         .pipe(catchError(() => of({ data: [] }))),
     };
 
@@ -150,7 +150,8 @@ export class DialogEditarRefaccionComponent implements OnInit {
         this.ubicaciones = responses.ubicaciones.data;
         this.proveedores = responses.proveedores.data;
 
-        const refaccionData = responses.refaccion.data[0];
+        // El API nuevo devuelve la refacción como objeto único (antes venía en data[0]).
+        const refaccionData = responses.refaccion.data;
         if (!refaccionData) {
           Swal.fire(
             'Error',
@@ -187,7 +188,7 @@ export class DialogEditarRefaccionComponent implements OnInit {
         }
         Swal.close();
       },
-      error: (err) => {
+      error: (err: any) => {
         Swal.close();
         Swal.fire(
           'Error Inesperado',
@@ -267,7 +268,7 @@ export class DialogEditarRefaccionComponent implements OnInit {
       };
 
       this.refaccionesService
-        .editarRefaccion('', this.data.refaccion.id_refaccion, datosParaBackend)
+        .editarRefaccion(this.data.refaccion.id_refaccion, datosParaBackend)
         .subscribe({
           next: () => {
             Swal.fire(
@@ -277,7 +278,7 @@ export class DialogEditarRefaccionComponent implements OnInit {
             );
             this.dialogRef.close(true);
           },
-          error: (err) => {
+          error: (err: any) => {
             console.error(err);
             Swal.fire('Error', 'No se pudo actualizar la refacción.', 'error');
           },

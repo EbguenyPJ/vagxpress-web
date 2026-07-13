@@ -1,87 +1,49 @@
 import { Injectable } from '@angular/core';
-import { HttpHeaders, HttpClient, HttpParams } from '@angular/common/http';
-import { conexion } from '../../conexion';
+import { Observable } from 'rxjs';
+import { ApiResponse } from '@core/models/api-response';
+import { EmbarqueResumen } from '@core/models/dominio';
+import { ApiBase } from '../api-base';
 
-@Injectable({
-  providedIn: 'root'
-})
-export class EmbarqueService {
+export interface DetalleEmbarque {
+  embarque: EmbarqueResumen;
+  entradas: Record<string, unknown>[];
+  pendientes: Record<string, unknown>[];
+  factura: { s_evidencia_embarque: string; id_tipo_evidencia: number } | null;
+  base64: string;
+}
 
-  constructor(private http: HttpClient) { }
+export interface AprobarEmbarquePayload {
+  entradas?: { id_refaccion: number; n_cantidad: number; n_precio_compra: number }[];
+  pendientes?: Record<string, unknown>[];
+}
 
-
-  getAllEmbarques(s_token: string) {
-    let headers = new HttpHeaders({
-      'Content-Type': 'application/json',
-      'Authorization': s_token
-    });
-    let params = { headers: headers };
-    let url = conexion.url + 'mostrar-embarques'
-    return this.http.get(url, params);
+@Injectable({ providedIn: 'root' })
+export class EmbarqueService extends ApiBase {
+  getAllEmbarques(): Observable<ApiResponse<EmbarqueResumen[]>> {
+    return this.http.get<ApiResponse<EmbarqueResumen[]>>(`${this.apiUrl}/embarques`);
   }
 
-
-  getEmbarque(s_token: string, id_embarque: any) {
-    let headers = new HttpHeaders({
-      'Content-Type': 'application/json',
-      'Authorization': s_token
-    });
-    let params = { headers: headers };
-    let url = conexion.url + 'mostrar-embarque' + '/' + id_embarque
-    return this.http.get(url, params);
+  getEmbarque(idEmbarque: number): Observable<ApiResponse<DetalleEmbarque>> {
+    return this.http.get<ApiResponse<DetalleEmbarque>>(`${this.apiUrl}/embarques/${idEmbarque}`);
   }
 
-
-  aprobarEmbarque(s_token: string, data: any, id_embarque: any) {
-    let headers = new HttpHeaders({
-      'Content-Type': 'application/json',
-      'Authorization': s_token
-    });
-    let url = conexion.url + 'aprobar-embarque' + '/' + id_embarque;
-    return this.http.post(url, data, { headers });
+  aprobarEmbarque(idEmbarque: number, payload: AprobarEmbarquePayload): Observable<ApiResponse<null>> {
+    return this.http.post<ApiResponse<null>>(`${this.apiUrl}/embarques/${idEmbarque}/aprobar`, payload);
   }
 
-  rechazarEmbarque(s_token: string, data: any, id_embarque: any) {
-    let headers = new HttpHeaders({
-      'Content-Type': 'application/json',
-      'Authorization': s_token
-    });
-    let url = conexion.url + 'rechazar-embarque' + '/' + id_embarque;
-    return this.http.post(url, data, { headers });
+  rechazarEmbarque(idEmbarque: number): Observable<ApiResponse<null>> {
+    return this.http.post<ApiResponse<null>>(`${this.apiUrl}/embarques/${idEmbarque}/rechazar`, {});
   }
 
-
-  getRefaccionesInsertadas(s_token: string) {
-    let headers = new HttpHeaders({
-      'Content-Type': 'application/json',
-      'Authorization': s_token
-    });
-    let params = { headers: headers };
-    let url = conexion.url + 'refacciones-insertadas'
-    return this.http.get(url, params);
+  getRefaccionesInsertadas(): Observable<ApiResponse<Record<string, unknown>[]>> {
+    return this.http.get<ApiResponse<Record<string, unknown>[]>>(`${this.apiUrl}/embarques/refacciones-insertadas`);
   }
 
-  getEmbarquesRefaccionesInsertadas(s_token: string, id_refaccion: number) {
-    let headers = new HttpHeaders({
-      'Content-Type': 'application/json',
-      'Authorization': s_token
-    });
-    let params = { headers: headers };
-    let url = conexion.url + 'embarques-refacciones-insertadas' + '/' + id_refaccion
-    return this.http.get(url, params);
+  getEmbarquesRefaccion(idRefaccion: number): Observable<ApiResponse<Record<string, unknown>[]>> {
+    return this.http.get<ApiResponse<Record<string, unknown>[]>>(`${this.apiUrl}/embarques/refaccion/${idRefaccion}`);
   }
 
-
-
-  getEmbarquesRefaccionesInsertadasNuevas(s_token: string, id_pre_registro_refaccion: number) {
-    let headers = new HttpHeaders({
-      'Content-Type': 'application/json',
-      'Authorization': s_token
-    });
-    let params = { headers: headers };
-    let url = conexion.url + 'embarques-refacciones-insertadas-nuevas' + '/' + id_pre_registro_refaccion
-    return this.http.get(url, params);
+  getEmbarquesPreRegistro(idPreRegistro: number): Observable<ApiResponse<Record<string, unknown>[]>> {
+    return this.http.get<ApiResponse<Record<string, unknown>[]>>(`${this.apiUrl}/embarques/pre-registro/${idPreRegistro}`);
   }
-
-  
 }

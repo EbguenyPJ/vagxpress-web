@@ -2,7 +2,7 @@ import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
-import { conexion } from 'app/conexion';
+import { environment } from 'environments/environment';
 
 @Component({
   selector: 'app-carrito-pos',
@@ -26,7 +26,7 @@ export class CarritoComponent {
   @Output() procesar = new EventEmitter<void>();
   @Output() cambiarPorcentaje = new EventEmitter<{index: number, id_porcentaje: any}>();
 
-  urlImagenes: string = conexion.url_img;
+  urlImagenes: string = environment.imgUrl;
 
   get totalItems(): number {
     return this.carrito.reduce((sum: number, item: any) => sum + item.n_cantidad, 0);

@@ -4,7 +4,7 @@ import { Router } from '@angular/router';
 import Swal from 'sweetalert2';
 import { MatDialog } from '@angular/material/dialog';
 import { BreadcrumbComponent } from '@shared/components/breadcrumb/breadcrumb.component';
-import { conexion } from 'app/conexion';
+import { environment } from 'environments/environment';
 
 import { PuntoVentaService } from 'app/services/punto-venta/punto-venta.service';
 import { CotizacionService } from 'app/services/cotizacion/cotizacion.service';
@@ -66,7 +66,7 @@ export class CotizacionManualComponent implements OnInit {
   habilitarFocusBusqueda: boolean = true;
 
   // URL base para imágenes
-  urlImagenes: string = conexion.url_img;
+  urlImagenes: string = environment.imgUrl;
 
   // Breadcrumb
   breadscrums = [
@@ -126,7 +126,7 @@ export class CotizacionManualComponent implements OnInit {
     };
 
     // Cargar categorías
-    this.posService.getCategorias(this.s_token).subscribe(
+    this.posService.getCategorias().subscribe(
       (response: any) => {
         if (response.status === 'success') {
           this.todasCategorias = response.data || [];
@@ -141,7 +141,7 @@ export class CotizacionManualComponent implements OnInit {
     );
 
     // Cargar subcategorías
-    this.posService.getSubcategorias(this.s_token).subscribe(
+    this.posService.getSubcategorias().subscribe(
       (response: any) => {
         if (response.status === 'success') {
           this.todasSubcategorias = response.data || [];
@@ -156,7 +156,7 @@ export class CotizacionManualComponent implements OnInit {
     );
 
     // Cargar productos
-    this.posService.getProductos(this.s_token).subscribe(
+    this.posService.getProductos().subscribe(
       (response: any) => {
         if (response.status === 'success') {
           this.todosProductos = response.data || [];
@@ -171,7 +171,7 @@ export class CotizacionManualComponent implements OnInit {
     );
 
     // Cargar porcentajes de utilidad
-    this.posService.getPorcentajesUtilidad(this.s_token).subscribe(
+    this.posService.getPorcentajesUtilidad().subscribe(
       (response: any) => {
         if (response.status === 'success') {
           this.porcentajesUtilidad = (response.data || []).sort((a: any, b: any) => {

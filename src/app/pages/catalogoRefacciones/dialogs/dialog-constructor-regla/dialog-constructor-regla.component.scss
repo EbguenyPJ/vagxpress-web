@@ -1,0 +1,53 @@
+.constructor-cargando {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  padding: 32px 0;
+  color: rgba(0, 0, 0, 0.6);
+}
+
+.constructor-campos {
+  display: flex;
+  flex-direction: column;
+  min-width: 460px;
+  max-width: 560px;
+
+  mat-form-field {
+    width: 100%;
+  }
+}
+
+.constructor-ayuda {
+  margin: 0 0 16px;
+  font-size: 0.85rem;
+  color: rgba(0, 0, 0, 0.6);
+  line-height: 1.5;
+}
+
+.constructor-resumen {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  margin-top: 8px;
+  padding: 14px 16px;
+  border-radius: 8px;
+  background: rgba(63, 81, 181, 0.08);
+  border: 1px solid rgba(63, 81, 181, 0.25);
+  font-size: 0.9rem;
+  line-height: 1.45;
+
+  mat-icon {
+    color: #3f51b5;
+    flex-shrink: 0;
+  }
+
+  &.es-universal {
+    background: rgba(255, 152, 0, 0.1);
+    border-color: rgba(255, 152, 0, 0.35);
+
+    mat-icon {
+      color: #ff9800;
+    }
+  }
+}

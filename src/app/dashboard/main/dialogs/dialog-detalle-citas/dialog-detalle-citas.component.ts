@@ -30,7 +30,7 @@ import { MatSortModule } from '@angular/material/sort';
 import { MatPaginatorModule } from '@angular/material/paginator';
 
 import { DashboardService } from 'app/services/dashboard/dashboard.service';
-import { conexion } from 'app/conexion';
+import { environment } from 'environments/environment';
 import { TableExportUtil } from '@shared';
 import { rowsAnimation } from '@shared';
 
@@ -65,7 +65,7 @@ export class DialogDetalleCitasComponent implements OnInit {
   asesor: any;
   fechaInicio!: string;
   fechaFin!: string;
-  url_img_empleados: string = conexion.url_img + '/empleados/';
+  url_img_empleados: string = environment.imgUrl + '/empleados/';
   displayedColumns: string[] = [];
   isLoading = true;
   dataSource = new MatTableDataSource<any>();
@@ -117,7 +117,7 @@ export class DialogDetalleCitasComponent implements OnInit {
             );
           this.isLoading = false;
         },
-        error: (err) => {
+        error: (err: any) => {
           console.error('Error al obtener citas del asesor:', err);
           this.isLoading = false;
         }

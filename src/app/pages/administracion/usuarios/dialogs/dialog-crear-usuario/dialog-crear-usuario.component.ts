@@ -116,8 +116,8 @@ export class DialogCrearUsuarioComponent {
     const formData = this.usuariosTableForm.getRawValue();
     console.log('DATOS FORMULARIO:', formData);
 
-    this.UsuariosService.crearUsuario("", formData).subscribe({
-      next: (response) => {
+    this.UsuariosService.registrarUsuario(formData).subscribe({
+      next: (response: any) => {
         console.log(' RESPUESTA API:', response);
 
         Swal.fire({
@@ -129,7 +129,7 @@ export class DialogCrearUsuarioComponent {
           this.dialogRef.close(response);
         });
       },
-      error: (error) => {
+      error: (error: any) => {
         console.error(' ERROR API:', error);
 
         const errorMessage =
@@ -160,7 +160,7 @@ export class DialogCrearUsuarioComponent {
 
 
   async getEmpleados() {
-    this.EmpleadosService.getEmpleadosSinUsuario('').subscribe(data => {
+    this.EmpleadosService.getEmpleadosSinUsuario().subscribe(data => {
       this.empleados = data;
       this.empleados = this.empleados.data;
       console.log("Lista de empleados: ", this.empleados);
@@ -176,7 +176,7 @@ export class DialogCrearUsuarioComponent {
 
 
   async getTiposUsuarios() {
-    this.CatalogosService.GetAll('', 'tipos-usuarios').subscribe(data => {
+    this.CatalogosService.GetAll('tipos-usuarios').subscribe(data => {
       this.tipos_usuarios = data;
       this.tipos_usuarios = this.tipos_usuarios.data;
       console.log("Tipos de usuarios: ", this.tipos_usuarios);

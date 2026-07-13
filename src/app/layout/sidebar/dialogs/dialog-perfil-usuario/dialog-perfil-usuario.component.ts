@@ -13,7 +13,8 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatSelectModule } from '@angular/material/select';
 import { UsuariosService } from 'app/services/usuarios/usuarios.service';
 import { EmpleadosService } from 'app/services/empleados/empleados.service';
-import { conexion } from 'app/conexion';
+import { environment } from 'environments/environment';
+import { firstValueFrom } from 'rxjs';
 import Swal from 'sweetalert2';
 
 @Component({
@@ -41,7 +42,7 @@ import Swal from 'sweetalert2';
 export class DialogPerfilUsuarioComponent {
   dialogTitle = "Perfil de usuario";
   dataUsuario: any[] = [];
-  ruta_img = conexion.url_img + "/empleados/";
+  ruta_img = environment.imgUrl + "/empleados/";
   perfilForm: FormGroup;
   nivelesDominio: number[] = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
   habilidadesOriginales: any[] = [];
@@ -85,10 +86,11 @@ export class DialogPerfilUsuarioComponent {
 
   async getUsuarioInfo() {
     try {
-      const data = await this.usuariosService.getPerfilUsuario('', this.dataDialog.id_usuario).toPromise();
-      if (data && Array.isArray(data)) {
-        this.dataUsuario = data;
-        const empleado = this.dataUsuario[0];
+      const respuesta = await firstValueFrom(this.usuariosService.getPerfil(this.dataDialog.id_usuario));
+      if (respuesta?.data) {
+        this.dataUsuario = [respuesta.data];
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const empleado = respuesta.data as any;
         if (empleado) {
           this.perfilForm.patchValue({
             n_telefono: empleado.n_telefono,
@@ -116,7 +118,7 @@ export class DialogPerfilUsuarioComponent {
   }
 
   getHabilidadesEmpleado(id_empleado: number) {
-    this.empleadosService.getHabilidadesEmpleado('', id_empleado).subscribe(
+    this.empleadosService.getHabilidades(id_empleado).subscribe(
       (response: any) => {
         if (response.status === 'success' && response.data) {
           this.habilidadesEmpleado = response.data.map((h: any) => ({
@@ -201,11 +203,9 @@ export class DialogPerfilUsuarioComponent {
       }
 
       // 1. Actualizar información personal
-      const response = await this.empleadosService.actualizarEmpleado(
-        "",
-        empleado.id_empleado,
-        formData
-      ).toPromise();
+      const response = await firstValueFrom(
+        this.empleadosService.actualizarEmpleado(empleado.id_empleado, formData),
+      );
 
       // 2. Actualizar habilidades si hay cambios
       if (this.habilidadesEditadas) {
@@ -216,7 +216,7 @@ export class DialogPerfilUsuarioComponent {
       this.dialogRef.close(response);
       window.location.reload();
       this.getUsuarioInfo();
-    } catch (error: unknown) {
+    } catch (error: any) {
       let errorMessage = 'Error al actualizar el perfil';
       if (error instanceof Error) {
         errorMessage = error.message;
@@ -240,11 +240,9 @@ export class DialogPerfilUsuarioComponent {
     }));
 
     try {
-      await this.empleadosService.actualizarHabilidadesEmpleado(
-        "",
-        idEmpleado,
-        habilidadesActualizadas
-      ).toPromise();
+      await firstValueFrom(
+        this.empleadosService.actualizarHabilidades(idEmpleado, habilidadesActualizadas),
+      );
 
       this.habilidadesEditadas = false;
       this.habilidadesOriginales = JSON.parse(JSON.stringify(this.habilidadesEmpleado));

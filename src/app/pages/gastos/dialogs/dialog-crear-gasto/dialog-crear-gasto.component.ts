@@ -95,14 +95,14 @@ export class DialogCrearGastoComponent {
 
   loadTiposGasto() {
     const token = localStorage.getItem('token') || '';
-    this.gastosService.getTiposGastos(token).subscribe({
+    this.gastosService.getTiposGastos().subscribe({
       next: (resp: any) => {
         console.log('Respuesta backend tiposGasto:', resp);
         if (resp.status) {
           this.tiposGasto = resp.data;
         }
       },
-      error: (err) => console.error('Error al cargar tipos de gasto', err)
+      error: (err: any) => console.error('Error al cargar tipos de gasto', err)
     });
   }
 
@@ -128,63 +128,40 @@ export class DialogCrearGastoComponent {
       return;
     }
 
-    const formData = new FormData();
     const valores = this.gastosForm.getRawValue();
 
-    // Asegurar id_usuario_crea
-    valores.id_usuario_crea = this.getUsuarioId();
+    const enviar = (payload: any) => {
+      this.gastosService.crearGasto(payload).subscribe({
+        next: () => {
+          Swal.close();
+          Swal.fire('Éxito', 'Gasto registrado correctamente', 'success');
+          this.dialogRef.close(true);
+        },
+        error: (err: any) => {
+          Swal.close();
+          console.error('Error al registrar gasto', err);
+          Swal.fire('Error', err?.error?.message ?? 'No se pudo registrar el gasto', 'error');
+        },
+      });
+    };
 
-    // Agregar todos los campos al FormData
-    Object.keys(valores).forEach(key => {
-      if (valores[key] !== null && valores[key] !== undefined) {
-        formData.append(key, valores[key]);
-      }
-    });
-
-    // Agregar archivo si existe
+    // El API recibe la evidencia como base64 dentro del payload JSON.
     if (this.archivoSeleccionado) {
-      formData.append('archivo', this.archivoSeleccionado);
+      const lector = new FileReader();
+      lector.onload = () => enviar({
+        ...valores,
+        archivo: { evidencia: String(lector.result) },
+        extension: this.archivoSeleccionado!.name.split('.').pop()?.toLowerCase(),
+      });
+      lector.readAsDataURL(this.archivoSeleccionado);
+    } else {
+      enviar(valores);
     }
 
-    // Swal de carga
     Swal.fire({
       title: 'Registrando gasto...',
       allowOutsideClick: false,
       didOpen: () => Swal.showLoading()
-    });
-
-    this.gastosService.crearGasto(token, formData).subscribe({
-      next: (resp) => {
-        Swal.close();
-        Swal.fire('Éxito', 'Gasto registrado correctamente', 'success');
-
-        this.gastosForm.reset();
-        // Cierra el diálogo
-        this.dialogRef.close(true);
-
-        // Restaurar valores obligatorios
-        this.gastosForm.patchValue({
-          id_sucursal: this.getSucursalId(),
-          n_cantidad: 1,
-          n_costo: 0,
-          d_fecha_gasto: new Date().toISOString().split('T')[0],
-          s_evidencia: null,
-          id_tipo_evidencia: null
-        });
-
-        this.gastosForm.updateValueAndValidity();
-
-        // Limpiar input file
-        if (this.inputFile) {
-          this.inputFile.nativeElement.value = '';
-          this.archivoSeleccionado = null;
-        }
-      },
-      error: (err) => {
-        Swal.close();
-        console.error("Error al crear gasto:", err);
-        Swal.fire('Error', 'No se pudo registrar el gasto', 'error');
-      }
     });
   }
 

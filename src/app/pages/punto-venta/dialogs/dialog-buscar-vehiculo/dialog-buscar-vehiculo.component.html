@@ -1,0 +1,78 @@
+<h2 mat-dialog-title>Buscar refacciones para un vehículo</h2>
+
+<mat-dialog-content>
+  <div *ngIf="cargandoCatalogos" class="bv-cargando">
+    <mat-spinner [diameter]="34"></mat-spinner>
+    <span>Cargando catálogos…</span>
+  </div>
+
+  <div *ngIf="!cargandoCatalogos">
+    <div class="bv-filtros">
+      <mat-form-field appearance="outline">
+        <mat-label>Marca</mat-label>
+        <mat-select [formControl]="marcaCtrl">
+          <mat-option *ngFor="let m of marcas" [value]="m.id_marca_vehiculo">
+            {{ m.s_marca_vehiculo }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Modelo</mat-label>
+        <mat-select [formControl]="modeloCtrl" [disabled]="!modelosFiltrados.length">
+          <mat-option *ngFor="let m of modelosFiltrados" [value]="m.id_modelo_vehiculo">
+            {{ m.s_modelo_vehiculo }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Generación</mat-label>
+        <mat-select [formControl]="generacionCtrl" [disabled]="!generacionesFiltradas.length">
+          <mat-option *ngFor="let g of generacionesFiltradas" [value]="g.id_generacion">
+            {{ g.s_generacion }} ({{ g.n_anio_inicio }}<span *ngIf="g.n_anio_fin">–{{ g.n_anio_fin }}</span>)
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Motor</mat-label>
+        <mat-select [formControl]="motorCtrl">
+          <mat-option *ngFor="let mo of motores" [value]="mo.id_motor">
+            {{ mo.s_motor }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <button mat-raised-button color="primary" class="bv-buscar"
+        [disabled]="!marcaCtrl.value || buscando" (click)="buscar()">
+        <mat-icon>search</mat-icon> Buscar
+      </button>
+    </div>
+
+    <div *ngIf="buscando" class="bv-cargando">
+      <mat-spinner [diameter]="28"></mat-spinner>
+      <span>Buscando…</span>
+    </div>
+
+    <div *ngIf="yaBusco && !buscando" class="bv-resultados">
+      <p *ngIf="!resultados.length" class="bv-vacio">
+        No se encontraron refacciones compatibles para ese vehículo.
+      </p>
+
+      <button *ngFor="let r of resultados" type="button" class="bv-item"
+        [disabled]="r.n_stock_actual <= 0" (click)="seleccionar(r)">
+        <div class="bv-item-info">
+          <span class="bv-item-nombre">{{ r.s_nombre_refaccion }}</span>
+          <span class="bv-item-meta">{{ r.s_numero_parte }} · Stock: {{ r.n_stock_actual }}</span>
+        </div>
+        <span class="bv-item-precio">${{ r.n_precio_venta }}</span>
+        <mat-icon>add_shopping_cart</mat-icon>
+      </button>
+    </div>
+  </div>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button (click)="cerrar()">Cerrar</button>
+</mat-dialog-actions>

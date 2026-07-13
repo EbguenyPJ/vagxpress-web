@@ -1,176 +1,58 @@
 import { Injectable } from '@angular/core';
-import { HttpHeaders, HttpClient, HttpParams } from '@angular/common/http';
-import { conexion } from '../../conexion';
 import { Observable } from 'rxjs';
+import { ApiBase } from '../api-base';
 
-@Injectable({
-  providedIn: 'root'
-})
-export class DashboardService {
-
-  constructor(private http: HttpClient) { }
-
-  getVentasPagadasPorDia(s_token: string): Observable<[number, number][]> {
-    const headers = new HttpHeaders({
-      'Content-Type': 'application/json',
-      'Authorization': s_token
-    });
-
-    const url = conexion.url + 'ventas-pagadas-por-dia';
-    return this.http.get<[number, number][]>(url, { headers });
+/**
+ * Indicadores del dashboard. Los shapes vienen sin envoltura,
+ * exactamente como los consumen las gráficas.
+ */
+@Injectable({ providedIn: 'root' })
+export class DashboardService extends ApiBase {
+  getVentasPagadasPorDia(): Observable<[number, number][]> {
+    return this.http.get<[number, number][]>(`${this.apiUrl}/dashboard/ventas-pagadas-por-dia`);
   }
 
-  getVentasHoy(s_token: string) {
-
-    const headers = new HttpHeaders({
-      'Content-Type': 'application/json',
-      'Authorization': s_token
-    });
-
-    const url = conexion.url + 'ventas-hoy';
-
-    return this.http.get<any>(url, { headers });
+  getVentasHoy(): Observable<{ total_ventas_hoy: number }> {
+    return this.http.get<{ total_ventas_hoy: number }>(`${this.apiUrl}/dashboard/ventas-hoy`);
   }
 
-
-  getOrdenesEnRepartoHoy(s_token: string) {
-
-    const headers = new HttpHeaders({
-      'Content-Type': 'application/json',
-      'Authorization': s_token
-    });
-
-    const url = conexion.url + 'ordenes-en-reparto-hoy';
-
-    return this.http.get<{ total_ordenes_reparto_hoy: number }>(url, { headers });
+  getAcumuladoVentasHoy(): Observable<{ acumulado_ventas_hoy: number }> {
+    return this.http.get<{ acumulado_ventas_hoy: number }>(`${this.apiUrl}/dashboard/total-ventas-hoy`);
   }
 
-
-  getOrdenesCompraHoy(s_token: string) {
-
-    const headers = new HttpHeaders({
-      'Content-Type': 'application/json',
-      'Authorization': s_token
-    });
-
-    const url = conexion.url + 'ordenes-compra-hoy';
-
-    return this.http.get<any>(url, { headers });
+  getOrdenesEnRepartoHoy(): Observable<{ total_ordenes_reparto_hoy: number }> {
+    return this.http.get<{ total_ordenes_reparto_hoy: number }>(`${this.apiUrl}/dashboard/ordenes-en-reparto-hoy`);
   }
 
-
-  getRequisicionesAprobadasHoy(s_token: string) {
-
-    const headers = new HttpHeaders({
-      'Content-Type': 'application/json',
-      'Authorization': s_token
-    });
-
-    const url = conexion.url + 'requisiciones-aprobadas-hoy';
-
-    return this.http.get<any>(url, { headers });
+  getOrdenesCompraHoy(): Observable<{ total_ordenes_compra_hoy: number }> {
+    return this.http.get<{ total_ordenes_compra_hoy: number }>(`${this.apiUrl}/dashboard/ordenes-compra-hoy`);
   }
 
-
-  getTop5ClientesConMasVentas(s_token: string) {
-
-    const headers = new HttpHeaders({
-      'Content-Type': 'application/json',
-      'Authorization': s_token
-    });
-
-    const url = conexion.url + 'top5-clientes-con-mas-ventas';
-
-    return this.http.get<any>(url, { headers });
+  getRequisicionesAprobadasHoy(): Observable<{ total_requisiciones_aprobadas_hoy: number }> {
+    return this.http.get<{ total_requisiciones_aprobadas_hoy: number }>(`${this.apiUrl}/dashboard/requisiciones-aprobadas-hoy`);
   }
 
-
-  getTop5Refacciones(s_token: string) {
-
-    const headers = new HttpHeaders({
-      'Content-Type': 'application/json',
-      'Authorization': s_token
-    });
-
-    const url = conexion.url + 'top5-refacciones-vendidas';
-
-    return this.http.get<any>(url, { headers });
+  getTop5Clientes(): Observable<{ id_cliente: number; s_nombre_cliente: string; total_ventas: number; monto_total: string | number }[]> {
+    return this.http.get<{ id_cliente: number; s_nombre_cliente: string; total_ventas: number; monto_total: string | number }[]>(`${this.apiUrl}/dashboard/top5-clientes`);
   }
 
-
-  getVentasAcumuladasHoy(s_token: string) {
-
-    const headers = new HttpHeaders({
-      'Content-Type': 'application/json',
-      'Authorization': s_token
-    });
-
-    const url = conexion.url + 'total-ventas-hoy';
-
-    return this.http.get<any>(url, { headers });
+  getTop5RefaccionesVendidas(): Observable<{ top_mas: unknown[]; top_menos: unknown[] }> {
+    return this.http.get<{ top_mas: unknown[]; top_menos: unknown[] }>(`${this.apiUrl}/dashboard/top5-refacciones-vendidas`);
   }
 
-
-  getVentasMetodosPagosHoy(s_token: string) {
-
-    const headers = new HttpHeaders({
-      'Content-Type': 'application/json',
-      'Authorization': s_token
-    });
-
-    const url = conexion.url + 'ventas-metodos-hoy';
-
-    return this.http.get<any>(url, { headers });
+  getVentasMetodosPagosHoy(): Observable<{ ventas_por_metodo_pago_hoy: { id_metodo_pago: number; s_metodo_pago: string; total_ventas: number }[] }> {
+    return this.http.get<{ ventas_por_metodo_pago_hoy: { id_metodo_pago: number; s_metodo_pago: string; total_ventas: number }[] }>(`${this.apiUrl}/dashboard/ventas-metodos-hoy`);
   }
 
-
-  getRefaccionistaMasVentas(s_token: string) {
-
-    const headers = new HttpHeaders({
-      'Content-Type': 'application/json',
-      'Authorization': s_token
-    });
-
-    const url = conexion.url + 'refaccionista-mas-ventas';
-
-    return this.http.get<any>(url, { headers });
+  getTop5Refaccionistas(): Observable<{ top_5_refaccionistas_ingresos: unknown[] }> {
+    return this.http.get<{ top_5_refaccionistas_ingresos: unknown[] }>(`${this.apiUrl}/dashboard/top5-refaccionistas`);
   }
 
-
-  getRefaccionistaStockMinimo(s_token: string) {
-
-    const headers = new HttpHeaders({
-      'Content-Type': 'application/json',
-      'Authorization': s_token
-    });
-
-    const url = conexion.url + 'refacciones-stock-minimo';
-
-    return this.http.get<any>(url, { headers });
+  getRefaccionesCriticas(): Observable<{ top_5_refacciones_criticas: unknown[] }> {
+    return this.http.get<{ top_5_refacciones_criticas: unknown[] }>(`${this.apiUrl}/dashboard/refacciones-criticas`);
   }
 
-
-
-  getProveedoresActivos(s_token: string) {
-
-    const headers = new HttpHeaders({
-      'Content-Type': 'application/json',
-      'Authorization': s_token
-    });
-
-    const url = conexion.url + 'proveedores-mas-activos';
-
-    return this.http.get<any>(url, { headers });
+  getTopProveedores(): Observable<{ top_proveedores_refacciones: unknown[] }> {
+    return this.http.get<{ top_proveedores_refacciones: unknown[] }>(`${this.apiUrl}/dashboard/top-proveedores`);
   }
-
-
-
-
-
-
-
-
-
-
-
 }
